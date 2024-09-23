@@ -9,8 +9,6 @@ weapon.state = dofile "Weapons/Gun/freeslot"
 weapon.spawn = function(p, k)
 	k.cooldown = 0
 	k.anim = 0
-	k.hidden = true
-	k.hidepressed = false
 end
 weapon.attack = function(p, k)
 	if k.cooldown or k.hidden then
@@ -21,8 +19,9 @@ weapon.attack = function(p, k)
 	k.anim = MAX_ANIM
 
 	local bullet = P_SpawnMobjFromMobj(p.mo, 0,0,p.mo.height/2, MT_MM_BULLET)
-	bullet.momx = 48*cos(p.mo.angle)
-	bullet.momy = 48*sin(p.mo.angle)
+	bullet.momx = FixedMul(48*cos(p.mo.angle), cos(p.aiming))
+	bullet.momy = FixedMul(48*sin(p.mo.angle), cos(p.aiming))
+	bullet.momz = 48*sin(p.aiming)
 	bullet.color = p.mo.color
 	bullet.target = p.mo
 
@@ -30,7 +29,7 @@ weapon.attack = function(p, k)
 	return true
 end
 weapon.can_damage = function(p, k, p2)
-	return (k.hit and not k.hidden)
+	return (k.hit)
 end
 weapon.think = function(p, k)
 	local anim_time = FixedDiv(k.anim, MAX_ANIM)
@@ -45,19 +44,6 @@ weapon.think = function(p, k)
 
 	k.cooldown = max(0, $-1)
 	k.anim = max(0, $-1)
-
-	if k.hidden then
-		k.flags2 = $|MF2_DONTDRAW
-	else
-		k.flags2 = $ & ~MF2_DONTDRAW
-	end
-
-	if p.cmd.buttons & BT_CUSTOM1
-	and not (k.hidepressed) then
-		k.hidden = not k.hidden
-	end
-
-	k.hidepressed = (p.cmd.buttons & BT_CUSTOM1)
 end
 weapon.name = "Gun"
 weapon.icon = "MM_GUN"

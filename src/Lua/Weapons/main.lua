@@ -31,6 +31,8 @@ function MM:giveWeapon(p, name)
 	p.mm.weapon.ox = 0
 	p.mm.weapon.oy = 0
 	p.mm.weapon.oz = 0
+	p.mm.weapon.hidden = true
+	p.mm.weapon.hidepressed = false
 
 	self.weapons[name].spawn(p, p.mm.weapon)
 end
@@ -65,10 +67,16 @@ addHook("TouchSpecial", function(special, toucher)
 
 	if special.target == toucher then return true end
 
+	if special.hidden then return true end
+
 	local data = MM:getWpnData(special.target.player)
-	if data.can_damage(special.target.player, special, toucher.player) then
+
+	if not data.can_damage
+	or (data.can_damage
+	and data.can_damage(special.target.player, special, toucher.player)) then
 		P_DamageMobj(toucher, special, special, 999, DMG_INSTAKILL)
 	end
+
 	return true
 end, MT_MM_WEAPON)
 
@@ -113,10 +121,21 @@ addHook("MobjThinker", function(wpn)
 		d_wpn.target = wpn.target
 		
 		P_RemoveMobj(wpn)
-		
 		return
 	end
-	
+
+	if wpn.hidden then
+		wpn.flags2 = $|MF2_DONTDRAW
+	else
+		wpn.flags2 = $ & ~MF2_DONTDRAW
+	end
+
+	if p.cmd.buttons & BT_CUSTOM1
+	and not (wpn.hidepressed) then
+		wpn.hidden = not wpn.hidden
+	end
+
+	wpn.hidepressed = (p.cmd.buttons & BT_CUSTOM1)
 end, MT_MM_WEAPON)
 
 addHook("PostThinkFrame", do

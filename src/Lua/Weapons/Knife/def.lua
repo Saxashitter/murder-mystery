@@ -9,8 +9,6 @@ weapon.spawn = function(p, k)
 	k.cooldown = 0
 	k.anim = 0
 	k.hit = 0
-	k.hidden = true
-	k.hidepressed = false
 end
 weapon.attack = function(p, k)
 	if k.cooldown or k.hidden then
@@ -25,7 +23,7 @@ weapon.attack = function(p, k)
 	return true
 end
 weapon.can_damage = function(p, k, p2)
-	return (k.hit and not k.hidden)
+	return (k.hit)
 end
 weapon.think = function(p, k)
 	local anim_time = FixedDiv(k.anim, MAX_ANIM)
@@ -41,18 +39,6 @@ weapon.think = function(p, k)
 	k.cooldown = max(0, $-1)
 	k.anim = max(0, $-1)
 	k.hit = max(0, $-1)
-	if k.hidden then
-		k.flags2 = $|MF2_DONTDRAW
-	else
-		k.flags2 = $ & ~MF2_DONTDRAW
-	end
-
-	if p.cmd.buttons & BT_CUSTOM1
-	and not (k.hidepressed) then
-		k.hidden = not k.hidden
-	end
-
-	k.hidepressed = (p.cmd.buttons & BT_CUSTOM1)
 end
 weapon.name = "Knife"
 weapon.icon = "MM_KNIFE"

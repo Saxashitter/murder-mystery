@@ -35,6 +35,9 @@ addHook("PlayerThink", function(p)
 	if p.charability == CA_FLY then
 		p.powers[pw_tailsfly] = min(TICRATE, $)
 	end
+	if p.charability == CA_FLOAT then
+		p.charability = CA_NONE
+	end
 	if p.charability2 == CA2_GUNSLINGER then
 		p.charability2 = CA2_NONE
 	end
@@ -105,15 +108,16 @@ end)
 addHook("PlayerMsg", function(src, t, trgt, msg)
 	if not MM:isMM() then return end
 	if gamestate ~= GS_LEVEL then return end
-	if t == 4 then return end
+	if t == 3 then return end
 
-	if not (displayplayer
-		and displayplayer.mo
-		and displayplayer.mo.health
-		and displayplayer.mm
-		and not displayplayer.mm.spectator) then
+	if not (consoleplayer
+		and consoleplayer.mo
+		and consoleplayer.mo.health
+		and consoleplayer.mm
+		and not consoleplayer.mm.spectator) then
 			return
 	end
+
 	if not (src
 		and src.mo
 		and src.mo.health

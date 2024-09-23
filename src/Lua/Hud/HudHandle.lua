@@ -38,7 +38,7 @@ local function HUD_RoleDrawer(v,p)
 		return
 	end
 	
-	if types[p.mm.role] == nil then return end
+	if not (p.mm and types[p.mm.role]) then return end
 	
 	v.drawString(320,0,
 		types[p.mm.role][1],
@@ -67,7 +67,7 @@ local function HUD_WeaponDrawer(v,p)
 
 	v.drawScaled(x, y, FU, patch, V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_50TRANS)
 
-	if p.mm.weapon and p.mm.weapon.valid
+	if p.mm and p.mm.weapon and p.mm.weapon.valid
 		local wpn_t = MM:getWpnData(p)	
 		--Name
 		v.drawString(47,

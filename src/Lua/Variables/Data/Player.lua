@@ -1,5 +1,6 @@
 return {
 	role = 1,
 	chat_messages = {},
-	spectator = false
+	spectator = false,
+	got_weapon = false
 }

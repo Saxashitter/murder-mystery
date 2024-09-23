@@ -26,6 +26,19 @@ addHook("PlayerThink", function(p)
 		return
 	end
 
+	if p.charability == CA_GLIDEANDCLIMB then
+		if p.climbing then
+			p.climbing = 0
+			p.mo.state = S_PLAY_JUMP
+		end
+	end
+	if p.charability == CA_FLY then
+		p.powers[pw_tailsfly] = min(TICRATE, $)
+	end
+	if p.charability2 == CA2_GUNSLINGER then
+		p.charability2 = CA2_NONE
+	end
+
 	p.spectator = p.mm.spectator
 	if p.mm.spectator then
 		return
@@ -55,6 +68,11 @@ addHook("MobjDeath", function(target, inflictor, source)
 		target.player.mm.weapon = nil
 	end
 
+	if (source and source.player and source.player.mm and source.player.mm.role == 3) then
+		chatprintf(source.player, " !!! - That was not the murderer. You were kliled for friendly fire!", true)
+		P_DamageMobj(source, nil, nil, 999, DMG_INSTAKILL)
+	end
+
 	local corpse = P_SpawnMobjFromMobj(target, 0,0,0, MT_THOK)
 
 	target.flags2 = $|MF2_DONTDRAW
@@ -78,6 +96,34 @@ end, MT_PLAYER)
 addHook("ViewpointSwitch", function(p, p2, f)
 	if not (MM:isMM() and p.mm and not p.mm.spectator) then return end
 	return p2 == p
+end)
+
+addHook("PlayerMsg", function(src, t, trgt, msg)
+	if not MM:isMM() then return end
+	if t == 4 then return end
+
+	if not (displayplayer
+		and displayplayer.mo
+		and displayplayer.mo.health
+		and displayplayer.mm
+		and not displayplayer.mm.spectator) then
+			return
+	end
+	if not (src
+		and src.mo
+		and src.mo.health
+		and src.mm
+		and not src.mm.spectator) then
+			return true
+	end
+
+	local dist = R_PointToDist2(displayplayer.mo.x, displayplayer.mo.y,
+		src.mo.x,
+		src.mo.y)
+
+	if dist > 1500*FU then
+		return true
+	end
 end)
 
 doAndInsert("Murderer")

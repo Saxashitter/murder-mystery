@@ -22,6 +22,4 @@ dofile "Hooks/main"
 dofile "Weapons/main"
 
 dofile "Libs/CustomHud.lua"
-dofile "Libs/sglib"
 dofile "Hud/HudHandle.lua"
-dofile "Hud/Nametags"

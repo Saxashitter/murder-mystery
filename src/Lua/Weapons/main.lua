@@ -49,6 +49,7 @@ addHook("MobjSpawn", function(wpn)
 end, MT_MM_WEAPON)
 
 addHook("TouchSpecial", function(special, toucher)
+	if not (special and special.valid) then return end
 	if not (special
 	and special.target
 	and special.target.player
@@ -93,13 +94,27 @@ addHook("MobjThinker", function(wpn)
 	if not (wpn.target.player.cmd.buttons & BT_ATTACK) then
 		wpn.fired = false
 	end
+	if data.droppable
+	and wpn.target.player.cmd.buttons & BT_CUSTOM2 then
+		local x = wpn.target.x
+		local y = wpn.target.y
+		local d_wpn = MM:spawnDroppedWeapon(x, y, wpn.z, wpn.__type)
+
+		d_wpn.angle = wpn.target.angle
+		d_wpn.momx = 8*cos(d_wpn.angle)
+		d_wpn.momy = 8*sin(d_wpn.angle)
+		d_wpn.momz = 4*FU
+		d_wpn.target = wpn.target
+		P_KillMobj(wpn)
+
+		return
+	end
 	
 end, MT_MM_WEAPON)
 
 addHook("PostThinkFrame", do
 	for _,wpn in pairs(weapons) do
 		if not (wpn and wpn.valid) then
-			table.remove(weapons, _)
 			continue
 		end
 

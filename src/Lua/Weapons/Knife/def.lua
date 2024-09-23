@@ -55,6 +55,7 @@ weapon.think = function(p, k)
 	k.hidepressed = (p.cmd.buttons & BT_CUSTOM1)
 end
 weapon.name = "Knife"
+weapon.icon = "MM_KNIFE"
 weapon.restrict = {true, false, true}
 
 return weapon

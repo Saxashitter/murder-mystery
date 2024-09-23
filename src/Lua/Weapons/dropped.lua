@@ -14,6 +14,8 @@ function MM:spawnDroppedWeapon(x, y, z, name)
 	wpn.state = wpn_t.state
 	wpn.restrict = wpn_t.restrict
 	wpn.give = name
+
+	return wpn
 end
 
 addHook("MobjThinker", function(d_wpn)

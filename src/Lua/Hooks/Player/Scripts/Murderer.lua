@@ -4,10 +4,10 @@ return function(p) -- Murderer handler.
 	local murd = p.mm.murderer
 
 	if leveltime >= 10*TICRATE
+	and not p.mm.got_weapon
 	and not (p.mm.weapon
 	and p.mm.weapon.valid
-	and p.mm.weapon.__type == "Knife"
-	and p.mm.got_weapon) then
+	and p.mm.weapon.__type == "Knife") then
 		MM:giveWeapon(p, "Knife")
 		p.mm.got_weapon = true
 	end

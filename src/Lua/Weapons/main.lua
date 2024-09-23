@@ -82,39 +82,52 @@ addHook("MobjThinker", function(wpn)
 		P_RemoveMobj(wpn)
 		return
 	end
+	
+	local p = wpn.target.player
+	
+	local data = MM:getWpnData(p)
 
-	local data = MM:getWpnData(wpn.target.player)
-
-	data.think(wpn.target.player, wpn)
-	if wpn.target.player.cmd.buttons & BT_ATTACK
+	data.think(p, wpn)
+	if p.cmd.buttons & BT_ATTACK
 	and not wpn.fired then
-		data.attack(wpn.target.player, wpn)
+		data.attack(p, wpn)
 		wpn.fired = true
 	end
-	if not (wpn.target.player.cmd.buttons & BT_ATTACK) then
+	if not (p.cmd.buttons & BT_ATTACK) then
 		wpn.fired = false
 	end
+	
+	if p.cmd.buttons & BT_FIRENORMAL
+		P_RemoveMobj(wpn)
+		return
+	end
+	
 	if data.droppable
-	and wpn.target.player.cmd.buttons & BT_CUSTOM2 then
+	and (p.cmd.buttons & BT_CUSTOM2 and p.lastbuttons & BT_CUSTOM2 == 0)
+	and not wpn.dropped then
+		wpn.dropped = true
+		p.mm.weapon = nil
+		
 		local x = wpn.target.x
 		local y = wpn.target.y
 		local d_wpn = MM:spawnDroppedWeapon(x, y, wpn.z, wpn.__type)
-
+		
 		d_wpn.angle = wpn.target.angle
-		d_wpn.momx = 8*cos(d_wpn.angle)
-		d_wpn.momy = 8*sin(d_wpn.angle)
-		d_wpn.momz = 4*FU
+		P_Thrust(d_wpn,d_wpn.angle,8*d_wpn.scale)
+		P_SetObjectMomZ(d_wpn,4*FU)
 		d_wpn.target = wpn.target
-		P_KillMobj(wpn)
-
+		
+		P_RemoveMobj(wpn)
+		
 		return
 	end
 	
 end, MT_MM_WEAPON)
 
 addHook("PostThinkFrame", do
-	for _,wpn in pairs(weapons) do
+	for k,wpn in pairs(weapons) do
 		if not (wpn and wpn.valid) then
+			table.remove(weapons,k)
 			continue
 		end
 
@@ -125,7 +138,8 @@ addHook("PostThinkFrame", do
 		P_MoveOrigin(wpn,
 			wpn.target.x+wpn.ox,
 			wpn.target.y+wpn.oy,
-			wpn.target.z+(wpn.target.height/2)+wpn.oz)
+			wpn.target.z+(wpn.target.height/2)+wpn.oz
+		)
 	end
 end)
 

@@ -79,20 +79,30 @@ local function HUD_WeaponDrawer(v,p)
 		
 		--Tooltips
 		v.drawString(47,
-			171,
+			163,
 			(p.mm.weapon.hidden and "Hidden..." or "Showing!"),
 			V_YELLOWMAP|V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|(p.mm.weapon.hidden and V_30TRANS or 0),
 			"thin"
 		)
 		v.drawString(47,
-			179,
+			171,
 			"[C1] - "..(p.mm.weapon.hidden and "Show" or "Hide").." weapon",
 			V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
 			"thin"
 		)
+		local y = 179
+		if wpn_t.droppable then
+			v.drawString(47,
+					y,
+					"[C2] - Drop weapon",
+					V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
+					"thin"
+				)
+			y = $+8
+		end
 		if not p.mm.weapon.hidden
 			v.drawString(47,
-				187,
+				y,
 				"[FIRE] - Use weapon",
 				V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
 				"thin"

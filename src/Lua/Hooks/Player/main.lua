@@ -47,10 +47,6 @@ addHook("PlayerThink", function(p)
 	for _,script in ipairs(scripts) do
 		script(p)
 	end
-
-	if not (p.mm.weapon and p.mm.weapon.valid) then
-		MM:giveWeapon(p, "Gun")
-	end
 end)
 
 addHook("MobjDeath", function(target, inflictor, source)

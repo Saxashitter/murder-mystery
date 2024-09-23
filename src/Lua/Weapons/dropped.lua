@@ -36,7 +36,7 @@ addHook("TouchSpecial", function(d_wpn, toucher)
 	and not toucher.player.mm.spectator
 	and not (toucher.player.mm.weapon and toucher.player.mm.weapon.valid)
 	and not d_wpn.restrict[toucher.player.mm.role])
-	or (d_wpn.timealive < 3) then
+	or (d_wpn.timealive < 10) then
 		return true
 	end
 

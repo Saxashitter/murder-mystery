@@ -97,11 +97,6 @@ addHook("MobjThinker", function(wpn)
 		wpn.fired = false
 	end
 	
-	if p.cmd.buttons & BT_FIRENORMAL
-		P_RemoveMobj(wpn)
-		return
-	end
-	
 	if data.droppable
 	and (p.cmd.buttons & BT_CUSTOM2 and p.lastbuttons & BT_CUSTOM2 == 0)
 	and not wpn.dropped then

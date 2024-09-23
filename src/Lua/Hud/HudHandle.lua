@@ -27,7 +27,7 @@ local function HUD_RoleDrawer(v,p)
 	or p.mo.health == 0
 		v.drawString(320,0,
 			"Dead",
-			V_GRAYMAP|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE|V_50TRANS,
+			V_GRAYMAP|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
 			"right"
 		)
 		v.drawString(320,8,
@@ -42,14 +42,14 @@ local function HUD_RoleDrawer(v,p)
 	
 	v.drawString(320,0,
 		types[p.mm.role][1],
-		types[p.mm.role][2]|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE|V_10TRANS,
+		types[p.mm.role][2]|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
 		"right"
 	)
 	for i = 3,7
 		if types[p.mm.role][i] ~= nil
 			v.drawString(320,8*(i - 2),
 				types[p.mm.role][i],
-				V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE|V_10TRANS,
+				V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
 				"thin-right"
 			)
 		end

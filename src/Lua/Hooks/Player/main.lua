@@ -68,8 +68,12 @@ addHook("MobjDeath", function(target, inflictor, source)
 		target.player.mm.weapon = nil
 	end
 
-	if (source and source.player and source.player.mm and source.player.mm.role == 3) then
-		chatprintf(source.player, " !!! - That was not the murderer. You were kliled for friendly fire!", true)
+	if (source
+	and source.player
+	and source.player.mm
+	and source.player.mm.role ~= 2
+	and target.player.mm.role ~= 2) then
+		chatprintf(source.player, " !!! - That was not the murderer. You were killed for friendly fire!", true)
 		P_DamageMobj(source, nil, nil, 999, DMG_INSTAKILL)
 	end
 
@@ -100,6 +104,7 @@ end)
 
 addHook("PlayerMsg", function(src, t, trgt, msg)
 	if not MM:isMM() then return end
+	if gamestate ~= GS_LEVEL then return end
 	if t == 4 then return end
 
 	if not (displayplayer

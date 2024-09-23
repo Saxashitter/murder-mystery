@@ -5,7 +5,7 @@ return function(p) -- Murderer handler.
 	and not (p.mm.weapon
 	and p.mm.weapon.valid
 	and p.mm.weapon.__type == "Gun"
-	and not p.mm.got_weapon) then
+	and p.mm.got_weapon) then
 		MM:giveWeapon(p, "Gun")
 		p.mm.got_weapon = true
 	end

@@ -20,7 +20,7 @@ function MM:makeWeapon(name, data)
 end
 
 function MM:giveWeapon(p, name)
-	if not (p.mo and p.mm) then return end
+	if not (p.mo and p.mm and not p.mm.spectator) then return end
 	if not (self.weapons[name]) then return end
 
 	p.mm.weapon = P_SpawnMobj(p.mo.x, p.mo.y, p.mo.z, MT_MM_WEAPON)

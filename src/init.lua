@@ -18,6 +18,7 @@ MM.require = dofile "Libs/require"
 
 dofile "Variables/main"
 dofile "Functions/main"
+dofile "Console/main"
 dofile "Hooks/main"
 dofile "Weapons/main"
 

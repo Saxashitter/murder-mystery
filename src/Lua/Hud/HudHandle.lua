@@ -87,18 +87,20 @@ local function HUD_WeaponDrawer(v,p)
 
 	if p.mm and p.mm.weapon and p.mm.weapon.valid
 		local wpn_t = MM:getWpnData(p)
+		local text_string = wpn_t.name or "Weapon"
+		local text_width = v.stringWidth(text_string, V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE, "normal")
 		
 		--Name
 		v.drawString(47*FU - slidein,
 			156*FU,
-			wpn_t.name or "Weapon",
+			text_string,
 			V_YELLOWMAP|V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
 			"fixed"
 		)
 		
 		--Tooltips
-		v.drawString(47*FU - slidein,
-			162*FU,
+		v.drawString(47*FU - slidein + (text_width*FU) + 2*FU,
+			157*FU,
 			(p.mm.weapon.hidden and "Hidden..." or "Showing!"),
 			V_YELLOWMAP|V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|(p.mm.weapon.hidden and V_30TRANS or 0),
 			"thin-fixed"

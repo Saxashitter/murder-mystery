@@ -1,3 +1,5 @@
+local speedCap = MM.require "Libs/speedCap"
+
 return function(p)
 	if p.charability == CA_GLIDEANDCLIMB then
 		if p.climbing then
@@ -18,6 +20,8 @@ return function(p)
 	end
 
 	if p.mo.skin == "knuckles" then
-		p.jumpfactor = skins[p.mo.skin].jumpfactor*3/2
+		p.jumpfactor = skins["sonic"].jumpfactor
 	end
+
+	speedCap(p.mo, 28*FU)
 end

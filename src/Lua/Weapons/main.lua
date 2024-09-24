@@ -1,6 +1,6 @@
 mobjinfo[freeslot "MT_MM_WEAPON"] = {
-	radius = 16*FU,
-	height = 16*FU,
+	radius = 24*FU,
+	height = 24*FU,
 	spawnstate = S_THOK,
 	flags = MF_SPECIAL|MF_NOGRAVITY|MF_NOCLIP|MF_NOCLIPHEIGHT,
 	flags2 = MF2_DONTDRAW

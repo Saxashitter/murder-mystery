@@ -9,3 +9,8 @@ Me and my friends got tired of LeoTM's mode, from the OST, to the un-necessary t
 ## How can I help?
 If you can code, try making a pull request for something you want!
 If you can do art, compose, etc. Hit me up at **@literally_mario on Discord!**
+
+## Is there an Discord server?
+Yes!
+
+https://discord.gg/J6yzyJV8Ta

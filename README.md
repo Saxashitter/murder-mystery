@@ -12,4 +12,5 @@ If you can do art, compose, etc. Hit me up at **@literally_mario on Discord!**
 
 ## Is there an Discord server?
 Yes! https://discord.gg/J6yzyJV8Ta
+
 You'll be pinged whenever I'm hosting the mod, you can also contribute directly, and more!

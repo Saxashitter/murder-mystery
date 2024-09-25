@@ -42,12 +42,21 @@ local function HUD_RoleDrawer(v,p)
 			V_GRAYMAP|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
 			"fixed-right"
 		)
-		v.drawString(320*FU + off,
-			8*FU,
-			"Killed by: TODO: player name",
-			V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
-			"thin-fixed-right"
-		)
+		if p.spectator
+			local src = p.mm.whokilledme
+			local name = "your own stupidity"
+			
+			if ((src and src.valid) and (src.player and src.player.valid))
+				name = "\x85"..src.player.name
+			end
+			
+			v.drawString(320*FU + off,
+				8*FU,
+				"Killed by "..name,
+				V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
+				"thin-fixed-right"
+			)
+		end
 		return
 	end
 	
@@ -88,7 +97,7 @@ local function HUD_WeaponDrawer(v,p)
 	if p.mm and p.mm.weapon and p.mm.weapon.valid
 		local wpn_t = MM:getWpnData(p)
 		local text_string = wpn_t.name or "Weapon"
-		local text_width = v.stringWidth(text_string, V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE, "normal")
+		local text_width = v.stringWidth(text_string, V_ALLOWLOWERCASE, "normal")
 		
 		--Name
 		v.drawString(47*FU - slidein,
@@ -102,7 +111,7 @@ local function HUD_WeaponDrawer(v,p)
 		v.drawString(47*FU - slidein + (text_width*FU) + 2*FU,
 			157*FU,
 			(p.mm.weapon.hidden and "Hidden..." or "Showing!"),
-			V_YELLOWMAP|V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|(p.mm.weapon.hidden and V_30TRANS or 0),
+			V_ORANGEMAP|V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|(p.mm.weapon.hidden and V_30TRANS or 0),
 			"thin-fixed"
 		)
 		v.drawString(47*FU - slidein,
@@ -138,8 +147,8 @@ local function HUD_WeaponDrawer(v,p)
 			V_SNAPTOLEFT|V_SNAPTOBOTTOM|trans
 		)
 		
-		yoffset = -(p.mm.weapon.cooldown*FU)/2
-		--yoffset = ease.outquad(FU/3,$,0)
+		local cd = p.mm.weapon.cooldown
+		yoffset = ease.outquad((FU/TR)*cd,0,-10*FU)
 	else
 		v.drawString(47*FU - slidein,
 			156*FU,
@@ -160,13 +169,23 @@ end
 local function HUD_TimeForWeapon(v,p)
 	if not MM:isMM() then return end
 	if not (p.mo and p.mo.health and p.mm) then return end
-	if p.mm.role == 1 then return end
 	if leveltime >= 10*TICRATE then return end
 
 	local time = (10*TICRATE)-leveltime
 
-	v.drawString(160, 40, "You'll get your weapon in... ", V_SNAPTOTOP|V_ALLOWLOWERCASE, "center")
-	v.drawNum(160, 50, time/TICRATE, V_SNAPTOTOP)
+	v.drawString(160*FU,
+		40*FU - MMHUD.xoffset,
+		(p.mm.role == 1) and "Round starts in"
+		or "You'll get your weapon in",
+		V_SNAPTOTOP|V_ALLOWLOWERCASE,
+		(p.mm.role == 1) and "fixed-center" or "thin-fixed-center"
+	)
+	v.drawScaled(160*FU - (v.cachePatch("STTNUM0").width*FU/2),
+		50*FU - MMHUD.xoffset,
+		FU,
+		v.cachePatch("STTNUM"..(time/TICRATE)),
+		V_SNAPTOTOP
+	)	
 end
 
 local function HUD_IntermissionText(v)
@@ -174,6 +193,36 @@ local function HUD_IntermissionText(v)
 
 	v.drawString(160, 60, type.name, V_SNAPTOTOP|type.color, "center")
 	v.drawString(160, 200-24, "This mode is in alpha!", V_SNAPTOBOTTOM, "center")
+end
+
+local function HUD_InfoDrawer(v,p)
+	
+	local slidein = MMHUD.xoffset
+	
+	--TODO: Replace with timelimit stuff once thats added
+	local timetic = leveltime - 10*TR
+	timetic = max($,0)
+	
+	local minutes = G_TicsToMinutes(timetic, true)
+	local seconds = G_TicsToSeconds(timetic)
+	--local tictrn  = G_TicsToCentiseconds(timetic)
+	
+	if minutes < 10 then minutes = "0"..$ end
+	if seconds < 10 then seconds = "0"..$ end
+	--if tictrn < 10 then tictrn = "0"..$ end
+	
+	v.drawScaled(5*FU - slidein,
+		10*FU,
+		FU,
+		v.cachePatch("NGRTIMER"),
+		V_SNAPTOLEFT|V_SNAPTOTOP
+	)
+	v.drawString(20*FU - slidein,
+		10*FU,
+		minutes..":"..seconds, --.."."..tictrn,
+		V_SNAPTOLEFT|V_SNAPTOTOP,
+		"fixed"
+	)
 end
 
 addHook("HUD",function(v,p)
@@ -188,6 +237,7 @@ addHook("HUD",function(v,p)
 			customhud.SetupItem("saxamm_role",	     modname, HUD_RoleDrawer,    "game")
 			customhud.SetupItem("saxamm_weapon",     modname, HUD_WeaponDrawer,  "game")
 			customhud.SetupItem("saxamm_weapontime", modname, HUD_TimeForWeapon, "game")
+			customhud.SetupItem("saxamm_info",		 modname, HUD_InfoDrawer,	 "game")
 		end
 		
 		MMHUD.ticker = $+1

@@ -46,6 +46,7 @@ end
 addHook("PlayerMsg", function(src, t, trgt, msg)
 	if not MM:isMM() then return end
 	if gamestate ~= GS_LEVEL then return end
+	if MM.gameover then return end
 	if t == 3 then return end
 
 	if not (consoleplayer

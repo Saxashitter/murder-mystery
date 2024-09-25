@@ -1,9 +1,11 @@
 local huds = {
-	["rings"] = "None",
-	["time"] = "None",
-	["score"] = "None",
-	["lives"] = "None"
+	["rings"] = {"None", "game"},
+	["time"] = {"None", "game"},
+	["score"] = {"None", "game"},
+	["lives"] = {"None", "game"}
 }
+
+customhud.SetupFont("STCFN")
 
 -- Should match hud_disable_options in lua_hudlib.c
 -- taken from customhud
@@ -64,7 +66,9 @@ local hudwasmm = false
 local modname = "SAXAMM"
 
 local function addHud(name)
-	huds[name] = dofile("Hooks/HUD/Drawers/"..name)
+	local func,hudtype = dofile("Hooks/HUD/Drawers/"..name)
+
+	huds[name] = {func or "None", hudtype or "game"}
 end
 
 addHook("MapLoad",do
@@ -75,15 +79,15 @@ end)
 addHook("HUD", function(v,p,c)
 	if MM:isMM() then
 		if not hudwasmm then
-			for name,drawer in pairs(huds) do
-				local drawFunc = drawer
+			for name, data in pairs(huds) do
+				local drawFunc = data[1]
 
 				if drawFunc == "None" then drawFunc = nil end
 	
 				if (is_hud_modded(name)
 				and not customhud.ItemExists(name))
 				or not is_hud_modded(name) then
-					customhud.SetupItem(name, modname, drawFunc)
+					customhud.SetupItem(name, modname, drawFunc, data[2])
 					continue
 				end
 
@@ -108,7 +112,7 @@ addHook("HUD", function(v,p,c)
 	MMHUD.xoffset = HUD_BEGINNINGXOFF
 	
 	if hudwasmm
-		for name,drawer in pairs(huds) do
+		for name,data in pairs(huds) do
 
 			if not is_hud_modded(name) then
 				customhud.SetupItem(name, "vanilla")
@@ -128,3 +132,4 @@ addHud "weapontime"
 addHud "info"
 addHud "intermissiontally"
 addHud "rankings"
+addHud "intermission"

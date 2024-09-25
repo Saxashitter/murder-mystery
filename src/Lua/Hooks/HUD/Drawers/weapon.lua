@@ -1,3 +1,5 @@
+local TR = TICRATE
+
 local function HUD_WeaponDrawer(v,p)
 	if (p.spectator) then return end
 	

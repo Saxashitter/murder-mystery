@@ -29,14 +29,12 @@ setmetatable(MM, {
 			return rawget(self, key)
 		end
 
-		if MM_N[key] then
-			print "net has it, return the thing from net"
+		if MM_N[key] ~= nil then
 			return MM_N[key]
 		end
 	end,
 	__newindex = function(self, key, value)
 		if MM_N[key] ~= nil then
-			print "whoop we assigning shit to net now"
 			MM_N[key] = value
 			return
 		end

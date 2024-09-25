@@ -1,6 +1,6 @@
 local TR = TICRATE
 
-local function HUD_WeaponDrawer(v,p)
+return function(v,p)
 	if (p.mm and p.mm.spectator) then return end
 
 	local slidein = MMHUD.xoffset
@@ -97,5 +97,3 @@ local function HUD_WeaponDrawer(v,p)
 		V_SNAPTOLEFT|V_SNAPTOBOTTOM|trans
 	)
 end
-
-return HUD_WeaponDrawer

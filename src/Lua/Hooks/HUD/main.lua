@@ -127,7 +127,7 @@ addHook("HUD", function(v,p,c)
 end)
 
 addHud "role"
-addHud "weapon"
+addHud "heldweapon"
 addHud "weapontime"
 addHud "info"
 addHud "intermissiontally"

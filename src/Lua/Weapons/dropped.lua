@@ -38,14 +38,23 @@ addHook("MobjThinker", function(d_wpn)
 end, MT_MM_DROPPEDWEAPON)
 
 local function canPickUp(toucher, d_wpn)
+	if (d_wpn.timealive ~= nil and d_wpn.timealive < 10) then
+		return false
+	end
+
 	if not (toucher
 	and toucher.health
 	and toucher.player
 	and toucher.player.mm
 	and not toucher.player.mm.spectator) then return false end
 
+	if toucher == d_wpn.target then return false end
+
 	if (toucher.player.mm.weapon and toucher.player.mm.weapon.valid) then
-		if toucher.player.mm.role == 2
+		--if toucher.player.mm.role == 2
+		local data = MM:getWpnData(toucher.player.mm.weapon)
+
+		if data.hold_another
 		and not (toucher.player.mm.weapon2
 		and toucher.player.mm.weapon2.valid) then
 			return true
@@ -62,7 +71,7 @@ addHook("TouchSpecial", function(d_wpn, toucher)
 		return true
 	end
 
-	MM:giveWeapon(toucher.player, d_wpn.give, false, 10*TICRATE)
+	MM:giveWeapon(toucher.player, d_wpn.give)
 end, MT_MM_DROPPEDWEAPON)
 
 addHook("PostThinkFrame", do

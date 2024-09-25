@@ -1,5 +1,3 @@
-local PT_Remove = MM.require "Libs/preThinkRemove"
-
 mobjinfo[freeslot "MT_MM_WEAPON"] = {
 	radius = 24*FU,
 	height = 24*FU,
@@ -45,14 +43,20 @@ function MM:giveWeapon(p, name, forced, time)
 	if not (self.weapons[name]) then return end
 
 	if p.mm.weapon and p.mm.weapon.valid and not forced then
-		if not self.weapons[name].hold_another then return end
+		local data = self:getWpnData(p.mm.weapon)
+
+		if not data.hold_another then
+			return
+		end
 
 		p.mm.weapon2 = spawn_weapon(p, name)
-		p.mm.weapon2.time = time
+		p.mm.weapon2.time = time or 5*TICRATE
 
 		p.mm.weapon.hidden = true
 		return
 	end
+
+	print "oh ok"
 
 	if p.mm.weapon and p.mm.weapon.valid then
 		P_RemoveMobj(p.mm.weapon)
@@ -113,6 +117,33 @@ local function search_players(p)
 	end
 end
 
+local function drop_weapon(wpn, restrict_pickup)
+	wpn.dropped = true
+
+	local p = wpn.target.player
+
+	if p.mm.weapon == wpn then
+		p.mm.weapon = nil
+	end
+	if p.mm.weapon2 == wpn then
+		p.mm.weapon2 = nil
+	end
+
+	local x = wpn.target.x
+	local y = wpn.target.y
+	local d_wpn = MM:spawnDroppedWeapon(x, y, wpn.z, wpn.__type)
+	
+	d_wpn.angle = wpn.target.angle
+	P_Thrust(d_wpn,d_wpn.angle,8*d_wpn.scale)
+	P_SetObjectMomZ(d_wpn,4*FU)
+
+	if restrict_pickup then
+		d_wpn.target = wpn.target
+	end
+
+	P_RemoveMobj(wpn)
+end
+
 addHook("MobjThinker", function(wpn)
 	if not (wpn and wpn.valid) then return end
 	if not (wpn.target
@@ -140,12 +171,7 @@ addHook("MobjThinker", function(wpn)
 	if wpn.time ~= nil then
 		wpn.time = max(0, $-1)
 		if not (wpn.time) then
-			if p.mm.weapon == wpn then
-				p.mm.weapon = nil
-			end
-			if p.mm.weapon2 == wpn then
-				p.mm.weapon2 = nil
-			end
+			drop_weapon(wpn, true)
 			return
 		end
 	end
@@ -162,28 +188,7 @@ addHook("MobjThinker", function(wpn)
 	if data.droppable
 	and (p.cmd.buttons & BT_CUSTOM2 and p.lastbuttons & BT_CUSTOM2 == 0)
 	and not wpn.dropped then
-		wpn.dropped = true
-
-
-		if p.mm.weapon == wpn then
-			p.mm.weapon = nil
-		end
-		if p.mm.weapon2 == wpn then
-			p.mm.weapon2 = nil
-		end
-
-		local type = wpn.__type
-
-		local x = wpn.target.x
-		local y = wpn.target.y
-		local d_wpn = MM:spawnDroppedWeapon(x, y, wpn.z, type)
-		
-		d_wpn.angle = wpn.target.angle
-		P_Thrust(d_wpn,d_wpn.angle,8*d_wpn.scale)
-		P_SetObjectMomZ(d_wpn,4*FU)
-		d_wpn.target = wpn.target
-
-		PT_Remove(wpn)
+		drop_weapon(wpn)
 		return
 	end
 

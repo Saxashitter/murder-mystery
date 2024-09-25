@@ -100,7 +100,17 @@ local function HUD_WeaponDrawer(v,p)
 		local wpn_t = MM:getWpnData(wpn)
 		local text_string = wpn_t.name or "Weapon"
 		local text_width = v.stringWidth(text_string, V_ALLOWLOWERCASE, "normal")
-		
+
+		local above_text = ""
+		if wpn == p.mm.weapon2 then
+			above_text = "Secondary"
+		end
+		if wpn.time ~= nil then
+			above_text = $..", "..wpn.time/TICRATE
+		end
+
+		v.drawString(x - slidein, y - (10*FU), above_text, V_SNAPTOBOTTOM|V_SNAPTOLEFT, "thin-fixed")
+
 		--Name
 		v.drawString(47*FU - slidein,
 			156*FU,
@@ -112,13 +122,13 @@ local function HUD_WeaponDrawer(v,p)
 		--Tooltips
 		v.drawString(47*FU - slidein + (text_width*FU) + 2*FU,
 			157*FU,
-			(p.mm.weapon.hidden and "Hidden..." or "Showing!"),
+			(wpn.hidden and "Hidden..." or "Showing!"),
 			V_ORANGEMAP|V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|(p.mm.weapon.hidden and V_30TRANS or 0),
 			"thin-fixed"
 		)
 		v.drawString(47*FU - slidein,
 			170*FU,
-			"[C1] - "..(p.mm.weapon.hidden and "Show" or "Hide").." weapon",
+			"[C1] - "..(wpn.hidden and "Show" or "Hide").." weapon",
 			V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
 			"thin-fixed"
 		)
@@ -132,7 +142,7 @@ local function HUD_WeaponDrawer(v,p)
 			)
 			y = $+8
 		end
-		if not p.mm.weapon.hidden
+		if not wpn.hidden
 			v.drawString(47*FU - slidein,
 				y*FU,
 				"[FIRE] - Use weapon",
@@ -149,7 +159,7 @@ local function HUD_WeaponDrawer(v,p)
 			V_SNAPTOLEFT|V_SNAPTOBOTTOM|trans
 		)
 		
-		local cd = p.mm.weapon.cooldown
+		local cd = wpn.cooldown
 		yoffset = ease.outquad((FU/TR)*cd,0,-10*FU)
 	else
 		v.drawString(47*FU - slidein,

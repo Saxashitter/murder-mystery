@@ -80,7 +80,9 @@ return function(v)
 
 	v.drawString(160*FU, y+(10*FU), murd_text, V_SNAPTOTOP, "thin-fixed-center")
 
-	local icon_width = 48
+	//// ICONS
+
+	local icon_width = 20
 
 	if MM_N[endtype.results] then
 		local icons = {}
@@ -96,36 +98,65 @@ return function(v)
 			})
 		end
 
-		table.sort(icons, function(one, two)
-			return one.rings < two.rings
-		end)
-
-		local scale = FU*3/2
+		local scale = FU*5/4
 
 		local total_width = (icon_width*(#icons-1))
 		local x = ( 160*FU ) - ( total_width*scale/2 )
-		local y = ( 100*FU )
+		local y = ( 180*FU )
 
 		for k,icon in pairs(icons) do
-			if k > 3 then break end
-			v.drawScaled(x, y, scale, icon.patch, trans, icon.color)
-
-			customhud.CustomFontString(v,
-				x, y+(4*scale),
-				icon.name,
-				"STCFN",
-				0,
-				"center",
-				FU/2)
-			customhud.CustomFontString(v,
-				x, y+(8*scale),
-				tostring(icon.rings).." Rings",
-				"STCFN",
-				0,
-				"center",
-				FU/2)
-
+			v.drawScaled(x, y, scale, icon.patch, trans|V_SNAPTOBOTTOM, icon.color)
 			x = $+(icon_width*scale)
 		end
 	end
+
+	// MAPS
+
+	for k,map in ipairs(MM_N.mapVote) do
+		local scale = FU/4
+
+		local p = displayplayer
+
+		local maxMaps = #MM_N.mapVote
+		local mapIcon = v.cachePatch(G_BuildMapName(map.map).."P")
+		local iconWidth = mapIcon.width*scale
+		local offset = 60*FU
+		local width = iconWidth*maxMaps
+		width = $+(offset*(maxMaps-1))
+
+		local x = 160*FU
+		x = $ - (width/2)
+		x = $ + (offset*(k-1))
+		x = $ + (iconWidth*(k-1))
+
+		local y = 100*FU
+		y = $ - (mapIcon.height*scale/2)
+
+		local color = 0
+		if (p and p.mm and p.mm.cur_map == k) then
+			if not (p.mm.selected_map) then
+				color = V_YELLOWMAP
+			else
+				color = V_GREENMAP
+			end
+		end
+
+		v.drawScaled(x, y, scale, mapIcon)
+		v.drawString(x+(iconWidth/2),
+			y+(mapIcon.height*scale),
+			G_BuildMapTitle(map.map),
+			V_ALLOWLOWERCASE|color|trans,
+			"thin-fixed-center")
+		v.drawString(x+(iconWidth/2),
+			y+(mapIcon.height*scale)+(8*FU),
+			tostring(map.votes),
+			V_ALLOWLOWERCASE|color|trans,
+			"thin-fixed-center")
+	end
+
+	// START IN
+
+	local time = (15*TICRATE-MM_N.end_ticker)/TICRATE
+
+	v.drawString(160, 200-9, "START IN "..tostring(time).." SECONDS", V_SNAPTOBOTTOM|V_YELLOWMAP|trans, "center")
 end,"gameandscores"

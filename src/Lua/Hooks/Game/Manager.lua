@@ -17,8 +17,16 @@ addHook("PreThinkFrame", do
 
 	for p in players.iterate do
 		if (p and p.mm) then
+			p.mm.lastside = p.mm.sidemove or 0
+			p.mm.lastforward = p.mm.forwardmove or 0
+	
+			p.mm.forwardmove = p.cmd.forwardmove
+			p.mm.sidemove = p.cmd.sidemove
+	
 			p.mm.buttons = p.cmd.buttons
 		end
+		p.cmd.forwardmove = 0
+		p.cmd.sidemove = 0
 		p.cmd.buttons = 0
 	end
 end)
@@ -28,6 +36,18 @@ addHook("ThinkFrame", do
 
 	if MM_N.gameover then
 		MM_N.end_ticker = $+1
+		if MM_N.end_ticker > 15*TICRATE then
+			local selected_map = 1
+			local most_votes = 0
+			for _,map in ipairs(MM_N.mapVote) do
+				if map.votes < most_votes then continue end
+
+				selected_map = map.map
+				most_votes = map.votes
+			end
+			G_SetCustomExitVars(selected_map, 2)
+			G_ExitLevel()
+		end
 		return
 	end
 

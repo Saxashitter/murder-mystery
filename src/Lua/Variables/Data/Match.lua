@@ -7,5 +7,6 @@ return {
 	gameover = false,
 	end_ticker = 0,
 	murderers = {},
-	innocents = {}
+	innocents = {},
+	mapVote = {}
 }

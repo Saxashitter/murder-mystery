@@ -67,7 +67,7 @@ addHook("ThinkFrame", do
 					continue
 				end
 
-				if wpn.timealive > TICRATE then
+				if wpn.timealive > 60*TICRATE then
 					-- give player gun
 					local p = randomPlayer(_eligibleGunPlayer)
 					if p then
@@ -75,7 +75,6 @@ addHook("ThinkFrame", do
 						chatprint(" !!! - A random player has gotten the gun due to inactivity!")
 						P_RemoveMobj(wpn)
 					end
-					break
 				end
 			end
 		else

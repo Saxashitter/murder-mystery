@@ -174,7 +174,7 @@ local function HUD_TimeForWeapon(v,p)
 			40*FU - MMHUD.xoffset,
 			"Waiting for players",
 			V_SNAPTOTOP|V_ALLOWLOWERCASE,
-			"fixed-enter"
+			"fixed-center"
 		)
 		return
 	end
@@ -234,6 +234,19 @@ local function HUD_InfoDrawer(v,p)
 	)
 end
 
+local function HUD_TabScoresDrawer(v)
+
+	local summadat = v.cachePatch("SUMMADAT")
+
+	local w,h = FixedDiv(v.width()/v.dupx(), summadat.width),
+		FixedDiv(v.height()/v.dupy(), summadat.height)
+
+	v.drawStretched(0, 0,
+		w, h,
+		summadat,
+		V_SNAPTOTOP|V_SNAPTOLEFT)
+end
+
 addHook("HUD",function(v,p)
 	if (gametype == GT_SAXAMM)
 		if not hudwasmm
@@ -242,7 +255,7 @@ addHook("HUD",function(v,p)
 			customhud.SetupItem("score",		     modname)
 			customhud.SetupItem("lives",		     modname)
 			customhud.SetupItem("intermissiontally", modname, HUD_IntermissionText)
-			customhud.SetupItem("scores", 			 modname, HUD_TabScoresDrawer)
+			customhud.SetupItem("rankings",			 modname, HUD_TabScoresDrawer)
 			
 			customhud.SetupItem("saxamm_role",	     modname, HUD_RoleDrawer,    "game")
 			customhud.SetupItem("saxamm_weapon",     modname, HUD_WeaponDrawer,  "game")
@@ -270,7 +283,7 @@ addHook("HUD",function(v,p)
 			customhud.SetupItem("score",				"vanilla")
 			customhud.SetupItem("lives",				"vanilla")
 			customhud.SetupItem("intermissiontally",	"vanilla")
-			customhud.SetupItem("scores",				"vanilla")
+			customhud.SetupItem("rankings",				"vanilla")
 		end
 		
 		hudwasmm = false

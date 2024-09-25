@@ -94,8 +94,10 @@ local function HUD_WeaponDrawer(v,p)
 
 	v.drawScaled(x - slidein, y, FU, patch, V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_50TRANS)
 
-	if p.mm and p.mm.weapon and p.mm.weapon.valid
-		local wpn_t = MM:getWpnData(p)
+	local wpn = (p.mm.weapon2 and p.mm.weapon2.valid) and p.mm.weapon2 or p.mm.weapon
+
+	if wpn and wpn.valid
+		local wpn_t = MM:getWpnData(wpn)
 		local text_string = wpn_t.name or "Weapon"
 		local text_width = v.stringWidth(text_string, V_ALLOWLOWERCASE, "normal")
 		

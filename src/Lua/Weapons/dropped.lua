@@ -37,19 +37,32 @@ addHook("MobjThinker", function(d_wpn)
 	end
 end, MT_MM_DROPPEDWEAPON)
 
-addHook("TouchSpecial", function(d_wpn, toucher)
+local function canPickUp(toucher, d_wpn)
 	if not (toucher
 	and toucher.health
 	and toucher.player
 	and toucher.player.mm
-	and not toucher.player.mm.spectator
-	and not (toucher.player.mm.weapon and toucher.player.mm.weapon.valid)
-	and not d_wpn.restrict[toucher.player.mm.role])
-	or (d_wpn.timealive < 10) then
+	and not toucher.player.mm.spectator) then return false end
+
+	if (toucher.player.mm.weapon and toucher.player.mm.weapon.valid) then
+		if toucher.player.mm.role == 2
+		and not (toucher.player.mm.weapon2
+		and toucher.player.mm.weapon2.valid) then
+			return true
+		end
+	
+		return false
+	end
+
+	return true
+end
+
+addHook("TouchSpecial", function(d_wpn, toucher)
+	if not canPickUp(toucher, d_wpn) then
 		return true
 	end
 
-	MM:giveWeapon(toucher.player, d_wpn.give)
+	MM:giveWeapon(toucher.player, d_wpn.give, false, 10*TICRATE)
 end, MT_MM_DROPPEDWEAPON)
 
 addHook("PostThinkFrame", do

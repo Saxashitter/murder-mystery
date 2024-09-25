@@ -1,3 +1,5 @@
+local PT_Remove = MM.require "Libs/preThinkRemove"
+
 mobjinfo[freeslot "MT_MM_WEAPON"] = {
 	radius = 24*FU,
 	height = 24*FU,
@@ -19,28 +21,50 @@ function MM:makeWeapon(name, data)
 	self.weapons[name] = data
 end
 
-function MM:giveWeapon(p, name)
+local function spawn_weapon(p, name)
+	local weapon = P_SpawnMobj(p.mo.x, p.mo.y, p.mo.z, MT_MM_WEAPON)
+	weapon.__type = name
+	weapon.target = p.mo
+	weapon.fired = false
+	weapon.state = MM.weapons[name].state
+
+	weapon.ox = 0
+	weapon.oy = 0
+	weapon.oz = 0
+
+	weapon.hidden = true
+	weapon.hidepressed = false
+
+	MM.weapons[name].spawn(p, weapon)
+
+	return weapon
+end
+
+function MM:giveWeapon(p, name, forced, time)
 	if not (p.mo and p.mm and not p.mm.spectator) then return end
 	if not (self.weapons[name]) then return end
 
-	p.mm.weapon = P_SpawnMobj(p.mo.x, p.mo.y, p.mo.z, MT_MM_WEAPON)
-	p.mm.weapon.__type = name
-	p.mm.weapon.target = p.mo
-	p.mm.weapon.fired = false
-	p.mm.weapon.state = self.weapons[name].state
-	p.mm.weapon.ox = 0
-	p.mm.weapon.oy = 0
-	p.mm.weapon.oz = 0
-	p.mm.weapon.hidden = true
-	p.mm.weapon.hidepressed = false
+	if p.mm.weapon and p.mm.weapon.valid and not forced then
+		if not self.weapons[name].hold_another then return end
 
-	self.weapons[name].spawn(p, p.mm.weapon)
+		p.mm.weapon2 = spawn_weapon(p, name)
+		p.mm.weapon2.time = time
+
+		p.mm.weapon.hidden = true
+		return
+	end
+
+	if p.mm.weapon and p.mm.weapon.valid then
+		P_RemoveMobj(p.mm.weapon)
+	end
+
+	p.mm.weapon = spawn_weapon(p, name)
 end
 
-function MM:getWpnData(p)
-	if not (p.mo and p.mm and p.mm.weapon and p.mm.weapon.valid) then return end
+function MM:getWpnData(wpn)
+	if not (wpn and wpn.valid) then return end
 
-	return self.weapons[p.mm.weapon.__type]
+	return self.weapons[wpn.__type]
 end
 
 local weapons = {}
@@ -95,16 +119,36 @@ addHook("MobjThinker", function(wpn)
 	and wpn.target.valid
 	and wpn.target.player
 	and wpn.target.player.mm
-	and wpn.target.player.mm.weapon == wpn) then
+	and (wpn.target.player.mm.weapon == wpn
+	or wpn.target.player.mm.weapon2 == wpn)) then
 		P_RemoveMobj(wpn)
 		return
 	end
 	
 	local p = wpn.target.player
 	
-	local data = MM:getWpnData(p)
+	local data = MM:getWpnData(wpn)
 
-	data.think(p, wpn)
+	if p.mm.weapon == wpn
+	and (p.mm.weapon2 and p.mm.weapon2.valid) then
+		-- prioritize second weapon
+		wpn.flags2 = $|MF2_DONTDRAW
+		data.think(p, wpn)
+		return
+	end
+
+	if wpn.time ~= nil then
+		wpn.time = max(0, $-1)
+		if not (wpn.time) then
+			if p.mm.weapon == wpn then
+				p.mm.weapon = nil
+			end
+			if p.mm.weapon2 == wpn then
+				p.mm.weapon2 = nil
+			end
+			return
+		end
+	end
 
 	if p.cmd.buttons & BT_ATTACK
 	and not wpn.fired then
@@ -119,18 +163,27 @@ addHook("MobjThinker", function(wpn)
 	and (p.cmd.buttons & BT_CUSTOM2 and p.lastbuttons & BT_CUSTOM2 == 0)
 	and not wpn.dropped then
 		wpn.dropped = true
-		p.mm.weapon = nil
-		
+
+
+		if p.mm.weapon == wpn then
+			p.mm.weapon = nil
+		end
+		if p.mm.weapon2 == wpn then
+			p.mm.weapon2 = nil
+		end
+
+		local type = wpn.__type
+
 		local x = wpn.target.x
 		local y = wpn.target.y
-		local d_wpn = MM:spawnDroppedWeapon(x, y, wpn.z, wpn.__type)
+		local d_wpn = MM:spawnDroppedWeapon(x, y, wpn.z, type)
 		
 		d_wpn.angle = wpn.target.angle
 		P_Thrust(d_wpn,d_wpn.angle,8*d_wpn.scale)
 		P_SetObjectMomZ(d_wpn,4*FU)
 		d_wpn.target = wpn.target
-		
-		P_RemoveMobj(wpn)
+
+		PT_Remove(wpn)
 		return
 	end
 
@@ -146,6 +199,8 @@ addHook("MobjThinker", function(wpn)
 	end
 
 	wpn.hidepressed = (p.cmd.buttons & BT_CUSTOM1)
+
+	data.think(p, wpn)
 
 	if not data.can_damage
 	or (data.can_damage

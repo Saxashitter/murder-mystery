@@ -22,7 +22,7 @@ weapon.attack = function(p, k)
 	S_StartSound(p.mo, sfx_thok)
 	return true
 end
-weapon.can_damage = function(p, k, p2)
+weapon.can_damage = function(p, k)
 	return (k.hit)
 end
 weapon.think = function(p, k)
@@ -43,5 +43,6 @@ end
 weapon.name = "Knife"
 weapon.icon = "MM_KNIFE"
 weapon.restrict = {true, false, true}
+weapon.hold_another = true
 
 return weapon

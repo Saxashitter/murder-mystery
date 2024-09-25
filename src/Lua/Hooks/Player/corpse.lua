@@ -61,7 +61,7 @@ addHook("ThinkFrame", function()
 	for p in players.iterate() do
 		if p.mo and not (p.mo.health) then
 			p.mo.flags2 = $|MF2_DONTDRAW
-			return
+			continue
 		end
 	end
 end)

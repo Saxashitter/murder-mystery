@@ -242,6 +242,7 @@ addHook("HUD",function(v,p)
 			customhud.SetupItem("score",		     modname)
 			customhud.SetupItem("lives",		     modname)
 			customhud.SetupItem("intermissiontally", modname, HUD_IntermissionText)
+			customhud.SetupItem("scores", 			 modname, HUD_TabScoresDrawer)
 			
 			customhud.SetupItem("saxamm_role",	     modname, HUD_RoleDrawer,    "game")
 			customhud.SetupItem("saxamm_weapon",     modname, HUD_WeaponDrawer,  "game")
@@ -269,6 +270,7 @@ addHook("HUD",function(v,p)
 			customhud.SetupItem("score",				"vanilla")
 			customhud.SetupItem("lives",				"vanilla")
 			customhud.SetupItem("intermissiontally",	"vanilla")
+			customhud.SetupItem("scores",				"vanilla")
 		end
 		
 		hudwasmm = false

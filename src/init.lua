@@ -15,6 +15,7 @@ G_AddGametype({
 })
 
 MM.require = dofile "Libs/require"
+dofile "Libs/CustomHud.lua"
 
 dofile "Variables/main"
 dofile "Functions/main"
@@ -22,5 +23,3 @@ dofile "Console/main"
 dofile "Hooks/main"
 dofile "Weapons/main"
 
-dofile "Libs/CustomHud.lua"
-dofile "Hud/HudHandle.lua"

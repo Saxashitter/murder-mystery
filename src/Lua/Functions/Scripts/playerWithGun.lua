@@ -12,7 +12,7 @@ return function(self)
 		and p.mm.weapon.__type == "Gun")
 		or (p.mm.weapon2
 		and p.mm.weapon2.valid
-		and p.mm.weapon2.__type == "Gun")) then
+		and p.mm.weapon2.__type == "Gun"))) then
 			continue
 		end
 

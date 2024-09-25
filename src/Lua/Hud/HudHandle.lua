@@ -109,7 +109,7 @@ local function HUD_WeaponDrawer(v,p)
 			above_text = $..", "..wpn.time/TICRATE
 		end
 
-		v.drawString(x - slidein, y - (10*FU), above_text, V_SNAPTOBOTTOM|V_SNAPTOLEFT, "thin-fixed")
+		v.drawString(5*FU - slidein, y - (10*FU), above_text, V_SNAPTOBOTTOM|V_SNAPTOLEFT|V_ALLOWLOWERCASE, "thin-fixed")
 
 		--Name
 		v.drawString(47*FU - slidein,

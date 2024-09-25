@@ -56,8 +56,6 @@ function MM:giveWeapon(p, name, forced, time)
 		return
 	end
 
-	print "oh ok"
-
 	if p.mm.weapon and p.mm.weapon.valid then
 		P_RemoveMobj(p.mm.weapon)
 	end
@@ -188,7 +186,7 @@ addHook("MobjThinker", function(wpn)
 	if data.droppable
 	and (p.cmd.buttons & BT_CUSTOM2 and p.lastbuttons & BT_CUSTOM2 == 0)
 	and not wpn.dropped then
-		drop_weapon(wpn)
+		drop_weapon(wpn, wpn == p.mm.weapon2)
 		return
 	end
 

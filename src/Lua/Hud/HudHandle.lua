@@ -200,8 +200,8 @@ local function HUD_InfoDrawer(v,p)
 	local slidein = MMHUD.xoffset
 	
 	--TODO: Replace with timelimit stuff once thats added
-	local timetic = leveltime - 10*TR
-	timetic = max($,0)
+	local timetic = MM_N.time
+	timetic = min(max($,0), MM_N.maxtime)
 	
 	local minutes = G_TicsToMinutes(timetic, true)
 	local seconds = G_TicsToSeconds(timetic)

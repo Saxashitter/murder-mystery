@@ -26,8 +26,6 @@ addHook("ThinkFrame", do
 		return
 	end
 
-	// is time up?
-
 	local innocents = 0
 	local murderers = 0
 
@@ -52,7 +50,11 @@ addHook("ThinkFrame", do
 	end
 
 	-- time management
-	MM_N.time = $-1
+	MM_N.time = max(0, $-1)
+	if not (MM_N.time) then
+		MM:endGame(1)
+		return
+	end
 
 	-- gun management
 	if leveltime > 10*TICRATE

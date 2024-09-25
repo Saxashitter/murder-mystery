@@ -2,7 +2,7 @@ mobjinfo[freeslot "MT_MM_WEAPON"] = {
 	radius = 24*FU,
 	height = 24*FU,
 	spawnstate = S_THOK,
-	flags = MF_SPECIAL|MF_NOGRAVITY|MF_NOCLIP|MF_NOCLIPHEIGHT,
+	flags = MF_NOGRAVITY|MF_NOCLIP|MF_NOCLIPHEIGHT,
 	flags2 = MF2_DONTDRAW
 }
 
@@ -50,6 +50,36 @@ addHook("MobjSpawn", function(wpn)
 	table.insert(weapons, wpn)
 end, MT_MM_WEAPON)
 
+addHook("MobjMoveCollide", function(pmo, mo)
+	if not (pmo
+	and pmo.valid
+	and pmo.player
+	and pmo.health
+	and pmo.player.mm
+	and not pmo.player.mm.spectator
+	and pmo.player.mm.weapon
+	and pmo.player.mm.weapon.valid) then return end
+
+	if not (mo
+	and mo.valid
+	and mo.health
+	and mo.player
+	and mo.player.mm
+	and not mo.player.mm.spectator) then return end
+
+	if pmo.z > mo.z+mo.height then return end
+	if mo.z > pmo.z+pmo.height then return end
+
+	local data = MM:getWpnData(pmo.player)
+
+	if not data.can_damage
+	or (data.can_damage
+	and data.can_damage(pmo, pmo.player.mm.weapon, mo)) then
+		P_DamageMobj(mo, pmo.player.mm.weapon, pmo, 999, DMG_INSTAKILL)
+	end
+end, MT_PLAYER)
+
+/* old code
 addHook("TouchSpecial", function(special, toucher)
 	if not (special and special.valid) then return end
 	if not (special
@@ -78,7 +108,7 @@ addHook("TouchSpecial", function(special, toucher)
 	end
 
 	return true
-end, MT_MM_WEAPON)
+end, MT_MM_WEAPON)*/
 
 addHook("MobjThinker", function(wpn)
 	if not (wpn and wpn.valid) then return end

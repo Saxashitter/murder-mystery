@@ -1,4 +1,4 @@
-local match_time = 20*TICRATE
+local match_time = 300*TICRATE
 
 return {
 	time = match_time+10*TICRATE,

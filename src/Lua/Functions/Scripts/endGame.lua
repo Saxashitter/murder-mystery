@@ -2,18 +2,30 @@ MM.endTypes = {
 	{
 		name = "Innocents win!",
 		color = V_GREENMAP,
-		results = 1
+		results = "innocents"
 	},
 	{
 		name = "Murderer wins!",
 		color = V_REDMAP,
-		results = 2
+		results = "murderers"
 	}
 }
 
 return function(self, endType)
-	local endType = MM.endTypes[endType]
+	if MM_N.gameover then return end
+
+	local endType = MM.endTypes[endType] or 1
 
 	MM_N.endType = endType
-	G_ExitLevel()
+	MM_N.gameover = true
+
+	for p in players.iterate do
+		if not (p and p.mm) then continue end
+
+		if p.mm.role == 2 then
+			table.insert(MM_N.murderers, p)
+			continue
+		end
+		table.insert(MM_N.innocents, p)
+	end
 end

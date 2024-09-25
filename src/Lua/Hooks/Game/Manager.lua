@@ -11,8 +11,25 @@ local function _eligibleGunPlayer(p)
 	and not (p.mm.weapon and p.mm.weapon.valid)
 end
 
+addHook("PreThinkFrame", do
+	if not MM:isMM() then return end
+	if not MM.gameover then return end
+
+	for p in players.iterate do
+		if (p and p.mm) then
+			p.mm.buttons = p.cmd.buttons
+		end
+		p.cmd.buttons = 0
+	end
+end)
+
 addHook("ThinkFrame", do
 	if not MM:isMM() then return end
+
+	if MM_N.gameover then
+		MM_N.end_ticker = $+1
+		return
+	end
 
 	if MM_N.waiting_for_players then
 		local playersIn = 0

@@ -31,6 +31,9 @@ addHook("MobjDeath", function(target, inflictor, source)
 		chatprintf(source.player, " !!! - That was not the murderer. You were killed for friendly fire!", true)
 		P_DamageMobj(source, nil, nil, 999, DMG_INSTAKILL)
 	end
+	
+	target.player.mm.whokilledme = source
+	
 
 	local corpse = P_SpawnMobjFromMobj(target, 0,0,0, MT_THOK)
 

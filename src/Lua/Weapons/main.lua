@@ -74,7 +74,7 @@ addHook("TouchSpecial", function(special, toucher)
 	if not data.can_damage
 	or (data.can_damage
 	and data.can_damage(special.target.player, special, toucher.player)) then
-		P_DamageMobj(toucher, special, special, 999, DMG_INSTAKILL)
+		P_DamageMobj(toucher, special, special.target, 999, DMG_INSTAKILL)
 	end
 
 	return true

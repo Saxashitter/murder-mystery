@@ -169,6 +169,15 @@ end
 local function HUD_TimeForWeapon(v,p)
 	if not MM:isMM() then return end
 	if not (p.mo and p.mo.health and p.mm) then return end
+	if MM_N.waiting_for_players then
+		v.drawString(160*FU,
+			40*FU - MMHUD.xoffset,
+			"Waiting for players",
+			V_SNAPTOTOP|V_ALLOWLOWERCASE,
+			"fixed-enter"
+		)
+		return
+	end
 	if leveltime >= 10*TICRATE then return end
 
 	local time = (10*TICRATE)-leveltime

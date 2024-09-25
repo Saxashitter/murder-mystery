@@ -52,11 +52,11 @@ addHook("MobjDeath", function(target, inflictor, source)
 	corpse.momz = 6*(FU*P_MobjFlip(corpse))
 end, MT_PLAYER)
 
-addHook("PostThinkFrame", do
+addHook("ThinkFrame", function()
 	if not MM:isMM() then return end
 
-	for p in players.iterate do
-		if p.mo and p.mo.valid and not (p.mo.health) then
+	for p in players.iterate() do
+		if p.mo and not (p.mo.health) then
 			p.mo.flags2 = $|MF2_DONTDRAW
 			return
 		end

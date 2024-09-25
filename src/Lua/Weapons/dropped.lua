@@ -1,3 +1,6 @@
+local dropped_mobjs = {}
+addHook("NetVars", function(n) dropped_mobjs = n($) end)
+
 mobjinfo[freeslot "MT_MM_DROPPEDWEAPON"] = {
 	radius = 32*FU,
 	height = 16*FU,
@@ -14,6 +17,12 @@ function MM:spawnDroppedWeapon(x, y, z, name)
 	wpn.state = wpn_t.state
 	wpn.restrict = wpn_t.restrict
 	wpn.give = name
+
+	if not (dropped_mobjs[name]) then
+		dropped_mobjs[name] = {}
+	end
+
+	table.insert(dropped_mobjs[name], wpn)
 
 	return wpn
 end
@@ -42,3 +51,23 @@ addHook("TouchSpecial", function(d_wpn, toucher)
 
 	MM:giveWeapon(toucher.player, d_wpn.give)
 end, MT_MM_DROPPEDWEAPON)
+
+addHook("PostThinkFrame", do
+	-- manage weapons
+	for _,class in pairs(dropped_mobjs) do
+		for k,wpn in pairs(class) do
+			if not (wpn and wpn.valid) then
+				table.remove(class, k)
+				continue
+			end
+		end
+	end
+end)
+
+function MM:isWeaponOnMap(name)
+	if not dropped_mobjs[name] then return false end
+
+	if #dropped_mobjs[name] then
+		return dropped_mobjs[name]
+	end
+end

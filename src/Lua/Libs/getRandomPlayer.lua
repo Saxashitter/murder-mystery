@@ -12,7 +12,8 @@ end
 
 return function(conditions)
 	local p
-	while not p do
+	local loop = 0
+	while not (p and loop <= 32) do
 		p = players[P_RandomKey(#players)]
 
 		if (p and p.valid and conditionsPassed(p, conditions)) then
@@ -20,5 +21,8 @@ return function(conditions)
 		end
 
 		p = nil
+		loop = $+1
 	end
+
+	return false
 end

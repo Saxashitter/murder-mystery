@@ -6,3 +6,5 @@ doAndInsert("isMM")
 doAndInsert("init")
 doAndInsert("playerInit")
 doAndInsert("endGame")
+
+doAndInsert("playerWithGun")

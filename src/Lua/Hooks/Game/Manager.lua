@@ -72,7 +72,7 @@ addHook("ThinkFrame", do
 					local p = randomPlayer(_eligibleGunPlayer)
 					if p then
 						MM:giveWeapon(p, "Gun")
-						chatprint(" !!! - A random player has gotten the gun due to inactivity!")
+						chatprint("!!! - A random player has gotten the gun due to inactivity!")
 						P_RemoveMobj(wpn)
 					end
 				end
@@ -81,7 +81,7 @@ addHook("ThinkFrame", do
 			local p = randomPlayer(_eligibleGunPlayer)
 			if p then
 				MM:giveWeapon(p, "Gun")
-				chatprint(" !!! - A random player has gotten the gun due to the gun despawning!")
+				chatprint("!!! - A random player has gotten the gun due to the gun despawning!")
 			end
 		end
 	end

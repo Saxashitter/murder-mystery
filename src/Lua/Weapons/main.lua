@@ -50,16 +50,7 @@ addHook("MobjSpawn", function(wpn)
 	table.insert(weapons, wpn)
 end, MT_MM_WEAPON)
 
-addHook("MobjMoveCollide", function(pmo, mo)
-	if not (pmo
-	and pmo.valid
-	and pmo.player
-	and pmo.health
-	and pmo.player.mm
-	and not pmo.player.mm.spectator
-	and pmo.player.mm.weapon
-	and pmo.player.mm.weapon.valid) then return end
-
+local function do_damage(pmo, mo)
 	if not (mo
 	and mo.valid
 	and mo.health
@@ -67,48 +58,36 @@ addHook("MobjMoveCollide", function(pmo, mo)
 	and mo.player.mm
 	and not mo.player.mm.spectator) then return end
 
-	if pmo.z > mo.z+mo.height then return end
-	if mo.z > pmo.z+pmo.height then return end
+	local dist = R_PointToDist2(pmo.x, pmo.y, mo.x, mo.y)
+	local z_dist = abs(pmo.z-mo.z)
 
-	local data = MM:getWpnData(pmo.player)
-
-	if not data.can_damage
-	or (data.can_damage
-	and data.can_damage(pmo, pmo.player.mm.weapon, mo)) then
-		P_DamageMobj(mo, pmo.player.mm.weapon, pmo, 999, DMG_INSTAKILL)
+	if dist > max(pmo.radius, mo.radius)*5 then
+		return
 	end
-end, MT_PLAYER)
-
-/* old code
-addHook("TouchSpecial", function(special, toucher)
-	if not (special and special.valid) then return end
-	if not (special
-	and special.target
-	and special.target.player
-	and special.target.player.mm) then return true end
-
-	if not (toucher
-	and toucher.player
-	and toucher.player.mm) then return true end
-
-	if special.target.player.mm.role == toucher.player.mm.role then
-		return true
+	if z_dist > max(pmo.height, mo.height)*5/4 then
+		return
 	end
+	
+	P_DamageMobj(mo, pmo.player.mm.weapon, pmo, 999, DMG_INSTAKILL)
+end
 
-	if special.target == toucher then return true end
+local function search_players(p)
+	if not (p
+	and p.mo
+	and p.mo.valid
+	and p.mo.health
+	and p.mm
+	and not p.mm.spectator
+	and p.mm.weapon
+	and p.mm.weapon.valid) then return end
 
-	if special.hidden then return true end
+	local wpn = p.mm.weapon
+	local wpn_t = MM:getWpnData(p)
 
-	local data = MM:getWpnData(special.target.player)
-
-	if not data.can_damage
-	or (data.can_damage
-	and data.can_damage(special.target.player, special, toucher.player)) then
-		P_DamageMobj(toucher, special, special.target, 999, DMG_INSTAKILL)
+	for p2 in players.iterate do
+		do_damage(p.mo, p2 and p2.mo)
 	end
-
-	return true
-end, MT_MM_WEAPON)*/
+end
 
 addHook("MobjThinker", function(wpn)
 	if not (wpn and wpn.valid) then return end
@@ -126,6 +105,7 @@ addHook("MobjThinker", function(wpn)
 	local data = MM:getWpnData(p)
 
 	data.think(p, wpn)
+
 	if p.cmd.buttons & BT_ATTACK
 	and not wpn.fired then
 		data.attack(p, wpn)
@@ -134,7 +114,7 @@ addHook("MobjThinker", function(wpn)
 	if not (p.cmd.buttons & BT_ATTACK) then
 		wpn.fired = false
 	end
-	
+
 	if data.droppable
 	and (p.cmd.buttons & BT_CUSTOM2 and p.lastbuttons & BT_CUSTOM2 == 0)
 	and not wpn.dropped then
@@ -166,6 +146,12 @@ addHook("MobjThinker", function(wpn)
 	end
 
 	wpn.hidepressed = (p.cmd.buttons & BT_CUSTOM1)
+
+	if not data.can_damage
+	or (data.can_damage
+	and data.can_damage(p.mo, wpn)) then
+		search_players(p)
+	end
 end, MT_MM_WEAPON)
 
 addHook("PostThinkFrame", do

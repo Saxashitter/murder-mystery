@@ -16,7 +16,7 @@ addHook("MobjDeath", function(target, inflictor, source)
 		if target.player.mm.role == 3 then
 			-- oh, thats the sheriff
 			-- notify everyone that the sheriff is dead
-			chatprint(" !!! - The sheriff has died! Find his gun!", true)
+			chatprint("!!! - The sheriff has died! Find his gun!", true)
 		end
 
 		P_RemoveMobj(target.player.mm.weapon)
@@ -28,7 +28,7 @@ addHook("MobjDeath", function(target, inflictor, source)
 	and source.player.mm
 	and source.player.mm.role ~= 2
 	and target.player.mm.role ~= 2) then
-		chatprintf(source.player, " !!! - That was not the murderer. You were killed for friendly fire!", true)
+		chatprintf(source.player, "!!! - That was not the murderer. You were killed for friendly fire!", true)
 		P_DamageMobj(source, nil, nil, 999, DMG_INSTAKILL)
 	end
 	

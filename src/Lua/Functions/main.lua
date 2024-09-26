@@ -6,5 +6,5 @@ doAndInsert("isMM")
 doAndInsert("init")
 doAndInsert("playerInit")
 doAndInsert("endGame")
-
+doAndInsert("pingMurderers")
 doAndInsert("playerWithGun")

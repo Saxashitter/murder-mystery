@@ -87,7 +87,7 @@ local function do_damage(pmo, mo)
 	local dist = R_PointToDist2(pmo.x, pmo.y, mo.x, mo.y)
 	local z_dist = abs(pmo.z-mo.z)
 
-	if dist > max(pmo.radius, mo.radius)*5 then
+	if dist > max(pmo.radius, mo.radius)*10 then
 		return
 	end
 	if z_dist > max(pmo.height, mo.height)*5/4 then

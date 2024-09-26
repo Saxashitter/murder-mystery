@@ -1,8 +1,13 @@
 local scripts = {}
+local global_scripts = {}
 
-local function doAndInsert(file)
+local function doAndInsert(file, global)
 	local func = dofile("Hooks/Player/Scripts/"..file)
 
+	if global then
+		global_scripts[#global_scripts+1] = func
+		return
+	end
 	scripts[#scripts+1] = func
 end
 
@@ -11,6 +16,10 @@ addHook("PlayerThink", function(p)
 
 	if not p.mm then
 		MM:playerInit(p)
+	end
+
+	for _,script in ipairs(global_scripts) do
+		script(p)
 	end
 
 	if not (p.mo and p.mo.valid and p.mo.health) then
@@ -36,4 +45,4 @@ end)
 doAndInsert("Murderer")
 doAndInsert("Sheriff")
 doAndInsert("Nerfs")
-doAndInsert("Map Vote")
+doAndInsert("Map Vote", true)

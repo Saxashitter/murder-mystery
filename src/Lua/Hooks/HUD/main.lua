@@ -126,6 +126,7 @@ addHook("HUD", function(v,p,c)
 	hudwasmm = false
 end)
 
+addHud "murdererping"
 addHud "role"
 addHud "heldweapon"
 addHud "weapontime"

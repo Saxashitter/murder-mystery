@@ -106,9 +106,9 @@ addHook("ThinkFrame", do
 	end
 
 	if MM_N.showdown
-	and mapmusname ~= "MIRMAT" then
-		mapmusname = "MIRMAT"
-		S_ChangeMusic("MIRMAT", true)
+	and mapmusname ~= "MADEDE" then
+		mapmusname = "MADEDE"
+		S_ChangeMusic("MADEDE", true)
 	end
 
 	-- time management

@@ -1,3 +1,5 @@
+local int_ease = MM.require "Libs/int_ease"
+
 local function draw_parallax(v, x, y, scale, patch, flags)
 	local width = patch.width
 	local height = patch.height
@@ -32,8 +34,8 @@ return function(v)
 
 	// DEFINITION
 
-	local tics = MM.end_ticker
-	local tics_after = max(0, MM.end_ticker-MAX_FADE)
+	local tics = MM_N.end_ticker
+	local tics_after = max(0, MM_N.end_ticker-MAX_FADE)
 
 	// PARALLAX
 
@@ -43,8 +45,9 @@ return function(v)
 	local scroll = tics*scale
 
 	local t = FixedDiv(min(tics, MAX_FADE), MAX_FADE)
-	local trans = V_10TRANS*ease.linear(t, 10, 0)
+	local trans = V_10TRANS*int_ease(t, 10, 0)
 
+	if not (tics) then return end
 	if trans == 10 then return end
 
 	draw_parallax(v, scroll, scroll, scale, patch, V_SNAPTOTOP|V_SNAPTOLEFT|trans)

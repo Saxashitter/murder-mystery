@@ -1,6 +1,6 @@
 local weapon = {}
 
-local MAX_COOLDOWN = TICRATE/2
+local MAX_COOLDOWN = 3*TICRATE
 local MAX_ANIM = TICRATE
 
 dofile "Weapons/Gun/Bullet"
@@ -25,8 +25,12 @@ weapon.attack = function(p, k)
 	bullet.color = p.mo.color
 	bullet.target = p.mo
 
-	S_StartSound(p.mo, sfx_thok)
+	S_StartSound(p.mo, sfx_gnfire)
 	return true
+end
+weapon.equip = function(p, k)
+	S_StartSound(p.mo, sfx_gequip)
+	k.cooldown = max(TICRATE/2, $)
 end
 weapon.can_damage = function(p, k)
 	return (k.hit)

@@ -19,11 +19,17 @@ weapon.attack = function(p, k)
 	k.anim = MAX_ANIM
 	k.hit = MAX_HIT
 
-	S_StartSound(p.mo, sfx_thok)
 	return true
 end
 weapon.can_damage = function(p, k)
 	return (k.hit)
+end
+weapon.on_damage = function(p, k)
+	S_StartSound(p.mo, sfx_kffire)
+end
+weapon.equip = function(p, k)
+	S_StartSound(p.mo, sfx_kequip)
+	k.cooldown = max($, TICRATE/2)
 end
 weapon.think = function(p, k)
 	local anim_time = FixedDiv(k.anim, MAX_ANIM)

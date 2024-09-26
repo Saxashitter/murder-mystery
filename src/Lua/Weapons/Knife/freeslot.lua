@@ -4,4 +4,7 @@ states[freeslot "MT_MM_KNIFE"] = {
 	tics = -1
 }
 
+sfxinfo[freeslot "sfx_kequip"].caption = "Knife equip"
+sfxinfo[freeslot "sfx_kffire"].caption = "Stab"
+
 return MT_MM_KNIFE

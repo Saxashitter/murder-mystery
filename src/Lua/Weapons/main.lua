@@ -82,7 +82,8 @@ local function do_damage(pmo, mo)
 	and mo.health
 	and mo.player
 	and mo.player.mm
-	and not mo.player.mm.spectator) then return end
+	and not mo.player.mm.spectator
+	and mo ~= pmo) then return end
 
 	local dist = R_PointToDist2(pmo.x, pmo.y, mo.x, mo.y)
 	local z_dist = abs(pmo.z-mo.z)
@@ -95,6 +96,11 @@ local function do_damage(pmo, mo)
 	end
 	
 	P_DamageMobj(mo, pmo.player.mm.weapon, pmo, 999, DMG_INSTAKILL)
+	if MM.weapons[pmo.player.mm.weapon.__type].on_damage then
+		MM.weapons[pmo.player.mm.weapon.__type].on_damage(pmo.player, pmo.player.mm.weapon, mo)
+	end
+
+	return true
 end
 
 local function search_players(p)
@@ -111,7 +117,9 @@ local function search_players(p)
 	local wpn_t = MM:getWpnData(p)
 
 	for p2 in players.iterate do
-		do_damage(p.mo, p2 and p2.mo)
+		if do_damage(p.mo, p2 and p2.mo) then
+			break
+		end
 	end
 end
 
@@ -199,6 +207,10 @@ addHook("MobjThinker", function(wpn)
 	if p.cmd.buttons & BT_CUSTOM1
 	and not (wpn.hidepressed) then
 		wpn.hidden = not wpn.hidden
+		if not wpn.hidden
+		and data.equip then
+			data.equip(p, wpn)
+		end
 	end
 
 	wpn.hidepressed = (p.cmd.buttons & BT_CUSTOM1)

@@ -3,6 +3,8 @@ return {
 	spectator = false,
 	got_weapon = false,
 
+	joinedmidgame = false,
+
 	selected_map = false,
 	cur_map = 1,
 

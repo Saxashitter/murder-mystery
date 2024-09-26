@@ -5,6 +5,7 @@ return {
 	maxtime = match_time,
 	waiting_for_players = false,
 	gameover = false,
+	showdown = false,
 	end_ticker = 0,
 	ping_positions = {},
 	murderers = {},

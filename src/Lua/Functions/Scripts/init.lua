@@ -6,7 +6,7 @@ return function(self)
 	MM_N = shallowCopy(matchVars)
 
 	for p in players.iterate do
-		self:playerInit(p)
+		self:playerInit(p, true)
 	end
 
 	local count = 0

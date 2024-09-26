@@ -31,6 +31,14 @@ addHook("PreThinkFrame", do
 	end
 end)
 
+local function is_showdown(innocents, count)
+	if count > 2 then
+		return innocents == 1
+	end
+
+	return false
+end
+
 addHook("ThinkFrame", do
 	if not MM:isMM() then return end
 
@@ -63,12 +71,17 @@ addHook("ThinkFrame", do
 		return
 	end
 
+	local count = 0
 	local innocents = 0
 	local murderers = 0
 
 	for p in players.iterate do
-		if not (p and p.mo and p.mm and not p.mm.spectator) then continue end
+		if not (p and p.mo and p.mm) then continue end
+		if p.mm.joinedmidgame then continue end
 
+		count = $+1
+
+		if p.mm.spectator then continue end
 		if p.mm.role == 2 then
 			murderers = $+1
 			continue
@@ -86,9 +99,23 @@ addHook("ThinkFrame", do
 		return
 	end
 
+	-- 1 innocent? start showdown
+	if is_showdown(innocents, count)
+	and not MM_N.showdown then
+		MM_N.showdown = true
+	end
+
+	if MM_N.showdown
+	and mapmusname ~= "MIRMAT" then
+		mapmusname = "MIRMAT"
+		S_ChangeMusic("MIRMAT", true)
+	end
+
 	-- time management
 	MM_N.time = max(0, $-1)
-	if not (MM_N.time) then
+	if not (MM_N.time)
+	and not MM_N.showdown then 
+	
 		if not MM_N.ping_time then
 			MM_N.pings_done = $+1
 

@@ -54,10 +54,10 @@ end
 local TR = TICRATE
 local HUD_BEGINNINGXOFF = 300*FU
 
+--DO NOT SYNCH!!!!!!!!
 local MMHUD = {
 	ticker = 0,
 	xoffset = HUD_BEGINNINGXOFF,
-	lastmap = nil,
 }
 rawset(_G, "MMHUD", MMHUD)
 
@@ -99,8 +99,11 @@ addHook("HUD", function(v,p,c)
 		if abs(leveltime - MMHUD.ticker) >= 4
 			MMHUD.ticker = leveltime
 		end
-
-		if MMHUD.ticker >= TR*3/2
+		
+		if MM_N.waiting_for_players
+		and MMHUD.ticker >= TR*5
+			MMHUD.xoffset = ease.inquad(FU*3/10,$,HUD_BEGINNINGXOFF)
+		elseif MMHUD.ticker >= TR*3/2
 			MMHUD.xoffset = ease.inquart(FU*9/10,$,0)
 		end
 

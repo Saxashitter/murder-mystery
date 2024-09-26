@@ -1,25 +1,69 @@
 local types = {
 	{"Innocent",
 		V_GREENMAP,
-		"Stay alive."
+		info = {
+			"Stay alive."
+		}
 	},
 	{"Murderer",
 		V_REDMAP,
-		"Kill everyone."
+		info = {
+			"Kill everyone."
+		}
 	},
 	{"Sheriff",
 		V_BLUEMAP,
-		"Shoot the murderer!"
+		info = {
+			"Shoot the murderer!"
+		}
 	}
 }
 
+--cant think of a good way to draw & get the length using just 1 loop
 local function HUD_RoleDrawer(v,p)
 	local patch = v.cachePatch("MMROLE")
 	local off = MMHUD.xoffset
-	local x = (320*FU)-(patch.width*FU)
-	local y = 0
-	v.drawScaled(x + off, y, FU, patch, V_SNAPTOTOP|V_SNAPTORIGHT|V_50TRANS)
-
+	
+	local longest_width = 0
+	local killername = "your own stupidity"
+	if p.spectator
+		local src = p.mm.whokilledme
+		
+		if ((src and src.valid) and (src.player and src.player.valid))
+			killername = "\x85"..src.player.name
+		end
+	end
+	
+	do
+		if p.spectator 
+		or not (p.mo and p.mo.valid)
+		or p.mo.health == 0
+			longest_width = v.stringWidth("  Dead",V_ALLOWLOWERCASE,"normal")
+		else
+			longest_width = v.stringWidth("  "..types[p.mm.role][1],V_ALLOWLOWERCASE,"normal")
+		end
+	end
+	
+	do
+		local y = 10*FU
+		if not p.spectator
+			for k,va in ipairs(types[p.mm.role]["info"])
+				longest_width = max($,
+					v.stringWidth("  "..va,V_ALLOWLOWERCASE,"thin")
+				)
+				y = $+8*FU
+			end
+		else
+			longest_width = max($,
+				v.stringWidth("  Killed by "..killername,V_ALLOWLOWERCASE,"thin")
+			)
+			y = $+8*FU
+		end
+		
+		local x = (320*FU) - longest_width*FU
+		v.drawScaled(x + off, y, FU, patch, V_SNAPTOTOP|V_SNAPTORIGHT|V_50TRANS)
+	end
+	
 	if p.spectator 
 	or not (p.mo and p.mo.valid)
 	or p.mo.health == 0
@@ -30,16 +74,10 @@ local function HUD_RoleDrawer(v,p)
 			"fixed-right"
 		)
 		if p.spectator
-			local src = p.mm.whokilledme
-			local name = "your own stupidity"
-			
-			if ((src and src.valid) and (src.player and src.player.valid))
-				name = "\x85"..src.player.name
-			end
 			
 			v.drawString(320*FU + off,
 				8*FU,
-				"Killed by "..name,
+				"Killed by "..killername,
 				V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
 				"thin-fixed-right"
 			)
@@ -55,15 +93,13 @@ local function HUD_RoleDrawer(v,p)
 		types[p.mm.role][2]|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
 		"fixed-right"
 	)
-	for i = 3,7
-		if types[p.mm.role][i] ~= nil
-			v.drawString(320*FU + off,
-				(8*(i - 2))*FU,
-				types[p.mm.role][i],
-				V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
-				"thin-fixed-right"
-			)
-		end
+	for k,va in ipairs(types[p.mm.role]["info"])
+		v.drawString(320*FU + off,
+			(8*k)*FU,
+			va,
+			V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
+			"thin-fixed-right"
+		)
 	end
 end
 

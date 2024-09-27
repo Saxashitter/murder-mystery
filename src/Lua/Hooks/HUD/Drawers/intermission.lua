@@ -29,8 +29,8 @@ end
 local MAX_FADE = 20
 
 return function(v)
-	if not MM.gameover then return end
-	if MM.end_ticker == nil then return end
+	if not MM_N.voting then return end
+	if MM_N.end_ticker == nil then return end
 
 	// DEFINITION
 

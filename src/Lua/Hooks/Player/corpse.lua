@@ -34,6 +34,28 @@ addHook("MobjDeath", function(target, inflictor, source)
 	
 	target.player.mm.whokilledme = source
 	
+	--TODO: make this better and determine if this kill is a winning kill
+	local headcount = 0
+	for p in players.iterate
+		if p.spectator
+		or not (p.mo and p.mo.valid and p.mo.health)
+		or (p.mm and p.mm.spectator)
+			continue
+		end
+		headcount = $+1
+	end
+	
+	if headcount == 2
+		S_StartSound(nil,sfx_buzz3)
+		S_StartSound(nil,sfx_s253)
+		MM:startEndCamera(target,
+			target.player.drawangle + ANGLE_180,
+			200*FU,
+			6*TICRATE,
+			FU/16
+		)
+	end
+	
 
 	local corpse = P_SpawnMobjFromMobj(target, 0,0,0, MT_THOK)
 

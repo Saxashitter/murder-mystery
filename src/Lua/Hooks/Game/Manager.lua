@@ -45,20 +45,44 @@ addHook("ThinkFrame", function()
 	if not MM:isMM() then return end
 
 	if MM_N.gameover then
-		MM_N.end_ticker = $+1
-		if MM_N.end_ticker > 15*TICRATE then
-			local selected_map = 1
-			local most_votes = 0
-			for _,map in ipairs(MM_N.mapVote) do
-				if map.votes < most_votes then continue end
+		if MM_N.voting
+			MM_N.end_ticker = $+1
+			if MM_N.end_ticker > 15*TICRATE then
+				local selected_map = 1
+				local most_votes = 0
+				for _,map in ipairs(MM_N.mapVote) do
+					if map.votes < most_votes then continue end
 
-				selected_map = map.map
-				most_votes = map.votes
+					selected_map = map.map
+					most_votes = map.votes
+				end
+				G_SetCustomExitVars(selected_map, 2)
+				G_ExitLevel()
 			end
-			G_SetCustomExitVars(selected_map, 2)
-			G_ExitLevel()
+		else
+			MM_N.end_ticker = $+1
+			
+			if (MM_N.end_camera and MM_N.end_camera.valid)
+				MM:startEndCamera()
+			end
+			
+			if MM_N.end_ticker == 3*TICRATE
+				for mo in mobjs.iterate()
+					if not (mo and mo.valid) then continue end
+					
+					if mo.notthinking
+						continue
+					end
+					
+					mo.flags = $ &~MF_NOTHINK
+				end
+			end
+			
+			if MM_N.end_ticker >= 5*TICRATE
+				MM:startVote()
+			end
 		end
-
+		
 		return
 	end
 
@@ -93,11 +117,13 @@ addHook("ThinkFrame", function()
 
 		innocents = $+1
 	end
-
+	
+	--innocents win
 	if not (murderers) then
 		MM:endGame(1)
 		return
 	end
+	--murderers win
 	if not (innocents) then
 		MM:endGame(2)
 		return

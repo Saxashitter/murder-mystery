@@ -1,39 +1,9 @@
-MM.endTypes = {
-	{
-		name = "Innocents win!",
-		color = V_GREENMAP,
-		results = "innocents"
-	},
-	{
-		name = "Murderer wins!",
-		color = V_REDMAP,
-		results = "murderers"
-	}
-}
-
-return function(self, endType)
-	if MM_N.gameover then return end
-
-	local endType = MM.endTypes[endType] or 1
-
-	MM_N.endType = endType
-	MM_N.gameover = true
-
-	S_StopMusic(consoleplayer)
+return function(self)
+	if MM_N.voting then return end
 	
-	for mo in mobjs.iterate()
-		if not (mo and mo.valid) then continue end
-		if (mo == MM_N.end_camera) then continue end
-		
-		if mo.flags & MF_NOTHINK
-			mo.notthinking = true
-			continue
-		end
-		
-		mo.flags = $|MF_NOTHINK
-	end
+	MM_N.voting = true
+	MM_N.end_ticker = 0
 	
-	/*
 	MM_N.mapVote = {}
 
 	mapmusname = "_INTER"
@@ -73,6 +43,4 @@ return function(self, endType)
 		end
 		table.insert(MM_N.innocents, p)
 	end
-	*/
-
 end

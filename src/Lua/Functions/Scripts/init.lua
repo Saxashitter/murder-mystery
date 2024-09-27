@@ -4,7 +4,11 @@ local randomPlayer = MM.require "Libs/getRandomPlayer"
 
 return function(self)
 	MM_N = shallowCopy(matchVars)
-
+	if (MM_N.end_camera and MM_N.end_camera.valid)
+		P_RemoveMobj(MM_N.end_camera)
+		MM_N.end_camera = nil
+	end
+	
 	for p in players.iterate do
 		self:playerInit(p, true)
 	end

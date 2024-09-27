@@ -108,7 +108,7 @@ addHook("HUD", function(v,p,c)
 				MMHUD.xoffset = ease.inquart(FU*9/10,$,0)
 			end
 		else
-			MMHUD.xoffset = ease.inquart(FU*9/10,$,HUD_BEGINNINGXOFF)
+			MMHUD.xoffset = ease.inexpo(FU*7/10,$,HUD_BEGINNINGXOFF)
 		end
 		
 		hudwasmm = true

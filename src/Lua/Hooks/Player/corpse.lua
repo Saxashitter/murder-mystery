@@ -34,6 +34,10 @@ addHook("MobjDeath", function(target, inflictor, source)
 	
 	target.player.mm.whokilledme = source
 	
+	if MM_N.showdown
+		S_StartSound(target,sfx_buzz3)
+		S_StartSound(nil,sfx_s253)
+	end
 
 	local corpse = P_SpawnMobjFromMobj(target, 0,0,0, MT_THOK)
 

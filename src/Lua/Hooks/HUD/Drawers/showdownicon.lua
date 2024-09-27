@@ -6,7 +6,12 @@ return function(v,p,c)
 		return
 	end
 
-	v.drawString(6, 30, "SHOWDOWN!", V_SNAPTOTOP|V_SNAPTOLEFT|V_REDMAP, "thin")
+	v.drawString(6*FU - MMHUD.xoffset,
+		30*FU,
+		"SHOWDOWN!",
+		V_SNAPTOTOP|V_SNAPTOLEFT|V_REDMAP,
+		"thin-fixed"
+	)
 
 	if not (p and p.mo and p.mm and p.mm.role == 2) then return end
 

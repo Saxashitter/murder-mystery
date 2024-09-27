@@ -14,11 +14,24 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Update version.lua
+      run:
+        rm src/Lua/version.lua
+        printf "return GITHUB" > src/Lua/version.lua
+
+    - name: Install dependencies
+      run:
+        sudo apt-get install -y nodejs
+        sudo npm install argparse
+        sudo npm install deasync
+        sudo npm install jimp
+        sudo npm install jszip
+
     - name: Make build
-      run: make build
+      run: make default
 
     - name: Upload build
       uses: actions/upload-artifact@v4
       with:
         name: MurderMystery
-        path: build.pk3
+        path: build/build.pk3

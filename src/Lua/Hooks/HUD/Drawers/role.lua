@@ -1,3 +1,8 @@
+local version = dofile("version")
+if #version > 6 then
+	version = $:sub(1,6)
+end
+
 local types = {
 	{"Innocent",
 		V_GREENMAP,
@@ -26,10 +31,10 @@ local function HUD_RoleDrawer(v,p)
 	
 	local longest_width = 0
 	local killername = "your own stupidity"
-	if p.spectator
+	if p.spectator then
 		local src = p.mm.whokilledme
 		
-		if ((src and src.valid) and (src.player and src.player.valid))
+		if ((src and src.valid) and (src.player and src.player.valid)) then
 			killername = "\x85"..src.player.name
 		end
 	end
@@ -37,7 +42,7 @@ local function HUD_RoleDrawer(v,p)
 	do
 		if p.spectator 
 		or not (p.mo and p.mo.valid)
-		or p.mo.health == 0
+		or p.mo.health == 0 then
 			longest_width = v.stringWidth("  Dead",V_ALLOWLOWERCASE,"normal")
 		else
 			longest_width = v.stringWidth("  "..types[p.mm.role][1],V_ALLOWLOWERCASE,"normal")
@@ -47,7 +52,7 @@ local function HUD_RoleDrawer(v,p)
 	do
 		local y = 10*FU
 		if not p.spectator
-			for k,va in ipairs(types[p.mm.role]["info"])
+			for k,va in ipairs(types[p.mm.role]["info"]) do
 				longest_width = max($,
 					v.stringWidth("  "..va,V_ALLOWLOWERCASE,"thin")
 				)
@@ -62,11 +67,12 @@ local function HUD_RoleDrawer(v,p)
 		
 		local x = (320*FU) - longest_width*FU
 		v.drawScaled(x + off, y, FU, patch, V_SNAPTOTOP|V_SNAPTORIGHT|V_50TRANS)
+		v.drawString(x + off, y + (2*FU), version, V_SNAPTOTOP|V_SNAPTORIGHT|V_80TRANS, "thin-fixed")
 	end
 	
 	if p.spectator 
 	or not (p.mo and p.mo.valid)
-	or p.mo.health == 0
+	or p.mo.health == 0 then
 		v.drawString(320*FU + off,
 			0,
 			"Dead",

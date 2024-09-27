@@ -1,6 +1,6 @@
 local version = dofile("version")
-if #version > 6 then
-	version = $:sub(1,6)
+if #version > 7 then
+	version = $:sub(1,7)
 end
 
 local types = {

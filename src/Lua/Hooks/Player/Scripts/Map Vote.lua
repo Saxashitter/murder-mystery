@@ -1,7 +1,7 @@
 local MOVE_DEADZONE = 10
 
 return function(p)
-	if not MM_N.gameover then return end
+	if not MM_N.voting then return end
 
 	if (p and p.mo) then
 		p.mo.momx = 0

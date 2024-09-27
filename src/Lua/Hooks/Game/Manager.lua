@@ -28,6 +28,8 @@ addHook("PreThinkFrame", function()
 		p.cmd.forwardmove = 0
 		p.cmd.sidemove = 0
 		p.cmd.buttons = 0
+		p.powers[pw_underwater] = underwatertics*2
+		p.powers[pw_spacetime] = spacetimetics*2
 	end
 end)
 
@@ -68,6 +70,7 @@ addHook("ThinkFrame", function()
 
 		if playersIn >= 2 then
 			COM_BufInsertText(server, "map "..G_BuildMapName(gamemap).." -f")
+			MM_N.waiting_for_players = false
 		end
 		return
 	end

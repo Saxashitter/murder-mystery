@@ -8,6 +8,7 @@ MM.showdownSprites = {
 	-- you may be asking why im doing this instead of directly getting the XTRAB0 spr2
 	-- i wanna plan to add custom sprites for this sometime soon
 }
+local int_ease = MM.require "Libs/int_ease"
 
 local last_innocent_data
 local murderer_data
@@ -52,16 +53,20 @@ return function(v, p)
 
 	-- insert showdown animation here, not ready yet
 	if MM_N.showdown_ticker < 3*TICRATE then
+		local twn = int_ease(t, 0, 16)
+		v.fadeScreen(0xFF00, twn)
+
 		if last_innocent_data then
 			local data = last_innocent_data
 			local patch = v.cachePatch(MM.showdownSprites[data.skin] or MM.showdownSprites["sonic"])
 			local scale = FU
 			local color = v.getColormap(data.skin, data.color)
 
-			local t = MM_N.showdown_ticker < TICRATE and start_t or end_t
-
 			local x = ease.outcubic(t, -patch.width*FU, -patch.width*(FU/3))
 			local y = 20*FU
+
+			x = $+(v.RandomRange(-200, 200)*(FU/100))
+			y = $+(v.RandomRange(-200, 200)*(FU/100))
 
 			v.drawScaled((320*FU)-x, y, FU, patch, V_SNAPTORIGHT|V_FLIP, color)
 		end
@@ -75,12 +80,18 @@ return function(v, p)
 			local x = ease.outcubic(t, -patch.width*FU, -patch.width*(FU/3))
 			local y = 20*FU
 
+			x = $+(v.RandomRange(-200, 200)*(FU/100))
+			y = $+(v.RandomRange(-200, 200)*(FU/100))
+
 			v.drawScaled(x, y, FU, patch, V_SNAPTOLEFT, color)
 		end
 
 		local width = v.nameTagWidth "SHOWDOWN!"
 		local x = (160*FU)-(width*(FU/2))
 		local y = ease.outcubic(t, 200*FU, 162*FU)
+
+		x = $+(v.RandomRange(-200, 200)*(FU/100))
+		y = $+(v.RandomRange(-200, 200)*(FU/100))
 
 		v.drawScaledNameTag(x, y, "SHOWDOWN", V_SNAPTOBOTTOM, FU, SKINCOLOR_RED, SKINCOLOR_WHITE)
 	end

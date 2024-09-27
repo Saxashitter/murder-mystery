@@ -12,6 +12,7 @@ return function(v,p,c)
 		V_SNAPTOTOP|V_SNAPTOLEFT|V_REDMAP,
 		"thin-fixed"
 	)
+	
 
 	if not (p and p.mo and p.mm and p.mm.role == 2) then return end
 
@@ -24,7 +25,7 @@ return function(v,p,c)
 		if not to_screen.onScreen then continue end
 
 		local dist = R_PointToDist2(c.x, c.y, player.mo.x, player.mo.y)
-		local t = max(0, min(FixedDiv(dist, 800*FU), FU))
+		local t = max(0, min(FixedDiv(dist, 1500*FU), FU))
 		local trans = int_ease(t, 10, 0)
 
 		if trans == 10 then continue end

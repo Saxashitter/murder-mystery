@@ -25,6 +25,11 @@ return function(self, endType)
 		if not (mo and mo.valid) then continue end
 		if (mo == MM_N.end_camera) then continue end
 		
+		if mo.flags & MF_NOTHINK
+			mo.notthinking = true
+			continue
+		end
+		
 		mo.flags = $|MF_NOTHINK
 	end
 	

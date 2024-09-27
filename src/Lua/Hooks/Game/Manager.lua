@@ -61,7 +61,24 @@ addHook("ThinkFrame", function()
 			end
 		else
 			MM_N.end_ticker = $+1
-			if MM_N.end_ticker >= 6*TICRATE
+			
+			if (MM_N.end_camera and MM_N.end_camera.valid)
+				MM:startEndCamera()
+			end
+			
+			if MM_N.end_ticker == 3*TICRATE
+				for mo in mobjs.iterate()
+					if not (mo and mo.valid) then continue end
+					
+					if mo.notthinking
+						continue
+					end
+					
+					mo.flags = $ &~MF_NOTHINK
+				end
+			end
+			
+			if MM_N.end_ticker >= 5*TICRATE
 				MM:startVote()
 			end
 		end

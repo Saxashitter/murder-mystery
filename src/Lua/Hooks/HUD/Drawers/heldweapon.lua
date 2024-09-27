@@ -80,7 +80,8 @@ return function(v,p)
 		)
 		
 		local cd = wpn.cooldown
-		yoffset = ease.outquad((FU/TR)*cd,0,-10*FU)
+		local maxdelay = 5*TR
+		yoffset = ease.outquad((FU/maxdelay)*cd,0,-10*FU)
 	else
 		v.drawString(47*FU - slidein,
 			156*FU,

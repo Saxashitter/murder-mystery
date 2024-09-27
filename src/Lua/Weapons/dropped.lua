@@ -30,7 +30,7 @@ end
 addHook("MobjThinker", function(d_wpn)
 	d_wpn.angle = $+(ANG1*3/2)
 	
-	if d_wpn.timealive == nil
+	if d_wpn.timealive == nil then
 		d_wpn.timealive = 0
 	else
 		d_wpn.timealive = $+1

@@ -4,5 +4,3 @@ mobjinfo[MT_MM_SHERIFF_SPAWN] = {
 	height = FU,
 	doomednum = 2100
 }
-
-addHook("MapThingSpawn", function(p)

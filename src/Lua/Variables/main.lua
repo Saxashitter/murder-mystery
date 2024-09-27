@@ -1,4 +1,4 @@
-addHook("MapChange", do
+addHook("MapChange", function()
 	MM:init()
 end)
 

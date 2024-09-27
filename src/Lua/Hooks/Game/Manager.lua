@@ -11,7 +11,7 @@ local function _eligibleGunPlayer(p)
 	and not (p.mm.weapon and p.mm.weapon.valid)
 end
 
-addHook("PreThinkFrame", do
+addHook("PreThinkFrame", function()
 	if not MM:isMM() then return end
 	if not MM.gameover then return end
 
@@ -39,7 +39,7 @@ local function is_showdown(innocents, count)
 	return false
 end
 
-addHook("ThinkFrame", do
+addHook("ThinkFrame", function()
 	if not MM:isMM() then return end
 
 	if MM_N.gameover then
@@ -56,6 +56,7 @@ addHook("ThinkFrame", do
 			G_SetCustomExitVars(selected_map, 2)
 			G_ExitLevel()
 		end
+
 		return
 	end
 
@@ -105,17 +106,20 @@ addHook("ThinkFrame", do
 		MM_N.showdown = true
 	end
 
-	if MM_N.showdown
-	and mapmusname ~= "MADEDE" then
-		mapmusname = "MADEDE"
-		S_ChangeMusic("MADEDE", true)
+	if MM_N.showdown then
+		if mapmusname ~= "MADEDE" then
+			mapmusname = "MADEDE"
+			S_ChangeMusic("MADEDE", true)
+		end
+
+		MM_N.showdown_ticker = $+1
 	end
+
 
 	-- time management
 	MM_N.time = max(0, $-1)
 	if not (MM_N.time)
 	and not MM_N.showdown then 
-	
 		if not MM_N.ping_time then
 			MM_N.pings_done = $+1
 

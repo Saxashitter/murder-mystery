@@ -1,32 +1,12 @@
 local sglib = MM.require "Libs/sglib"
 local int_ease = MM.require "Libs/int_ease"
 
-MM.showdownSprites = {
-	["sonic"] = "MMSD_SONIC";
-	["tails"] = "MMSD_TAILS";
-	["knuckles"] = "MMSD_KNUCKLES";
-	["amy"] = "MMSD_AMY";
-	["fang"] = "MMSD_FANG";
-	["metalsonic"] = "MMSD_METAL";
-	-- you may be asking why im doing this instead of directly getting the XTRAB0 spr2
-	-- i wanna plan to add custom sprites for this sometime soon
-}
-
-local last_innocent_data
-local murderer_data
-
 return function(v,p,c)
 	if not MM_N.showdown then
-		last_innocent_data = nil
-		murderer_data = nil
 		return
 	end
 
-	-- its showdown? iterate through players and get the last innocent and murderers
-
 	v.drawString(6, 30, "SHOWDOWN!", V_SNAPTOTOP|V_SNAPTOLEFT|V_REDMAP, "thin")
-
-	-- insert showdown animation here, not ready yet
 
 	if not (p and p.mo and p.mm and p.mm.role == 2) then return end
 

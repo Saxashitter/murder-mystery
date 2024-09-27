@@ -224,7 +224,7 @@ addHook("MobjThinker", function(wpn)
 	end
 end, MT_MM_WEAPON)
 
-addHook("PostThinkFrame", do
+addHook("PostThinkFrame", function()
 	for k,wpn in pairs(weapons) do
 		if not (wpn and wpn.valid) then
 			table.remove(weapons,k)

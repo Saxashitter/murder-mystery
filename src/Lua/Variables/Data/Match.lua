@@ -7,6 +7,7 @@ return {
 	gameover = false,
 	showdown = false,
 	end_ticker = 0,
+	showdown_ticker = 0,
 	ping_positions = {},
 	murderers = {},
 	innocents = {},

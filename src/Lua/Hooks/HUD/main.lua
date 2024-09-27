@@ -100,13 +100,17 @@ addHook("HUD", function(v,p,c)
 			MMHUD.ticker = leveltime
 		end
 		
-		if MM_N.waiting_for_players
-		and MMHUD.ticker >= TR*5
-			MMHUD.xoffset = ease.inquad(FU*3/10,$,HUD_BEGINNINGXOFF)
-		elseif MMHUD.ticker >= TR*3/2
-			MMHUD.xoffset = ease.inquart(FU*9/10,$,0)
+		if not MM.gameover
+			if MM_N.waiting_for_players
+			and MMHUD.ticker >= TR*5
+				MMHUD.xoffset = ease.inquad(FU*3/10,$,HUD_BEGINNINGXOFF)
+			elseif MMHUD.ticker >= TR*3/2
+				MMHUD.xoffset = ease.inquart(FU*9/10,$,0)
+			end
+		else
+			MMHUD.xoffset = ease.inquart(FU*9/10,$,HUD_BEGINNINGXOFF)
 		end
-
+		
 		hudwasmm = true
 		return
 	end

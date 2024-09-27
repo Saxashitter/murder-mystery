@@ -28,13 +28,13 @@ addHook("PlayerThink", function(p)
 
 	p.spectator = p.mm.spectator
 	if p.mm.spectator then
+		if p.deadtimer >= 3*TICRATE
+		and p.playerstate == PST_DEAD
+			G_DoReborn(#p)
+			p.deadtimer = 0
+		end
+		
 		return
-	end
-	
-	if p.deadtimer >= 3*TICRATE
-	and p.playerstate == PST_DEAD
-		G_DoReborn(#p)
-		p.deadtimer = 0
 	end
 	
 	for _,script in ipairs(scripts) do

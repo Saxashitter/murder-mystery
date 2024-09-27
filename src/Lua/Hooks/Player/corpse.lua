@@ -35,7 +35,7 @@ addHook("MobjDeath", function(target, inflictor, source)
 	target.player.mm.whokilledme = source
 	
 	--TODO: make this better and determine if this kill is a winning kill
-	local headcount = 0
+	/*local headcount = 0
 	for p in players.iterate
 		if p.spectator
 		or not (p.mo and p.mo.valid and p.mo.health)
@@ -43,9 +43,28 @@ addHook("MobjDeath", function(target, inflictor, source)
 			continue
 		end
 		headcount = $+1
+	end*/
+
+	local innocents = 0
+	local murderers = 0
+	for p in players.iterate do
+		if not (p
+		and p.mo
+		and p.mo.health
+		and not p.mm.spectator) then
+			continue
+		end
+
+		if p.mm.role == 2 then
+			murderers = $+1
+			continue
+		end
+
+		innocents = $+1
 	end
 	
-	if headcount == 2
+	if innocents == 0
+	or murderers == 0 then -- TODO: make game tell when match ends, probably via a canGameEnd function
 		S_StartSound(nil,sfx_buzz3)
 		S_StartSound(nil,sfx_s253)
 		MM:startEndCamera(target,

@@ -29,7 +29,9 @@ jobs:
         git clone https://github.com/UnmatchedBracket/PaK3.git
 
     - name: Make build
-      run: make default
+      run: |
+        mkdir build
+        make default
 
     - name: Upload build
       uses: actions/upload-artifact@v4

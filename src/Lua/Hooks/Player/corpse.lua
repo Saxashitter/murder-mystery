@@ -46,7 +46,7 @@ addHook("MobjDeath", function(target, inflictor, source)
 	end
 	
 	if headcount == 2
-		S_StartSound(target,sfx_buzz3)
+		S_StartSound(nil,sfx_buzz3)
 		S_StartSound(nil,sfx_s253)
 		MM:startEndCamera(target,
 			target.player.drawangle + ANGLE_180,

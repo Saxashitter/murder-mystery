@@ -19,8 +19,8 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 		local angle = AngleFixed(focusang)
 		
 		MM_N.end_camera = P_SpawnMobjFromMobj(origin,
-			P_ReturnThrustX(nil,focusang,-finalradius),
-			P_ReturnThrustY(nil,focusang,-finalradius),
+			P_ReturnThrustX(nil,focusang,-1200*FU),
+			P_ReturnThrustY(nil,focusang,-1200*FU),
 			origin.height,
 			MT_THOK
 		)

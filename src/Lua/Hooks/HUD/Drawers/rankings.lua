@@ -1,6 +1,6 @@
 local TILEWIDTH = 64
 local TILEHEIGHT = 16
-local TILEMARGIN = 2
+local TILEMARGIN = 4
 local ROWLENGTH = 300 / TILEWIDTH
 
 local function isDead(p)
@@ -14,33 +14,34 @@ local SECRECY_SECRET = 2
 
 local ROLESTYLES = {
 	Unknown = {
-		bgcolor = 197,
 		secrecy = SECRECY_NOTSECRET
 	},
 	Dead = {
-		bgcolor = 15,
+		overlay = "MM_PLAYERLIST_OVERLAY_DEAD",
+		overlayFlags = V_20TRANS,
 		subtitle = "\x86" .. "Dead",
 		secrecy = SECRECY_MURDERERALLOWED
 	},
 	MidgameJoin = {
-		bgcolor = 15,
 		subtitle = "\x82(joined midgame)",
 		secrecy = SECRECY_NOTSECRET
 	},
 	Innocent = {
-		bgcolor = 1975,
 		subtitle = "Innocent",
-		secrecy = SECRECY_SECRET
+		secrecy = SECRECY_SECRET,
+		standardRole = true
 	},
 	Murderer = {
-		bgcolor = 40,
+		bg = "MM_PLAYERLIST_BG_MURDERER",
 		subtitle = "\x85Murderer",
-		secrecy = SECRECY_MURDERERALLOWED
+		secrecy = SECRECY_MURDERERALLOWED,
+		standardRole = true
 	},
 	Sheriff = {
-		bgcolor = 149,
+		bg = "MM_PLAYERLIST_BG_SHERRIF",
 		subtitle = "\x84Sherrif",
-		secrecy = SECRECY_SECRET
+		secrecy = SECRECY_SECRET,
+		standardRole = true
 	}
 }
 
@@ -63,12 +64,12 @@ local function getViewedPlayerRole(player, viewer)
 
 	local secrecyLevel = (ROLESTYLES[role] and ROLESTYLES[role].secrecy) or 0
 	local privilegeLevel = SECRECY_NOTSECRET
-	if isDead(viewer) then
+	if isDead(viewer) or MM_N.gameover or MM_N.showdown /*DEBUG!* / or (viewer.cmd.buttons & BT_CUSTOM3)/**/  then
 		privilegeLevel = SECRECY_SECRET
 	elseif (viewer.mm and viewer.mm.role == 2) then
 		privilegeLevel = SECRECY_MURDERERALLOWED
 	end
-	print(player.name .. ": " .. role .. " with secrecy " .. secrecyLevel .. " and priv " .. privilegeLevel)
+	-- print(player.name .. ": " .. role .. " with secrecy " .. secrecyLevel .. " and priv " .. privilegeLevel)
 	if (privilegeLevel < secrecyLevel) then
 		role = "Unknown"
 	end
@@ -78,11 +79,19 @@ end
 --[[@param v videolib]]
 local function HUD_TabScoresDrawer(v)
 	local playerlist = {}
+	local deadplayerlist = {}
 	-- while #playerlist < 32 do
 	for p in players.iterate do
 		if p and p.valid then
-			table.insert(playerlist, p)
+			if isDead(p) then
+				table.insert(deadplayerlist, p)
+			else
+				table.insert(playerlist, p)
+			end
 		end
+	end
+	for _, p in ipairs(deadplayerlist) do
+		table.insert(playerlist, p)
 	end
 	-- end
 	-- while #playerlist > 32 do
@@ -92,13 +101,19 @@ local function HUD_TabScoresDrawer(v)
 	local xroot = 160 - TILEWIDTH/2 - (min(ROWLENGTH, #playerlist)-1)*(TILEWIDTH+TILEMARGIN)/2
 	local yroot = 100 - TILEHEIGHT/2 - ((#playerlist-1)/ROWLENGTH)*(TILEHEIGHT+TILEMARGIN)/2
 	
+	local bgPatch = v.cachePatch("MM_PLAYERLIST_BG")
 	for ind, p in ipairs(playerlist) do
 		local x = xroot + (TILEWIDTH+TILEMARGIN)*((ind-1)%ROWLENGTH)
 		local y = yroot + (TILEHEIGHT+TILEMARGIN)*((ind-1)/ROWLENGTH)
 		
 		local role = getViewedPlayerRole(p, consoleplayer)
 		local roleStyle = ROLESTYLES[role] or ROLESTYLES.Unknown
-		-- v.drawFill(x, y, TILEWIDTH, TILEHEIGHT, roleStyle.bgcolor)
+
+		local thisBgPatch = bgPatch
+		if roleStyle.bg then
+			thisBgPatch = v.cachePatch(roleStyle.bg)
+		end
+		v.draw(x, y, thisBgPatch, V_50TRANS)
 
 
 		--#region life icon
@@ -131,15 +146,29 @@ local function HUD_TabScoresDrawer(v)
 		--#endregion
 
 		if roleStyle.subtitle then
+			local subtitle = roleStyle.subtitle
+			if role == "Dead" then
+				local preDeathRole = MM.roleInfos[p.mm.role][1]
+				subtitle = subtitle .. " " .. ROLESTYLES[preDeathRole].subtitle
+			end
 			style = "small"
-			if v.stringWidth(roleStyle.subtitle, 0, "small") >= (TILEWIDTH-18) then
+			if v.stringWidth(subtitle, 0, "small") >= (TILEWIDTH-18) then
 				style = "small-thin"
 			end
 			v.drawString(
 				x + 17, y+5,
-				roleStyle.subtitle, V_ALLOWLOWERCASE,
+				subtitle, V_ALLOWLOWERCASE,
 				style
 			)
+		end
+		if roleStyle.overlay then
+			v.draw(x, y, v.cachePatch(roleStyle.overlay), roleStyle.overlayFlags)
+		end
+
+		if p == consoleplayer then
+			v.draw(x, y, v.cachePatch("MM_PLAYERLIST_OUTLINE_YOU"))
+		elseif p == displayplayer then
+			v.draw(x, y, v.cachePatch("MM_PLAYERLIST_OUTLINE_SPEC"))
 		end
 	end
 end

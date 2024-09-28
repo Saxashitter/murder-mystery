@@ -3,7 +3,7 @@ if #version > 7 then
 	version = $:sub(1,7)
 end
 
-local types = {
+MM.roleInfos = {
 	{"Innocent",
 		V_GREENMAP,
 		info = {
@@ -45,14 +45,14 @@ local function HUD_RoleDrawer(v,p)
 		or p.mo.health == 0 then
 			longest_width = v.stringWidth("  Dead",V_ALLOWLOWERCASE,"normal")
 		else
-			longest_width = v.stringWidth("  "..types[p.mm.role][1],V_ALLOWLOWERCASE,"normal")
+			longest_width = v.stringWidth("  "..MM.roleInfos[p.mm.role][1],V_ALLOWLOWERCASE,"normal")
 		end
 	end
 	
 	do
 		local y = 10*FU
 		if not p.spectator
-			for k,va in ipairs(types[p.mm.role]["info"]) do
+			for k,va in ipairs(MM.roleInfos[p.mm.role]["info"]) do
 				longest_width = max($,
 					v.stringWidth("  "..va,V_ALLOWLOWERCASE,"thin")
 				)
@@ -91,15 +91,15 @@ local function HUD_RoleDrawer(v,p)
 		return
 	end
 	
-	if not (p.mm and types[p.mm.role]) then return end
+	if not (p.mm and MM.roleInfos[p.mm.role]) then return end
 	
 	v.drawString(320*FU + off,
 		0,
-		types[p.mm.role][1],
-		types[p.mm.role][2]|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
+		MM.roleInfos[p.mm.role][1],
+		MM.roleInfos[p.mm.role][2]|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
 		"fixed-right"
 	)
-	for k,va in ipairs(types[p.mm.role]["info"])
+	for k,va in ipairs(MM.roleInfos[p.mm.role]["info"]) do
 		v.drawString(320*FU + off,
 			(8*k)*FU,
 			va,

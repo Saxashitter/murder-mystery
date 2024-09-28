@@ -118,16 +118,11 @@ addHook("ThinkFrame", function()
 
 		innocents = $+1
 	end
-	
-	--innocents win
-	if not (murderers) then
-		MM:endGame(1)
-		return
-	end
-	--murderers win
-	if not (innocents) then
-		MM:endGame(2)
-		return
+
+	local canEnd, endType = MM:canGameEnd()
+
+	if canEnd then
+		MM:endGame(endType or 1)
 	end
 
 	-- 1 innocent? start showdown

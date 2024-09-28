@@ -63,8 +63,7 @@ addHook("MobjDeath", function(target, inflictor, source)
 		innocents = $+1
 	end
 	
-	if innocents == 0
-	or murderers == 0 then -- TODO: make game tell when match ends, probably via a canGameEnd function
+	if MM:canGameEnd() then
 		S_StartSound(nil,sfx_buzz3)
 		S_StartSound(nil,sfx_s253)
 		MM:startEndCamera(target,

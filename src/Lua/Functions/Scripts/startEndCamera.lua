@@ -31,7 +31,7 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 		MM_N.end_camera.origin = {origin.x,origin.y,origin.z + origin.height}
 		MM_N.end_camera.startradius = {1200*FU,800*FU}
 		MM_N.end_camera.endradius = {finalradius, finalradius/2}
-		MM_N.end_camera.lerpradius = finalradius
+		MM_N.end_camera.lerpradius = MM_N.end_camera.startradius[1]
 		
 		MM_N.end_camera.swirldur = 3*TICRATE
 		MM_N.end_camera.startangle = angle + 90*FU

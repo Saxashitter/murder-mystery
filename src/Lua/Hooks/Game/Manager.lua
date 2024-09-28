@@ -79,6 +79,7 @@ addHook("ThinkFrame", function()
 			end
 			
 			if MM_N.end_ticker >= 5*TICRATE
+				MM_N.end_ticker = 0
 				MM:startVote()
 			end
 		end

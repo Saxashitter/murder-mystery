@@ -76,7 +76,7 @@ addHook("MobjSpawn", function(wpn)
 	table.insert(weapons, wpn)
 end, MT_MM_WEAPON)
 
-local function do_damage(pmo, mo)
+local function do_damage(pmo, mo, target)
 	if not (mo
 	and mo.valid
 	and mo.health
@@ -95,15 +95,17 @@ local function do_damage(pmo, mo)
 		return
 	end
 	
-	P_DamageMobj(mo, pmo.player.mm.weapon, pmo, 999, DMG_INSTAKILL)
-	if MM.weapons[pmo.player.mm.weapon.__type].on_damage then
-		MM.weapons[pmo.player.mm.weapon.__type].on_damage(pmo.player, pmo.player.mm.weapon, mo)
+	if not target
+		P_DamageMobj(mo, pmo.player.mm.weapon, pmo, 999, DMG_INSTAKILL)
+		if MM.weapons[pmo.player.mm.weapon.__type].on_damage then
+			MM.weapons[pmo.player.mm.weapon.__type].on_damage(pmo.player, pmo.player.mm.weapon, mo)
+		end
 	end
-
+	
 	return true
 end
 
-local function search_players(p)
+local function search_players(p,target)
 	if not (p
 	and p.mo
 	and p.mo.valid
@@ -117,8 +119,16 @@ local function search_players(p)
 	local wpn_t = MM:getWpnData(p)
 
 	for p2 in players.iterate do
-		if do_damage(p.mo, p2 and p2.mo) then
-			break
+		if p == p2 then continue end
+		
+		if do_damage(p.mo, p2 and p2.mo, target) then
+			if target
+				if p2.mo and p2.mo.valid and p2.mo.health
+					P_SpawnLockOn(p,p2.mo,S_LOCKON1)
+				end
+			else
+				break
+			end
 		end
 	end
 end
@@ -221,6 +231,8 @@ addHook("MobjThinker", function(wpn)
 	or (data.can_damage
 	and data.can_damage(p.mo, wpn)) then
 		search_players(p)
+	else
+		search_players(p,true)
 	end
 end, MT_MM_WEAPON)
 

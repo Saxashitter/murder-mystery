@@ -7,7 +7,7 @@ return function(v,p,c)
 	end
 
 	v.drawString(6*FU - MMHUD.xoffset,
-		30*FU,
+		35*FU,
 		"SHOWDOWN!",
 		V_SNAPTOTOP|V_SNAPTOLEFT|V_REDMAP,
 		"thin-fixed"

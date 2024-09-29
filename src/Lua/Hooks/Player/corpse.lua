@@ -34,8 +34,8 @@ addHook("MobjDeath", function(target, inflictor, source)
 	
 	target.player.mm.whokilledme = source
 	
-	--TODO: make this better and determine if this kill is a winning kill
-	/*local headcount = 0
+	/*
+	local headcount = 0
 	for p in players.iterate
 		if p.spectator
 		or not (p.mo and p.mo.valid and p.mo.health)
@@ -43,7 +43,7 @@ addHook("MobjDeath", function(target, inflictor, source)
 			continue
 		end
 		headcount = $+1
-	end*/
+	end
 
 	local innocents = 0
 	local murderers = 0
@@ -62,6 +62,7 @@ addHook("MobjDeath", function(target, inflictor, source)
 
 		innocents = $+1
 	end
+	*/
 	
 	if MM:canGameEnd() then
 		S_StartSound(nil,sfx_buzz3)

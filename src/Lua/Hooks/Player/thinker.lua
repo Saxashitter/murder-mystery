@@ -23,17 +23,17 @@ addHook("PlayerThink", function(p)
 	end
 
 	if not (p.mo and p.mo.valid and p.mo.health) then
-		return
-	end
-
-	p.spectator = p.mm.spectator
-	if p.mm.spectator then
 		if p.deadtimer >= 3*TICRATE
 		and p.playerstate == PST_DEAD
 			G_DoReborn(#p)
 			p.deadtimer = 0
 		end
 		
+		return
+	end
+
+	p.spectator = p.mm.spectator
+	if p.mm.spectator then
 		return
 	end
 	

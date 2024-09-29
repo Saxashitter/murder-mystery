@@ -15,7 +15,7 @@ local murderer_data
 local got_players = false
 
 return function(v, p)
-	if not MM_N.showdown then
+	if (not MM_N.showdown or MM_N.gameover) then
 		last_innocent_data = nil
 		murderer_data = nil
 		got_players = false

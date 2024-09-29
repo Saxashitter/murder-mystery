@@ -1,6 +1,6 @@
 mobjinfo[freeslot "MT_MM_BULLET"] = {
-	radius = 16*FU,
-	height = 16*FU,
+	radius = 24*FU,
+	height = 64*FU,
 	spawnstate = S_RRNG1,
 	flags = MF_NOGRAVITY
 }

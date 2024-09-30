@@ -27,4 +27,6 @@ return function(self)
 
 	murdererP.mm.role = 2 -- murderer
 	sherriffP.mm.role = 3 -- sherriff
+	
+	CV_Set(CV_FindVar("restrictskinchange"),0)
 end

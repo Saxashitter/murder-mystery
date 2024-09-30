@@ -5,7 +5,7 @@ local function HUD_EndGameDrawer(v,p,c)
 	if MM_N.voting then return end
 	
 	if MM_N.end_killed and MM_N.end_killed.valid
-		local w2s = sglib.ObjectTracking(v,p,c,MM_N.end_killed)
+		local w2s = sglib.ObjectTracking(v,p,c,MM_N.end_killed,false,true)
 
 		if w2s.onScreen
 			local isme = ''
@@ -24,7 +24,7 @@ local function HUD_EndGameDrawer(v,p,c)
 	end
 
 	if MM_N.end_killer and MM_N.end_killer.valid and MM_N.end_killer.health
-		local w2s = sglib.ObjectTracking(v,p,c,MM_N.end_killer)
+		local w2s = sglib.ObjectTracking(v,p,c,MM_N.end_killer,false,true)
 
 		if w2s.onScreen
 			local isme = ''

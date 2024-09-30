@@ -172,7 +172,12 @@ addHook("ThinkFrame", function()
 			end
 		end
 	end
-
+	
+	--Funny
+	if leveltime == 10*TICRATE
+		CV_Set(CV_FindVar("restrictskinchange"),1)
+	end
+	
 	-- gun management
 	if leveltime > 10*TICRATE
 	and not MM:playerWithGun()

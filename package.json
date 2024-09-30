@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "argparse": "^2.0.1",
-    "jszip": "^3.10.1"
-  }
-}

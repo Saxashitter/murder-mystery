@@ -176,7 +176,8 @@ addHook("ThinkFrame", function()
 	-- gun management
 	if leveltime > 10*TICRATE
 	and not MM:playerWithGun()
-	and not MM_N.gameover then
+	and not MM_N.gameover
+	and innocents > 1 then
 		local wpns = MM:isWeaponOnMap("Gun")
 
 		if wpns then

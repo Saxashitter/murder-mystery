@@ -4,8 +4,19 @@ states[freeslot "S_PLAY_BODY"] = {
 	tics = -1
 }
 
-addHook("MobjDeath", function(target, inflictor, source)
+addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	if not MM:isMM() then return end
+	
+	--most likely map damage
+	/*
+	if not (inflictor and inflictor.valid and source and source.valid)
+	and dmgt ~= DMG_DEATHPIT
+		P_DoPlayerPain(target.player,target,target)
+		P_PlayRinglossSound(target,target.player)
+		return true
+	end
+	*/
+	
 	if not (target and target.valid and target.player and target.player.mm) then return end
 
 	target.player.mm.spectator = true
@@ -80,6 +91,14 @@ addHook("MobjDeath", function(target, inflictor, source)
 		target.flags2 = $ &~MF2_DONTDRAW
 		target.angle = angle
 		MM_N.killing_end = true
+		
+		if target.player.mm.role == 2
+			MM_N.end_killed = target
+			MM_N.end_killer = source
+		else
+			MM_N.end_killed = source
+			MM_N.end_killer = target
+		end
 		return
 	end
 	

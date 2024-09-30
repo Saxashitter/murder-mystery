@@ -92,7 +92,10 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		target.angle = angle
 		MM_N.killing_end = true
 		
-		source.momx,source.momy = 0,0
+		if source and source.valid
+			source.momx,source.momy = 0,0
+		end
+		
 		if target.player.mm.role == 2
 			MM_N.end_killed = target
 			MM_N.end_killer = source

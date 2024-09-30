@@ -1,5 +1,5 @@
 return function(p) -- Murderer handler.
-	if p.mm.role ~= 3 then return end
+	if p.mm.role ~= MMROLE_SHERIFF then return end
 
 	if leveltime >= 10*TICRATE
 	and not p.mm.got_weapon

@@ -1,5 +1,5 @@
 return function(p) -- Murderer handler.
-	if p.mm.role ~= 2 then return end
+	if p.mm.role ~= MMROLE_MURDERER then return end
 
 	local murd = p.mm.murderer
 

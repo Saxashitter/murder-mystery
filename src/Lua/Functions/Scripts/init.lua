@@ -25,6 +25,6 @@ return function(self)
 	local murdererP = randomPlayer(function(p) return p.mm end)
 	local sherriffP = randomPlayer(function(p) return p.mm and p ~= murdererP end)
 
-	murdererP.mm.role = 2 -- murderer
-	sherriffP.mm.role = 3 -- sherriff
+	murdererP.mm.role = MMROLE_MURDERER -- murderer
+	sherriffP.mm.role = MMROLE_SHERIFF -- sherriff
 end

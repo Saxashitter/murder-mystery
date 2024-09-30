@@ -19,15 +19,21 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	
 	if not (target and target.valid and target.player and target.player.mm) then return end
 
-	target.player.mm.spectator = true
+	if MM_N.waiting_for_players then
+		target.player.mm.spectator = true
+	end
 
 	if target.player.mm.weapon and target.player.mm.weapon.valid then
 		MM:spawnDroppedWeapon(target.x, target.y, target.z, target.player.mm.weapon.__type)
 
-		if target.player.mm.role == 3 then
-			-- oh, thats the sheriff
-			-- notify everyone that the sheriff is dead
-			chatprint("!!! - The sheriff has died! Find his gun!", true)
+		if (p.mm.weapon and p.mm.weapon.valid) then
+			-- oh, thats the gun haver
+			-- notify everyone that they died
+			local type = "gun holder"
+			if p.mm.role == MMROLE_SHERIFF then
+				type = "sheriff"
+			end
+			chatprint("!!! - The "..type.." has died! Find his gun!", true)
 		end
 
 		P_RemoveMobj(target.player.mm.weapon)
@@ -37,8 +43,8 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	if (source
 	and source.player
 	and source.player.mm
-	and source.player.mm.role ~= 2
-	and target.player.mm.role ~= 2) then
+	and source.player.mm.role ~= MMROLE_MURDERER
+	and target.player.mm.role ~= MMROLE_MURDERER) then
 		chatprintf(source.player, "!!! - That was not the murderer. You were killed for friendly fire!", true)
 		P_DamageMobj(source, nil, nil, 999, DMG_INSTAKILL)
 	end
@@ -58,6 +64,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 
 	local innocents = 0
 	local murderers = 0
+
 	for p in players.iterate do
 		if not (p
 		and p.mo

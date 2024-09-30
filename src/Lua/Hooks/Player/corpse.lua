@@ -64,6 +64,9 @@ addHook("MobjDeath", function(target, inflictor, source)
 	end
 	*/
 	
+	local angle = (inflictor and inflictor.valid) and R_PointToAngle2(target.x, target.y, inflictor.x, inflictor.y) or target.angle
+	target.deathangle = angle
+	
 	if MM:canGameEnd() then
 		S_StartSound(nil,sfx_buzz3)
 		S_StartSound(nil,sfx_s253)
@@ -73,6 +76,11 @@ addHook("MobjDeath", function(target, inflictor, source)
 			6*TICRATE,
 			FU/16
 		)
+		target.state = (target.player.mm.end_deathstate and S_PLAY_DEAD or S_PLAY_PAIN)
+		target.flags2 = $ &~MF2_DONTDRAW
+		target.angle = angle
+		MM_N.killing_end = true
+		return
 	end
 	
 
@@ -84,8 +92,6 @@ addHook("MobjDeath", function(target, inflictor, source)
 	corpse.color = target.color
 	corpse.state = S_PLAY_BODY
 
-	local angle = (inflictor and inflictor.valid) and R_PointToAngle2(target.x, target.y, inflictor.x, inflictor.y) or target.angle
-
 	corpse.angle = angle
 	corpse.flags = 0
 	corpse.flags2 = 0
@@ -93,7 +99,7 @@ addHook("MobjDeath", function(target, inflictor, source)
 	corpse.fuse = -1
 
 	P_InstaThrust(corpse, angle, -8*FU)
-	corpse.momz = 6*(FU*P_MobjFlip(corpse))
+	P_SetObjectMomZ(corpse,6*FU)
 end, MT_PLAYER)
 
 addHook("ThinkFrame", function()
@@ -101,6 +107,35 @@ addHook("ThinkFrame", function()
 
 	for p in players.iterate() do
 		if p.mo and not (p.mo.health) then
+		
+			if MM_N.gameover
+				if MM_N.end_ticker < 3*TICRATE
+				and not MM_N.voting
+					p.deadtimer = min($,3)
+					p.mo.momx,p.mo.momy,p.mo.momz = 0,0,0
+					p.mo.flags2 = $ &~MF2_DONTDRAW
+					p.mo.state = (p.mm.end_deathstate and S_PLAY_DEAD or S_PLAY_PAIN)
+					continue
+					
+				elseif MM_N.end_ticker == 3*TICRATE
+				and not MM_N.voting
+					local corpse = P_SpawnMobjFromMobj(p.mo, 0,0,0, MT_THOK)
+					
+					corpse.skin = p.mo.skin
+					corpse.color = p.mo.color
+					corpse.state = S_PLAY_BODY
+					
+					corpse.angle = p.mo.deathangle
+					corpse.flags = 0
+					corpse.flags2 = 0
+					corpse.tics = -1
+					corpse.fuse = -1
+
+					P_InstaThrust(corpse, p.mo.deathangle, -8*FU)
+					P_SetObjectMomZ(corpse,6*FU)
+				end
+			end
+			
 			p.mo.flags2 = $|MF2_DONTDRAW
 			continue
 		end

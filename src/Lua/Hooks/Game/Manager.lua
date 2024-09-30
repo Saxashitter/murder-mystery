@@ -79,7 +79,7 @@ addHook("ThinkFrame", function()
 			end
 			
 			if MM_N.end_ticker >= 5*TICRATE
-				MM_N.end_ticker = 0
+				MM_N.end_ticker = 1
 				MM:startVote()
 			end
 		end
@@ -123,6 +123,11 @@ addHook("ThinkFrame", function()
 
 	if canEnd then
 		MM:endGame(endType or 1)
+		if not MM_N.killing_end
+			MM_N.disconnect_end = true
+			MM_N.end_ticker = 3*TICRATE - 1
+			S_StartSound(nil,sfx_s253)
+		end
 	end
 
 	-- 1 innocent? start showdown
@@ -170,7 +175,8 @@ addHook("ThinkFrame", function()
 
 	-- gun management
 	if leveltime > 10*TICRATE
-	and not MM:playerWithGun() then
+	and not MM:playerWithGun()
+	and not MM_N.gameover then
 		local wpns = MM:isWeaponOnMap("Gun")
 
 		if wpns then
@@ -191,7 +197,7 @@ addHook("ThinkFrame", function()
 			end
 		else
 			local p = randomPlayer(_eligibleGunPlayer)
-			if p then
+			if p and not MM:canGameEnd() then
 				MM:giveWeapon(p, "Gun")
 				chatprint("!!! - A random player has gotten the gun due to the gun despawning!")
 			end

@@ -16,5 +16,8 @@ return {
 	max_ping_time = 30*TICRATE,
 	ping_approx = FU,
 	ping_time = 0,
-	pings_done = 0
+	pings_done = 0,
+	--round ended because all innocents/murderers left the game
+	disconnect_end = false,
+	killing_end = false,
 }

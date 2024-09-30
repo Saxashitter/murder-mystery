@@ -231,7 +231,7 @@ addHook("MobjThinker", function(wpn)
 	or (data.can_damage
 	and data.can_damage(p.mo, wpn)) then
 		search_players(p)
-	else
+	elseif p.mm.role == 2 and not wpn.hidden
 		search_players(p,true)
 	end
 end, MT_MM_WEAPON)

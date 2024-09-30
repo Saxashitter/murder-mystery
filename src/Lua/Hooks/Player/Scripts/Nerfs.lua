@@ -7,20 +7,23 @@ return function(p)
 			p.mo.state = S_PLAY_JUMP
 		end
 	end
+	/*
 	if p.charability == CA_FLY then
 		p.powers[pw_tailsfly] = min(TICRATE/2, $)
 	end
+	*/
 	if p.charability == CA_FLOAT
 	or p.charability == CA_THOK
-	or p.charability == CA_BOUNCE then
+	or p.charability == CA_BOUNCE
+	or p.charability == CA_FLY then
 		p.charability = CA_NONE
 	end
 	if p.charability2 == CA2_GUNSLINGER then
 		p.charability2 = CA2_NONE
 	end
 
-	if p.mo.skin == "knuckles" then
-		p.jumpfactor = skins["sonic"].jumpfactor
+	if p.jumpfactor ~= FU then
+		p.jumpfactor = FU
 	end
 
 	speedCap(p.mo, 28*FU)

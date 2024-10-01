@@ -4,19 +4,19 @@ if #version > 7 then
 end
 
 local types = {
-	{"Innocent",
+	[MMROLE_INNOCENT] = {"Innocent",
 		V_GREENMAP,
 		info = {
 			"Stay alive."
 		}
 	},
-	{"Murderer",
+	[MMROLE_MURDERER] = {"Murderer",
 		V_REDMAP,
 		info = {
 			"Kill everyone."
 		}
 	},
-	{"Sheriff",
+	[MMROLE_SHERIFF] = {"Sheriff",
 		V_BLUEMAP,
 		info = {
 			"Shoot the murderer!"
@@ -38,7 +38,7 @@ local function HUD_RoleDrawer(v,p)
 			killername = "\x85"..src.player.name
 		end
 	end
-	
+
 	do
 		if p.spectator 
 		or not (p.mo and p.mo.valid)

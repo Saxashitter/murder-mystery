@@ -26,11 +26,11 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	if target.player.mm.weapon and target.player.mm.weapon.valid then
 		MM:spawnDroppedWeapon(target.x, target.y, target.z, target.player.mm.weapon.__type)
 
-		if (p.mm.weapon and p.mm.weapon.valid) then
+		if (target.player.mm.weapon and target.player.mm.weapon.valid) then
 			-- oh, thats the gun haver
 			-- notify everyone that they died
 			local type = "gun holder"
-			if p.mm.role == MMROLE_SHERIFF then
+			if target.player.mm.role == MMROLE_SHERIFF then
 				type = "sheriff"
 			end
 			chatprint("!!! - The "..type.." has died! Find his gun!", true)

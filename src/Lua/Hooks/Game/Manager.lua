@@ -7,7 +7,7 @@ local function _eligibleGunPlayer(p)
 	and p.mo.health
 	and p.mm
 	and not p.mm.spectator
-	and p.mm.role ~= 2
+	and p.mm.role ~= MMROLE_MURDERER
 	and not (p.mm.weapon and p.mm.weapon.valid)
 end
 
@@ -111,7 +111,7 @@ addHook("ThinkFrame", function()
 		count = $+1
 
 		if p.mm.spectator then continue end
-		if p.mm.role == 2 then
+		if p.mm.role == MMROLE_MURDERER then
 			murderers = $+1
 			continue
 		end

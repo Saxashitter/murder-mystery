@@ -37,7 +37,7 @@ return function(self)
 	for p in players.iterate do
 		if not (p and p.mm) then continue end
 
-		if p.mm.role == 2 then
+		if p.mm.role == MMROLE_MURDERER then
 			table.insert(MM_N.murderers, p)
 			continue
 		end

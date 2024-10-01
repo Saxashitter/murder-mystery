@@ -13,4 +13,7 @@ return {
 	lastforward = 0,
 	lastside = 0,
 	buttons = 0
+	
+	wassheriff = false,
+	wasmurderer = false,
 }

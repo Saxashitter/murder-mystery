@@ -3,6 +3,7 @@ states[freeslot "S_PLAY_BODY"] = {
 	frame = freeslot "SPR2_OOF_"|A,
 	tics = -1
 }
+spr2defaults[SPR2_OOF_] = SPR2_DEAD
 
 addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	if not MM:isMM() then return end

@@ -4,8 +4,7 @@ addHook("NetVars", function(n) dropped_mobjs = n($) end)
 mobjinfo[freeslot "MT_MM_DROPPEDWEAPON"] = {
 	radius = 32*FU,
 	height = 16*FU,
-	spawnstate = S_THOK,
-	flags = MF_SPECIAL
+	spawnstate = S_THOK
 }
 
 function MM:spawnDroppedWeapon(x, y, z, name)
@@ -27,22 +26,13 @@ function MM:spawnDroppedWeapon(x, y, z, name)
 	return wpn
 end
 
-addHook("MobjThinker", function(d_wpn)
-	d_wpn.angle = $+(ANG1*3/2)
-	
-	if d_wpn.timealive == nil then
-		d_wpn.timealive = 0
-	else
-		d_wpn.timealive = $+1
-	end
-end, MT_MM_DROPPEDWEAPON)
-
 local function canPickUp(toucher, d_wpn)
 	if (d_wpn.timealive ~= nil and d_wpn.timealive < 10) then
 		return false
 	end
 
 	if not (toucher
+	and toucher.valid
 	and toucher.health
 	and toucher.player
 	and toucher.player.mm
@@ -66,12 +56,38 @@ local function canPickUp(toucher, d_wpn)
 	return true
 end
 
-addHook("TouchSpecial", function(d_wpn, toucher)
-	if not canPickUp(toucher, d_wpn) then
-		return true
+addHook("MobjThinker", function(d_wpn)
+	d_wpn.angle = $+(ANG1*3/2)
+	
+	if d_wpn.timealive == nil then
+		d_wpn.timealive = 0
+	else
+		d_wpn.timealive = $+1
 	end
 
-	MM:giveWeapon(toucher.player, d_wpn.give)
+	local PICKUP_DIST = 120*FU
+
+	for p in players.iterate do
+		if not canPickUp(p.mo, d_wpn) then
+			continue
+		end
+
+		local dist = R_PointToDist2(p.mo.x, p.mo.y, d_wpn.x, d_wpn.y)
+		local zDist = abs(p.mo.z-d_wpn.z)
+
+		if dist > PICKUP_DIST
+		or zDist > PICKUP_DIST then
+			print(abs(dist-PICKUP_DIST)/FU)
+			continue
+		end
+
+		if p.cmd.buttons & BT_CUSTOM3
+		and not (p.lastbuttons & BT_CUSTOM3) then
+			MM:giveWeapon(p, d_wpn.give)
+			P_RemoveMobj(d_wpn)
+			break
+		end
+	end
 end, MT_MM_DROPPEDWEAPON)
 
 addHook("PostThinkFrame", do

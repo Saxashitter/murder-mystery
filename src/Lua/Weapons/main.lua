@@ -193,12 +193,8 @@ addHook("MobjThinker", function(wpn)
 	end
 
 	if p.cmd.buttons & BT_ATTACK
-	and not wpn.fired then
+	and not (p.lastbuttons & BT_ATTACK) then
 		data.attack(p, wpn)
-		wpn.fired = true
-	end
-	if not (p.cmd.buttons & BT_ATTACK) then
-		wpn.fired = false
 	end
 
 	if data.droppable
@@ -231,7 +227,7 @@ addHook("MobjThinker", function(wpn)
 	or (data.can_damage
 	and data.can_damage(p.mo, wpn)) then
 		search_players(p)
-	elseif p.mm.role == 2 and not wpn.hidden
+	elseif p.mm.role == MMROLE_MURDERER and not wpn.hidden
 		search_players(p,true)
 	end
 end, MT_MM_WEAPON)

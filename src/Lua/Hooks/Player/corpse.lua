@@ -51,37 +51,6 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	
 	target.player.mm.whokilledme = source
 	
-	/*
-	local headcount = 0
-	for p in players.iterate
-		if p.spectator
-		or not (p.mo and p.mo.valid and p.mo.health)
-		or (p.mm and p.mm.spectator)
-			continue
-		end
-		headcount = $+1
-	end
-
-	local innocents = 0
-	local murderers = 0
-
-	for p in players.iterate do
-		if not (p
-		and p.mo
-		and p.mo.health
-		and not p.mm.spectator) then
-			continue
-		end
-
-		if p.mm.role == 2 then
-			murderers = $+1
-			continue
-		end
-
-		innocents = $+1
-	end
-	*/
-	
 	local angle = (inflictor and inflictor.valid) and R_PointToAngle2(target.x, target.y, inflictor.x, inflictor.y) or target.angle
 	target.deathangle = angle
 	

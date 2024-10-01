@@ -105,7 +105,7 @@ return function(v)
 
 		local total_width = (icon_width*(#icons-1))
 		local x = ( 160*FU ) - ( total_width*scale/2 )
-		local y = ( 180*FU )
+		local y = ( (200-32)*FU )
 
 		for k,icon in pairs(icons) do
 			v.drawScaled(x, y, scale, icon.patch, trans|V_SNAPTOBOTTOM, icon.color)
@@ -161,5 +161,6 @@ return function(v)
 
 	local time = (15*TICRATE-MM_N.end_ticker)/TICRATE
 
-	v.drawString(160, 200-9, "START IN "..tostring(time).." SECONDS", V_SNAPTOBOTTOM|V_YELLOWMAP|trans, "center")
+	v.drawString(160, 200-20, "JOIN US AT https://discord.gg/PxT4XKhZxd", V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_REDMAP, "center")
+	v.drawString(160, 200-10, "START IN "..tostring(time).." SECONDS", V_SNAPTOBOTTOM|V_YELLOWMAP|trans, "center")
 end,"gameandscores"

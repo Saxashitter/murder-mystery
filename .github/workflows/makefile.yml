@@ -31,7 +31,7 @@ jobs:
     - name: Make build
       run: |
         mkdir build
-        make default
+        make build
 
     - name: Upload build
       uses: actions/upload-artifact@v4

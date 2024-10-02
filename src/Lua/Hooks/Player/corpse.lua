@@ -107,6 +107,10 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 
 	P_InstaThrust(corpse, angle, -8*FU)
 	P_SetObjectMomZ(corpse,6*FU)
+
+	MM_N.corpses[#MM_N.corpses+1] = corpse
+	corpse.playerid = #target.player
+	corpse.playername = target.player.name
 end, MT_PLAYER)
 
 addHook("ThinkFrame", function()
@@ -114,7 +118,6 @@ addHook("ThinkFrame", function()
 
 	for p in players.iterate() do
 		if p.mo and not (p.mo.health) then
-		
 			if MM_N.gameover
 				if MM_N.end_ticker < 3*TICRATE
 				and not MM_N.voting
@@ -145,6 +148,26 @@ addHook("ThinkFrame", function()
 			
 			p.mo.flags2 = $|MF2_DONTDRAW
 			continue
+		end
+	end
+
+	for _,corpse in pairs(MM_N.corpses) do
+		if not (corpse and corpse.valid) then
+			table.remove(MM_N.corpses, _)
+			continue
+		end
+
+		for p in players.iterate do
+			if not (p and p.mo and p.mo.health and p.mm and p.mm.role ~= MMROLE_MURDERER and not p.mm.spectator) then
+				continue
+			end
+
+			if P_CheckSight(corpse, p.mo)
+			and R_PointToDist(corpse.x, corpse.y, p.mo.x, p.mo.y) < 2000*FU
+			and not (MM_N.knownDeadPlayers[corpse.playerid]) then
+				chatprint("!!! - The corpse of "..corpse.playername.." has been found!")
+				MM_N.knownDeadPlayers[corpse.playerid] = true
+			end
 		end
 	end
 end)

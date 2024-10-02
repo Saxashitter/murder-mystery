@@ -5,7 +5,19 @@ local ROWLENGTH = 300 / TILEWIDTH
 
 local function isDead(p)
 	-- print("death", (not (p and p.mo and p.mo.valid)), p.spectator, p.mo.health <= 0)
-	return (not (p and p.mo and p.mo.valid)) or p.spectator or p.mo.health <= 0
+	if p.mm and p.mm.joinedmidgame then
+		return true
+	end
+
+	if MM_N.knownDeadPlayers[#p] then
+		return true
+	end
+
+	if (p and p.mm and p.mm.role == MMROLE_SHERIFF and p.mm.spectator) then
+		return true
+	end
+
+	return false
 end
 
 local SECRECY_NOTSECRET = 0

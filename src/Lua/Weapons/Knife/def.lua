@@ -9,6 +9,7 @@ weapon.spawn = function(p, k)
 	k.cooldown = 0
 	k.anim = 0
 	k.hit = 0
+	k.mark = true
 end
 weapon.attack = function(p, k)
 	if k.cooldown or k.hidden then
@@ -24,12 +25,18 @@ end
 weapon.can_damage = function(p, k)
 	return (k.hit)
 end
-weapon.on_damage = function(p, k)
-	S_StartSound(p.mo, sfx_kffire)
+weapon.on_damage = function(mo, mo2, k)
+	local anglediff = anglefix(R_PointToAngle2(mo.x, mo.y, mo2.x, mo2.y))
+	local angle = anglefix(mo.angle)
+
+	if abs(angle-anglediff) > 40*FU then return true end
+
+	S_StartSound(mo, sfx_kffire)
+	k.hit = 0
 end
 weapon.equip = function(p, k)
 	S_StartSound(p.mo, sfx_kequip)
-	k.cooldown = max($, TICRATE/2)
+	k.cooldown = max($, 24)
 end
 weapon.think = function(p, k)
 	local anim_time = FixedDiv(k.anim, MAX_ANIM)

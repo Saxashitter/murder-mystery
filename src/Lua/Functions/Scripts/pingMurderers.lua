@@ -14,7 +14,7 @@ return function(self, time, approx)
 		and p.mo.health
 		and p.mm
 		and not p.mm.spectator
-		and p.mm.role == 2) then
+		and p.mm.role == MMROLE_MURDERER) then
 			continue
 		end
 

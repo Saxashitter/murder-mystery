@@ -19,9 +19,8 @@ weapon.attack = function(p, k)
 	k.anim = MAX_ANIM
 
 	local bullet = P_SpawnMobjFromMobj(p.mo, 0,0,p.mo.height/2, MT_MM_BULLET)
-	bullet.momx = FixedMul(48*cos(p.mo.angle), cos(p.aiming))
-	bullet.momy = FixedMul(48*sin(p.mo.angle), cos(p.aiming))
-	bullet.momz = 48*sin(p.aiming)
+	bullet.angle = p.mo.angle
+	bullet.aiming = p.aiming
 	bullet.color = p.mo.color
 	bullet.target = p.mo
 

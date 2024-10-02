@@ -23,11 +23,6 @@ addHook("PlayerThink", function(p)
 	end
 
 	if not (p.mo and p.mo.valid and p.mo.health) then
-		return
-	end
-
-	p.spectator = p.mm.spectator
-	if p.mm.spectator then
 		if p.deadtimer >= 3*TICRATE
 		and p.playerstate == PST_DEAD
 			G_DoReborn(#p)
@@ -36,13 +31,17 @@ addHook("PlayerThink", function(p)
 		
 		return
 	end
+
+	p.spectator = p.mm.spectator
+	if p.mm.spectator then
+		return
+	end
 	
 	for _,script in ipairs(scripts) do
 		script(p)
 	end
 end)
 
-doAndInsert("Murderer")
-doAndInsert("Sheriff")
+doAndInsert("Role Handler")
 doAndInsert("Nerfs")
 doAndInsert("Map Vote", true)

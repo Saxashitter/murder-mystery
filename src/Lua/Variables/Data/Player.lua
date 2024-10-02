@@ -1,5 +1,5 @@
 return {
-	role = 1,
+	role = MMROLE_INNOCENT,
 	spectator = false,
 	got_weapon = false,
 

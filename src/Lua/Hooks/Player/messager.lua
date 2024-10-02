@@ -8,9 +8,7 @@ local function skinColorToChatColor(color)
 	local chatcolor = skincolors[color].chatcolor;
 
 	-- this elseif table is by srb2, not me
-	if (not chatcolor or chatcolor>V_INVERTMAP)
-		return "\x80"
-	elseif (chatcolor == V_MAGENTAMAP)
+	if (chatcolor == V_MAGENTAMAP)
 		return "\x81"
 	elseif (chatcolor == V_YELLOWMAP)
 		return "\x82";
@@ -41,6 +39,8 @@ local function skinColorToChatColor(color)
 	elseif (chatcolor == V_INVERTMAP)
 		return "\x8f"
 	end
+
+	return "\x80"
 end
 
 addHook("PlayerMsg", function(src, t, trgt, msg)

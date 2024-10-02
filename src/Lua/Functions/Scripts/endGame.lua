@@ -31,6 +31,7 @@ return function(self, endType)
 		end
 		
 		mo.flags = $|MF_NOTHINK
+		S_StopSound(mo)
 	end
 	
 	/*

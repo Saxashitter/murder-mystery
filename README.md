@@ -1,6 +1,7 @@
 # Saxa and Luigi's Murder Mystery
 
-Saxa and Luigi's Murder Mystery was made as a mode to counter LeoTM and his scummy practices.
+Saxa and Luigi's Murder Mystery was made as a mode to counter LeoTM and how strict he is with his Murder Mystery. We do not have any intent to overthrow him, this is an entirely different thing.
+
 This mode is 100% re-usable, even LeoTM can steal the code from here.
 
 ## Why this was made.

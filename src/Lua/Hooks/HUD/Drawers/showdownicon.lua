@@ -28,7 +28,7 @@ return function(v,p,c)
 		local t = max(0, min(FixedDiv(dist, 1500*FU), FU))
 		local trans = int_ease(t, 10, 0)
 
-		if trans == 10 then continue end
+		if trans == 10 << V_ALPHASHIFT then continue end
 		v.drawScaled(to_screen.x, to_screen.y, (FU/2)*3/2, icon, (trans*V_10TRANS), v.getColormap(player.skin, player.mo.color))
 	end
 end

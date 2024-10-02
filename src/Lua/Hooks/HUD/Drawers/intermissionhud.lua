@@ -45,10 +45,10 @@ return function(v)
 	local scroll = tics*scale
 
 	local t = FixedDiv(min(tics, MAX_FADE), MAX_FADE)
-	local trans = V_10TRANS*int_ease(t, 10, 0)
+	local trans = ease.linear(t, 10, 0) << V_ALPHASHIFT
 
 	if not (tics) then return end
-	if trans == 10 then return end
+	if trans == 10 << V_ALPHASHIFT then return end
 
 	draw_parallax(v, scroll, scroll, scale, patch, V_SNAPTOTOP|V_SNAPTOLEFT|trans)
 
@@ -144,7 +144,7 @@ return function(v)
 			end
 		end
 
-		v.drawScaled(x, y, scale, mapIcon)
+		v.drawScaled(x, y, scale, mapIcon, trans)
 		v.drawString(x+(iconWidth/2),
 			y+(mapIcon.height*scale),
 			G_BuildMapTitle(map.map),
@@ -161,6 +161,6 @@ return function(v)
 
 	local time = (15*TICRATE-MM_N.end_ticker)/TICRATE
 
-	v.drawString(160, 200-20, "JOIN US AT https://discord.gg/PxT4XKhZxd", V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_REDMAP, "center")
+	v.drawString(160, 200-20, "JOIN US AT https://discord.gg/PxT4XKhZxd", V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_REDMAP|trans, "center")
 	v.drawString(160, 200-10, "START IN "..tostring(time).." SECONDS", V_SNAPTOBOTTOM|V_YELLOWMAP|trans, "center")
 end,"gameandscores"

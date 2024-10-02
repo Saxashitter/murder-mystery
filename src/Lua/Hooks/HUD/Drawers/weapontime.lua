@@ -1,3 +1,5 @@
+local roles = MM.require "Variables/Data/Roles"
+
 local function HUD_TimeForWeapon(v,p)
 	if not MM:isMM() then return end
 	if not (p.mo and p.mo.health and p.mm) then return end
@@ -21,10 +23,10 @@ local function HUD_TimeForWeapon(v,p)
 
 	v.drawString(160*FU,
 		40*FU - MMHUD.xoffset,
-		(p.mm.role == 1) and "Round starts in"
-		or "You'll get your weapon in",
+		roles[p.mm.role].weapon and "You'll get your weapon in" or
+		"Round starts in",
 		V_SNAPTOTOP|V_ALLOWLOWERCASE,
-		(p.mm.role == 1) and "fixed-center" or "thin-fixed-center"
+		roles[p.mm.role].weapon and "thin-fixed-center" or "fixed-center"
 	)
 	v.drawScaled(160*FU - (v.cachePatch("STTNUM0").width*FU/2),
 		50*FU - MMHUD.xoffset,

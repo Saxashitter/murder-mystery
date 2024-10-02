@@ -5,6 +5,8 @@ states[freeslot "S_PLAY_BODY"] = {
 }
 spr2defaults[SPR2_OOF_] = SPR2_DEAD
 
+local roles = MM.require "Variables/Data/Roles"
+
 addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	if not MM:isMM() then return end
 	
@@ -44,8 +46,11 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	if (source
 	and source.player
 	and source.player.mm
-	and source.player.mm.role ~= MMROLE_MURDERER
-	and target.player.mm.role ~= MMROLE_MURDERER) then
+	and target
+	and target.player
+	and target.player.mm
+	and roles[source.player.mm.role].team == roles[target.player.mm.role].team
+	and not roles[source.player.mm.role].cankillmates) then
 		chatprintf(source.player, "!!! - That was not the murderer. You were killed for friendly fire!", true)
 		P_DamageMobj(source, nil, nil, 999, DMG_INSTAKILL)
 	end

@@ -42,7 +42,6 @@ addHook("PlayerThink", function(p)
 	end
 end)
 
-doAndInsert("Murderer")
-doAndInsert("Sheriff")
+doAndInsert("Role Handler")
 doAndInsert("Nerfs")
 doAndInsert("Map Vote", true)

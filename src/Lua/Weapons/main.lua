@@ -8,6 +8,8 @@ mobjinfo[freeslot "MT_MM_WEAPON"] = {
 
 MM.weapons = {}
 
+local roles = MM.require "Variables/Data/Roles"
+
 local function getWeapon(file)
 	local data = dofile("Weapons/"..file.."/def.lua")
 
@@ -76,32 +78,19 @@ addHook("MobjSpawn", function(wpn)
 	table.insert(weapons, wpn)
 end, MT_MM_WEAPON)
 
-local function do_damage(pmo, mo, target)
-	if not (mo
-	and mo.valid
-	and mo.health
-	and mo.player
-	and mo.player.mm
-	and not mo.player.mm.spectator
-	and mo ~= pmo) then return end
-
-	local dist = R_PointToDist2(pmo.x, pmo.y, mo.x, mo.y)
-	local z_dist = abs(pmo.z-mo.z)
-
-	if dist > max(pmo.radius, mo.radius)*10 then
-		return
-	end
-	if z_dist > max(pmo.height, mo.height)*5/4 then
-		return
-	end
-	
-	if not target
-		P_DamageMobj(mo, pmo.player.mm.weapon, pmo, 999, DMG_INSTAKILL)
-		if MM.weapons[pmo.player.mm.weapon.__type].on_damage then
-			MM.weapons[pmo.player.mm.weapon.__type].on_damage(pmo.player, pmo.player.mm.weapon, mo)
+local function do_damage(pmo, mo)
+	if (roles[pmo.player.mm.role].team == roles[mo.player.mm.role].team) then
+		if not roles[pmo.player.mm.role].friendlyfire then
+			return
 		end
 	end
-	
+
+	if MM.weapons[pmo.player.mm.weapon.__type].on_damage
+	and MM.weapons[pmo.player.mm.weapon.__type].on_damage(pmo, mo, pmo.player.mm.weapon) then
+		return
+	end
+	P_DamageMobj(mo, pmo.player.mm.weapon, pmo, 999, DMG_INSTAKILL)
+
 	return true
 end
 
@@ -116,19 +105,41 @@ local function search_players(p,target)
 	and p.mm.weapon.valid) then return end
 
 	local wpn = p.mm.weapon
-	local wpn_t = MM:getWpnData(p)
+	local wpn_t = MM:getWpnData(wpn)
 
 	for p2 in players.iterate do
-		if p == p2 then continue end
-		
-		if do_damage(p.mo, p2 and p2.mo, target) then
-			if target
-				if p2.mo and p2.mo.valid and p2.mo.health
-					P_SpawnLockOn(p,p2.mo,S_LOCKON1)
-				end
-			else
-				break
-			end
+		if not (p2
+		and p2.mo
+		and p2.mo.valid
+		and p2.mo.health
+		and p2.mm
+		and not p2.mm.spectator
+		and p2 ~= p) then continue end
+
+		local dist = R_PointToDist2(p.mo.x, p.mo.y, p2.mo.x, p2.mo.y)
+		local z_dist = abs(p2.mo.z-p.mo.z)
+
+		if dist > (p.mo.radius+p2.mo.radius)*3 then
+			continue
+		end
+		if z_dist > max(p.mo.height, p2.mo.height)*5/4 then
+			continue
+		end
+
+		if wpn.mark
+		and not wpn.hidden
+		and not (wpn.hit) then
+			P_SpawnLockOn(p, p2.mo, S_LOCKON1)
+		end
+
+		local canDamage = wpn_t.can_damage and wpn_t.can_damage(p.mo, wpn)
+		if canDamage == nil then
+			canDamage = false
+		end
+
+		if not wpn.hidden
+		and canDamage then
+			do_damage(p.mo, p2.mo)
 		end
 	end
 end
@@ -223,13 +234,7 @@ addHook("MobjThinker", function(wpn)
 
 	data.think(p, wpn)
 
-	if not data.can_damage
-	or (data.can_damage
-	and data.can_damage(p.mo, wpn)) then
-		search_players(p)
-	elseif p.mm.role == MMROLE_MURDERER and not wpn.hidden
-		search_players(p,true)
-	end
+	search_players(p)
 end, MT_MM_WEAPON)
 
 addHook("PostThinkFrame", function()

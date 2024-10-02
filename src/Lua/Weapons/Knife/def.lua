@@ -29,7 +29,7 @@ weapon.on_damage = function(mo, mo2, k)
 	local anglediff = anglefix(R_PointToAngle2(mo.x, mo.y, mo2.x, mo2.y))
 	local angle = anglefix(mo.angle)
 
-	--print(abs(angle-anglediff)/FU)
+	if abs(angle-anglediff) > 40*FU then return true end
 
 	S_StartSound(mo, sfx_kffire)
 	k.hit = 0

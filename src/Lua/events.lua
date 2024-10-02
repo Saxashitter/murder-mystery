@@ -34,7 +34,7 @@ MM.runEvent = function(name, prioritize, ...)
 	local return_value
 
 	for _,call in pairs(events[name]) do
-		return_value = can_override_variable(return_value, call(...), prioritize)
+		return_value = can_override_variable($, call(...), prioritize)
 	end
 
 	return return_value

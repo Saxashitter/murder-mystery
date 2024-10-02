@@ -29,7 +29,9 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	if target.player.mm.weapon and target.player.mm.weapon.valid then
 		MM:spawnDroppedWeapon(target.x, target.y, target.z, target.player.mm.weapon.__type)
 
-		if (target.player.mm.weapon and target.player.mm.weapon.valid) then
+		if (target.player.mm.weapon
+		and target.player.mm.weapon.valid
+		and target.player.mm.weapon.__type == "Gun") then
 			-- oh, thats the gun haver
 			-- notify everyone that they died
 			local type = "gun holder"

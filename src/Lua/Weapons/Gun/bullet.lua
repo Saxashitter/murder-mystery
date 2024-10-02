@@ -2,16 +2,48 @@ mobjinfo[freeslot "MT_MM_BULLET"] = {
 	radius = 32*FU,
 	height = 64*FU,
 	spawnstate = S_RRNG1,
-	flags = MF_NOGRAVITY
+	flags = MF_NOGRAVITY,
+	deathstate = S_SPRK1
 }
 
 addHook("MobjThinker", function(mo)
 	if not mo.valid then return end
 
-	if mo.z == mo.floorz
-	or mo.z+mo.height == mo.ceilingz then
+	print "ran"
+
+	mo.momx = FixedMul(32*cos(mo.angle), cos(mo.aiming))
+	mo.momy = FixedMul(32*sin(mo.angle), cos(mo.aiming))
+	mo.momz = 32*sin(mo.aiming)
+
+	for i = 1,256 do
+		if not (mo and mo.valid) then
+			return
+		end
+
+		if mo.z <= mo.floorz
+		or mo.z+mo.height >= mo.ceilingz then
+			P_RemoveMobj(mo)
+			return
+		end
+
+		if i % 4 == 0 then
+			local effect = P_SpawnMobjFromMobj(mo, 0,0,0, MT_THOK)
+			effect.tics = -1
+			effect.fuse = -1
+			effect.state = S_SPRK1
+		end
+
+		P_XYMovement(mo)
+
+		if not (mo and mo.valid) then
+			return
+		end
+
+		P_ZMovement(mo)
+	end
+
+	if mo and mo.valid then
 		P_RemoveMobj(mo)
-		return
 	end
 end, MT_MM_BULLET)
 

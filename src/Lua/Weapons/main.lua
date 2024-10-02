@@ -125,7 +125,9 @@ local function search_players(p,target)
 		if z_dist > max(p.mo.height, p2.mo.height)*5/4 then
 			continue
 		end
-
+		
+		if not P_CheckSight(p.mo,p2.mo) then return end
+		
 		if wpn.mark
 		and not wpn.hidden
 		and not (wpn.hit) then

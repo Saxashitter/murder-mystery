@@ -44,6 +44,11 @@ local function HUD_RoleDrawer(v,p)
 				v.stringWidth("  Killed by "..killername,V_ALLOWLOWERCASE,"thin")
 			)
 			y = $+8*FU
+
+			longest_width = max($,
+				v.stringWidth("  You cannot interact with alive people.",V_ALLOWLOWERCASE,"thin")
+			)
+			y = $+8*FU
 		end
 		
 		local x = (320*FU) - longest_width*FU
@@ -65,6 +70,12 @@ local function HUD_RoleDrawer(v,p)
 			v.drawString(320*FU + off,
 				8*FU,
 				"Killed by "..killername,
+				V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
+				"thin-fixed-right"
+			)
+			v.drawString(320*FU + off,
+				16*FU,
+				"You cannot interact with alive people.",
 				V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
 				"thin-fixed-right"
 			)

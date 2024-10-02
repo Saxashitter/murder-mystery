@@ -77,7 +77,7 @@ addHook("MobjThinker", function(d_wpn)
 
 		if dist > PICKUP_DIST
 		or zDist > PICKUP_DIST then
-			print(abs(dist-PICKUP_DIST)/FU)
+			--print(abs(dist-PICKUP_DIST)/FU)
 			continue
 		end
 

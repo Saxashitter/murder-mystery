@@ -29,9 +29,9 @@ weapon.on_damage = function(mo, mo2, k)
 	local anglediff = anglefix(R_PointToAngle2(mo.x, mo.y, mo2.x, mo2.y))
 	local angle = anglefix(mo.angle)
 
-	print(abs(angle-anglediff)/FU)
+	--print(abs(angle-anglediff)/FU)
 
-	S_StartSound(p.mo, sfx_kffire)
+	S_StartSound(mo, sfx_kffire)
 	k.hit = 0
 end
 weapon.equip = function(p, k)

@@ -39,7 +39,7 @@ local function HUD_EndGameDrawer(v,p,c)
 				"thin-fixed-center"
 			)
 			v.drawString(w2s.x,
-				w2s.y - 72*w2s.scale,
+				w2s.y - 64*w2s.scale - 8*FU,
 				MM_N.end_killer.player.name,
 				V_YELLOWMAP|V_ALLOWLOWERCASE,
 				"thin-fixed-center"

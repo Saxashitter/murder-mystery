@@ -12,6 +12,8 @@ local SECRECY_NOTSECRET = 0
 local SECRECY_MURDERERALLOWED = 1
 local SECRECY_SECRET = 2
 
+local roles = MM.require "Variables/Data/Roles"
+
 local ROLESTYLES = {
 	Unknown = {
 		secrecy = SECRECY_NOTSECRET
@@ -39,7 +41,7 @@ local ROLESTYLES = {
 	},
 	Sheriff = {
 		bg = "MM_PLAYERLIST_BG_SHERRIF",
-		subtitle = "\x84Sherrif",
+		subtitle = "\x84Sheriff",
 		secrecy = SECRECY_SECRET,
 		standardRole = true
 	}
@@ -54,7 +56,7 @@ local function getViewedPlayerRole(player, viewer)
 	elseif isDead(player) then
 		role = "Dead"
 	else
-		role = MM.roleInfos[player.mm.role][1]
+		role = roles[player.mm.role].name
 	end
 
 	if player == viewer then
@@ -66,7 +68,7 @@ local function getViewedPlayerRole(player, viewer)
 	local privilegeLevel = SECRECY_NOTSECRET
 	if isDead(viewer) or MM_N.gameover or MM_N.showdown /*DEBUG!* / or (viewer.cmd.buttons & BT_CUSTOM3)/**/  then
 		privilegeLevel = SECRECY_SECRET
-	elseif (viewer.mm and viewer.mm.role == 2) then
+	elseif (viewer.mm and viewer.mm.role == MMROLE_MURDERER) then
 		privilegeLevel = SECRECY_MURDERERALLOWED
 	end
 	-- print(player.name .. ": " .. role .. " with secrecy " .. secrecyLevel .. " and priv " .. privilegeLevel)
@@ -148,7 +150,7 @@ local function HUD_TabScoresDrawer(v)
 		if roleStyle.subtitle then
 			local subtitle = roleStyle.subtitle
 			if role == "Dead" then
-				local preDeathRole = MM.roleInfos[p.mm.role][1]
+				local preDeathRole = roles[p.mm.role].name
 				subtitle = subtitle .. " " .. ROLESTYLES[preDeathRole].subtitle
 			end
 			style = "small"

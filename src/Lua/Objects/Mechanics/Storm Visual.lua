@@ -76,16 +76,19 @@ addHook("MobjThinker", function(mo)
 		submo.colorized = true
 
 		submo.scale = FU*2
-		submo.spriteyscale = FixedDiv(2048*FU, 20*FU)
+		submo.spriteyscale = FixedDiv(4096*FU, 20*FU)
 
 		submo.renderflags = $|RF_PAPERSPRITE|RF_NOCOLORMAPS
 		submo.blendmode = AST_ADD
 		submo.frame = $|FF_FULLBRIGHT
 
+		local x = mo.x+FixedMul(mo.dist, cos(angle))
+		local y = mo.y+FixedMul(mo.dist, sin(angle))
+
 		P_MoveOrigin(submo,
-			mo.x+FixedMul(mo.dist, cos(angle)),
-			mo.y+FixedMul(mo.dist, sin(angle)),
-			mo.floorz)
+			x, y,
+			P_FloorzAtPos(x, y, submo.z, 1)
+		)
 		submo.angle = angle+ANGLE_90
 	end
 end, MT_MM_STORMVISUAL)

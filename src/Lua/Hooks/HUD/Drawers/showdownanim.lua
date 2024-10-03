@@ -46,6 +46,8 @@ return function(v, p)
 		got_players = true
 	end
 
+	if not (MM_N.showdown_ticker) then return end
+
 	local start_t = max(0, min(FixedDiv(MM_N.showdown_ticker, TICRATE), FU))
 	local end_t = max(0, min(FixedDiv((3*TICRATE)-MM_N.showdown_ticker, TICRATE), FU))
 

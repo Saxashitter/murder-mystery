@@ -18,6 +18,7 @@ return {
 	ping_time = 0,
 	pings_done = 0,
 	corpses = {},
+	showdown_song = "SHWDW1",
 	knownDeadPlayers = {},
 	--round ended because all innocents/murderers left the game
 	disconnect_end = false,

@@ -19,4 +19,5 @@ COM_AddCommand("MM_StartShowdown", function(p)
 	if MM_N.showdown then return end
 	
 	MM_N.showdown = true
+	MM_N.showdown_song = "SHWDW"..tostring(P_RandomRange(1, 2))
 end, COM_ADMIN)

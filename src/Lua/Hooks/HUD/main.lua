@@ -133,6 +133,7 @@ addHook("HUD", function(v,p,c)
 	hudwasmm = false
 end)
 
+addHud "outofbounds"
 addHud "endgamepointer"
 addHud "murdererping"
 addHud "showdownicon"

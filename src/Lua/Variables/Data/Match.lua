@@ -22,4 +22,6 @@ return {
 	--round ended because all innocents/murderers left the game
 	disconnect_end = false,
 	killing_end = false,
+	overtime_point = nil,
+	overtime_ticker = 0,
 }

@@ -40,6 +40,16 @@ addHook("PlayerThink", function(p)
 	for _,script in ipairs(scripts) do
 		script(p)
 	end
+	
+	if p.mm.outofbounds
+		p.mm.oob_ticker = $+1
+		if p.mm.oob_ticker == 3*TICRATE
+			P_KillMobj(p.mo) 
+		end
+	else
+		p.mm.oob_ticker = 0
+	end
+	
 end)
 
 doAndInsert("Role Handler")

@@ -11,12 +11,21 @@ local function HUD_RoleDrawer(v,p)
 	local off = MMHUD.xoffset
 	
 	local longest_width = 0
-	local killername = "your own stupidity"
+	local killername = "your own stupidity."
+	local killerstring = "Killed by "
 	if p.spectator then
 		local src = p.mm.whokilledme
 		
-		if ((src and src.valid) and (src.player and src.player.valid)) then
-			killername = "\x85"..src.player.name
+		if src ~= nil
+			if type(src) == "string"
+				killerstring = src
+			elseif type(src) == "userdata" and userdataType(src) == "mobj_t"
+			and ((src and src.valid) and (src.player and src.player.valid)) then
+				killername = "\x85"..src.player.name
+				killerstring = $..killername
+			end
+		else
+			killerstring = "Joined midgame."
 		end
 	end
 
@@ -41,7 +50,7 @@ local function HUD_RoleDrawer(v,p)
 			end
 		else
 			longest_width = max($,
-				v.stringWidth("  Killed by "..killername,V_ALLOWLOWERCASE,"thin")
+				v.stringWidth("  "..killerstring,V_ALLOWLOWERCASE,"thin")
 			)
 			y = $+8*FU
 
@@ -69,7 +78,7 @@ local function HUD_RoleDrawer(v,p)
 			
 			v.drawString(320*FU + off,
 				8*FU,
-				"Killed by "..killername,
+				killerstring,
 				V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
 				"thin-fixed-right"
 			)

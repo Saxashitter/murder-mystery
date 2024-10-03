@@ -15,13 +15,46 @@ local function canBeRole(p, lastRoles, count)
 	return true
 end
 
-return function(self)
+return function(self, setovertimepoint)
+	if setovertimepoint
+		local possiblePoints = {}
+		for mt in mapthings.iterate do
+			if mt.type <= 35 then
+				local z = P_FloorzAtPos(mt.x*FU,mt.y*FU,mt.z*FU,
+					mobjinfo[MT_PLAYER].height
+				)
+				
+				table.insert(possiblePoints,{x = mt.x*FU, y = mt.y*FU, z = z, type = mt.type})
+			end
+		end
+		
+		local chosenPoint = possiblePoints[P_RandomRange(1,#possiblePoints)]
+		
+		if chosenPoint == nil then return end
+		
+		MM_N.overtime_point = P_SpawnMobj(
+			chosenPoint.x,
+			chosenPoint.y,
+			chosenPoint.z,
+			MT_THOK
+		)
+		MM_N.overtime_point.state = S_THOK
+		MM_N.overtime_point.tics = -1
+		MM_N.overtime_point.fuse = -1
+		P_SetOrigin(consoleplayer.mo,
+			chosenPoint.x,
+			chosenPoint.y,
+			chosenPoint.z
+		)
+		return
+	end
+	
 	MM_N = shallowCopy(matchVars)
 	if (MM_N.end_camera and MM_N.end_camera.valid)
 		P_RemoveMobj(MM_N.end_camera)
 		MM_N.end_camera = nil
 	end
-
+	
 	local lastMurderers = {}
 	local lastSheriffs = {}
 

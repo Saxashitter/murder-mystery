@@ -12,5 +12,8 @@ return {
 	sidemove = 0,
 	lastforward = 0,
 	lastside = 0,
-	buttons = 0
+	buttons = 0,
+	
+	outofbounds = false,
+	oob_dist = 0,
 }

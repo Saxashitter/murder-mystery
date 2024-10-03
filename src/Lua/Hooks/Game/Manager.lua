@@ -144,8 +144,21 @@ addHook("ThinkFrame", function()
 
 		MM_N.showdown_ticker = $+1
 	end
-
-
+	
+	--Overtime storm
+	if MM_N.showdown 
+	or not MM_N.time
+		if MM_N.overtime_ticker == 0
+			S_StartSound(nil,sfx_kc4b)
+			if mapmusname ~= "MADEDE" then
+				mapmusname = "MADEDE"
+				S_ChangeMusic("MADEDE", true)
+			end
+		end
+		
+		MM:handleOvertime()
+	end
+	
 	-- time management
 	MM_N.time = max(0, $-1)
 	if not (MM_N.time)

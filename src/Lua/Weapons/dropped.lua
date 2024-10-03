@@ -7,6 +7,8 @@ mobjinfo[freeslot "MT_MM_DROPPEDWEAPON"] = {
 	spawnstate = S_THOK
 }
 
+sfxinfo[freeslot "sfx_gepick"].caption = "Weapon pick up"
+
 function MM:spawnDroppedWeapon(x, y, z, name)
 	if not self.weapons[name] then return end
 
@@ -85,6 +87,8 @@ addHook("MobjThinker", function(d_wpn)
 		and not (p.lastbuttons & BT_CUSTOM3) then
 			MM:giveWeapon(p, d_wpn.give)
 			P_RemoveMobj(d_wpn)
+			S_StartSound(p.mo,sfx_gepick)
+			
 			break
 		end
 	end

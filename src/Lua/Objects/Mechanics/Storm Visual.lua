@@ -14,10 +14,6 @@ mobjinfo[freeslot "MT_MM_STORMVISUAL"] = {
 	flags2 = MF2_DONTDRAW
 }
 
-COM_AddCommand("spawnstorm", function(p)
-	P_SpawnMobj(p.mo.x, p.mo.y, p.mo.z, MT_MM_STORMVISUAL)
-end)
-
 addHook("MobjSpawn", function(mo)
 	mo.subobjects = {}
 	mo.dist = 1024*FU

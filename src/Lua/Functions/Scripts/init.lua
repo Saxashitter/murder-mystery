@@ -24,11 +24,13 @@ return function(self, setovertimepoint)
 					mobjinfo[MT_PLAYER].height
 				)
 				
-				table.insert(possiblePoints,{x = mt.x*FU, y = mt.y*FU, z = z, type = mt.type})
+				table.insert(possiblePoints,{x = mt.x*FU, y = mt.y*FU, z = z, a = mt.angle*ANG1, type = mt.type})
 			end
 		end
 		
 		local chosenPoint = possiblePoints[P_RandomRange(1,#possiblePoints)]
+		
+		MM_N.overtime_ticker = 0
 		
 		if chosenPoint == nil then return end
 		
@@ -41,11 +43,26 @@ return function(self, setovertimepoint)
 		MM_N.overtime_point.state = S_THOK
 		MM_N.overtime_point.tics = -1
 		MM_N.overtime_point.fuse = -1
+		MM_N.overtime_point.flags2 = $|MF2_DONTDRAW
+		
+		local garg = P_SpawnMobjFromMobj(
+			MM_N.overtime_point,
+			0,0,0,
+			MT_GARGOYLE
+		)
+		garg.flags = MF_NOCLIPTHING|MF_SOLID
+		garg.colorized = true
+		garg.color = SKINCOLOR_GALAXY
+		garg.scale = $*2
+		garg.angle = chosenPoint.a
+		
+		/*
 		P_SetOrigin(consoleplayer.mo,
 			chosenPoint.x,
 			chosenPoint.y,
 			chosenPoint.z
 		)
+		*/
 		return
 	end
 	

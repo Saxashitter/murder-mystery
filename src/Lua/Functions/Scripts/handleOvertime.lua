@@ -1,3 +1,5 @@
+freeslot("SPR_BGLS")
+
 return function(self)
 	local point = MM_N.overtime_point
 	
@@ -26,24 +28,29 @@ return function(self)
 	local color = P_RandomRange(SKINCOLOR_GALAXY,SKINCOLOR_NOBLE)
 	for i = 0,maxiter/FU - 1
 		local angle = FixedAngle(leveltime*FU) + FixedAngle(FixedDiv(360*FU,maxiter)*i)
-		for j = -10,10
-			local laser = P_SpawnMobjFromMobj(point,
-				P_ReturnThrustX(nil,angle,dist),
-				P_ReturnThrustY(nil,angle,dist),
-				70*FU * j,
-				MT_THOK
-			)
-			do
-				laser.tics = 1
-				laser.fuse = -1
-				laser.angle = angle + ANGLE_90
-				laser.renderflags = $|RF_PAPERSPRITE|RF_NOCOLORMAPS
-				laser.blendmode = AST_ADD
-				laser.frame = $|FF_FULLBRIGHT
-				laser.scale = $*2
-				laser.color = color
-				P_SetOrigin(laser,laser.x,laser.y,laser.z)
-			end
+		local laser = P_SpawnMobjFromMobj(point,
+			P_ReturnThrustX(nil,angle,dist),
+			P_ReturnThrustY(nil,angle,dist),
+			0,
+			MT_THOK
+		)
+		laser.z = P_FloorzAtPos(laser.x,laser.y,laser.floorz, 20*FU) + FU
+		do
+			laser.tics = 1
+			laser.fuse = -1
+			laser.angle = angle + ANGLE_90
+			laser.renderflags = $|RF_PAPERSPRITE|RF_NOCOLORMAPS
+			laser.blendmode = AST_ADD
+			laser.sprite = SPR_BGLS
+			laser.frame = A|FF_FULLBRIGHT
+			laser.scale = $*2
+			laser.color = color
+			P_SetOrigin(laser,laser.x,laser.y,laser.z)
+		end
+		do
+			local cz = P_CeilingzAtPos(laser.x,laser.y,laser.ceilingz, 20*FU)
+			local fz = laser.z --P_FloorzAtPos(laser.x,laser.y,20*FU)
+			laser.spriteyscale = FixedDiv(cz - fz, 20*FU)
 		end
 	end
 	

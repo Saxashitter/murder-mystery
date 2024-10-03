@@ -97,7 +97,6 @@ addHook("ThinkFrame", function()
 			COM_BufInsertText(server, "map "..G_BuildMapName(gamemap).." -f")
 			MM_N.waiting_for_players = false
 		end
-		MM:handleOvertime()
 		return
 	end
 

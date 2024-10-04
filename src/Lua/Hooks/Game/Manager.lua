@@ -186,7 +186,7 @@ addHook("ThinkFrame", function()
 	end
 	
 	--Funny
-	if leveltime == 10*TICRATE
+	if leveltime == 10*TICRATE and isserver then
 		CV_Set(CV_FindVar("restrictskinchange"),1)
 	end
 	

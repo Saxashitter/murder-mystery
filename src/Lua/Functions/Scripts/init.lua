@@ -103,5 +103,7 @@ return function(self, setovertimepoint)
 	murdererP.mm.role = MMROLE_MURDERER -- murderer
 	sherriffP.mm.role = MMROLE_SHERIFF -- sherriff
 	
-	CV_Set(CV_FindVar("restrictskinchange"),0)
+	if isserver then
+		CV_Set(CV_FindVar("restrictskinchange"),0)
+	end
 end

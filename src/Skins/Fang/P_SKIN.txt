@@ -1,1 +1,2 @@
 name = fang
+flags = SF_NOJUMPSPIN|SF_FASTEDGE

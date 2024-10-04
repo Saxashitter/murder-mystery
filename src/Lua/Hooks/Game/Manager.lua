@@ -133,7 +133,7 @@ addHook("ThinkFrame", function()
 	-- 1 innocent? start showdown
 	if is_showdown(innocents, count)
 	and not MM_N.showdown then
-		MM_N.showdown_song = "SHWDW"..tostring(P_RandomRange(1, 2))
+		MM_N.showdown_song = "SHWDW"..tostring(P_RandomRange(1, 3))
 		MM_N.showdown = true
 	end
 

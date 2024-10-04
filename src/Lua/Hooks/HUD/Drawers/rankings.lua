@@ -34,7 +34,7 @@ local ROLESTYLES = {
 		overlay = "MM_PLAYERLIST_OVERLAY_DEAD",
 		overlayFlags = V_20TRANS,
 		subtitle = "\x86" .. "Dead",
-		secrecy = SECRECY_MURDERERALLOWED
+		secrecy = SECRECY_NOTSECRET
 	},
 	MidgameJoin = {
 		subtitle = "\x82(joined midgame)",

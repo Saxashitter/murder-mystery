@@ -70,13 +70,12 @@ addHook("MobjThinker", function(mo)
 
 		local angle = (360*FU)/amount
 		angle = $*k
-		angle = FixedAngle($) + FixedAngle(leveltime*FU)
+		angle = FixedAngle($) + FixedAngle(leveltime*(FU/2))
 
 		submo.color = color
 		submo.colorized = true
 
 		submo.scale = FU*2
-		submo.spriteyscale = FixedDiv(4096*FU, 20*FU)
 
 		submo.renderflags = $|RF_PAPERSPRITE|RF_NOCOLORMAPS
 		submo.blendmode = AST_ADD
@@ -85,9 +84,14 @@ addHook("MobjThinker", function(mo)
 		local x = mo.x+FixedMul(mo.dist, cos(angle))
 		local y = mo.y+FixedMul(mo.dist, sin(angle))
 
-		P_MoveOrigin(submo,
-			x, y,
-			P_FloorzAtPos(x, y, submo.z, 1)
+		local sec = R_PointInSubsector(x, y).sector
+
+		local z = min(sec.floorheight, P_FloorzAtPos(x, y, 0, 1))
+		local s = FixedDiv(sec.ceilingheight-z, 20*FU)
+
+		submo.spriteyscale = s
+		P_SetOrigin(submo,
+			x, y, z
 		)
 		submo.angle = angle+ANGLE_90
 	end

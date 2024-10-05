@@ -67,8 +67,8 @@ return function(v, p)
 			local x = ease.outcubic(t, -patch.width*FU, -patch.width*(FU/3))
 			local y = 20*FU
 
-			x = $+(v.RandomRange(-200, 200)*(FU/100))
-			y = $+(v.RandomRange(-200, 200)*(FU/100))
+			x = $+v.RandomRange(-2*FU, 2*FU)
+			y = $+v.RandomRange(-2*FU, 2*FU)
 
 			v.drawScaled((320*FU)-x, y, FU, patch, V_SNAPTORIGHT|V_FLIP, color)
 		end
@@ -82,8 +82,8 @@ return function(v, p)
 			local x = ease.outcubic(t, -patch.width*FU, -patch.width*(FU/3))
 			local y = 20*FU
 
-			x = $+(v.RandomRange(-200, 200)*(FU/100))
-			y = $+(v.RandomRange(-200, 200)*(FU/100))
+			x = $+v.RandomRange(-2*FU, 2*FU)
+			y = $+v.RandomRange(-2*FU, 2*FU)
 
 			v.drawScaled(x, y, FU, patch, V_SNAPTOLEFT, color)
 		end
@@ -92,8 +92,8 @@ return function(v, p)
 		local x = (160*FU)-(width*(FU/2))
 		local y = ease.outcubic(t, 200*FU, 162*FU)
 
-		x = $+(v.RandomRange(-200, 200)*(FU/100))
-		y = $+(v.RandomRange(-200, 200)*(FU/100))
+		x = $+v.RandomRange(-2*FU, 2*FU)
+		y = $+v.RandomRange(-2*FU, 2*FU)
 
 		v.drawScaledNameTag(x, y, "SHOWDOWN", V_SNAPTOBOTTOM, FU, SKINCOLOR_RED, SKINCOLOR_WHITE)
 	end

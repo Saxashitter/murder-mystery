@@ -16,7 +16,7 @@ local function canBeRole(p, lastRoles, count)
 end
 
 return function(self, setovertimepoint)
-	if setovertimepoint
+	if setovertimepoint then
 		local possiblePoints = {}
 		for mt in mapthings.iterate do
 			if mt.type <= 35 then
@@ -34,20 +34,12 @@ return function(self, setovertimepoint)
 		
 		if chosenPoint == nil then return end
 		
-		MM_N.overtime_point = P_SpawnMobj(
+		MM_N.overtime_point = chosenPoint
+
+		local garg = P_SpawnMobj(
 			chosenPoint.x,
 			chosenPoint.y,
 			chosenPoint.z,
-			MT_THOK
-		)
-		MM_N.overtime_point.state = S_THOK
-		MM_N.overtime_point.tics = -1
-		MM_N.overtime_point.fuse = -1
-		MM_N.overtime_point.flags2 = $|MF2_DONTDRAW
-		
-		local garg = P_SpawnMobjFromMobj(
-			MM_N.overtime_point,
-			0,0,0,
 			MT_GARGOYLE
 		)
 		garg.flags = MF_NOCLIPTHING|MF_SOLID

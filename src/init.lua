@@ -17,6 +17,8 @@ G_AddGametype({
 MM.require = dofile "Libs/require"
 dofile "Libs/CustomHud.lua"
 
+dofile "Objects/Mechanics/Storm Visual"
+
 dofile "Variables/main"
 dofile "Functions/main"
 dofile "Console/main"

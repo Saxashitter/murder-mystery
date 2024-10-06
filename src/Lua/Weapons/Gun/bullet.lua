@@ -9,6 +9,8 @@ mobjinfo[freeslot "MT_MM_BULLET"] = {
 addHook("MobjThinker", function(mo)
 	if not mo.valid then return end
 
+	print "ran"
+
 	mo.momx = FixedMul(32*cos(mo.angle), cos(mo.aiming))
 	mo.momy = FixedMul(32*sin(mo.angle), cos(mo.aiming))
 	mo.momz = 32*sin(mo.aiming)

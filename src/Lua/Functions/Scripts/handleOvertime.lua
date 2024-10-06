@@ -1,32 +1,32 @@
+freeslot("SPR_BGLS")
+
 return function(self)
-	local storm = MM_N.overtime_storm
+	local point = MM_N.overtime_point
 	
-	if not (storm and storm.valid) then
-		if not (MM_N.overtime_point) then
-			return
-		end
-		MM_N.overtime_storm = P_SpawnMobj(
-			MM_N.overtime_point.x,
-			MM_N.overtime_point.y,
-			MM_N.overtime_point.z,
-			MT_MM_STORMVISUAL)
-		storm = MM_N.overtime_storm
+	if not (point and point.valid)
+		MM_N.overtime_ticker = 0
+		return
 	end
 	MM_N.overtime_ticker = $+1
 	
-	local dist = 6000*FU - (MM_N.overtime_ticker*FU*2)
+	local dist = MM_N.overtime_startingdist - (MM_N.overtime_ticker*FU*2)
 	dist = max($,1028*FU)
-	storm.dist = dist
-
+	
+	local pi = (22*FU/7)
+	local circ = FixedMul(2*pi, dist/6)
+	local maxiter = FixedDiv(circ, 80*FU + 20*FU)
+	
 	/*
 	print(string.format(
-		"radi: %f	circ: %f	i: %f	ii: %d",
+		"dist: %f	radi: %f	circ: %f	i: %f	ii: %d	ticker: %d",
+		dist,
 		dist/4,
 		circ,
 		maxiter,
-		maxiter/FU
+		maxiter/FU,
+		MM_N.overtime_ticker
 	))
-	
+	*/
 	
 	local color = P_RandomRange(SKINCOLOR_GALAXY,SKINCOLOR_NOBLE)
 	for i = 0,maxiter/FU - 1
@@ -51,11 +51,13 @@ return function(self)
 			P_SetOrigin(laser,laser.x,laser.y,laser.z)
 		end
 		do
-			local cz = P_CeilingzAtPos(laser.x,laser.y,laser.ceilingz, 20*FU)
+			local cz = laser.subsector.sector and laser.subsector.sector.ceilingheight or P_CeilingzAtPos(laser.x,laser.y,laser.ceilingz, 20*FU)
 			local fz = laser.z --P_FloorzAtPos(laser.x,laser.y,20*FU)
 			laser.spriteyscale = FixedDiv(cz - fz, 20*FU)
 		end
-	end*/
+	end
+	
+	if MM_N.gameover then return end
 	
 	for p in players.iterate
 		if not p.mm then continue end
@@ -74,7 +76,7 @@ return function(self)
 		
 		local me = p.mo
 		
-		local pDist = R_PointToDist2(me.x,me.y, storm.x,storm.y)
+		local pDist = R_PointToDist2(me.x,me.y, point.x,point.y)
 		p.mm.oob_dist = pDist
 		
 		if pDist <= dist

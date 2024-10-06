@@ -16,7 +16,7 @@ local function canBeRole(p, lastRoles, count)
 end
 
 return function(self, setovertimepoint)
-	if setovertimepoint then
+	if setovertimepoint
 		local possiblePoints = {}
 		for mt in mapthings.iterate do
 			if mt.type <= 35 then
@@ -34,12 +34,33 @@ return function(self, setovertimepoint)
 		
 		if chosenPoint == nil then return end
 		
-		MM_N.overtime_point = chosenPoint
-
-		local garg = P_SpawnMobj(
+		--Find the farthest possible point
+		local olddist = 4096*FU
+		for k,v in ipairs(possiblePoints)
+			if v == chosenPoint then continue end
+			
+			--add 256 as a small buffer to let people get to the middle
+			local distTo = R_PointToDist2(v.x,v.y, chosenPoint.x,chosenPoint.y) + 256*FU
+			if distTo < olddist then continue end
+			
+			MM_N.overtime_startingdist = distTo
+			olddist = distTo
+		end
+		
+		MM_N.overtime_point = P_SpawnMobj(
 			chosenPoint.x,
 			chosenPoint.y,
 			chosenPoint.z,
+			MT_THOK
+		)
+		MM_N.overtime_point.state = S_THOK
+		MM_N.overtime_point.tics = -1
+		MM_N.overtime_point.fuse = -1
+		MM_N.overtime_point.flags2 = $|MF2_DONTDRAW
+		
+		local garg = P_SpawnMobjFromMobj(
+			MM_N.overtime_point,
+			0,0,0,
 			MT_GARGOYLE
 		)
 		garg.flags = MF_NOCLIPTHING|MF_SOLID

@@ -25,4 +25,5 @@ return {
 	killing_end = false,
 	overtime_point = nil,
 	overtime_ticker = 0,
+	overtime_startingdist = 6000*FU,
 }

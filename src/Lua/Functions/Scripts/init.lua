@@ -34,6 +34,19 @@ return function(self, setovertimepoint)
 		
 		if chosenPoint == nil then return end
 		
+		--Find the farthest possible point
+		local olddist = 4096*FU
+		for k,v in ipairs(possiblePoints)
+			if v == chosenPoint then continue end
+			
+			--add 256 as a small buffer to let people get to the middle
+			local distTo = R_PointToDist2(v.x,v.y, chosenPoint.x,chosenPoint.y) + 256*FU
+			if distTo < olddist then continue end
+			
+			MM_N.overtime_startingdist = distTo
+			olddist = distTo
+		end
+		
 		MM_N.overtime_point = P_SpawnMobj(
 			chosenPoint.x,
 			chosenPoint.y,

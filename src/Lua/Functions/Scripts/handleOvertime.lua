@@ -9,19 +9,22 @@ return function(self)
 	end
 	MM_N.overtime_ticker = $+1
 	
-	local dist = 6000*FU - (MM_N.overtime_ticker*FU*2)
+	local dist = MM_N.overtime_startingdist - (MM_N.overtime_ticker*FU*2)
 	dist = max($,1028*FU)
 	
 	local pi = (22*FU/7)
 	local circ = FixedMul(2*pi, dist/6)
 	local maxiter = FixedDiv(circ, 80*FU + 20*FU)
+	
 	/*
 	print(string.format(
-		"radi: %f	circ: %f	i: %f	ii: %d",
+		"dist: %f	radi: %f	circ: %f	i: %f	ii: %d	ticker: %d",
+		dist,
 		dist/4,
 		circ,
 		maxiter,
-		maxiter/FU
+		maxiter/FU,
+		MM_N.overtime_ticker
 	))
 	*/
 	
@@ -48,11 +51,13 @@ return function(self)
 			P_SetOrigin(laser,laser.x,laser.y,laser.z)
 		end
 		do
-			local cz = P_CeilingzAtPos(laser.x,laser.y,laser.ceilingz, 20*FU)
+			local cz = laser.subsector.sector and laser.subsector.sector.ceilingheight or P_CeilingzAtPos(laser.x,laser.y,laser.ceilingz, 20*FU)
 			local fz = laser.z --P_FloorzAtPos(laser.x,laser.y,20*FU)
 			laser.spriteyscale = FixedDiv(cz - fz, 20*FU)
 		end
 	end
+	
+	if MM_N.gameover then return end
 	
 	for p in players.iterate
 		if not p.mm then continue end

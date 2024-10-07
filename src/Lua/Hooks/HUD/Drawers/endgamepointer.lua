@@ -1,4 +1,5 @@
 local sglib = MM.require "Libs/sglib"
+local roles = MM.require "Variables/Data/Roles"
 
 local function HUD_EndGameDrawer(v,p,c)
 	if not MM_N.gameover then return end
@@ -15,7 +16,7 @@ local function HUD_EndGameDrawer(v,p,c)
 			
 			v.drawString(w2s.x,
 				w2s.y - 32*w2s.scale,
-				"MURDERER"..isme,
+				roles[MM_N.end_killed.player.mm.role].name..isme,
 				V_REDMAP,
 				"thin-fixed-center"
 			)
@@ -23,7 +24,7 @@ local function HUD_EndGameDrawer(v,p,c)
 		
 	end
 
-	if MM_N.end_killer and MM_N.end_killer.valid and MM_N.end_killer.health
+	if MM_N.end_killer and MM_N.end_killer.valid and MM_N.end_killer.health and MM_N.end_killer.player
 		local w2s = sglib.ObjectTracking(v,p,c,MM_N.end_killer,false,true)
 
 		if w2s.onScreen

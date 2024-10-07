@@ -19,6 +19,9 @@ jobs:
         rm src/Lua/version.lua
         printf "local commit_sha = \"${{ github.sha }}\"\n\nreturn commit_sha" > src/Lua/version.lua
 
+	- name: Make date
+      run: echo "BUILD_DATE=$(git rev-parse --abbrev-ref HEAD)-$(date +%Y-%m-%d)" >> $GITHUB_ENV
+
     - name: Install dependencies
       run: |
         sudo apt-get install -y nodejs
@@ -31,10 +34,17 @@ jobs:
     - name: Make build
       run: |
         mkdir build
-        make build
+        node PaK3/main.js build/ SaxasMM-${{ env.BUILD_DATE }}.pk3
 
-    - name: Upload build
+    - name: Upload build to Actions
       uses: actions/upload-artifact@v4
       with:
         name: MurderMystery
-        path: build/build.pk3
+        path: build/SaxasMM-${{ env.BUILD_DATE }}.pk3
+        
+    - name: Upload build to Discord
+      uses: sinshutu/upload-to-discord@master
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      with:
+        args: build/SaxasMM-${{ env.BUILD_DATE }}.pk3

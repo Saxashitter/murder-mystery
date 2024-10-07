@@ -65,15 +65,14 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 			return true
 	end
 
-	local dist = R_PointToDist2(displayplayer.mo.x, displayplayer.mo.y,
+	local dist = R_PointToDist2(consoleplayer.mo.x, consoleplayer.mo.y,
 		src.mo.x,
 		src.mo.y)
 
-	if not P_CheckSight(displayplayer.mo, src.mo) then
+	if not P_CheckSight(consoleplayer.mo, src.mo) then
 		if dist > (3000*FU)/4 then return true end
 
 		chatprint("\x86You can hear faint talking through the walls...", true)
-
 		return true
 	end
 
@@ -92,6 +91,7 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	end
 
 	local disttext = "[NEAR]"
+
 	if src ~= consoleplayer then
 		local distcheck
 		for name,_dist in pairs(dist_values) do
@@ -107,6 +107,5 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	end
 
 	chatprint(name.."\x80 "..msg, true)
-
 	return true
 end)

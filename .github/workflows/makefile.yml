@@ -19,7 +19,7 @@ jobs:
         rm src/Lua/version.lua
         printf "local commit_sha = \"${{ github.sha }}\"\n\nreturn commit_sha" > src/Lua/version.lua
 
-	- name: Make date
+    - name: Make date
       run: echo "BUILD_DATE=$(git rev-parse --abbrev-ref HEAD)-$(date +%Y-%m-%d)" >> $GITHUB_ENV
 
     - name: Install dependencies
@@ -34,7 +34,7 @@ jobs:
     - name: Make build
       run: |
         mkdir build
-        node PaK3/main.js build/ SaxasMM-${{ env.BUILD_DATE }}.pk3
+        node PaK3/main.js src/ build/SaxasMM-${{ env.BUILD_DATE }}.pk3
 
     - name: Upload build to Actions
       uses: actions/upload-artifact@v4

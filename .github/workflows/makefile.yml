@@ -19,7 +19,7 @@ jobs:
         rm src/Lua/version.lua
         printf "local commit_sha = \"${{ github.sha }}\"\n\nreturn commit_sha" > src/Lua/version.lua
 
-	- name: Make date
+    - name: Make date
       run: echo "BUILD_DATE=$(git rev-parse --abbrev-ref HEAD)-$(date +%Y-%m-%d)" >> $GITHUB_ENV
 
     - name: Install dependencies

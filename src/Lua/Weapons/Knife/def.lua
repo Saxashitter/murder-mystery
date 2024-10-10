@@ -29,7 +29,7 @@ weapon.on_damage = function(mo, mo2, k)
 	local anglediff = R_PointToAngle2(mo.x, mo.y, mo2.x, mo2.y)
 	local angle = mo.angle
 
-	if abs(angle-anglediff) > ANGLE_180 then return true end
+	if abs(angle-anglediff) > 180*FU then return true end
 
 	S_StartSound(mo, sfx_kffire)
 	k.hit = 0

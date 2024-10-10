@@ -26,8 +26,8 @@ weapon.can_damage = function(p, k)
 	return (k.hit)
 end
 weapon.on_damage = function(mo, mo2, k)
-	local anglediff = R_PointToAngle2(mo.x, mo.y, mo2.x, mo2.y)
-	local angle = mo.angle
+	local anglediff = AngleFixed(R_PointToAngle2(mo.x, mo.y, mo2.x, mo2.y))
+	local angle = AngleFixed(mo.angle)
 
 	if abs(angle-anglediff) > 180*FU then return true end
 

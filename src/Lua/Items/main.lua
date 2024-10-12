@@ -1,7 +1,7 @@
 // WEAPON SYSTEM BY @j1sk ON DISCORD
 // ORIGINALLY FOR ZE2
 
-// MM WEAPON SYSTEM V2
+// MM ITEM SYSTEM V2
 
 local shallowCopy = MM.require "Libs/shallowCopy"
 
@@ -245,3 +245,7 @@ function MM:GiveItem(p, item_input, count, slot)
 	
 	return false
 end
+
+// FETCH VALID ITEMS
+
+dofile "Items/Weapons/main"

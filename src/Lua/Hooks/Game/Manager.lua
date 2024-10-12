@@ -194,7 +194,7 @@ addHook("ThinkFrame", function()
 	if leveltime > 10*TICRATE
 	and not MM:playerWithGun()
 	and not MM_N.gameover
-	and innocents > 1 then
+	and innocents >= 1 then
 		local wpns = MM:isWeaponOnMap("Gun")
 
 		if wpns then
@@ -208,7 +208,13 @@ addHook("ThinkFrame", function()
 					local p = randomPlayer(_eligibleGunPlayer)
 					if p then
 						MM:giveWeapon(p, "Gun")
-						chatprint("!!! - A random player has gotten the gun due to inactivity!")
+						for play in players.iterate
+							if play == p
+								chatprintf(play,"\x82*You have been given the gun!",true)
+							else
+								chatprintf(play,"\x82*A random player has gotten the gun due to inactivity!")
+							end
+						end
 						P_RemoveMobj(wpn)
 					end
 				end
@@ -217,7 +223,13 @@ addHook("ThinkFrame", function()
 			local p = randomPlayer(_eligibleGunPlayer)
 			if p and not MM:canGameEnd() then
 				MM:giveWeapon(p, "Gun")
-				chatprint("!!! - A random player has gotten the gun due to the gun despawning!")
+				for play in players.iterate
+					if play == p
+						chatprintf(play,"\x82*You have been given the gun!",true)
+					else
+						chatprintf(play,"\x82*A random player has gotten the gun due to the gun despawning!")
+					end
+				end
 			end
 		end
 	end

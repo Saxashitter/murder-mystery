@@ -188,7 +188,9 @@ addHook("MobjThinker", function(wpn)
 	local p = wpn.target.player
 	
 	local data = MM:getWpnData(wpn)
-
+	
+	wpn.dontdrawforviewmobj = wpn.target
+	
 	if p.mm.weapon == wpn
 	and (p.mm.weapon2 and p.mm.weapon2.valid) then
 		-- prioritize second weapon

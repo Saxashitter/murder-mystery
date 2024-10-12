@@ -35,7 +35,7 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 		
 		MM_N.end_camera.swirldur = 3*TICRATE
 		MM_N.end_camera.startangle = angle + 90*FU
-		MM_N.end_camera.endangle = angle + 990*FU --720*FU
+		MM_N.end_camera.endangle = angle + 810*FU
 		
 		MM_N.end_camera.target = origin
 		

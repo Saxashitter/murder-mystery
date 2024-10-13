@@ -5,52 +5,32 @@ local MAX_ANIM = TICRATE
 
 dofile "Weapons/Gun/Bullet"
 
-weapon.state = dofile "Weapons/Gun/freeslot"
-weapon.spawn = function(p, k)
-	k.cooldown = 0
-	k.anim = 0
-end
-weapon.attack = function(p, k)
-	if k.cooldown or k.hidden then
-		return false
-	end
-
-	k.cooldown = MAX_COOLDOWN
-	k.anim = MAX_ANIM
-
-	local bullet = P_SpawnMobjFromMobj(p.mo, 0,0,p.mo.height/2, MT_MM_BULLET)
-	bullet.angle = p.mo.angle
-	bullet.aiming = p.aiming
-	bullet.color = p.mo.color
-	bullet.target = p.mo
-
-	S_StartSound(p.mo, sfx_gnfire)
-	return true
-end
-weapon.equip = function(p, k)
-	S_StartSound(p.mo, sfx_gequip)
-	k.cooldown = max(TICRATE/2, $)
-end
-weapon.can_damage = function(p, k)
-	return (k.hit)
-end
-weapon.think = function(p, k)
-	local anim_time = FixedDiv(k.anim, MAX_ANIM)
-
-	local _ox = FixedMul(p.mo.radius, cos(p.mo.angle-(90*ANG1)))
-	local _oy = FixedMul(p.mo.radius, sin(p.mo.angle-(90*ANG1)))
-	local _ax = _ox+FixedMul(-12*FU, cos(p.mo.angle))
-	local _ay = _oy+FixedMul(-12*FU, sin(p.mo.angle))
-
-	k.ox = ease.incubic(anim_time, _ox, _ax)
-	k.oy = ease.incubic(anim_time, _oy, _ay)
-
-	k.cooldown = max(0, $-1)
-	k.anim = max(0, $-1)
-end
-weapon.name = "Gun"
-weapon.icon = "MM_GUN"
+weapon.id = "gun"
+weapon.display_name = "Gun"
+weapon.display_icon = "MM_GUN"
+weapon.state = dofile "Items/Weapons/Gun/freeslot"
+weapon.timeleft = -1
+weapon.hit_time = TICRATE/3
+weapon.anim_time = TICRATE
+weapon.cooldown_time = TICRATE
+weapon.position = {
+	x = FU,
+	y = 0,
+	z = 0
+}
+weapon.animation_position = {
+	x = FU,
+	y = -FU/4,
+	z = 0
+}
+weapon.sidestick = true
+weapon.animation = true
+weapon.damage = true
+weapon.weaponize = true
 weapon.droppable = true
-weapon.restrict = {false, true, false}
+weapon.shootable = true
+weapon.shootmobj = dofile "Items/Weapons/Gun/bullet"
+weapon.equipsfx = sfx_gequip
+weapon.hitsfx = sfx_gnfire
 
 return weapon

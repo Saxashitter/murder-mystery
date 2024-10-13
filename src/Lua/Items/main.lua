@@ -17,16 +17,28 @@ local ITEM_DEF = {
 	animation_time = 35,
 	cooldown_time = 35,
 
+	position = {x = 0, y = 0, z = 0},
 	animation_position = {x = 0, y = 0, z = 0},
-	hit_position = {x = 0, y = 0, z = 0},
+	-- these actually scale based on the players radius
+	-- so, what these values would be if you want the default to be on the upper right of the player is...
+	-- {x = FU, y = FU, z = 0}
 
-	sidestick = true,
+
+	sidestick = true, -- disable if you wanna manually handle weapon sticking
+	-- useful for cooldowns after throwing a weapon, or if you just want to do a fake-drop or something
 	animation = true,
 	damage = true,
-	weaponize = true, -- enable to put item in right hand and allow for dual-wielding with regular items
+	weaponize = true, -- make item identify as a weapon (#woke /j)
+	-- weapons are usually on the players right hand, while items are on the players left
 	droppable = false, -- enable to let item be dropped
 	shootable = false, -- enable to make weapon shoot projectiles instead of stabbing
 	shootmobj = MT_THOK, -- the mobj type it shoots
+
+	pickupsfx = sfx_None,
+	equipsfx = sfx_None,
+	attacksfx = sfx_None,
+	hitsfx = sfx_None,
+	finalkillsfx = sfx_None,
 
 	// not required, for scripters
 	pickup = func,
@@ -87,6 +99,7 @@ function MM:CreateItem(input_table)
 		or type(input_table[k]) ~= type(ITEM_DEF[k]) then
 			if item_input[k] == nil then
 				print(tostring(k).." is nil. It has been corrected to the default property from ITEM_DEF.")
+				print("Ignore this notification unless you are the dev and know that something is wrong.")
 			else
 				print(tostring(k).." is not the same type as the default. It has been corrected to the default property from ITEM_DEF.")
 			end
@@ -252,6 +265,7 @@ function MM:GiveItem(p, item_input, count, slot, overrides)
 		item.mobj = P_SpawnMobjFromMobj(p.mo, 0,0,0, MT_THOK)
 		item.mobj.tics = -1
 		item.mobj.fuse = -1
+		item.mobj.state = def.state
 
 		item.state = def.state
 
@@ -261,9 +275,9 @@ function MM:GiveItem(p, item_input, count, slot, overrides)
 		item.max_anim = def.animation_time
 		item.max_cooldown = def.cooldown_time
 
-		item.pos = shallowCopy(def.animation_position)
-		item.default_pos = shallowCopy(def.animation_position)
-		item.hit_position = shallowCopy(def.hit_position)
+		item.pos = shallowCopy(def.position)
+		item.default_pos = shallowCopy(def.position)
+		item.anim_pos = shallowCopy(def.animation_position)
 
 		item.sidestick = def.sidestick
 		item.animation = def.animation

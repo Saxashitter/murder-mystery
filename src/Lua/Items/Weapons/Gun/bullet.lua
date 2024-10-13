@@ -62,3 +62,5 @@ addHook("MobjMoveBlocked", function(ring)
 
 	P_RemoveMobj(ring)
 end, MT_MM_BULLET)
+
+return MT_MM_BULLET

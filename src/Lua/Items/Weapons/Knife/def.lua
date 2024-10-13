@@ -4,58 +4,32 @@ local MAX_COOLDOWN = TICRATE
 local MAX_ANIM = MAX_COOLDOWN
 local MAX_HIT = MAX_COOLDOWN/3
 
-weapon.state = dofile "Weapons/Knife/Freeslot"
-weapon.spawn = function(p, k)
-	k.cooldown = 0
-	k.anim = 0
-	k.hit = 0
-	k.mark = true
-end
-weapon.attack = function(p, k)
-	if k.cooldown or k.hidden then
-		return false
-	end
-
-	k.cooldown = MAX_COOLDOWN
-	k.anim = MAX_ANIM
-	k.hit = MAX_HIT
-
-	return true
-end
-weapon.can_damage = function(p, k)
-	return (k.hit)
-end
-weapon.on_damage = function(mo, mo2, k)
-	local anglediff = AngleFixed(R_PointToAngle2(mo.x, mo.y, mo2.x, mo2.y))
-	local angle = AngleFixed(mo.angle)
-
-	--if abs(angle-anglediff) > 180*FU then return true end
-
-	S_StartSound(mo, sfx_kffire)
-	k.hit = 0
-end
-weapon.equip = function(p, k)
-	S_StartSound(p.mo, sfx_kequip)
-	k.cooldown = max($, 24)
-end
-weapon.think = function(p, k)
-	local anim_time = FixedDiv(k.anim, MAX_ANIM)
-
-	local _ox = FixedMul(p.mo.radius, cos(p.mo.angle-(90*ANG1)))
-	local _oy = FixedMul(p.mo.radius, sin(p.mo.angle-(90*ANG1)))
-	local _ax = FixedMul(p.mo.radius, cos(p.mo.angle))
-	local _ay = FixedMul(p.mo.radius, sin(p.mo.angle))
-
-	k.ox = ease.incubic(anim_time, _ox, _ax)
-	k.oy = ease.incubic(anim_time, _oy, _ay)
-
-	k.cooldown = max(0, $-1)
-	k.anim = max(0, $-1)
-	k.hit = max(0, $-1)
-end
-weapon.name = "Knife"
-weapon.icon = "MM_KNIFE"
-weapon.restrict = {true, false, true}
-weapon.hold_another = true
+weapon.id = "knife"
+weapon.display_name = "Knife"
+weapon.display_icon = "MM_KNIFE"
+weapon.state = dofile "Items/Weapons/Knife/freeslot"
+weapon.timeleft = -1
+weapon.hit_time = TICRATE/3
+weapon.anim_time = TICRATE
+weapon.cooldown_time = TICRATE
+weapon.position = {
+	x = FU,
+	y = 0,
+	z = 0
+}
+weapon.animation_position = {
+	x = 0,
+	y = FU,
+	z = 0
+}
+weapon.sidestick = true
+weapon.animation = true
+weapon.damage = true
+weapon.weaponize = true
+weapon.droppable = false
+weapon.shootable = false
+weapon.shootmobj = MT_THOK
+weapon.equipsfx = sfx_kequip
+weapon.hitsfx = sfx_kffire
 
 return weapon

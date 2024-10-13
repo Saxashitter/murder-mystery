@@ -3,8 +3,6 @@ local weapon = {}
 local MAX_COOLDOWN = 3*TICRATE
 local MAX_ANIM = TICRATE
 
-dofile "Weapons/Gun/Bullet"
-
 weapon.id = "gun"
 weapon.display_name = "Gun"
 weapon.display_icon = "MM_GUN"

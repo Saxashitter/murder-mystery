@@ -16,4 +16,6 @@ return {
 	
 	outofbounds = false,
 	oob_dist = 0,
+
+	items = {}
 }

@@ -17,7 +17,7 @@ local function HUD_EndGameDrawer(v,p,c)
 			v.drawString(w2s.x,
 				w2s.y - 32*w2s.scale,
 				roles[MM_N.end_killed.player.mm.role].name..isme,
-				V_REDMAP,
+				roles[MM_N.end_killed.player.mm.role].color,
 				"thin-fixed-center"
 			)
 		end
@@ -33,18 +33,28 @@ local function HUD_EndGameDrawer(v,p,c)
 				isme = "\x80 (you!)"
 			end
 			
-			v.drawString(w2s.x,
-				w2s.y - 64*w2s.scale,
-				"HERO"..isme,
-				V_YELLOWMAP,
-				"thin-fixed-center"
-			)
-			v.drawString(w2s.x,
-				w2s.y - 64*w2s.scale - 8*FU,
-				MM_N.end_killer.player.name,
-				V_YELLOWMAP|V_ALLOWLOWERCASE,
-				"thin-fixed-center"
-			)
+			if MM_N.end_killed.player.mm.role == MMROLE_MURDERER
+				v.drawString(w2s.x,
+					w2s.y - 64*w2s.scale,
+					"HERO"..isme,
+					V_YELLOWMAP,
+					"thin-fixed-center"
+				)
+				v.drawString(w2s.x,
+					w2s.y - 64*w2s.scale - 8*FU,
+					MM_N.end_killer.player.name,
+					V_YELLOWMAP|V_ALLOWLOWERCASE,
+					"thin-fixed-center"
+				)
+			--Innocents kill each other
+			else
+				v.drawString(w2s.x,
+					w2s.y - 64*w2s.scale,
+					roles[MM_N.end_killer.player.mm.role].name..isme,
+					roles[MM_N.end_killer.player.mm.role].color,
+					"thin-fixed-center"
+				)			
+			end
 		end
 		
 	end

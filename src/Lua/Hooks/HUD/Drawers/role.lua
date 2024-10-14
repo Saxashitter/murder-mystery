@@ -18,10 +18,13 @@ local function HUD_RoleDrawer(v,p)
 		
 		if src ~= nil
 			if type(src) == "string"
+			and src ~= ''
 				killerstring = src
 			elseif type(src) == "userdata" and userdataType(src) == "mobj_t"
 			and ((src and src.valid) and (src.player and src.player.valid)) then
 				killername = "\x85"..src.player.name
+				killerstring = $..killername
+			else
 				killerstring = $..killername
 			end
 		else

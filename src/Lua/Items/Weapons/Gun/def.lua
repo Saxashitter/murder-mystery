@@ -21,7 +21,7 @@ weapon.animation_position = {
 	y = -FU/4,
 	z = 0
 }
-weapon.sidestick = true
+weapon.stick = true
 weapon.animation = true
 weapon.damage = true
 weapon.weaponize = true

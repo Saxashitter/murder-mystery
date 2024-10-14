@@ -24,7 +24,7 @@ local ITEM_DEF = {
 	-- {x = FU, y = FU, z = 0}
 
 
-	sidestick = true, -- disable if you wanna manually handle weapon sticking
+	stick = true, -- disable if you wanna manually handle weapon sticking
 	-- useful for cooldowns after throwing a weapon, or if you just want to do a fake-drop or something
 	animation = true,
 	damage = true,
@@ -71,7 +71,7 @@ local ITEM_STRUCT = {
 	default_pos = {x = 0, y = 0, z = 0},
 	anim_pos = {x = 0, y = 0, z = 0},
 
-	sidestick = true,
+	stick = true,
 	animation = true,
 	damage = true,
 	weaponize = true, -- enable to put item in right hand and allow for dual-wielding with regular items
@@ -297,7 +297,7 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		item.default_pos = shallowCopy(def.position)
 		item.anim_pos = shallowCopy(def.animation_position)
 
-		item.sidestick = def.sidestick
+		item.stick = def.stick
 		item.animation = def.animation
 		item.damage = def.damage
 		item.weaponize = def.weaponize
@@ -336,6 +336,8 @@ function MM:GiveItem(p, item_input, slot, overrides)
 				end
 				if item.pickupsfx >= 0 then
 					S_StartSound((p.mo and p.mo.valid) and p.mo, item.pickupsfx)
+				elseif item.equipsfx >= 0 then
+					S_StartSound((p.mo and p.mo.valid) and p.mo, item.equipsfx)
 				end
 				--print("Went to empty slot")
 			end

@@ -1,4 +1,4 @@
-states[freeslot "MT_MM_KNIFE"] = {
+states[freeslot "S_MM_KNIFE"] = {
 	sprite = freeslot "SPR_KNFE",
 	frame = A,
 	tics = -1
@@ -10,4 +10,4 @@ sfxinfo[freeslot "sfx_kffire"] = {
 	flags = SF_X8AWAYSOUND
 }
 
-return MT_MM_KNIFE
+return S_MM_KNIFE

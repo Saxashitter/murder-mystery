@@ -17,5 +17,9 @@ return {
 	outofbounds = false,
 	oob_dist = 0,
 
-	items = {}
+	inventory = {
+		items = {},
+		cur_sel = 1,
+		count = 5
+	}
 }

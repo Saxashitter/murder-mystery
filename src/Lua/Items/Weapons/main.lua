@@ -7,5 +7,5 @@ mobjinfo[freeslot "MT_MM_WEAPON"] = {
 	flags = MF_NOCLIP|MF_NOGRAVITY|MF_NOCLIP|MF_NOBLOCKMAP
 }
 
-dofile(path.."Gun/main")
-dofile(path.."Knife/main")
+MM:CreateItem(dofile(path.."Gun/def"))
+MM:CreateItem(dofile(path.."Knife/def"))

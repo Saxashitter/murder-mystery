@@ -34,11 +34,11 @@ local ITEM_DEF = {
 	shootable = false, -- enable to make weapon shoot projectiles instead of stabbing
 	shootmobj = MT_THOK, -- the mobj type it shoots
 
-	pickupsfx = sfx_None,
-	equipsfx = sfx_None,
-	attacksfx = sfx_None,
-	hitsfx = sfx_None,
-	finalkillsfx = sfx_None,
+	pickupsfx = -1,
+	equipsfx = -1,
+	attacksfx = -1,
+	hitsfx = -1,
+	finalkillsfx = -1,
 
 	// not required, for scripters
 	pickup = func,
@@ -61,7 +61,7 @@ local ITEM_STRUCT = {
 
 	max_hit = 0,
 	max_cooldown = 0,
-	max_anim = 0
+	max_anim = 0,
 
 	hit = 0,
 	anim = 0,
@@ -78,6 +78,12 @@ local ITEM_STRUCT = {
 	droppable = false, -- enable to let item be dropped
 	shootable = false, -- enable to make weapon shoot projectiles instead of stabbing
 	shootmobj = MT_THOK, -- the mobj type it shoots
+
+	pickupsfx = -1,
+	equipsfx = -1,
+	attacksfx = -1,
+	hitsfx = -1,
+	finalkillsfx = -1,
 
 	bullets = {} -- save valid bullets here incase modders decide they wanna do cool shit
 }
@@ -97,7 +103,7 @@ function MM:CreateItem(input_table)
 	for k,v in pairs(ITEM_DEF) do
 		if input_table[k] == nil
 		or type(input_table[k]) ~= type(ITEM_DEF[k]) then
-			if item_input[k] == nil then
+			if input_table[k] == nil then
 				print(tostring(k).." is nil. It has been corrected to the default property from ITEM_DEF.")
 				print("Ignore this notification unless you are the dev and know that something is wrong.")
 			else
@@ -111,7 +117,7 @@ function MM:CreateItem(input_table)
 
 	MM.Items[input_table.id] = input_table
 
-	print("\x84MM:".."\x82 Item ".."\""..input_table.id.." ("..idname..")".."\" included ["..(#self.ItemPresets).."]")
+	print("\x84MM:".."\x82 Item ".."\""..input_table.id.."\" included ["..(#self.Items).."]")
 	return true
 end
 
@@ -125,7 +131,7 @@ end
 
 function MM:FetchInventoryLimit(p)
 	if not (p and p.valid and p.mm) then return 1 end
-	return 5 -- placeholder, will expand later
+	return p.mm.inventory.count
 end
 
 function MM:FetchInventorySlot(p, slot)
@@ -233,7 +239,7 @@ function MM:SetItemInfoIndex(iteminfo, index, value, skin, real)
 end
 
 function MM:CopyItemFromID(item_id)
-	local item = shallowCopy(self.ItemPresets[item_id]) or error("Invalid item_id.")
+	local item = shallowCopy(self.Items[item_id]) or error("Invalid item_id.")
 
 	item.ontrigger = nil
 	item.onspawn = nil
@@ -243,8 +249,20 @@ function MM:CopyItemFromID(item_id)
 	return item
 end
 
+function MM:MakeWeaponMobj(p, item)
+	local def = self.Items[item.id]
+	local mobj = P_SpawnMobjFromMobj(p.mo, 0,0,0, MT_THOK)
+
+	mobj.tics = -1
+	mobj.fuse = -1
+	mobj.state = def.state
+	mobj.flags = MF_NOBLOCKMAP|MF_NOGRAVITY|MF_NOTHINK|MF_NOCLIP|MF_NOCLIPHEIGHT
+
+	return mobj
+end
+
 -- iteminfo can be number or table
-function MM:GiveItem(p, item_input, count, slot, overrides)
+function MM:GiveItem(p, item_input, slot, overrides)
 	if not (p and p.valid and p.mm) then return end
 
 	local datatype = type(item_input)
@@ -286,31 +304,39 @@ function MM:GiveItem(p, item_input, count, slot, overrides)
 		item.droppable = def.droppable
 		item.shootable = def.shootable
 		item.shootmobj = def.shootmobj
-		
+
+		item.pickupsfx = def.pickupsfx
+		item.equipsfx = def.pickupsfx
+		item.attacksfx = def.attacksfx
+		item.hitsfx = def.hitsfx
+		item.finalkillsfx = def.finalkillsfx
+
+		if overrides
+		and type(overrides) == "table" then
+			for k,v in pairs(overrides) do
+				if item[k] ~= nil
+				and type(v) == type(item[k]) then
+					item[k] = v
+				end
+			end
+		end
+
 		if slot then
 			self:FetchInventory(p)[i] = item
 			return true
 		end
 
-		local real_count = count or item.count
-		local item_id
-		
-		if isNumber then
-			item_id = item_input
-		elseif isTable then
-			item_id = item_input.item_id
-		end
-		
-		local fitem,fslot = self:GetInventoryItemFromId(p, item_id) --print(fitem,fslot)
-
-		if fitem and fitem.count and fitem.count + real_count <= fitem.max_count then
-			self:FetchInventorySlot(p, fslot).count = $ + real_count
-			--print("Added apon exiting item")
-		elseif self:FetchEmptySlot(p) then
+		if self:FetchEmptySlot(p) then
 			local emptyslot = self:FetchEmptySlot(p) 
 			
 			if emptyslot then
 				self:FetchInventory(p)[emptyslot] = item
+				if def.pickup then
+					def.pickup(item, p)
+				end
+				if item.pickupsfx >= 0 then
+					S_StartSound((p.mo and p.mo.valid) and p.mo, item.pickupsfx)
+				end
 				--print("Went to empty slot")
 			end
 		else
@@ -326,6 +352,8 @@ function MM:GiveItem(p, item_input, count, slot, overrides)
 	
 	return false
 end
+
+dofile "Items/logic"
 
 // FETCH VALID ITEMS
 

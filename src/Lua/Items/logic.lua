@@ -15,8 +15,16 @@ local function manage_position(p, item)
 		}
 	end
 
-	local x = FixedMul(FixedMul(p.mo.radius, cos(p.drawangle)), item.pos.x)
-	local y = FixedMul(FixedMul(p.mo.radius, sin(p.drawangle)), item.pos.y)
+	local ox = FixedMul(p.mo.radius*2, item.pos.x)
+	local oy = FixedMul(p.mo.radius*2, item.pos.y)
+
+	local xx = FixedMul(ox, cos(p.mo.angle))
+	local xy = FixedMul(ox, sin(p.mo.angle))
+	local yx = FixedMul(oy, sin(p.mo.angle))
+	local yy = FixedMul(oy, cos(p.mo.angle))
+
+	local x = xx+yx
+	local y = yy+xy
 
 	P_MoveOrigin(item.mobj,
 		p.mo.x+x,

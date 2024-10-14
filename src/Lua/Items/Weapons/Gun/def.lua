@@ -1,5 +1,7 @@
 local weapon = {}
 
+local roles = MM.require "Variables/Data/Roles"
+
 local MAX_COOLDOWN = 3*TICRATE
 local MAX_ANIM = TICRATE
 
@@ -18,17 +20,24 @@ weapon.position = {
 }
 weapon.animation_position = {
 	x = FU,
-	y = -FU/4,
+	y = -FU/2,
 	z = 0
 }
 weapon.stick = true
 weapon.animation = true
-weapon.damage = true
+weapon.damage = false
 weapon.weaponize = true
 weapon.droppable = true
 weapon.shootable = true
 weapon.shootmobj = dofile "Items/Weapons/Gun/bullet"
 weapon.equipsfx = sfx_gequip
-weapon.hitsfx = sfx_gnfire
+weapon.attacksfx = sfx_gnfire
+
+function weapon:pickup(p)
+	if roles[p.mm.role].team == true then
+		self.restrict[p.mm.role] = true
+		self.timeleft = 5*TICRATE
+	end
+end
 
 return weapon

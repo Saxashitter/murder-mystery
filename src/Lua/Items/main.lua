@@ -26,26 +26,29 @@ local ITEM_DEF = {
 
 	stick = true, -- disable if you wanna manually handle weapon sticking
 	-- useful for cooldowns after throwing a weapon, or if you just want to do a fake-drop or something
-	animation = true,
-	damage = true,
+	animation = true, -- enable if you want the weapon to be tweened between it's hit pos and default pos
+	damage = true, -- enable if this can damage people
 	weaponize = true, -- make item identify as a weapon (#woke /j)
 	-- weapons are usually on the players right hand, while items are on the players left
 	droppable = false, -- enable to let item be dropped
 	shootable = false, -- enable to make weapon shoot projectiles instead of stabbing
 	shootmobj = MT_THOK, -- the mobj type it shoots
-
-	pickupsfx = -1,
-	equipsfx = -1,
-	attacksfx = -1,
-	hitsfx = -1,
-	finalkillsfx = -1,
-
+	restrict = {}, -- restricts pickup from certain roles
+	/* example:
+	{
+		[MMROLE_INNOCENT] = true
+	}
+	
+	this would restrict innocents from picking the item up, but allow for murderers and sheriffs to pick it up
+	*/
 	// not required, for scripters
 	pickup = func,
 	equip = func,
+	unequip = func,
 	thinker = func,
 	attack = func,
-	hit = func
+	hit = func,
+	drop = func
 }
 
 local ITEM_STRUCT = {
@@ -79,11 +82,7 @@ local ITEM_STRUCT = {
 	shootable = false, -- enable to make weapon shoot projectiles instead of stabbing
 	shootmobj = MT_THOK, -- the mobj type it shoots
 
-	pickupsfx = -1,
-	equipsfx = -1,
-	attacksfx = -1,
-	hitsfx = -1,
-	finalkillsfx = -1,
+	restrict = {},
 
 	bullets = {} -- save valid bullets here incase modders decide they wanna do cool shit
 }
@@ -304,9 +303,10 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		item.droppable = def.droppable
 		item.shootable = def.shootable
 		item.shootmobj = def.shootmobj
+		item.restrict = shallowCopy(def.restrict)
 
 		item.pickupsfx = def.pickupsfx
-		item.equipsfx = def.pickupsfx
+		item.equipsfx = def.equipsfx
 		item.attacksfx = def.attacksfx
 		item.hitsfx = def.hitsfx
 		item.finalkillsfx = def.finalkillsfx
@@ -322,8 +322,16 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		end
 
 		if slot then
-			self:FetchInventory(p)[i] = item
-			return true
+			self:FetchInventory(p)[slot] = item
+			if def.pickup then
+				def.pickup(item, p)
+			end
+			if item.pickupsfx then
+				S_StartSound((p.mo and p.mo.valid) and p.mo, item.pickupsfx)
+			elseif item.equipsfx then
+				S_StartSound((p.mo and p.mo.valid) and p.mo, item.equipsfx)
+			end
+			return item
 		end
 
 		if self:FetchEmptySlot(p) then
@@ -334,19 +342,19 @@ function MM:GiveItem(p, item_input, slot, overrides)
 				if def.pickup then
 					def.pickup(item, p)
 				end
-				if item.pickupsfx >= 0 then
+				if item.pickupsfx then
 					S_StartSound((p.mo and p.mo.valid) and p.mo, item.pickupsfx)
-				elseif item.equipsfx >= 0 then
+				elseif item.equipsfx then
 					S_StartSound((p.mo and p.mo.valid) and p.mo, item.equipsfx)
 				end
+
+				return item
 				--print("Went to empty slot")
 			end
 		else
 			CONS_Printf(p, "\x85\Inventory full!")
 			return false
 		end
-		
-		return true
 	elseif not self:FetchInventory(p) then
 		CONS_Printf(p, "\x85\Invalid inventory!")
 		return false
@@ -356,6 +364,7 @@ function MM:GiveItem(p, item_input, slot, overrides)
 end
 
 dofile "Items/logic"
+dofile "Items/dropped"
 
 // FETCH VALID ITEMS
 

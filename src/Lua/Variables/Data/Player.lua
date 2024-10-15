@@ -19,7 +19,7 @@ return {
 
 	inventory = {
 		items = {},
-		cur_sel = 1,
+		cur_sel = 0,
 		count = 5
 	}
 }

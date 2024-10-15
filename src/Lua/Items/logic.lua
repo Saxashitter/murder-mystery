@@ -87,7 +87,7 @@ MM:addPlayerScript(function(p)
 		inv.cur_sel = $+sel
 
 		if inv.cur_sel < 0 then
-			inv.cur_sel = #p.mm.inventory.count
+			inv.cur_sel = p.mm.inventory.count
 		end
 		if inv.cur_sel > p.mm.inventory.count then
 			inv.cur_sel = 0

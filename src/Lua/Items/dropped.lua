@@ -108,60 +108,20 @@ local function manage_unpicked_weapon(mobj)
 			continue
 		end
 
-		mobj.pos = {x = mobj.x, y = mobj.y, z = mobj.z}
-		mobj.magnetize = p.mo
-		mobj.magtime = 0
+		local item = MM:GiveItem(p, mobj.pickupid)
 
-		p.mm.picking_up = mobj
-
-		break
+		if item then
+			P_RemoveMobj(mobj)
+			return true
+		end
 	end
 end
 
 addHook("PostThinkFrame", do
 	for i,mobj in pairs(MM.DroppedMobjs) do
-		if not (mobj and mobj.valid) then
+		if not (mobj and mobj.valid and not manage_unpicked_weapon(mobj)) then
 			table.remove(MM.DroppedMobjs, i)
 			continue
-		end
-
-		if not (mobj and mobj.magnetize) then
-			manage_unpicked_weapon(mobj)
-			continue
-		end
-
-		mobj.flags = MF_NOCLIP|MF_NOCLIPHEIGHT
-
-		local x = ease.incubic(mobj.magtime, mobj.pos.x, mobj.magnetize.x)
-		local y = ease.incubic(mobj.magtime, mobj.pos.y, mobj.magnetize.y)
-		local z = ease.incubic(mobj.magtime, mobj.pos.z, mobj.magnetize.z)
-
-		P_MoveOrigin(mobj, x,y,z)
-
-		mobj.magtime = min($+(FU/13), FU)
-
-		if mobj.magtime == FU then
-			local item = MM:GiveItem(mobj.magnetize.player, mobj.pickupid)
-
-			if item then
-				mobj.magnetize.player.mm.picking_up = nil
-				table.remove(MM.DroppedMobjs, i)
-				P_RemoveMobj(mobj)
-				return
-			end
-
-			local angle = FixedAngle(P_RandomRange(0, 360)*FU)
-			mobj.angle = angle
-
-			P_InstaThrust(mobj, mobj.angle, 5*FU)
-			mobj.momz = (3*FU)*P_MobjFlip(mobj.magnetize)
-
-			if mobj.magnetize.player.mm then
-				mobj.magnetize.player.mm.picking_up = nil
-			end
-	
-			mobj.magnetize = nil
-			mobj.magtime = 0
 		end
 	end
 end)

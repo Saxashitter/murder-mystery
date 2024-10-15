@@ -110,6 +110,7 @@ local function manage_unpicked_weapon(mobj)
 
 		local item = MM:GiveItem(p, mobj.pickupid)
 
+		S_StartSound(p.mo,sfx_gnpick)
 		if item then
 			P_RemoveMobj(mobj)
 			return true

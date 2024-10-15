@@ -21,8 +21,13 @@ dofile "Variables/main"
 dofile "Functions/main"
 dofile "Console/main"
 dofile "Hooks/main"
-dofile "Weapons/main"
+dofile "Items/main"
 
+-- fool-proofing
+-- basically if you reference a variable thats not in the local table
+-- it corrects itself to get the variable in the network table
+-- ofc, its faster to reference the correct tables
+-- so dont use this too much
 setmetatable(MM, {
 	__index = function(self, key)
 		if rawget(self, key) ~= nil then

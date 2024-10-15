@@ -1,8 +1,8 @@
 local scripts = {}
 local global_scripts = {}
 
-local function doAndInsert(file, global)
-	local func = dofile("Hooks/Player/Scripts/"..file)
+function MM:addPlayerScript(file, global)
+	local func = file
 
 	if global then
 		global_scripts[#global_scripts+1] = func
@@ -52,6 +52,6 @@ addHook("PlayerThink", function(p)
 	
 end)
 
-doAndInsert("Role Handler")
-doAndInsert("Nerfs")
-doAndInsert("Map Vote", true)
+MM:addPlayerScript(dofile("Hooks/Player/Scripts/Role Handler"))
+MM:addPlayerScript(dofile("Hooks/Player/Scripts/Nerfs"))
+MM:addPlayerScript(dofile("Hooks/Player/Scripts/Map Vote"), true)

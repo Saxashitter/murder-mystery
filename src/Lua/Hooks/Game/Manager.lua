@@ -195,20 +195,22 @@ addHook("ThinkFrame", function()
 	and not MM:playerWithGun()
 	and not MM_N.gameover
 	and innocents >= 1 then
-		local wpns = MM:isWeaponOnMap("Gun")
+		local wpns = MM:GetCertainDroppedItems("gun")
 
-		if wpns then
+		if #wpns then
 			for _,wpn in pairs(wpns) do
-				if not (wpn and wpn.valid and wpn.timealive) then
-					continue
+				if wpn.timealive == nil then
+					wpn.timealive = 0
 				end
+
+				wpn.timealive = $+1
 
 				if wpn.timealive > 60*TICRATE then
 					-- give player gun
 					local p = randomPlayer(_eligibleGunPlayer)
 					if p then
-						MM:giveWeapon(p, "Gun")
-						for play in players.iterate
+						MM:GiveItem(p, "gun")
+						for play in players.iterate do
 							if play == p
 								chatprintf(play,"\x82*You have been given the gun!",true)
 							else
@@ -222,7 +224,7 @@ addHook("ThinkFrame", function()
 		else
 			local p = randomPlayer(_eligibleGunPlayer)
 			if p and not MM:canGameEnd() then
-				MM:giveWeapon(p, "Gun")
+				MM:GiveItem(p, "gun")
 				for play in players.iterate
 					if play == p
 						chatprintf(play,"\x82*You have been given the gun!",true)

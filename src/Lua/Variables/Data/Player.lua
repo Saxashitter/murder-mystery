@@ -16,4 +16,10 @@ return {
 	
 	outofbounds = false,
 	oob_dist = 0,
+
+	inventory = {
+		items = {},
+		cur_sel = 0,
+		count = 5
+	}
 }

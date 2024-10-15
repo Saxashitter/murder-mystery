@@ -1,7 +1,7 @@
-COM_AddCommand("MM_GiveWeapon", function(p, wname)
+COM_AddCommand("MM_GiveItem", function(p, name)
 	if not MM:isMM() then return end
 
-	MM:giveWeapon(p, wname, true)
+	MM:GiveItem(p, name)
 end, COM_ADMIN)
 
 COM_AddCommand("MM_EndGame", function(p)

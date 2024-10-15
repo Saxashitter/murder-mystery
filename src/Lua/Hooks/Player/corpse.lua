@@ -38,7 +38,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	and target.player.mm
 	and roles[source.player.mm.role].team == roles[target.player.mm.role].team
 	and not roles[source.player.mm.role].cankillmates) then
-		chatprintf(source.player, "!!! - That was not the murderer. You were killed for friendly fire!", true)
+		chatprintf(source.player, "\x82*That was not the murderer. You were killed for friendly fire!", true)
 		P_DamageMobj(source, nil, nil, 999, DMG_INSTAKILL)
 	end
 	
@@ -48,11 +48,15 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	local angle = (inflictor and inflictor.valid) and R_PointToAngle2(target.x, target.y, inflictor.x, inflictor.y) or target.angle
 	target.deathangle = angle
 	
-	if MM:canGameEnd() then
+	if MM:canGameEnd() and not MM_N.gameover then
 		S_StartSound(nil,sfx_buzz3)
 		S_StartSound(nil,sfx_s253)
+		local facingangle = target.player.drawangle + ANGLE_180
+		if (source and source.valid)
+			facingangle = R_PointToAngle2(target.x,target.y, source.x,source.y)
+		end
 		MM:startEndCamera(target,
-			target.player.drawangle + ANGLE_180,
+			facingangle,
 			200*FU,
 			6*TICRATE,
 			FU/16
@@ -151,7 +155,7 @@ addHook("ThinkFrame", function()
 			if P_CheckSight(corpse, p.mo)
 			and R_PointToDist(corpse.x, corpse.y, p.mo.x, p.mo.y) < 2000*FU
 			and not (MM_N.knownDeadPlayers[corpse.playerid]) then
-				chatprint("!!! - The corpse of "..corpse.playername.." has been found!")
+				chatprint("\x82*The corpse of "..corpse.playername.." has been found!")
 				MM_N.knownDeadPlayers[corpse.playerid] = true
 			end
 		end

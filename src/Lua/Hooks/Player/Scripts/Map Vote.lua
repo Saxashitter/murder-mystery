@@ -28,13 +28,13 @@ return function(p)
 			S_StartSound(nil, sfx_menu1, p)
 		end
 
-		if p.mm.buttons & BT_JUMP then
+		if p.mm.buttons & (BT_JUMP|BT_SPIN) == BT_JUMP then
 			p.mm.selected_map = true
 			MM_N.mapVote[p.mm.cur_map].votes = $+1
 			S_StartSound(nil, sfx_addfil, p)
 		end
 	else
-		if p.mm.buttons & BT_SPIN then
+		if p.mm.buttons & (BT_JUMP|BT_SPIN) == BT_SPIN then
 			p.mm.selected_map = false
 			MM_N.mapVote[p.mm.cur_map].votes = $-1
 			S_StartSound(nil, sfx_notadd, p)

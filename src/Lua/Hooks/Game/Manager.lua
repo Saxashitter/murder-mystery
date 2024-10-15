@@ -210,7 +210,13 @@ addHook("ThinkFrame", function()
 					local p = randomPlayer(_eligibleGunPlayer)
 					if p then
 						MM:giveWeapon(p, "Gun")
-						chatprint("!!! - A random player has gotten the gun due to inactivity!")
+						for play in players.iterate
+							if play == p
+								chatprintf(play,"\x82*You have been given the gun!",true)
+							else
+								chatprintf(play,"\x82*A random player has gotten the gun due to inactivity!")
+							end
+						end
 						P_RemoveMobj(wpn)
 					end
 				end
@@ -218,8 +224,19 @@ addHook("ThinkFrame", function()
 		else
 			local p = randomPlayer(_eligibleGunPlayer)
 			if p and not MM:canGameEnd() then
+<<<<<<< HEAD
 				MM:GiveItem(p, "gun")
 				chatprint("!!! - A random player has gotten the gun due to the gun despawning!")
+=======
+				MM:giveWeapon(p, "Gun")
+				for play in players.iterate
+					if play == p
+						chatprintf(play,"\x82*You have been given the gun!",true)
+					else
+						chatprintf(play,"\x82*A random player has gotten the gun due to the gun despawning!")
+					end
+				end
+>>>>>>> f023e3f3f25f8d60222a111d7ab875cb77421bef
 			end
 		end
 	end

@@ -42,6 +42,13 @@ return function(v,p)
 		
 		--Tooltips
 		local y = 170
+		local text = p.mm.inventory.hidden and "Show" or "Hide"
+		v.drawString(47*FU - slidein,
+			y*FU,
+			"[C1] - "..text.." items",
+			V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
+			"thin-fixed")
+		y = $+8
 		if item.droppable then
 			v.drawString(47*FU - slidein,
 				y*FU,
@@ -85,8 +92,14 @@ return function(v,p)
 			V_GRAYMAP|V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
 			"thin-fixed"
 		)	
+		local text = p.mm.inventory.hidden and "Show" or "Hide"
 		v.drawString(47*FU - slidein,
 			170*FU,
+			"[C1] - "..text.." items",
+			V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
+			"thin-fixed")
+		v.drawString(47*FU - slidein,
+			178*FU,
 			"[C3] - Pick up",
 			V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
 			"thin-fixed"

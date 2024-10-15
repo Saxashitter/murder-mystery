@@ -19,7 +19,8 @@ return {
 
 	inventory = {
 		items = {},
-		cur_sel = 0,
+		hidden = true,
+		cur_sel = 1,
 		count = 5
 	}
 }

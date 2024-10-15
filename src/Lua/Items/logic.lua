@@ -61,7 +61,8 @@ addHook("PostThinkFrame", do
 				item.mobj = MM:MakeWeaponMobj(p, item)
 			end
 
-			if i ~= inv.cur_sel then
+			if i ~= inv.cur_sel
+			or inv.hidden then
 				item.mobj.flags2 = $|MF2_DONTDRAW
 				continue
 			end
@@ -76,6 +77,44 @@ MM:addPlayerScript(function(p)
 	local inv = p.mm.inventory
 	local sel = 0
 
+	if p.cmd.buttons & BT_CUSTOM1
+	and not (p.lastbuttons) then
+		inv.hidden = not inv.hidden
+
+		local item = inv.items[inv.cur_sel]
+
+		if item then
+			local def = MM.Items[item.id]
+			if inv.hidden then
+				if def.unequip then
+					def.unequip(item, p)
+				end
+			else
+				if def.equip then
+					def.equip(item, p)
+				end
+
+				if item.equipsfx then
+					S_StartSound(p.mo, item.equipsfx)
+				end
+
+				item.anim = 0
+				item.hit = 0
+				item.cooldown = max(item.cooldown, 12)
+				manage_position(p, item, true)
+			end
+		end
+	end
+
+	for i,item in pairs(p.mm.inventory.items) do
+		if item.timeleft >= 0 then
+			item.timeleft = max(0, $-1)
+		end
+		if item.timeleft == 0 then
+			MM:DropItem(p, i, nil, true)
+		end 
+	end
+
 	if p.cmd.buttons & BT_WEAPONNEXT
 	and not (p.lastbuttons & BT_WEAPONNEXT) then
 		sel = $+1
@@ -87,58 +126,58 @@ MM:addPlayerScript(function(p)
 	end
 
 	if abs(sel) then
-		local item = inv.items[inv.cur_sel]
-		local def = MM.Items[item and item.id or ""]
-
+		local old_sel = inv.cur_sel
 		inv.cur_sel = $+sel
 
-		if inv.cur_sel < 0 then
+		if inv.cur_sel < 1 then
 			inv.cur_sel = p.mm.inventory.count
 		end
 		if inv.cur_sel > p.mm.inventory.count then
-			inv.cur_sel = 0
+			inv.cur_sel = 1
 		end
 
-		local newitem = inv.items[inv.cur_sel]
-		local newdef = MM.Items[newitem and newitem.id or ""]
-
-		if item
-		and def
-		and def.unequip then
-			def.unequip(item, p)
-		end
-
-		if newitem
-		and newdef
-		and newdef.equip then
-			newdef.equip(newitem, p)
-		end
-
-		if newitem
-		and newitem.equipsfx then
-			S_StartSound(p.mo, newitem.equipsfx)
-		end
-
-		if newitem then
-			newitem.anim = 0
-			newitem.hit = 0
-			newitem.cooldown = max(newitem.cooldown, 12)
-			manage_position(p, newitem, true)
+		if not inv.hidden then
+			local newitem = inv.items[inv.cur_sel]
+			local newdef = MM.Items[newitem and newitem.id or ""]
+	
+			if item
+			and def
+			and def.unequip then
+				def.unequip(item, p)
+			end
+	
+			if newitem
+			and newdef
+			and newdef.equip then
+				newdef.equip(newitem, p)
+			end
+	
+			if newitem
+			and newitem.equipsfx then
+				S_StartSound(p.mo, newitem.equipsfx)
+			end
+	
+			if newitem then
+				newitem.anim = 0
+				newitem.hit = 0
+				newitem.cooldown = max(newitem.cooldown, 12)
+				manage_position(p, newitem, true)
+			end
 		end
 	end
 
 	local item = inv.items[inv.cur_sel]
 
 	if not item then return end
+
 	local def = MM.Items[item.id]
 
 	// timers
 
-	item.hit = max(0, $-1)
-	item.anim = max(0, $-1)
-	item.cooldown = max(0, $-1)
-	if item.timeleft >= 0 then
-		item.timeleft = max(0, $-1)
+	if not inv.hidden then
+		item.hit = max(0, $-1)
+		item.anim = max(0, $-1)
+		item.cooldown = max(0, $-1)
 	end
 
 	// drop le weapon
@@ -149,16 +188,12 @@ MM:addPlayerScript(function(p)
 		return
 	end
 
-	if item.timeleft == 0 then
-		MM:DropItem(p, nil, nil, true)
-		return
-	end
-
 	// attacking/use
 
 	if p.cmd.buttons & BT_ATTACK
 	and not (p.lastbuttons & BT_ATTACK)
-	and not (item.cooldown) then
+	and not (item.cooldown) 
+	and not inv.hidden then
 		item.hit = item.max_hit
 		item.anim = item.max_anim
 		item.cooldown = item.max_cooldown
@@ -187,7 +222,8 @@ MM:addPlayerScript(function(p)
 	// hit detection
 
 	if item.damage
-	and item.hit then
+	and item.hit
+	and not inv.hidden then
 		for p2 in players.iterate do
 			if not (p2 ~= p
 			and p2

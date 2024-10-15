@@ -42,6 +42,7 @@ function MM:DropItem(p, slot, randomize, dont_notify)
 	mobj.momz = (3*FU)*P_MobjFlip(p.mo)
 
 	mobj.pickupid = item.id
+	mobj.pickupsfx = item.pickupsfx
 	mobj.restrict = shallowCopy(item.restrict)
 
 	mobj.magtime = 0
@@ -110,8 +111,11 @@ local function manage_unpicked_weapon(mobj)
 
 		local item = MM:GiveItem(p, mobj.pickupid)
 
-		S_StartSound(p.mo,sfx_gnpick)
 		if item then
+			if mobj.pickupsfx then
+				S_StartSound(p.mo, mobj.pickupsfx)
+			end
+
 			P_RemoveMobj(mobj)
 			return true
 		end

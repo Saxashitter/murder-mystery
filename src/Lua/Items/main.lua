@@ -270,7 +270,7 @@ function MM:MakeWeaponMobj(p, item)
 	return mobj
 end
 
-function MM:GiveItem(p, item_input, slient, slot, overrides)
+function MM:GiveItem(p, item_input, slot, overrides)
 	if not (p and p.valid and p.mm) then return end
 
 	local datatype = type(item_input)
@@ -332,15 +332,14 @@ function MM:GiveItem(p, item_input, slient, slot, overrides)
 
 		if slot then
 			self:FetchInventory(p)[slot] = item
-			if def.pickup then
-				def.pickup(item, p)
+			if def.spawn then
+				def.spawn(item, p)
 			end
-			if not slient then
-				if item.pickupsfx then
-					S_StartSound((p.mo and p.mo.valid) and p.mo, item.pickupsfx)
-				elseif item.equipsfx then
-					S_StartSound((p.mo and p.mo.valid) and p.mo, item.equipsfx)
-				end
+			if not p.mm.inventory.hidden
+			and p.mm.inventory.cur_sel == slot then
+				S_StartSound(p.mo, item.equipsfx)
+
+				item.cooldown = 17
 			end
 			return item
 		end
@@ -350,15 +349,14 @@ function MM:GiveItem(p, item_input, slient, slot, overrides)
 			
 			if emptyslot then
 				self:FetchInventory(p)[emptyslot] = item
-				if def.pickup then
-					def.pickup(item, p)
+				if def.spawn then
+					def.spawn(item, p)
 				end
-				if not slient then
-					if item.pickupsfx then
-						S_StartSound((p.mo and p.mo.valid) and p.mo, item.pickupsfx)
-					elseif item.equipsfx then
-						S_StartSound((p.mo and p.mo.valid) and p.mo, item.equipsfx)
-					end
+				if not p.mm.inventory.hidden
+				and p.mm.inventory.cur_sel == emptyslot then
+					S_StartSound(p.mo, item.equipsfx)
+
+					item.cooldown = 17
 				end
 
 				return item

@@ -5,7 +5,7 @@ return function(p) -- Role handler
 
 	if leveltime >= 10*TICRATE
 	and not p.mm.got_weapon
-		MM:GiveItem(p, roles[p.mm.role].weapon, true)
+		MM:GiveItem(p, roles[p.mm.role].weapon)
 		p.mm.got_weapon = true
 	end
 end

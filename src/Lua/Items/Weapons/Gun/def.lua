@@ -32,6 +32,7 @@ weapon.weaponize = true
 weapon.droppable = true
 weapon.shootable = true
 weapon.shootmobj = dofile "Items/Weapons/Gun/bullet"
+weapon.pickupsfx = sfx_gnpick
 weapon.equipsfx = sfx_gequip
 weapon.attacksfx = sfx_gnfire
 

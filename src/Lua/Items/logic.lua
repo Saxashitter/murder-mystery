@@ -100,7 +100,7 @@ MM:addPlayerScript(function(p)
 
 				item.anim = 0
 				item.hit = 0
-				item.cooldown = max(item.cooldown, 12)
+				item.cooldown = max(item.cooldown, 20)
 				manage_position(p, item, true)
 			end
 		end

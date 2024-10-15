@@ -1,7 +1,13 @@
 local roles = MM.require "Variables/Data/Roles"
 
-local function manage_position(p, item)
+local function manage_position(p, item, set)
 	if not item.stick then return end
+
+	if not (item.mobj and item.mobj.valid) then
+		item.mobj = MM:MakeWeaponMobj(p, item)
+	end
+
+	local tpfunc = set and P_SetOrigin or P_MoveOrigin
 
 	if item.animation then
 		local t = FixedDiv(item.anim, item.max_anim)
@@ -35,7 +41,7 @@ local function manage_position(p, item)
 	local z = FixedMul(h, item.pos.z)
 
 	item.mobj.angle = p.mo.angle
-	P_MoveOrigin(item.mobj,
+	tpfunc(item.mobj,
 		p.mo.x+x,
 		p.mo.y+y,
 		p.mo.z+h+z
@@ -117,6 +123,7 @@ MM:addPlayerScript(function(p)
 			newitem.anim = 0
 			newitem.hit = 0
 			newitem.cooldown = max(newitem.cooldown, 12)
+			manage_position(p, newitem, true)
 		end
 	end
 

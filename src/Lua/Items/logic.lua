@@ -86,11 +86,11 @@ MM:addPlayerScript(function(p)
 
 		inv.cur_sel = $+sel
 
-		while inv.cur_sel < 0 do
-			inv.cur_sel = $+p.mm.inventory.count
+		if inv.cur_sel < 0 then
+			inv.cur_sel = #p.mm.inventory.count
 		end
-		while inv.cur_sel > p.mm.inventory.count do
-			inv.cur_sel = $-p.mm.inventory.count
+		if inv.cur_sel > p.mm.inventory.count then
+			inv.cur_sel = 0
 		end
 
 		local newitem = inv.items[inv.cur_sel]

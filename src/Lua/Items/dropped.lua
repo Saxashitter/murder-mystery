@@ -96,7 +96,7 @@ local function manage_unpicked_weapon(mobj)
 			continue
 		end
 
-		local radius = p.mo.radius*2
+		local radius = p.mo.radius*4
 
 		if abs(p.mo.x - mobj.x) > radius
 		or abs(p.mo.y - mobj.y) > radius

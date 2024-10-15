@@ -74,7 +74,7 @@ end
 
 local function manage_unpicked_weapon(mobj)
 	local angle = FixedAngle(FixedDiv(leveltime % 80, 80)*360)
-	local z = 12*cos(angle)
+	local z = (12*FU)+12*cos(angle)
 
 	mobj.flags = $ & ~(MF_NOCLIP|MF_NOCLIPHEIGHT)
 

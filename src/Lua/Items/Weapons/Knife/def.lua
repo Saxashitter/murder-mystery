@@ -5,6 +5,7 @@ local MAX_ANIM = MAX_COOLDOWN
 local MAX_HIT = MAX_COOLDOWN/3
 
 weapon.id = "knife"
+weapon.category = "Weapon"
 weapon.display_name = "Knife"
 weapon.display_icon = "MM_KNIFE"
 weapon.state = dofile "Items/Weapons/Knife/freeslot"

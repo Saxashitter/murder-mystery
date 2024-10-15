@@ -9,6 +9,8 @@ local ITEM_DEF = {
 	display_name = "Knife",
 	display_icon = "MM_KNIFE",
 
+	category = "Weapon",
+
 	state = S_THOK,
 
 	timeleft = -1,
@@ -256,12 +258,12 @@ function MM:MakeWeaponMobj(p, item)
 	mobj.fuse = -1
 	mobj.state = def.state
 	mobj.flags = MF_NOBLOCKMAP|MF_NOGRAVITY|MF_NOTHINK|MF_NOCLIP|MF_NOCLIPHEIGHT
+	mobj.flags2 = MF2_DONTDRAW
 
 	return mobj
 end
 
--- iteminfo can be number or table
-function MM:GiveItem(p, item_input, slot, overrides)
+function MM:GiveItem(p, item_input, slient, slot, overrides)
 	if not (p and p.valid and p.mm) then return end
 
 	local datatype = type(item_input)
@@ -279,10 +281,7 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		item.display_name = def.display_name
 		item.display_icon = def.display_icon
 
-		item.mobj = P_SpawnMobjFromMobj(p.mo, 0,0,0, MT_THOK)
-		item.mobj.tics = -1
-		item.mobj.fuse = -1
-		item.mobj.state = def.state
+		item.mobj = self:MakeWeaponMobj(p, item)
 
 		item.state = def.state
 
@@ -326,10 +325,12 @@ function MM:GiveItem(p, item_input, slot, overrides)
 			if def.pickup then
 				def.pickup(item, p)
 			end
-			if item.pickupsfx then
-				S_StartSound((p.mo and p.mo.valid) and p.mo, item.pickupsfx)
-			elseif item.equipsfx then
-				S_StartSound((p.mo and p.mo.valid) and p.mo, item.equipsfx)
+			if not slient then
+				if item.pickupsfx then
+					S_StartSound((p.mo and p.mo.valid) and p.mo, item.pickupsfx)
+				elseif item.equipsfx then
+					S_StartSound((p.mo and p.mo.valid) and p.mo, item.equipsfx)
+				end
 			end
 			return item
 		end
@@ -342,10 +343,12 @@ function MM:GiveItem(p, item_input, slot, overrides)
 				if def.pickup then
 					def.pickup(item, p)
 				end
-				if item.pickupsfx then
-					S_StartSound((p.mo and p.mo.valid) and p.mo, item.pickupsfx)
-				elseif item.equipsfx then
-					S_StartSound((p.mo and p.mo.valid) and p.mo, item.equipsfx)
+				if not slient then
+					if item.pickupsfx then
+						S_StartSound((p.mo and p.mo.valid) and p.mo, item.pickupsfx)
+					elseif item.equipsfx then
+						S_StartSound((p.mo and p.mo.valid) and p.mo, item.equipsfx)
+					end
 				end
 
 				return item

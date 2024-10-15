@@ -194,14 +194,16 @@ addHook("ThinkFrame", function()
 	if leveltime > 10*TICRATE
 	and not MM:playerWithGun()
 	and not MM_N.gameover
-	and innocents > 1 then
-		local wpns = MM:isWeaponOnMap("Gun")
+	and innocents >= 1 then
+		local wpns = MM:GetCertainDroppedItems("gun")
 
-		if wpns then
+		if #wpns then
 			for _,wpn in pairs(wpns) do
-				if not (wpn and wpn.valid and wpn.timealive) then
-					continue
+				if wpn.timealive == nil then
+					wpn.timealive = 0
 				end
+
+				wpn.timealive = $+1
 
 				if wpn.timealive > 60*TICRATE then
 					-- give player gun
@@ -216,7 +218,7 @@ addHook("ThinkFrame", function()
 		else
 			local p = randomPlayer(_eligibleGunPlayer)
 			if p and not MM:canGameEnd() then
-				MM:giveWeapon(p, "Gun")
+				MM:GiveItem(p, "gun")
 				chatprint("!!! - A random player has gotten the gun due to the gun despawning!")
 			end
 		end

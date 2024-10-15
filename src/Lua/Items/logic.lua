@@ -1,3 +1,5 @@
+local roles = MM.require "Variables/Data/Roles"
+
 local function manage_position(p, item)
 	if not item.stick then return end
 
@@ -17,8 +19,10 @@ local function manage_position(p, item)
 		}
 	end
 
-	local ox = FixedMul(p.mo.radius*3/2, item.pos.y)
-	local oy = FixedMul(p.mo.radius*3/2, -item.pos.x)
+	local radius = p.mo.radius
+
+	local ox = FixedMul(radius*3/2, item.pos.y)
+	local oy = FixedMul(radius*3/2, -item.pos.x)
 
 	local xx = FixedMul(ox, cos(p.mo.angle))
 	local xy = FixedMul(ox, sin(p.mo.angle))
@@ -27,12 +31,14 @@ local function manage_position(p, item)
 
 	local x = xx-yx
 	local y = yy+xy
+	local h = FixedMul(p.mo.height/2, p.mo.scale)
+	local z = FixedMul(h, item.pos.z)
 
 	item.mobj.angle = p.mo.angle
 	P_MoveOrigin(item.mobj,
 		p.mo.x+x,
 		p.mo.y+y,
-		p.mo.z+FixedMul(p.mo.height/2, p.mo.scale)+item.pos.z
+		p.mo.z+h+z
 	)
 end
 
@@ -40,20 +46,20 @@ addHook("PostThinkFrame", do
 	if not MM:isMM() then return end
 
 	for p in players.iterate do
-		if not (p and p.mm and #p.mm.inventory.items) then continue end
+		if not (p and p.mo and p.mm) then continue end
 
 		local inv = p.mm.inventory
 
-		for i,item in ipairs(inv.items) do
+		for i,item in pairs(inv.items) do
 			if not (item.mobj and item.mobj.valid) then
 				item.mobj = MM:MakeWeaponMobj(p, item)
 			end
 
 			if i ~= inv.cur_sel then
-				item.mobj.flags = $|MF2_DONTDRAW
+				item.mobj.flags2 = $|MF2_DONTDRAW
 				continue
 			end
-			item.mobj.flags = $ & ~MF2_DONTDRAW
+			item.mobj.flags2 = $ & ~MF2_DONTDRAW
 	
 			manage_position(p, item)
 		end
@@ -189,6 +195,11 @@ MM:addPlayerScript(function(p)
 			if dist > maxdist
 			or abs(p.mo.z-p2.mo.z) > max(p.mo.height, p2.mo.height)*3/2
 			or not P_CheckSight(p.mo, p2.mo) then
+				continue
+			end
+
+			if roles[p.mm.role].team == roles[p2.mm.role].team
+			and not roles[p.mm.role].friendlyfire then
 				continue
 			end
 

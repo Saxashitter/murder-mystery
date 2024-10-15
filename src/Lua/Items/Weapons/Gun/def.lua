@@ -6,6 +6,7 @@ local MAX_COOLDOWN = 3*TICRATE
 local MAX_ANIM = TICRATE
 
 weapon.id = "gun"
+weapon.category = "Weapon"
 weapon.display_name = "Gun"
 weapon.display_icon = "MM_GUN"
 weapon.state = dofile "Items/Weapons/Gun/freeslot"

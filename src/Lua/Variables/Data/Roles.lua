@@ -21,7 +21,7 @@ roles[MMROLE_INNOCENT].cankillmates = false
 
 -- sheriff
 roles[MMROLE_SHERIFF] = {}
-roles[MMROLE_SHERIFF].weapon = "Gun"
+roles[MMROLE_SHERIFF].weapon = "gun"
 roles[MMROLE_SHERIFF].name = "Sheriff"
 roles[MMROLE_SHERIFF].desc = {"Protect the innocents.", "Investigate murders.", "Find the murderer."}
 roles[MMROLE_SHERIFF].color = V_BLUEMAP
@@ -31,7 +31,7 @@ roles[MMROLE_SHERIFF].cankillmates = false
 
 -- murderer
 roles[MMROLE_MURDERER] = {}
-roles[MMROLE_MURDERER].weapon = "Knife"
+roles[MMROLE_MURDERER].weapon = "knife"
 roles[MMROLE_MURDERER].name = "Murderer"
 roles[MMROLE_MURDERER].desc = {"Shhhh... Kill in silence.", "Make sure there are no witnesses."}
 roles[MMROLE_MURDERER].color = V_REDMAP

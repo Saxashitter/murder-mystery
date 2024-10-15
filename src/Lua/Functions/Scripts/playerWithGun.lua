@@ -6,17 +6,15 @@ return function(self)
 		and p.mo
 		and p.mo.health
 		and p.mm
-		and not p.mm.spectator
-		and ((p.mm.weapon
-		and p.mm.weapon.valid
-		and p.mm.weapon.__type == "Gun")
-		or (p.mm.weapon2
-		and p.mm.weapon2.valid
-		and p.mm.weapon2.__type == "Gun"))) then
+		and not p.mm.spectator) then
 			continue
 		end
 
-		return true
+		for i,item in pairs(p.mm.inventory.items) do
+			if item.id == "gun" then
+				return true
+			end
+		end
 	end
 
 	return false

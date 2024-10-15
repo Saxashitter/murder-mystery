@@ -26,23 +26,8 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		target.player.mm.spectator = true
 	end
 
-	if target.player.mm.weapon and target.player.mm.weapon.valid then
-		MM:spawnDroppedWeapon(target.x, target.y, target.z, target.player.mm.weapon.__type)
-
-		if (target.player.mm.weapon
-		and target.player.mm.weapon.valid
-		and target.player.mm.weapon.__type == "Gun") then
-			-- oh, thats the gun haver
-			-- notify everyone that they died
-			local type = "gun holder"
-			if target.player.mm.role == MMROLE_SHERIFF then
-				type = "sheriff"
-			end
-			chatprint("!!! - The "..type.." has died! Find his gun!", true)
-		end
-
-		P_RemoveMobj(target.player.mm.weapon)
-		target.player.mm.weapon = nil
+	for k,v in pairs(target.player.mm.inventory.items) do
+		MM:DropItem(target.player, k, true, true)
 	end
 
 	if (source

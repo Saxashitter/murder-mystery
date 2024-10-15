@@ -1,7 +1,7 @@
-local droppeditems = {}
+MM.DroppedMobjs = {}
 local shallowCopy = MM.require "Libs/shallowCopy"
 
-function MM:DropItem(p, slot)
+function MM:DropItem(p, slot, randomize, dont_notify)
 	if not (p and p.mm and #p.mm.inventory.items) then
 		chatprintf(p, "* There's nothing to drop...")
 		return
@@ -11,12 +11,16 @@ function MM:DropItem(p, slot)
 	local item = p.mm.inventory.items[slot]
 
 	if not (item) then
-		chatprintf(p, "* There's nothing to drop...")
+		if not dont_notify then
+			chatprintf(p, "* There's nothing to drop...")
+		end
 		return
 	end
 
 	if not (item.droppable) then
-		chatprintf(p, "* You can't drop this.")
+		if not dont_notify then
+			chatprintf(p, "* You can't drop this.")
+		end
 		return
 	end
 
@@ -27,6 +31,10 @@ function MM:DropItem(p, slot)
 	mobj.tics = -1
 	mobj.fuse = -1
 	mobj.angle = p.mo.angle
+
+	if randomize then
+		mobj.angle = FixedAngle(P_RandomRange(0, 360)*FU)
+	end
 
 	P_InstaThrust(mobj, mobj.angle, 5*FU)
 	mobj.momz = (3*FU)*P_MobjFlip(p.mo)
@@ -42,12 +50,24 @@ function MM:DropItem(p, slot)
 		def.drop(mobj)
 	end
 
-	table.insert(droppeditems, mobj)
+	table.insert(MM.DroppedMobjs, mobj)
 
 	if (item and item.mobj) then
 		P_RemoveMobj(item.mobj)
 	end
 	p.mm.inventory.items[slot] = nil
+end
+
+function MM:GetCertainDroppedItems(id)
+	local wpns = {}
+
+	for i,item in pairs(MM.DroppedMobjs) do
+		if item.id == id then
+			table.insert(wpns, item)
+		end
+	end
+
+	return wpns
 end
 
 local function manage_unpicked_weapon(mobj)
@@ -95,9 +115,9 @@ local function manage_unpicked_weapon(mobj)
 end
 
 addHook("PostThinkFrame", do
-	for i,mobj in pairs(droppeditems) do
+	for i,mobj in pairs(MM.DroppedMobjs) do
 		if not (mobj and mobj.valid) then
-			table.remove(droppeditems, i)
+			table.remove(MM.DroppedMobjs, i)
 			continue
 		end
 
@@ -121,7 +141,7 @@ addHook("PostThinkFrame", do
 
 			if item then
 				mobj.magnetize.player.mm.picking_up = nil
-				table.remove(droppeditems, i)
+				table.remove(MM.DroppedMobjs, i)
 				P_RemoveMobj(mobj)
 				return
 			end
@@ -143,5 +163,5 @@ addHook("PostThinkFrame", do
 end)
 
 addHook("NetVars", function(n)
-	droppeditems = n($)
+	MM.DroppedMobjs = n($)
 end)

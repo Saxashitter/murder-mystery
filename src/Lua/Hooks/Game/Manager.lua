@@ -209,8 +209,8 @@ addHook("ThinkFrame", function()
 					-- give player gun
 					local p = randomPlayer(_eligibleGunPlayer)
 					if p then
-						MM:giveWeapon(p, "Gun")
-						for play in players.iterate
+						MM:GiveItem(p, "gun")
+						for play in players.iterate do
 							if play == p
 								chatprintf(play,"\x82*You have been given the gun!",true)
 							else
@@ -225,7 +225,6 @@ addHook("ThinkFrame", function()
 			local p = randomPlayer(_eligibleGunPlayer)
 			if p and not MM:canGameEnd() then
 				MM:GiveItem(p, "gun")
-				chatprint("!!! - A random player has gotten the gun due to the gun despawning!")
 				for play in players.iterate
 					if play == p
 						chatprintf(play,"\x82*You have been given the gun!",true)

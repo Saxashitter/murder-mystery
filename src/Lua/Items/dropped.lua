@@ -62,7 +62,7 @@ function MM:GetCertainDroppedItems(id)
 	local wpns = {}
 
 	for i,item in pairs(MM.DroppedMobjs) do
-		if item.id == id then
+		if item.pickupid == id then
 			table.insert(wpns, item)
 		end
 	end
@@ -73,6 +73,8 @@ end
 local function manage_unpicked_weapon(mobj)
 	local angle = FixedAngle(FixedDiv(leveltime % 80, 80)*360)
 	local z = 12*cos(angle)
+
+	mobj.flags = $ & ~(MF_NOCLIP|MF_NOCLIPHEIGHT)
 
 	mobj.spriteyoffset = z
 	mobj.angle = angle

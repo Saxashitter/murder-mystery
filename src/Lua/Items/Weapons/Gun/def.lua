@@ -14,6 +14,7 @@ weapon.timeleft = -1
 weapon.hit_time = TICRATE/3
 weapon.animation_time = TICRATE
 weapon.cooldown_time = 3*TICRATE
+weapon.range = FU*2
 weapon.position = {
 	x = FU,
 	y = 0,

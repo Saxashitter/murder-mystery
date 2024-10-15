@@ -19,12 +19,17 @@ local ITEM_DEF = {
 	animation_time = 35,
 	cooldown_time = 35,
 
+	range = FU*2,
+	-- this is a multiplication of the targets range and the players range combined
+	-- putting this to FU will make the attack only hit if the target is directly in the players hitbox
+	-- theres another variable called "zrange" thatll only modify the range of the weapon on the z axis
+	-- use this if you got a big range but might be too big for the players height
+
 	position = {x = 0, y = 0, z = 0},
 	animation_position = {x = 0, y = 0, z = 0},
 	-- these actually scale based on the players radius
 	-- so, what these values would be if you want the default to be on the upper right of the player is...
 	-- {x = FU, y = FU, z = 0}
-
 
 	stick = true, -- disable if you wanna manually handle weapon sticking
 	-- useful for cooldowns after throwing a weapon, or if you just want to do a fake-drop or something
@@ -71,6 +76,8 @@ local ITEM_STRUCT = {
 	hit = 0,
 	anim = 0,
 	cooldown = 0,
+
+	range = FU*2,
 
 	pos = {x = 0, y = 0, z = 0},
 	default_pos = {x = 0, y = 0, z = 0},
@@ -290,6 +297,9 @@ function MM:GiveItem(p, item_input, slient, slot, overrides)
 		item.max_hit = def.hit_time
 		item.max_anim = def.animation_time
 		item.max_cooldown = def.cooldown_time
+
+		item.range = def.range
+		item.zrange = def.zrange
 
 		item.pos = shallowCopy(def.position)
 		item.default_pos = shallowCopy(def.position)

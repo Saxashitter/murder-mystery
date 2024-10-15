@@ -32,7 +32,7 @@ local function V_DrawBox(props)
 	if timeleft >= 0 then
 		customhud.CustomFontString(v,
 			x, y,
-			tostring(timeleft),
+			tostring(timeleft/TICRATE),
 			"STCFG",
 			flags|trans,
 			"left",

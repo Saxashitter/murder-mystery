@@ -86,7 +86,7 @@ MM:addPlayerScript(function(p)
 
 		inv.cur_sel = $+sel
 
-		while inv.cur_sel < 1 do
+		while inv.cur_sel < 0 do
 			inv.cur_sel = $+p.mm.inventory.count
 		end
 		while inv.cur_sel > p.mm.inventory.count do
@@ -143,7 +143,7 @@ MM:addPlayerScript(function(p)
 	end
 
 	if item.timeleft == 0 then
-		MM:DropItem(p, true)
+		MM:DropItem(p, nil, nil, true)
 		return
 	end
 
@@ -190,10 +190,10 @@ MM:addPlayerScript(function(p)
 			and not p2.mm.spectator) then continue end
 
 			local dist = R_PointToDist2(p.mo.x, p.mo.y, p2.mo.x, p2.mo.y)
-			local maxdist = (p.mo.radius+p2.mo.radius)*3/2
+			local maxdist = FixedMul(p.mo.radius+p2.mo.radius, item.range)
 
 			if dist > maxdist
-			or abs(p.mo.z-p2.mo.z) > max(p.mo.height, p2.mo.height)*3/2
+			or abs(p.mo.z-p2.mo.z) > FixedMul(max(p.mo.height, p2.mo.height), item.zrange or item.range)
 			or not P_CheckSight(p.mo, p2.mo) then
 				continue
 			end

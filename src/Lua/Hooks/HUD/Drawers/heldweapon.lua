@@ -5,50 +5,6 @@ local secondscale = FU*2
 local secondx = 45*FU
 local secondy = 130*FU
 
-local function drawSecondWeapon(v,p)
-	local slidein = MMHUD.xoffset
-	secondscale = ease.outquad(FU*2/10,$,FU)
-	secondx = ease.outquad(FU*2/10,$,25*FU)
-	secondy = ease.outquad(FU*2/10,$,130*FU)
-	
-	if secondticker == -1
-		secondscale = FU*2
-		secondy = 130*FU
-		secondx = 45*FU
-		return
-	end
-	local wpn_t = MM:getWpnData(p.mm.weapon)
-	
-	v.drawScaled(secondx - slidein, 
-		secondy,
-		secondscale/2,
-		v.cachePatch("MMWEAPON"),
-		V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_50TRANS
-	)
-
-	v.drawScaled(secondx - 18*FU - slidein,
-		secondy + 2*FU,
-		secondscale/2,
-		v.cachePatch(wpn_t and wpn_t.icon or "MISSING"),
-		V_SNAPTOLEFT|V_SNAPTOBOTTOM
-	)
-	
-	v.drawString(secondx + FU - slidein,
-		secondy,
-		"Main",
-		V_ALLOWLOWERCASE|V_SNAPTOLEFT|V_SNAPTOBOTTOM,
-		"thin-fixed"
-	)
-	
-	v.drawScaled(secondx - 20*FU - slidein,
-		secondy,
-		secondscale,
-		v.cachePatch("CURWEAP"),
-		V_SNAPTOLEFT|V_SNAPTOBOTTOM
-	)
-	
-end
-
 return function(v,p)
 	if (p.mm and p.mm.spectator) then return end
 
@@ -63,16 +19,13 @@ return function(v,p)
 
 	v.drawScaled(x - slidein, y, FU, patch, V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_50TRANS)
 
-	local wpn = (p.mm.weapon2 and p.mm.weapon2.valid) and p.mm.weapon2 or p.mm.weapon
+	local item = p.mm.inventory.items[p.mm.inventory.cur_sel]
 
-	if wpn and wpn.valid
-		local wpn_t = MM:getWpnData(wpn)
-		local text_string = wpn_t.name or "Weapon"
+	if item 
+		local text_string = item.display_name or "Weapon"
 		local text_width = v.stringWidth(text_string, V_ALLOWLOWERCASE, "normal")
 
-		
-		drawSecondWeapon(v,p)
-		if wpn == p.mm.weapon2 then
+		if item.timeleft >= 0 then
 			secondticker = $+1
 		else
 			secondticker = -1
@@ -88,20 +41,8 @@ return function(v,p)
 		)
 		
 		--Tooltips
-		v.drawString(47*FU - slidein + (text_width*FU) + 2*FU,
-			157*FU,
-			(wpn.hidden and "Hidden..." or "Showing!"),
-			V_ORANGEMAP|V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|(p.mm.weapon.hidden and V_30TRANS or 0),
-			"thin-fixed"
-		)
-		v.drawString(47*FU - slidein,
-			170*FU,
-			"[C1] - "..(wpn.hidden and "Show" or "Hide").." weapon",
-			V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
-			"thin-fixed"
-		)
-		local y = 178
-		if wpn_t.droppable then
+		local y = 170
+		if item.droppable then
 			v.drawString(47*FU - slidein,
 				y*FU,
 				"[C2] - Drop weapon",
@@ -110,34 +51,32 @@ return function(v,p)
 			)
 			y = $+8
 		end
-		if not wpn.hidden
-			v.drawString(47*FU - slidein,
-				y*FU,
-				"[FIRE] - Use weapon",
-				V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
-				"thin-fixed"
-			)
-		end
-		
+		v.drawString(47*FU - slidein,
+			y*FU,
+			"[FIRE] - Use weapon",
+			V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
+			"thin-fixed"
+		)
+
 		--Icon
 		v.drawScaled(9*FU - slidein,
 			159*FU,
 			FU,
-			v.cachePatch(wpn_t.icon or "MISSING"), --v.cachePatch("MISSING"),
+			v.cachePatch(item.display_icon or "MISSING"), --v.cachePatch("MISSING"),
 			V_SNAPTOLEFT|V_SNAPTOBOTTOM|trans
 		)
-		if wpn.time ~= nil then
+		if item.timeleft >= 0 then
 			v.drawScaled(9*FU - slidein,
 				180*FU,
 				FU,
-				v.cachePatch("STTNUM"..(wpn.time/TR)),
+				v.cachePatch("STTNUM"..(item.timeleft/TR)),
 				V_SNAPTOLEFT|V_SNAPTOBOTTOM,
 				((leveltime%(2*TR)) < 30*TR) and (leveltime/5 & 1) and v.getColormap(TC_RAINBOW,SKINCOLOR_RED) or nil
 			)
 		end
 		
-		local cd = wpn.cooldown
-		local maxdelay = 5*TR
+		local cd = item.cooldown
+		local maxdelay = item.max_cooldown
 		yoffset = ease.outquad((FU/maxdelay)*cd,0,-10*FU)
 	else
 		v.drawString(47*FU - slidein,

@@ -79,7 +79,6 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		end
 		return
 	end
-	
 
 	local corpse = P_SpawnMobjFromMobj(target, 0,0,0, MT_THOK)
 
@@ -101,6 +100,8 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	MM_N.corpses[#MM_N.corpses+1] = corpse
 	corpse.playerid = #target.player
 	corpse.playername = target.player.name
+
+	MM.runHook("CorpseSpawn", target, corpse)
 end, MT_PLAYER)
 
 addHook("ThinkFrame", function()
@@ -147,6 +148,8 @@ addHook("ThinkFrame", function()
 			continue
 		end
 
+		MM.runHook("CorpseThink", corpse)
+
 		for p in players.iterate do
 			if not (p and p.mo and p.mo.health and p.mm and p.mm.role ~= MMROLE_MURDERER and not p.mm.spectator) then
 				continue
@@ -157,6 +160,7 @@ addHook("ThinkFrame", function()
 			and not (MM_N.knownDeadPlayers[corpse.playerid]) then
 				chatprint("\x82*The corpse of "..corpse.playername.." has been found!")
 				MM_N.knownDeadPlayers[corpse.playerid] = true
+				MM.runHook("CorpseFound", corpse, p.mo)
 			end
 		end
 	end

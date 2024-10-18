@@ -28,19 +28,24 @@ addHook("PlayerThink", function(p)
 			G_DoReborn(#p)
 			p.deadtimer = 0
 		end
-		
+
+		MM.runHook("DeadPlayerThink", p)
+
 		return
 	end
 
 	p.spectator = p.mm.spectator
 	if p.mm.spectator then
+		MM.runHook("DeadPlayerThink", p)
 		return
 	end
 	
 	for _,script in ipairs(scripts) do
 		script(p)
 	end
-	
+
+	MM.runHook("PlayerThink", p)
+
 	if p.mm.outofbounds
 		p.mm.oob_ticker = $+1
 		if p.mm.oob_ticker == 3*TICRATE

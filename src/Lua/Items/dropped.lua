@@ -50,7 +50,7 @@ function MM:DropItem(p, slot, randomize, dont_notify)
 	mobj.flags = 0
 
 	if def.drop then
-		def.drop(mobj)
+		def.drop(mobj, p)
 	end
 
 	table.insert(MM.DroppedMobjs, mobj)
@@ -77,11 +77,17 @@ local function manage_unpicked_weapon(mobj)
 	local angle = FixedAngle(FixedDiv(leveltime % 80, 80)*360)
 	local z = (12*FU)+12*cos(angle)
 
+	local def = MM.Items[mobj.pickupid]
+
 	mobj.flags = $ & ~(MF_NOCLIP|MF_NOCLIPHEIGHT)
 
 	mobj.spriteyoffset = z
 	mobj.angle = angle
 	mobj.flags = 0
+
+	if def.dropthinker then
+		def.dropthinker(mobj)
+	end
 
 	// PICK ME UP. PICK ME UP.
 	for p in players.iterate do
@@ -106,6 +112,11 @@ local function manage_unpicked_weapon(mobj)
 		if abs(p.mo.x - mobj.x) > radius
 		or abs(p.mo.y - mobj.y) > radius
 		or abs(p.mo.z - mobj.z) > p.mo.height then
+			continue
+		end
+
+		if def.pickup
+		and def.pickup(mobj, p) then
 			continue
 		end
 

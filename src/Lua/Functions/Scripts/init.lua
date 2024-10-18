@@ -3,7 +3,6 @@ local shallowCopy = MM.require "Libs/shallowCopy"
 local randomPlayer = MM.require "Libs/getRandomPlayer"
 
 local function canBeRole(p, lastRoles, count)
-	// TODO: unaware if this causes freezes, test and fix if so
 	if count < 2 then
 		return true
 	end
@@ -76,6 +75,8 @@ return function(self, setovertimepoint)
 			chosenPoint.z
 		)
 		*/
+
+		MM.runHook("PostOvertimePointSet")
 		return
 	end
 	
@@ -127,4 +128,6 @@ return function(self, setovertimepoint)
 	if isserver then
 		CV_Set(CV_FindVar("restrictskinchange"),0)
 	end
+
+	MM.runHook("Init")
 end

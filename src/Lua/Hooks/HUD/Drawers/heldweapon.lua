@@ -84,7 +84,8 @@ return function(v,p)
 		
 		local cd = item.cooldown
 		local maxdelay = item.max_cooldown
-		yoffset = ease.outquad((FU/maxdelay)*cd,0,-10*FU)
+		local t = maxdelay > 0 and FU/maxdelay or 0
+		yoffset = ease.outquad(t*cd,0,-10*FU)
 	else
 		v.drawString(47*FU - slidein,
 			156*FU,

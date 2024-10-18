@@ -55,7 +55,8 @@ local ITEM_DEF = {
 	thinker = func,
 	attack = func,
 	hit = func,
-	drop = func
+	drop = func,
+	dropthinker = func
 }
 
 local ITEM_STRUCT = {
@@ -336,7 +337,8 @@ function MM:GiveItem(p, item_input, slot, overrides)
 				def.spawn(item, p)
 			end
 			if not p.mm.inventory.hidden
-			and p.mm.inventory.cur_sel == slot then
+			and p.mm.inventory.cur_sel == slot
+			and item.equipsfx then
 				S_StartSound(p.mo, item.equipsfx)
 
 				item.cooldown = 17
@@ -353,7 +355,8 @@ function MM:GiveItem(p, item_input, slot, overrides)
 					def.spawn(item, p)
 				end
 				if not p.mm.inventory.hidden
-				and p.mm.inventory.cur_sel == emptyslot then
+				and p.mm.inventory.cur_sel == emptyslot
+				and item.equipsfx then
 					S_StartSound(p.mo, item.equipsfx)
 
 					item.cooldown = 17

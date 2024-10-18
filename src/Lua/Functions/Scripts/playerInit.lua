@@ -7,9 +7,12 @@ return function(self, p, mapchange)
 		p.mm_save = {}
 	end
 
-	if not mapchange
-	and leveltime > 10*TICRATE then
+	local midgame = not mapchange and leveltime > 10*TICRATE
+
+	if midgame then
 		p.mm.joinedmidgame = true
 		p.mm.spectator = true
 	end
+
+	MM.runHook("PlayerInit", p, midgame)
 end

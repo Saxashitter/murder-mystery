@@ -125,7 +125,8 @@ MM:addPlayerScript(function(p)
 		sel = $-1
 	end
 
-	if abs(sel) then
+	if abs(sel)
+	and not MM.runHook("InventorySwitch", p) then
 		local old_sel = inv.cur_sel
 		inv.cur_sel = $+sel
 
@@ -183,7 +184,8 @@ MM:addPlayerScript(function(p)
 	// drop le weapon
 
 	if p.cmd.buttons & BT_CUSTOM2
-	and not (p.lastbuttons & BT_CUSTOM2) then
+	and not (p.lastbuttons & BT_CUSTOM2)
+	and not MM.runHook("ItemDrop", p) then
 		MM:DropItem(p)
 		return
 	end
@@ -193,7 +195,8 @@ MM:addPlayerScript(function(p)
 	if p.cmd.buttons & BT_ATTACK
 	and not (p.lastbuttons & BT_ATTACK)
 	and not (item.cooldown) 
-	and not inv.hidden then
+	and not inv.hidden
+	and not MM.runHook("ItemUse", p) then
 		item.hit = item.max_hit
 		item.anim = item.max_anim
 		item.cooldown = item.max_cooldown
@@ -243,6 +246,10 @@ MM:addPlayerScript(function(p)
 
 			if roles[p.mm.role].team == roles[p2.mm.role].team
 			and not roles[p.mm.role].friendlyfire then
+				continue
+			end
+
+			if MM.runHook("AttackPlayer", p, p2) then
 				continue
 			end
 

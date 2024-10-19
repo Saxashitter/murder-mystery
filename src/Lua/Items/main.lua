@@ -378,7 +378,7 @@ function MM:GiveItem(p, item_input, slot, overrides)
 	return false
 end
 
-dofile "Items/logic"
+dofile "Items/base_logic"
 dofile "Items/dropped"
 
 // FETCH VALID ITEMS

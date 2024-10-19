@@ -33,6 +33,8 @@ local ITEM_DEF = {
 
 	stick = true, -- disable if you wanna manually handle weapon sticking
 	-- useful for cooldowns after throwing a weapon, or if you just want to do a fake-drop or something
+	hiddenforothers = false, -- determines if the stick is hidden for others
+	-- stick needs to be true for this to operate correctly
 	animation = true, -- enable if you want the weapon to be tweened between it's hit pos and default pos
 	damage = true, -- enable if this can damage people
 	weaponize = true, -- make item identify as a weapon (#woke /j)
@@ -86,6 +88,8 @@ local ITEM_STRUCT = {
 	anim_pos = {x = 0, y = 0, z = 0},
 
 	stick = true,
+	hiddenforothers = false,
+	
 	animation = true,
 	damage = true,
 	weaponize = true, -- enable to put item in right hand and allow for dual-wielding with regular items
@@ -321,6 +325,8 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		item.attacksfx = def.attacksfx
 		item.hitsfx = def.hitsfx
 		item.finalkillsfx = def.finalkillsfx
+		
+		item.hiddenforothers = def.hiddenforothers
 
 		if overrides
 		and type(overrides) == "table" then

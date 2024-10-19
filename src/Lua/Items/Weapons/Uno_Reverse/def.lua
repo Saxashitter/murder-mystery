@@ -32,7 +32,9 @@ weapon.weaponize = true
 weapon.droppable = true
 weapon.shootable = false
 weapon.shootmobj = MT_THOK
-weapon.equipsfx = sfx_burgr1
-weapon.attacksfx = sfx_burgr2
+weapon.equipsfx = sfx_None
+weapon.attacksfx = sfx_None
+
+weapon.hiddenforothers = true
 
 return weapon

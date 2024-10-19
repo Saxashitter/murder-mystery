@@ -69,6 +69,10 @@ addHook("PostThinkFrame", do
 			item.mobj.flags2 = $ & ~MF2_DONTDRAW
 	
 			manage_position(p, item)
+								
+			if item.hiddenforothers then
+				item.mobj.drawonlyforplayer = p
+			end
 		end
 	end
 end)

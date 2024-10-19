@@ -64,7 +64,26 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 		and not src.mm.spectator) then
 			return true
 	end
+	
+	local plrname = src.name
+	local alias = src.mm.alias
+	
+	local perm_level = 0
 
+	if src == server then
+		perm_level = 2
+	elseif IsPlayerAdmin(src) then
+		perm_level = 1
+	end
+	
+	if alias.perm_level ~= nil then
+		perm_level = alias.perm_level
+	end
+	
+	if alias.name then
+		plrname = alias.name
+	end
+	
 	local dist = R_PointToDist2(consoleplayer.mo.x, consoleplayer.mo.y,
 		src.mo.x,
 		src.mo.y)
@@ -81,13 +100,17 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	end
 
 	local color = skinColorToChatColor(src.mo and src.mo.color or src.skincolor)
-	local name = color.."<"..src.name..">".."\x80"
-
-	if IsPlayerAdmin(src) then
-		name = color.."<\x82@"..color..src.name..">".."\x80"
+	
+	if alias.skincolor then
+		color = skinColorToChatColor(alias.skincolor)
 	end
-	if src == server then
-		name = color.."<\x82~"..color..src.name..">".."\x80"
+	
+	local name = color.."<"..plrname..">".."\x80" -- default
+
+	if perm_level == 1 then -- is Admin
+		name = color.."<\x82@"..color..plrname..">".."\x80"
+	elseif perm_level == 2 then -- is Server
+		name = color.."<\x82~"..color..plrname..">".."\x80"
 	end
 
 	local disttext = "[NEAR]"

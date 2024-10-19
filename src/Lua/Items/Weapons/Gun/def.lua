@@ -36,7 +36,7 @@ weapon.pickupsfx = sfx_gnpick
 weapon.equipsfx = sfx_gequip
 weapon.attacksfx = sfx_gnfire
 
-function weapon:pickup(p)
+function weapon:postpickup(p)
 	if roles[p.mm.role].team == true then
 		self.restrict[p.mm.role] = true
 		self.timeleft = 5*TICRATE

@@ -126,6 +126,9 @@ local function manage_unpicked_weapon(mobj)
 			if mobj.pickupsfx then
 				S_StartSound(p.mo, mobj.pickupsfx)
 			end
+			if def.postpickup then
+				def.postpickup(item, p)
+			end
 
 			P_RemoveMobj(mobj)
 			return true

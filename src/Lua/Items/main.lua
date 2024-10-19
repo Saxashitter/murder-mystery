@@ -50,6 +50,7 @@ local ITEM_DEF = {
 	*/
 	// not required, for scripters
 	pickup = func,
+	postpickup = func,
 	equip = func,
 	unequip = func,
 	thinker = func,

@@ -228,7 +228,7 @@ MM:addPlayerScript(function(p)
 
 	// hit detection
 
-	if item.damage
+	if (item.damage or item.cantouch)
 	and item.hit
 	and not inv.hidden then
 		for p2 in players.iterate do
@@ -257,7 +257,14 @@ MM:addPlayerScript(function(p)
 				continue
 			end
 
-			P_DamageMobj(p2.mo, item.mobj, p.mo, 999, DMG_INSTAKILL)
+			if item.damage then
+				P_DamageMobj(p2.mo, item.mobj, p.mo, 999, DMG_INSTAKILL)
+			end
+			
+			if def.onhit then
+				def:onhit(p,p2)
+			end
+			
 			item.hit = 0
 			item.anim = item.max_anim/3
 			if item.hitsfx then

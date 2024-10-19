@@ -37,4 +37,6 @@ weapon.attacksfx = sfx_None
 
 weapon.hiddenforothers = true
 
+weapon.cantouch = true
+
 return weapon

@@ -12,6 +12,10 @@ return function(self, p, mapchange)
 	if midgame then
 		p.mm.joinedmidgame = true
 		p.mm.spectator = true
+	else
+		if p.mo and p.mo.valid then
+			p.mo.skin = skins[p.skin].name -- Set skin to your skin in character select menu.
+		end
 	end
 
 	MM.runHook("PlayerInit", p, midgame)

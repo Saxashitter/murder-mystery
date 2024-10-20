@@ -93,7 +93,7 @@ function weapon:onhit(player, player2)
 		player.drawangle = old[2].drawangle
 		
 		mo1.color = old[2].color
-		R_SetPlayerSkin(player, old[2].skin)
+		mo1.skin = old[2].skin
 		
 		P_SetOrigin(mo2, old[1].x, old[1].y, old[1].z)
 		mo2.angle = old[1].angle
@@ -106,7 +106,7 @@ function weapon:onhit(player, player2)
 		player2.drawangle = old[1].drawangle
 		
 		mo2.color = old[1].color
-		R_SetPlayerSkin(player2, old[1].skin)
+		mo2.skin = old[1].skin
 	end
 end
 

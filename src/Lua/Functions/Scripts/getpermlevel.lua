@@ -10,4 +10,6 @@ return function(self, player)
 	if player == server then
 		level = 2
 	end
+	
+	return level
 end

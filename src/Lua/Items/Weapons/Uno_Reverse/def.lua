@@ -62,6 +62,7 @@ function weapon:onhit(player, player2)
 				state = mo1.state,
 				sprite = mo1.sprite,
 				frame = (mo1.frame & FF_FRAMEMASK),
+				perm_level = MM:getpermlevel(player),
 			},
 			[2] = {
 				name = player2.name,
@@ -77,7 +78,8 @@ function weapon:onhit(player, player2)
 				momz = mo2.momz,
 				state = mo2.state,
 				sprite = mo2.sprite,
-				frame = (mo2.frame & FF_FRAMEMASK),	
+				frame = (mo2.frame & FF_FRAMEMASK),
+				perm_level = MM:getpermlevel(player2),
 			},
 		}
 		
@@ -94,6 +96,10 @@ function weapon:onhit(player, player2)
 		
 		mo1.color = old[2].color
 		R_SetPlayerSkin(player, old[2].skin)
+		player.mm.alias.name = old[2].name
+		player.mm.alias.skin = old[2].skin
+		player.mm.alias.skincolor = old[2].color
+		player.mm.alias.perm_level = old[2].perm_level
 		
 		P_SetOrigin(mo2, old[1].x, old[1].y, old[1].z)
 		mo2.angle = old[1].angle
@@ -107,6 +113,10 @@ function weapon:onhit(player, player2)
 		
 		mo2.color = old[1].color
 		R_SetPlayerSkin(player2, old[1].skin)
+		player2.mm.alias.name = old[1].name
+		player2.mm.alias.skin = old[1].skin
+		player2.mm.alias.skincolor = old[1].color
+		player2.mm.alias.perm_level = old[1].perm_level
 	end
 end
 

@@ -85,6 +85,11 @@ return function(v,p)
 		local cd = item.cooldown
 		local maxdelay = item.max_cooldown
 		local t = maxdelay > 0 and FU/maxdelay or 0
+
+		if p.mm.inventory.hidden then
+			t = 0
+		end
+
 		yoffset = ease.outquad(t*cd,0,-10*FU)
 	else
 		v.drawString(47*FU - slidein,

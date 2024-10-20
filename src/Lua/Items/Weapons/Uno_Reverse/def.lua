@@ -12,7 +12,7 @@ weapon.state = dofile "Items/Weapons/Uno_Reverse/freeslot"
 weapon.timeleft = -1
 weapon.hit_time = TICRATE/3
 weapon.animation_time = TICRATE
-weapon.cooldown_time = TICRATE
+weapon.cooldown_time = TICRATE*2
 weapon.range = FU*3
 weapon.zrange = FU*2
 weapon.position = {
@@ -151,9 +151,11 @@ function weapon:onhit(player, player2)
 		
 		local wp = MM:FetchInventorySlot(player)
 		
+		/*
 		if (wp.timeleft <= 0) then
 			wp.timeleft = 15*TICRATE
 		end
+		*/
 	end
 end
 

@@ -68,13 +68,7 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	local plrname = src.name
 	local alias = src.mm.alias
 	
-	local perm_level = 0
-
-	if src == server then
-		perm_level = 2
-	elseif IsPlayerAdmin(src) then
-		perm_level = 1
-	end
+	local perm_level = MM:getpermlevel(src)
 	
 	if alias.perm_level ~= nil then
 		perm_level = alias.perm_level

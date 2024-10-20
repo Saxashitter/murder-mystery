@@ -166,7 +166,12 @@ function MM:ClearInventorySlot(p, slot)
 
 	local inv = self:FetchInventory(p)
 	if inv and inv[slot] then
+		if (inv[slot].mobj and inv[slot].mobj.valid) then
+			P_RemoveMobj(inv[slot].mobj)
+		end
+		
 		inv[slot] = nil
+		
 		return true
 	end
 

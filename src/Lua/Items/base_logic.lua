@@ -41,6 +41,7 @@ local function manage_position(p, item, set)
 	local z = FixedMul(h, item.pos.z)
 
 	item.mobj.angle = p.mo.angle
+	item.mobj.fuse = 1
 	tpfunc(item.mobj,
 		p.mo.x+x,
 		p.mo.y+y,
@@ -115,7 +116,11 @@ MM:addPlayerScript(function(p)
 			item.timeleft = max(0, $-1)
 		end
 		if item.timeleft == 0 then
-			MM:DropItem(p, i, nil, true)
+			if item.droppable then
+				MM:DropItem(p, i, nil, true, true)
+			else
+				MM:ClearInventorySlot(p, i)
+			end
 		end 
 	end
 

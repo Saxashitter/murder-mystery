@@ -148,6 +148,12 @@ function weapon:onhit(player, player2)
 				player2.mm.alias = {}
 			end
 		end
+		
+		local wp = MM:FetchInventorySlot(player)
+		
+		if (wp.timeleft <= 0) then
+			wp.timeleft = 15*TICRATE
+		end
 	end
 end
 

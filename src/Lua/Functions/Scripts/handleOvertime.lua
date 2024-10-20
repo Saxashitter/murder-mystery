@@ -132,7 +132,6 @@ return function(self)
 	end
 	*/
 	
-	if MM_N.gameover then return end
 	
 	for p in players.iterate
 		if not p.mm then continue end
@@ -157,6 +156,10 @@ return function(self)
 		if pDist <= dist
 			continue
 		end
+		
+		--Move this here because otherwise we would never be considered
+		--in bounds during the endcam, eventually killing us
+		if MM_N.gameover then continue end
 		
 		p.mm.outofbounds = true
 		

@@ -77,6 +77,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 			MM_N.end_killed = source
 			MM_N.end_killer = target
 		end
+		MM:discordMessage("***The round has ended!***\n")
 		return
 	end
 

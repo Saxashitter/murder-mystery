@@ -287,3 +287,10 @@ addHook("PlayerSpawn", function(player)
 		end
 	end
 end)
+
+-- TODO: Re-enable seenplayer functionality and Make a new hud using "SeenPlayer" hook.
+addHook("SeenPlayer", function(player, seenplayer)
+	if not MM:isMM() then return end
+
+	return false
+end)

@@ -104,7 +104,7 @@ function weapon:onhit(player, player2)
 		mo1.momy = old[2].momy
 		mo1.momz = old[2].momz
 		mo1.state = old[2].state
-		mo1.sprite = old[2].sprite
+		--mo1.sprite = old[2].sprite
 		mo1.frame = $|old[2].frame
 		player.drawangle = old[2].drawangle
 		
@@ -123,7 +123,7 @@ function weapon:onhit(player, player2)
 		mo2.momy = old[1].momy
 		mo2.momz = old[1].momz
 		mo2.state = old[1].state
-		mo2.sprite = old[1].sprite
+		--mo2.sprite = old[1].sprite
 		mo2.frame = $|old[1].frame
 		player2.drawangle = old[1].drawangle
 		

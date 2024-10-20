@@ -14,7 +14,12 @@ return function(self, p, mapchange)
 		p.mm.spectator = true
 	else
 		if p.mo and p.mo.valid then
-			p.mo.skin = skins[p.skin].name -- Set skin to your skin in character select menu.
+			-- r_ = restored
+			if p.mm_save.r_color ~= nil then
+				p.skincolor = p.mm_save.r_color
+				p.mo.color = p.skincolor
+				p.mm_save.r_color = nil
+			end
 		end
 	end
 

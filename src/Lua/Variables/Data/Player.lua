@@ -11,6 +11,9 @@ return {
 		perm_level = nil, -- | None: 0 | Admin: 1 | Server: 2 |
 	},
 
+	permanentcolor = nil,
+	permanentskin = nil, -- doesn't set skin, just for ranking hud display
+	lastcolor = nil,
 	joinedmidgame = false,
 
 	selected_map = false,

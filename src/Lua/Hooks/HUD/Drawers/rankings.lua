@@ -128,15 +128,17 @@ local function HUD_TabScoresDrawer(v)
 			thisBgPatch = v.cachePatch(roleStyle.bg)
 		end
 		v.draw(x, y, thisBgPatch, V_50TRANS)
-
+		
+		local p_skin = p.mm.permanentskin or p.skin
+		local p_skincolor = p.mm.permanentcolor or p.skincolor
 
 		--#region life icon
-		local iconpatch = v.getSprite2Patch(p.skin, SPR2_XTRA, false, A)
-		local stndpatch = v.getSprite2Patch(p.skin, SPR2_STND, false, A)
+		local iconpatch = v.getSprite2Patch(p_skin, SPR2_XTRA, false, A)
+		local stndpatch = v.getSprite2Patch(p_skin, SPR2_STND, false, A)
 		if iconpatch == stndpatch then
 			iconpatch = v.cachePatch("WHODISICON")
 		end
-		v.drawScaled(x*FU, y*FU, FU/2, iconpatch, 0, v.getColormap(p.skin, p.skincolor))
+		v.drawScaled(x*FU, y*FU, FU/2, iconpatch, 0, v.getColormap(p_skin, p_skincolor))
 		--#endregion
 
 		--#region name rendering

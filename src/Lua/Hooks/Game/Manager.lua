@@ -128,6 +128,11 @@ addHook("ThinkFrame", function()
 			MM_N.end_ticker = 3*TICRATE - 1
 			S_StartSound(nil,sfx_s253)
 		end
+		
+		--Allow players to change their skin during intermission
+		if isserver
+			CV_Set(CV_FindVar("restrictskinchange"),0)
+		end
 	end
 
 	-- 1 innocent? start showdown

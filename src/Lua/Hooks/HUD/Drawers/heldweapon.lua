@@ -72,6 +72,8 @@ return function(v,p)
 			v.cachePatch(item.display_icon or "MISSING"), --v.cachePatch("MISSING"),
 			V_SNAPTOLEFT|V_SNAPTOBOTTOM|trans
 		)
+			
+		/* TODO: Bring back when it ACTUALLY draws above 10
 		if item.timeleft >= 0 then
 			v.drawScaled(9*FU - slidein,
 				180*FU,
@@ -81,6 +83,7 @@ return function(v,p)
 				((leveltime%(2*TR)) < 30*TR) and (leveltime/5 & 1) and v.getColormap(TC_RAINBOW,SKINCOLOR_RED) or nil
 			)
 		end
+		*/
 		
 		local cd = item.cooldown
 		local maxdelay = item.max_cooldown

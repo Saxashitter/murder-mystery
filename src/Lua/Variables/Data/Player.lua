@@ -9,6 +9,7 @@ return {
 		skin = nil, -- String
 		skincolor = nil, -- SKINCOLOR_...
 		perm_level = nil, -- | None: 0 | Admin: 1 | Server: 2 |
+		posingas = nil, -- who you're posing as (player_t)
 	},
 
 	permanentcolor = nil,

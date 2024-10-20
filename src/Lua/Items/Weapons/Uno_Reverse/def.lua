@@ -48,7 +48,7 @@ function weapon:onhit(player, player2)
 	(mo2 and mo2.valid) then
 		local old = {
 			[1] = {
-				name = player.name,
+				name = player.mm.alias.name or player.name,
 				skin = mo1.skin,
 				color = mo1.color,
 				x = mo1.x,
@@ -62,10 +62,10 @@ function weapon:onhit(player, player2)
 				state = mo1.state,
 				sprite = mo1.sprite,
 				frame = (mo1.frame & FF_FRAMEMASK),
-				perm_level = MM:getpermlevel(player),
+				perm_level = 0, -- set later
 			},
 			[2] = {
-				name = player2.name,
+				name = player2.mm.alias.name or player2.name,
 				skin = mo2.skin,
 				color = mo2.color,
 				x = mo2.x,
@@ -79,11 +79,25 @@ function weapon:onhit(player, player2)
 				state = mo2.state,
 				sprite = mo2.sprite,
 				frame = (mo2.frame & FF_FRAMEMASK),
-				perm_level = MM:getpermlevel(player2),
+				perm_level = 0, -- set later
 			},
 		}
 		
+		-- where "set later" comes in play
+		if player.mm.alias.perm_level ~= nil then
+			old[1].perm_level = player.mm.alias.perm_level
+		else
+			old[1].perm_level = MM:getpermlevel(player)
+		end
 		
+		if player2.mm.alias.perm_level ~= nil then
+			old[2].perm_level = player2.mm.alias.perm_level
+		else
+			old[2].perm_level = MM:getpermlevel(player2)
+		end
+		
+		
+		-- Player 1
 		P_SetOrigin(mo1, old[2].x, old[2].y, old[2].z)
 		mo1.angle = old[2].angle
 		mo1.momx = old[2].momx
@@ -100,7 +114,9 @@ function weapon:onhit(player, player2)
 		player.mm.alias.skin = old[2].skin
 		player.mm.alias.skincolor = old[2].color
 		player.mm.alias.perm_level = old[2].perm_level
+		player.mm.alias.posingas = player2
 		
+		-- Player 2
 		P_SetOrigin(mo2, old[1].x, old[1].y, old[1].z)
 		mo2.angle = old[1].angle
 		mo2.momx = old[1].momx
@@ -117,6 +133,21 @@ function weapon:onhit(player, player2)
 		player2.mm.alias.skin = old[1].skin
 		player2.mm.alias.skincolor = old[1].color
 		player2.mm.alias.perm_level = old[1].perm_level
+		player2.mm.alias.posingas = player
+		
+		-- This is for if you swap back to your original body.
+		-- You shouldn't have an alias set if you're going back to your own body
+		if player.mm.alias.posingas ~= nil then
+			if player.mm.alias.posingas.valid and player.mm.alias.posingas == player then
+				player.mm.alias = {}
+			end
+		end
+		
+		if player2.mm.alias.posingas ~= nil then
+			if player2.mm.alias.posingas.valid and player2.mm.alias.posingas == player2 then
+				player2.mm.alias = {}
+			end
+		end
 	end
 end
 

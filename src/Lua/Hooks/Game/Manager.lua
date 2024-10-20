@@ -240,7 +240,7 @@ addHook("ThinkFrame", function()
 
 				wpn.timealive = $+1
 
-				if wpn.timealive > 60*TICRATE then
+				if wpn.timealive > 20*TICRATE then
 					-- give player gun
 					local p = randomPlayer(_eligibleGunPlayer)
 					if p then

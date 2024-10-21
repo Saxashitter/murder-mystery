@@ -1,10 +1,11 @@
 local shallowCopy = MM.require "Libs/shallowCopy"
 local playerVars = MM.require "Variables/Data/Player"
+local savedPlayerVars = MM.require "Variables/Data/Player_Saved"
 
 return function(self, p, mapchange)
 	p.mm = shallowCopy(playerVars)
 	if not p.mm_save then
-		p.mm_save = {}
+		p.mm_save = shallowCopy(savedPlayerVars)
 	end
 
 	local midgame = not mapchange and leveltime > 10*TICRATE

@@ -2,20 +2,16 @@ local matchVars = MM.require "Variables/Data/Match"
 local shallowCopy = MM.require "Libs/shallowCopy"
 local randomPlayer = MM.require "Libs/getRandomPlayer"
 
-local function canBeRole(p, lastRoles, count)
+local function canBeRole(p, count)
 	if count < 2 then
 		return true
 	end
-
-	if lastRoles[p] then
-		return false
-	end
-
+	
 	return true
 end
 
-return function(self, setovertimepoint)
-	if setovertimepoint
+return function(self, maploaded)
+	if maploaded then
 		local possiblePoints = {}
 		for mt in mapthings.iterate do
 			if mt.type <= 35 then
@@ -90,19 +86,9 @@ return function(self, setovertimepoint)
 	local lastSheriffs = {}
 
 	for p in players.iterate do
-		local lastRole = p.mm and p.mm.role or MMROLE_INNOCENT
-
 		self:playerInit(p, true)
-		p.mm_save.lastRole = lastRole
-
-		if lastRole == MMROLE_SHERIFF then
-			lastSheriffs[p] = true
-		end
-		if lastRole == MMROLE_MURDERER then
-			lastMurderers[p] = true
-		end
 	end
-
+	
 	local count = 0
 	for p in players.iterate do
 		count = $+1
@@ -111,19 +97,100 @@ return function(self, setovertimepoint)
 	MM_N.waiting_for_players = count < 2
 
 	if not (self:isMM() and count >= 2) then return end
-
-	local murdererP = randomPlayer(function(p)
-		return p.mm
-		and canBeRole(p, lastMurderers, count)
-	end)
-	local sherriffP = randomPlayer(function(p)
-		return p.mm
-		and p ~= murdererP
-		and canBeRole(p, lastSheriffs, count)
-	end)
+	
+	local murdererP
+	local sheriffP
+	
+	local murderer_chance_table = {} 
+	local sheriff_chance_table = {}
+	
+	-- Insert murderer chances in murderer_chance_table.
+	for p in players.iterate do
+		if not (p and p.valid and p.mm and p.mm_save) 
+		and not canBeRole(p, count) then continue end
+		
+		for i=1,p.mm_save.murderer_chance_multi do
+			table.insert(murderer_chance_table, p)
+		end
+	end
+	
+	murdererP = murderer_chance_table[P_RandomRange(1,#murderer_chance_table)]
+	
+	-- Insert sheriff chances in sheriff_chance_table.
+	for p in players.iterate do
+		if not (p and p.valid and p.mm and p.mm_save)
+		and not canBeRole(p, count) then continue end
+		
+		if (p == murdererP) then continue end
+		
+		for i=1,p.mm_save.sheriff_chance_multi do
+			table.insert(sheriff_chance_table, p)
+		end
+	end
+	
+	sheriffP = sheriff_chance_table[P_RandomRange(1,#sheriff_chance_table)]
 
 	murdererP.mm.role = MMROLE_MURDERER -- murderer
-	sherriffP.mm.role = MMROLE_SHERIFF -- sherriff
+	murdererP.mm_save.murderer_chance_multi = 1
+
+	sheriffP.mm.role = MMROLE_SHERIFF -- sheriff
+	sheriffP.mm_save.sheriff_chance_multi = 1
+	
+	if murdererP and murdererP.valid
+	and sheriffP and sheriffP.valid then
+		for p in players.iterate do
+			if not (p and p.valid and p.mm and p.mm_save) then continue end
+			
+			if (p ~= murdererP) then 
+				p.mm_save.murderer_chance_multi = $ + 1
+			end 
+
+			if (p ~= sheriffP) then 
+				p.mm_save.sheriff_chance_multi = $ + 1
+			end
+		end
+		
+		for p in players.iterate do
+			if not (p and p.valid and p.mm and p.mm_save) then continue end
+			
+			local m_chancecount = 0
+			local s_chancecount = 0
+			
+			local m_percent = "???%"
+			local s_percent = "???%"
+			
+			for _p in players.iterate do
+				if not (_p and _p.valid and _p.mm and _p.mm_save) then continue end
+				
+				for i=1,_p.mm_save.murderer_chance_multi do
+					m_chancecount = $ + 1
+				end
+				
+				for i=1,_p.mm_save.sheriff_chance_multi do
+					s_chancecount = $ + 1
+				end
+			end
+			
+			local result_m = FixedMul( 
+								FixedDiv(
+									p.mm_save.murderer_chance_multi*FU,
+									m_chancecount*FU
+								),
+								100*FU
+							)
+							
+			local result_s = FixedMul( 
+								FixedDiv(
+									p.mm_save.sheriff_chance_multi*FU,
+									s_chancecount*FU
+								),
+								100*FU
+							)
+			
+			
+			CONS_Printf(p, string.format("\x85Murderer Chance: (%.2f percent)\n\x84Sheriff Chance: (%.2f percent)", result_m, result_s))
+		end
+	end
 	
 	if isserver then
 		CV_Set(CV_FindVar("restrictskinchange"),0)

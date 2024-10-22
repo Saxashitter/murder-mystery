@@ -196,7 +196,7 @@ return function(self, maploaded)
 		CV_Set(CV_FindVar("restrictskinchange"),0)
 	end
 
-	MM_N.ptsr_mode = P_RandomRange(1, 30) == 1
+	MM_N.ptsr_mode = P_RandomRange(1, 10) >= 7
 	-- HEADS UP! this might be an external mod in the future when we clean up the code
 	-- the reason behind this is cause we dislike bloat
 	-- and i only did this cause i made a promise

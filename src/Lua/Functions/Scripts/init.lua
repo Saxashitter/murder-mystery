@@ -31,7 +31,7 @@ return function(self, maploaded)
 		
 		--Find the farthest possible point
 		local olddist = 4096*FU
-		for k,v in ipairs(possiblePoints)
+		for k,v in ipairs(possiblePoints) do
 			if v == chosenPoint then continue end
 			
 			--add 256 as a small buffer to let people get to the middle
@@ -77,7 +77,7 @@ return function(self, maploaded)
 	end
 	
 	MM_N = shallowCopy(matchVars)
-	if (MM_N.end_camera and MM_N.end_camera.valid)
+	if (MM_N.end_camera and MM_N.end_camera.valid) then
 		P_RemoveMobj(MM_N.end_camera)
 		MM_N.end_camera = nil
 	end
@@ -195,6 +195,12 @@ return function(self, maploaded)
 	if isserver then
 		CV_Set(CV_FindVar("restrictskinchange"),0)
 	end
+
+	MM_N.ptsr_mode = P_RandomRange(1, 30) == 1
+	-- HEADS UP! this might be an external mod in the future when we clean up the code
+	-- the reason behind this is cause we dislike bloat
+	-- and i only did this cause i made a promise
+	-- - saxashitter
 
 	MM.runHook("Init")
 end

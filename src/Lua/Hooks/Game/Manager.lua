@@ -138,14 +138,32 @@ addHook("ThinkFrame", function()
 	-- 1 innocent? start showdown
 	if is_showdown(innocents, count)
 	and not MM_N.showdown then
-		MM_N.showdown_song = "SHWDW"..tostring(P_RandomRange(1, 3))
 		MM_N.showdown = true
 	end
 
+	if MM_N.time == 0
+	and MM_N.ptsr_mode then
+		if MM_N.ptsr_overtime_ticker == 0 then
+			S_StartSound(nil, P_RandomRange(41,43)) -- lightning
+		end
+
+		if mapmusname ~= "OTMUSB" then
+			S_ChangeMusic("OTMUSB", true)
+			mapmusname = "OTMUSB"
+		end
+
+		P_SetupLevelSky(34)
+		P_SetSkyboxMobj(nil)
+
+		MM_N.ptsr_overtime_ticker = $+1
+	end
+
 	if MM_N.showdown then
-		if mapmusname ~= MM_N.showdown_song then
-			mapmusname = MM_N.showdown_song
-			S_ChangeMusic(MM_N.showdown_song, true)
+		if not (MM_N.ptsr_mode and MM_N.time < 20*TICRATE) then
+			if mapmusname ~= MM_N.showdown_song then
+				mapmusname = MM_N.showdown_song
+				S_ChangeMusic(MM_N.showdown_song, true)
+			end
 		end
 		MM_N.showdown_ticker = $+1
 	end
@@ -153,11 +171,14 @@ addHook("ThinkFrame", function()
 	--Overtime storm
 	if MM_N.showdown 
 	or not MM_N.time
-		if MM_N.overtime_ticker == 0
+		if MM_N.overtime_ticker == 0 then
+			MM_N.showdown_song = "SHWDW"..tostring(P_RandomRange(1, 3))
 			S_StartSound(nil,sfx_kc4b)
-			if mapmusname ~= MM_N.showdown_song then
-				mapmusname = MM_N.showdown_song
-				S_ChangeMusic(MM_N.showdown_song, true)
+			if not (MM_N.ptsr_mode and MM_N.time < 20*TICRATE) then
+				if mapmusname ~= MM_N.showdown_song then
+					mapmusname = MM_N.showdown_song
+					S_ChangeMusic(MM_N.showdown_song, true)
+				end
 			end
 		end
 		MM:handleOvertime()
@@ -165,6 +186,15 @@ addHook("ThinkFrame", function()
 	
 	-- time management
 	MM_N.time = max(0, $-1)
+
+	if MM_N.ptsr_mode
+	and MM_N.time
+	and MM_N.time <= 20*TICRATE
+	and mapmusname ~= "OTMUSA" then
+		S_ChangeMusic("OTMUSA", false)
+		mapmusname = "OTMUSA"
+	end
+
 	if not (MM_N.time)
 	and not MM_N.showdown then 
 		if not MM_N.ping_time then
@@ -273,7 +303,7 @@ addHook("ThinkFrame", function()
 						chatprintf(play,"\x82*A random player has gotten the gun due to the gun despawning!")
 					end
 				end
-				MM:discordMessage("***A random player has gotten the gun due to the gun despawning!***\n"
+				MM:discordMessage("***A random player has gotten the gun due to the gun despawning!***\n")
 			end
 		end
 	end

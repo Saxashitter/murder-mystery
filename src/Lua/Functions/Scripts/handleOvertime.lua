@@ -8,7 +8,7 @@ return function(self)
 		return
 	end
 	MM_N.overtime_ticker = $+1
-	
+
 	local dist = MM_N.overtime_startingdist - (MM_N.overtime_ticker*FU*2)
 	dist = max($,1028*FU)
 	

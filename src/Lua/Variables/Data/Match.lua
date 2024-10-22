@@ -10,11 +10,11 @@ return {
 	waiting_for_players = false,
 
 	showdown = false,
-	showdown_song = "SHWDW1",
+	showdown_song = "MMOVRT",
 	showdown_ticker = 0,
 
 	ptsr_mode = true,
-	ptsr_overtime_ticker = 0, -- luigi please fix ur variable names
+	ptsr_overtime_ticker = 0, -- luigi please fix ur variable names (overtime ticker is showdown ticker)
 
 	overtime_point = nil,
 	overtime_ticker = 0,
@@ -23,6 +23,7 @@ return {
 	gameover = false,
 	voting = false,
 	mapVote = {},
+	results_ticker = 0,
 	end_ticker = 0,
 
 	pings_done = 0,

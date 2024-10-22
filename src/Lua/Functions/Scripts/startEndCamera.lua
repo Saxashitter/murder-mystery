@@ -80,6 +80,6 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 	
 	for p in players.iterate
 		p.awayviewmobj = MM_N.end_camera
-		p.awayviewtics = 10*TICRATE
+		p.awayviewtics = 21*TICRATE
 	end
 end

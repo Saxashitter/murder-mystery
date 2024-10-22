@@ -33,7 +33,9 @@ local function HUD_EndGameDrawer(v,p,c)
 				isme = "\x80 (you!)"
 			end
 			
-			if MM_N.end_killed.player.mm.role == MMROLE_MURDERER
+			if MM_N.end_killed
+			and MM_N.end_killed.valid
+			and MM_N.end_killed.player.mm.role == MMROLE_MURDERER
 				v.drawString(w2s.x,
 					w2s.y - 64*w2s.scale,
 					"HERO"..isme,
@@ -53,7 +55,7 @@ local function HUD_EndGameDrawer(v,p,c)
 					roles[MM_N.end_killer.player.mm.role].name..isme,
 					roles[MM_N.end_killer.player.mm.role].color,
 					"thin-fixed-center"
-				)			
+				)
 			end
 		end
 		

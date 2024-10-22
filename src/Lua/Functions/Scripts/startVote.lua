@@ -6,7 +6,7 @@ return function(self)
 	
 	MM_N.mapVote = {}
 
-	mapmusname = "_INTER"
+	mapmusname = "MMINTR"
 	S_ChangeMusic(mapmusname)
 	
 	local addedMaps = 0

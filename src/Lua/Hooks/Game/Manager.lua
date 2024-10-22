@@ -45,7 +45,7 @@ addHook("ThinkFrame", function()
 	if not MM:isMM() then return end
 
 	if MM_N.gameover then
-		if MM_N.voting
+		if MM_N.voting then
 			MM_N.end_ticker = $+1
 			if MM_N.end_ticker > 15*TICRATE then
 				local selected_map = 1
@@ -62,7 +62,7 @@ addHook("ThinkFrame", function()
 		else
 			MM_N.end_ticker = $+1
 			
-			if (MM_N.end_camera and MM_N.end_camera.valid)
+			if (MM_N.end_camera and MM_N.end_camera.valid) then
 				MM:startEndCamera()
 			end
 			
@@ -78,7 +78,22 @@ addHook("ThinkFrame", function()
 				end
 			end
 			
-			if MM_N.end_ticker >= 5*TICRATE
+			if MM_N.end_ticker >= 5*TICRATE then
+				local song = "MMWINR"
+				local p = consoleplayer
+	
+				if (p and p.mm and p.mm.spectator and not p.mm.joinedmidgame) then
+					song = "MMLOSR"
+				end
+
+				if MM_N.results_ticker == 0 then
+					S_ChangeMusic(song, false)
+				end
+
+				MM_N.results_ticker = $+1
+			end
+
+			if MM_N.end_ticker >= 15*TICRATE then
 				MM_N.end_ticker = 1
 				MM:startVote()
 			end
@@ -172,7 +187,6 @@ addHook("ThinkFrame", function()
 	if MM_N.showdown 
 	or not MM_N.time
 		if MM_N.overtime_ticker == 0 then
-			MM_N.showdown_song = "SHWDW"..tostring(P_RandomRange(1, 3))
 			S_StartSound(nil,sfx_kc4b)
 			if not (MM_N.ptsr_mode and MM_N.time < 20*TICRATE) then
 				if mapmusname ~= MM_N.showdown_song then

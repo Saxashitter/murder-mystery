@@ -1,11 +1,12 @@
-# Saxa and Luigi's Murder Mystery
+# Saxa's Murder Mystery
 
-Saxa and Luigi's Murder Mystery was made as a mode to counter LeoTM and how strict he is with his Murder Mystery. We do not have any intent to overthrow him, this is an entirely different thing.
+Saxa's Murder Mystery is a combination of multiple different Murder Mystery modes from other games, all added into SRB2, with help from a few devs (Jisk, luigi budd, Unmatched Bracket)
 
-This mode is 100% re-usable, even LeoTM can steal the code from here.
+Our main inspiration is ROBLOX's Murder Mystery 2, and we aim to make the mode mostly similar to it.
 
-## Why this was made.
-Me and my friends got tired of LeoTM's mode, from the OST, to the un-necessary things. We didn't make this to compete, we made this as an alternative for people who also don't like Leo's mode.
+[If you want a more simple, but unique project. Check out **Leo's Murder Mystery**](https://github.com/LeonardoTheMutant/SRB2-Murder-Mystery)
+
+This mode is 100% re-usable.
 
 ## How can I help?
 If you can code, try making a pull request for something you want!

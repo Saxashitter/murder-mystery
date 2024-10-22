@@ -4,7 +4,7 @@ rawset(_G, "MM_N", {})
 rawset(_G, "MM", {})
 
 G_AddGametype({
-    name = "Saxa's MM",
+    name = "Murder Mystery",
     identifier = "SAXAMM",
     typeoflevel = TOL_MATCH|TOL_TAG,
     rules = GTR_FRIENDLYFIRE|GTR_SPAWNINVUL,

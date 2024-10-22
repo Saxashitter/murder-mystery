@@ -284,10 +284,10 @@ addHook("ThinkFrame", function()
 							if play == p
 								chatprintf(play,"\x82*You have been given the gun!",true)
 							else
-								chatprintf(play,"\x82*A random player has gotten the gun due to inactivity!")
+								chatprintf(play,"\x82*A random player has received the gun due to inactivity!")
 							end
 						end
-						MM:discordMessage("***A random player has gotten the gun due to inactivity!***\n")
+						MM:discordMessage("***A random player has received the gun due to inactivity!***\n")
 						P_RemoveMobj(wpn)
 					end
 				end
@@ -300,10 +300,10 @@ addHook("ThinkFrame", function()
 					if play == p
 						chatprintf(play,"\x82*You have been given the gun!",true)
 					else
-						chatprintf(play,"\x82*A random player has gotten the gun due to the gun despawning!")
+						chatprintf(play,"\x82*A random player has received the gun due to the gun despawning!")
 					end
 				end
-				MM:discordMessage("***A random player has gotten the gun due to the gun despawning!***\n")
+				MM:discordMessage("***A random player has received the gun due to the gun despawning!***\n")
 			end
 		end
 	end

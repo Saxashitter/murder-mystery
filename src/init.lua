@@ -6,7 +6,7 @@ rawset(_G, "MM", {})
 G_AddGametype({
     name = "Murder Mystery",
     identifier = "SAXAMM",
-    typeoflevel = TOL_COOP|TOL_MATCH,
+    typeoflevel = TOL_MATCH|TOL_TAG,
     rules = GTR_FRIENDLYFIRE|GTR_SPAWNINVUL,
     intermissiontype = int_match,
     headerleftcolor = 222,

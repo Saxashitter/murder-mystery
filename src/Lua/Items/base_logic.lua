@@ -43,10 +43,13 @@ local function manage_position(p, item, set)
 	item.mobj.angle = p.mo.angle
 	item.mobj.fuse = 1
 	tpfunc(item.mobj,
-		p.mo.x+x,
-		p.mo.y+y,
+		p.mo.x + x,
+		p.mo.y + y,
 		p.mo.z+h+z
 	)
+	
+	--Hide in 1st person
+	item.mobj.dontdrawforviewmobj = p.mo 
 end
 
 addHook("PostThinkFrame", do

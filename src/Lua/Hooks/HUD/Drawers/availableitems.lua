@@ -7,7 +7,7 @@ local function V_DrawBox(props)
 	local flags = props.flags or 0
 	local scale = props.scale or FU
 	local selected = props.selected or false
-	local graphic = props.graphic or "MISSING"
+	local graphic = props.graphic or "MMNOITEM"
 	local timeleft = props.timeleft or -1
 
 	local trans = V_40TRANS
@@ -46,15 +46,15 @@ return function(v, p)
 
 	local count = p.mm.inventory.count
 
-	local x = 180*FU
+	local x = 180*FU + MMHUD.xoffset
 	local y = 165*FU
 	local scale = FU*3/count
 
 	local inv = p.mm.inventory
 	local items = inv.items
 
-	v.drawString(x, y-(6*FU), "Weapon Prev/Next", V_SNAPTORIGHT|V_SNAPTOBOTTOM, "thin-fixed")
-	v.drawString(x, y-(6*FU), "Weapon Prev/Next", V_SNAPTORIGHT|V_SNAPTOBOTTOM, "thin-fixed")
+	v.drawString(x, y-(10*FU), "Weapon Prev/Next", V_SNAPTORIGHT|V_SNAPTOBOTTOM, "thin-fixed")
+	v.drawString(x, y-(10*FU), "Weapon Prev/Next", V_SNAPTORIGHT|V_SNAPTOBOTTOM, "thin-fixed")
 
 	for i = 1,count do
 		V_DrawBox{

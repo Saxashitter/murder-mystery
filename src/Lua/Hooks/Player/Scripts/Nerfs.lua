@@ -18,4 +18,6 @@ return function(p)
 
 	speedCap(p.mo, 28*FU)
 	p.runspeed = 9999*FU
+	
+	p.powers[pw_shield] = 0
 end

@@ -41,6 +41,7 @@ local function manage_position(p, item, set)
 	local z = FixedMul(h, item.pos.z)
 
 	item.mobj.angle = p.mo.angle
+	item.mobj.fuse = 1
 	tpfunc(item.mobj,
 		p.mo.x+x,
 		p.mo.y+y,
@@ -69,6 +70,10 @@ addHook("PostThinkFrame", do
 			item.mobj.flags2 = $ & ~MF2_DONTDRAW
 	
 			manage_position(p, item)
+								
+			if item.hiddenforothers then
+				item.mobj.drawonlyforplayer = p
+			end
 		end
 	end
 end)
@@ -111,7 +116,11 @@ MM:addPlayerScript(function(p)
 			item.timeleft = max(0, $-1)
 		end
 		if item.timeleft == 0 then
-			MM:DropItem(p, i, nil, true)
+			if item.droppable then
+				MM:DropItem(p, i, nil, true, true)
+			else
+				MM:ClearInventorySlot(p, i)
+			end
 		end 
 	end
 
@@ -224,7 +233,7 @@ MM:addPlayerScript(function(p)
 
 	// hit detection
 
-	if item.damage
+	if (item.damage or item.cantouch)
 	and item.hit
 	and not inv.hidden then
 		for p2 in players.iterate do
@@ -253,7 +262,14 @@ MM:addPlayerScript(function(p)
 				continue
 			end
 
-			P_DamageMobj(p2.mo, item.mobj, p.mo, 999, DMG_INSTAKILL)
+			if item.damage then
+				P_DamageMobj(p2.mo, item.mobj, p.mo, 999, DMG_INSTAKILL)
+			end
+			
+			if def.onhit then
+				def:onhit(p,p2)
+			end
+			
 			item.hit = 0
 			item.anim = item.max_anim/3
 			if item.hitsfx then

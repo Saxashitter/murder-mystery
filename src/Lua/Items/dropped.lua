@@ -1,8 +1,8 @@
 MM.DroppedMobjs = {}
 local shallowCopy = MM.require "Libs/shallowCopy"
 
-function MM:DropItem(p, slot, randomize, dont_notify)
-	if not (p and p.mm) then
+function MM:DropItem(p, slot, randomize, dont_notify, forced)
+	if not (p and p.mm and #p.mm.inventory.items) then
 		if not dont_notify then
 			chatprintf(p, "* There's nothing to drop...")
 		end
@@ -23,7 +23,10 @@ function MM:DropItem(p, slot, randomize, dont_notify)
 		if not dont_notify then
 			chatprintf(p, "* You can't drop this.")
 		end
-		return
+		
+		if not forced then 
+			return
+		end
 	end
 
 	local def = self.Items[item.id]

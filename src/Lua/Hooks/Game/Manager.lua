@@ -326,7 +326,12 @@ end)
 -- Restore Skin
 addHook("PlayerSpawn", function(player)
 	if not MM:isMM() then return end
-	
+
+	if player.mm
+	and player.mm.spectator then
+		player.spectator = true
+	end
+
 	if player.mo and player.mo.valid then
 		if not (player.mm) then return end
 		
@@ -336,24 +341,5 @@ addHook("PlayerSpawn", function(player)
 				player.mm_save.r_skin = nil
 			end
 		end
-	end
-end)
-
--- TODO: Re-enable seenplayer functionality and Make a new hud using "SeenPlayer" hook.
-addHook("SeenPlayer", function(player, seenplayer)
-	if not MM:isMM() then return end
-
-	if seenplayer
-	and seenplayer.mm then
-		local name = seenplayer.name
-
-		if seenplayer.mm.alias
-		and seenplayer.mm.alias.name then
-			name = seenplayer.mm.alias.name
-		end
-
-		v.drawString(160, 110, name, V_SNAPTOBOTTOM|V_ALLOWLOWERCASE, "thin-center")
-
-		return false
 	end
 end)

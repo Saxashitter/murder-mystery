@@ -343,5 +343,17 @@ end)
 addHook("SeenPlayer", function(player, seenplayer)
 	if not MM:isMM() then return end
 
-	return false
+	if seenplayer
+	and seenplayer.mm then
+		local name = seenplayer.name
+
+		if seenplayer.mm.alias
+		and seenplayer.mm.alias.name then
+			name = seenplayer.mm.alias.name
+		end
+
+		v.drawString(160, 110, name, V_SNAPTOBOTTOM|V_ALLOWLOWERCASE, "thin-center")
+
+		return false
+	end
 end)

@@ -7,6 +7,8 @@ return {
 	murderers = {},
 	innocents = {},
 
+	speed_cap = 28*FU,
+
 	waiting_for_players = false,
 
 	showdown = false,

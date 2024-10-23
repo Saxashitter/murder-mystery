@@ -1,23 +1,18 @@
 local speedCap = MM.require "Libs/speedCap"
 
 return function(p)
-	if p.charability == CA_FLOAT
-	or p.charability == CA_THOK
-	or p.charability == CA_BOUNCE
-	or p.charability == CA_FLY
-	or p.charability == CA_GLIDEANDCLIMB then
-		p.charability = CA_NONE
-	end
-	if p.charability2 == CA2_GUNSLINGER then
-		p.charability2 = CA2_NONE
-	end
+	p.charability = CA_NONE
+	p.charability2 = CA2_NONE
+	p.jumpfactor = FU
 
-	if p.jumpfactor ~= FU then
-		p.jumpfactor = FU
-	end
+	speedCap(p.mo, MM_N.speed_cap)
+	p.normalspeed = MM_N.speed_cap
 
-	speedCap(p.mo, 28*FU)
+	p.thrustfactor = 5
+	p.accelstart = 250
+	p.acceleration = 50
+
 	p.runspeed = 9999*FU
-	
+
 	p.powers[pw_shield] = 0
 end

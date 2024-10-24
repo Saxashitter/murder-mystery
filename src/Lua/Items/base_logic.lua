@@ -253,7 +253,7 @@ MM:addPlayerScript(function(p)
 			local maxdist = FixedMul(p.mo.radius+p2.mo.radius, item.range)
 
 			if dist > maxdist
-			or abs(p.mo.z-p2.mo.z) > FixedMul(max(p.mo.height, p2.mo.height), item.zrange or item.range)
+			or abs((p.mo.z + p.mo.height/2) - (p2.mo.z + p2.mo.height/2)) > FixedMul(max(p.mo.height, p2.mo.height), item.zrange or item.range)
 			or not P_CheckSight(p.mo, p2.mo) then
 				continue
 			end

@@ -23,6 +23,7 @@ addHook("PlayerThink", function(p)
 	end
 
 	if not (p.mo and p.mo.valid and p.mo.health) then
+		--Force a respawn
 		if p.deadtimer >= 3*TICRATE
 		and p.playerstate == PST_DEAD
 			G_DoReborn(#p)

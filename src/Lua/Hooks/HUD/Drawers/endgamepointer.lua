@@ -48,6 +48,7 @@ local function HUD_EndGameDrawer(v,p,c)
 					V_YELLOWMAP|V_ALLOWLOWERCASE,
 					"thin-fixed-center"
 				)
+			--TODO: this block will execute now after a while, FIX!
 			--Innocents kill each other
 			else
 				v.drawString(w2s.x,

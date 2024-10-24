@@ -7,11 +7,12 @@ local function V_DrawBox(props)
 	local flags = props.flags or 0
 	local scale = props.scale or FU
 	local selected = props.selected or false
-	local graphic = props.graphic or "MMNOITEM"
+	local graphic = props.graphic or "MM_NOITEM"
 	local timeleft = props.timeleft or -1
 
 	local trans = V_40TRANS
-	if selected then trans = 0 end
+	--Presumably no item in this slot
+	if selected and (graphic ~= "MM_NOITEM") then trans = 0 end
 
 	v.drawScaled(
 		x,y,
@@ -25,7 +26,7 @@ local function V_DrawBox(props)
 			x-(4*scale),y-(4*scale),
 			scale*2,
 			v.cachePatch("CURWEAP"),
-			flags|trans
+			flags
 		)
 	end
 
@@ -47,7 +48,7 @@ return function(v, p)
 	local count = p.mm.inventory.count
 
 	local x = 180*FU + MMHUD.xoffset
-	local y = 165*FU
+	local y = 175*FU
 	local scale = FU*3/count
 
 	local inv = p.mm.inventory

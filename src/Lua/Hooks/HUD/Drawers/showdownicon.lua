@@ -5,13 +5,15 @@ return function(v,p,c)
 	if not MM_N.showdown then
 		return
 	end
-
+	
+	/*
 	v.drawString(6*FU - MMHUD.xoffset,
 		35*FU,
 		"SHOWDOWN!",
 		V_SNAPTOTOP|V_SNAPTOLEFT|V_REDMAP,
 		"thin-fixed"
 	)
+	*/
 	
 	if not (p and p.mm and p.mm.role) then return end
 

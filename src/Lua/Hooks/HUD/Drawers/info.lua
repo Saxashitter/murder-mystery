@@ -5,6 +5,7 @@ local function HUD_InfoDrawer(v)
 	
 	--Timer
 	do
+		local flash = false
 		local timetic = MM_N.time
 		timetic = min(max($,0), MM_N.maxtime)
 		
@@ -14,6 +15,14 @@ local function HUD_InfoDrawer(v)
 		if minutes < 10 then minutes = "0"..$ end
 		if seconds < 10 then seconds = "0"..$ end
 		
+		flash = timetic <= 30*TICRATE or MM_N.showdown
+		flash = (flash and ((leveltime%(2*TICRATE)) < 30*TICRATE) and (leveltime/5 & 1))
+		
+		local finalstring = minutes..":"..seconds
+		if (MM_N.showdown)
+			finalstring = "SHOWDOWN !!" -- ("..$..")"
+		end
+		
 		v.drawScaled(5*FU - slidein,
 			10*FU,
 			FU,
@@ -22,8 +31,8 @@ local function HUD_InfoDrawer(v)
 		)
 		v.drawString(20*FU - slidein,
 			10*FU,
-			minutes..":"..seconds, --.."."..tictrn,
-			V_SNAPTOLEFT|V_SNAPTOTOP,
+			finalstring, --.."."..tictrn,
+			V_SNAPTOLEFT|V_SNAPTOTOP|(flash and V_REDMAP or 0),
 			"fixed"
 		)
 	end

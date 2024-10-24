@@ -62,12 +62,13 @@ local function set_overtime_point()
 	garg.color = SKINCOLOR_GALAXY
 	garg.scale = $*2
 	garg.angle = chosenPoint.a
+end
 
 return function(self, maploaded)
 	if maploaded then
 		set_overtime_point()
-		MM:giveOutClues(5)
-
+		--MM:giveOutClues(5)
+		
 		MM.runHook("PostMapLoad")
 		return
 	end

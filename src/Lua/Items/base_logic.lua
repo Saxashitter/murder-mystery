@@ -139,6 +139,8 @@ MM:addPlayerScript(function(p)
 
 	if abs(sel)
 	and not MM.runHook("InventorySwitch", p) then
+		S_StartSound(nil,sfx_menu1,p)
+		
 		local old_sel = inv.cur_sel
 		inv.cur_sel = $+sel
 

@@ -16,6 +16,7 @@ return function(v,p)
 	local patch = v.cachePatch("MMWEAPON")
 	local x = 45*FU
 	local y = 155*FU
+	local hiddenc
 
 	v.drawScaled(x - slidein, y, FU, patch, V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_50TRANS)
 
@@ -73,28 +74,48 @@ return function(v,p)
 			V_SNAPTOLEFT|V_SNAPTOBOTTOM|trans
 		)
 			
-		/* TODO: Bring back when it ACTUALLY draws above 10
-		if item.timeleft >= 0 then
-			v.drawScaled(9*FU - slidein,
-				180*FU,
-				FU,
-				v.cachePatch("STTNUM"..(item.timeleft/TR)),
-				V_SNAPTOLEFT|V_SNAPTOBOTTOM,
-				((leveltime%(2*TR)) < 30*TR) and (leveltime/5 & 1) and v.getColormap(TC_RAINBOW,SKINCOLOR_RED) or nil
-			)
-		end
-		*/
-		
 		local cd = item.cooldown
 		local maxdelay = item.max_cooldown
 		local t = maxdelay > 0 and FU/maxdelay or 0
 
 		if p.mm.inventory.hidden then
 			t = 0
+			
+			--EZ colorswap to signify hidden weapon
+			--to SIGMAfy
+			hiddenc = v.getColormap(TC_RAINBOW,SKINCOLOR_SILVER)
 		end
 
 		yoffset = ease.outquad(t*cd,0,-10*FU)
+		
+		if item.timeleft >= 0 then
+			local time = tostring( item.timeleft/TR )
+			local cmap = ((leveltime%(2*TR)) < 30*TR) and (leveltime/5 & 1) and v.getColormap(TC_RAINBOW,SKINCOLOR_RED) or nil
+			local x = 10*FU
+			
+			for i = 1,string.len(time)
+				local n = string.sub(time,i,i)
+				v.drawScaled(x - slidein,
+					--Cant have this obscured by CURWEAP
+					179*FU + yoffset,
+					FU,
+					v.cachePatch( "STTNUM"..n ),
+					V_SNAPTOLEFT|V_SNAPTOBOTTOM,
+					cmap
+				)
+				x = $ + 8*FU
+			end
+			
+		end
+		
 	else
+		v.drawScaled(9*FU - slidein,
+			159*FU,
+			FU,
+			v.cachePatch("MM_NOITEM"),
+			V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_50TRANS
+		)
+		
 		v.drawString(47*FU - slidein,
 			156*FU,
 			"No Weapon",
@@ -119,6 +140,7 @@ return function(v,p)
 		155*FU + yoffset,
 		FU*2,
 		v.cachePatch("CURWEAP"),
-		V_SNAPTOLEFT|V_SNAPTOBOTTOM|trans
+		V_SNAPTOLEFT|V_SNAPTOBOTTOM|trans,
+		hiddenc
 	)
 end

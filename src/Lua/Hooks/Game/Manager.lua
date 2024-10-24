@@ -112,7 +112,12 @@ addHook("ThinkFrame", function()
 			COM_BufInsertText(server, "map "..G_BuildMapName(gamemap).." -f")
 			MM_N.waiting_for_players = false
 		end
-		return
+		
+		if isserver
+		and CV_FindVar("restrictskinchange").value
+			CV_Set(CV_FindVar("restrictskinchange"),0)
+		end
+		return --ends the function early
 	end
 
 	local count = 0

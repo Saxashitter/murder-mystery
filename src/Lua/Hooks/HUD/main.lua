@@ -101,10 +101,7 @@ addHook("HUD", function(v,p,c)
 		end
 		
 		if not MM.gameover
-			if MM_N.waiting_for_players
-			--and (MMHUD.ticker >= TR*5 and not (p.cmd.sidemove or p.cmd.forwardmove))
-				MMHUD.xoffset = ease.inquad(FU*3/10,$,HUD_BEGINNINGXOFF)
-			elseif MMHUD.ticker >= TR*3/2
+			if MMHUD.ticker >= TR*3/2
 				MMHUD.xoffset = ease.inquart(FU*9/10,$,0)
 			end
 		else

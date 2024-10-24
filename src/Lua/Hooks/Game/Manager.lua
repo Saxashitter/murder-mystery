@@ -1,14 +1,9 @@
 local randomPlayer = MM.require "Libs/getRandomPlayer"
 
-local function _eligibleGunPlayer(p)
-	return p
-	and p.mo
-	and p.mo.valid
-	and p.mo.health
-	and p.mm
-	and not p.mm.spectator
-	and p.mm.role ~= MMROLE_MURDERER
-	and not (p.mm.weapon and p.mm.weapon.valid)
+local funcs = {gameover = {}, ongoing = {}, waiting = {}}
+local function addScript(name)
+	local func, type = dofile("Hooks/Game/Scripts/"..name)
+	table.insert(funcs[type or "ongoing"], func)
 end
 
 addHook("PreThinkFrame", function()
@@ -33,298 +28,26 @@ addHook("PreThinkFrame", function()
 	end
 end)
 
-local function is_showdown(innocents, count)
-	if count > 2 then
-		return innocents == 1
-	end
-
-	return false
-end
-
 addHook("ThinkFrame", function()
 	if not MM:isMM() then return end
 
 	if MM_N.gameover then
-		if MM_N.voting then
-			MM_N.end_ticker = $+1
-			if MM_N.end_ticker > 15*TICRATE then
-				local selected_map = 1
-				local most_votes = 0
-				for _,map in ipairs(MM_N.mapVote) do
-					if map.votes < most_votes then continue end
-
-					selected_map = map.map
-					most_votes = map.votes
-				end
-				G_SetCustomExitVars(selected_map, 2)
-				G_ExitLevel()
-			end
-		else
-			MM_N.end_ticker = $+1
-			
-			if (MM_N.end_camera and MM_N.end_camera.valid) then
-				MM:startEndCamera()
-			end
-			
-			if MM_N.end_ticker == 3*TICRATE
-				for mo in mobjs.iterate()
-					if not (mo and mo.valid) then continue end
-					
-					if mo.notthinking
-						continue
-					end
-					
-					mo.flags = $ &~MF_NOTHINK
-				end
-			end
-			
-			if MM_N.end_ticker >= 5*TICRATE then
-				local song = "MMWINR"
-				local p = consoleplayer
-	
-				if (p and p.mm and p.mm.spectator and not p.mm.joinedmidgame) then
-					song = "MMLOSR"
-				end
-
-				if MM_N.results_ticker == 0 then
-					S_ChangeMusic(song, false)
-				end
-
-				MM_N.results_ticker = $+1
-			end
-
-			if MM_N.end_ticker >= 15*TICRATE then
-				MM_N.end_ticker = 1
-				MM:startVote()
-			end
+		for k,func in pairs(funcs.gameover) do
+			func()
 		end
 		
 		return
 	end
 
 	if MM_N.waiting_for_players then
-		local playersIn = 0
-		for p in players.iterate do
-			playersIn = $+1
-		end
-
-		if playersIn >= 2 then
-			COM_BufInsertText(server, "map "..G_BuildMapName(gamemap).." -f")
-			MM_N.waiting_for_players = false
-		end
-		
-		if isserver
-		and CV_FindVar("restrictskinchange").value
-			CV_Set(CV_FindVar("restrictskinchange"),0)
+		for k,func in pairs(funcs.waiting) do
+			func()
 		end
 		return --ends the function early
 	end
-
-	local count = 0
-	local innocents = 0
-	local murderers = 0
-
-	for p in players.iterate do
-		if not (p and p.mo and p.mm) then continue end
-		if p.mm.joinedmidgame then continue end
-
-		count = $+1
-
-		if p.mm.spectator then continue end
-		if p.mm.role == MMROLE_MURDERER then
-			murderers = $+1
-			continue
-		end
-
-		innocents = $+1
-	end
-
-	local canEnd, endType = MM:canGameEnd()
-
-	if canEnd then
-		MM:endGame(endType or 1)
-		if not MM_N.killing_end
-			MM_N.disconnect_end = true
-			MM_N.end_ticker = 3*TICRATE - 1
-			S_StartSound(nil,sfx_s253)
-		end
-		
-		--Allow players to change their skin during intermission
-		if isserver
-			CV_Set(CV_FindVar("restrictskinchange"),0)
-		end
-	end
-
-	-- 1 innocent? start showdown
-	if is_showdown(innocents, count)
-	and not MM_N.showdown then
-		MM_N.showdown = true
-	end
-
-	if MM_N.time == 0
-	and MM_N.ptsr_mode then
-		if MM_N.ptsr_overtime_ticker == 0 then
-			S_StartSound(nil, P_RandomRange(41,43)) -- lightning
-		end
-
-		if mapmusname ~= "OTMUSB" then
-			S_ChangeMusic("OTMUSB", true)
-			mapmusname = "OTMUSB"
-		end
-
-		P_SetupLevelSky(34)
-		P_SetSkyboxMobj(nil)
-
-		MM_N.ptsr_overtime_ticker = $+1
-	end
-
-	if MM_N.showdown then
-		if not (MM_N.ptsr_mode and MM_N.time < 20*TICRATE) then
-			if mapmusname ~= MM_N.showdown_song then
-				mapmusname = MM_N.showdown_song
-				S_ChangeMusic(MM_N.showdown_song, true)
-			end
-		end
-		MM_N.showdown_ticker = $+1
-	end
-
-	--Overtime storm
-	if MM_N.showdown 
-	or not MM_N.time
-		if MM_N.overtime_ticker == 0 then
-			S_StartSound(nil,sfx_kc4b)
-			if not (MM_N.ptsr_mode and MM_N.time < 20*TICRATE) then
-				if mapmusname ~= MM_N.showdown_song then
-					mapmusname = MM_N.showdown_song
-					S_ChangeMusic(MM_N.showdown_song, true)
-				end
-			end
-		end
-		MM:handleOvertime()
-	end
 	
-	-- time management
-	MM_N.time = max(0, $-1)
-
-	if MM_N.ptsr_mode
-	and MM_N.time
-	and MM_N.time <= 20*TICRATE
-	and mapmusname ~= "OTMUSA" then
-		S_ChangeMusic("OTMUSA", false)
-		mapmusname = "OTMUSA"
-	end
-
-	if not (MM_N.time)
-	and not MM_N.showdown then 
-		if not MM_N.ping_time then
-			MM_N.pings_done = $+1
-
-			if MM_N.pings_done >= 2 then
-				MM_N.pings_done = 0
-				MM_N.max_ping_time = max(6, $/2)
-			end
-
-			MM_N.ping_time = MM_N.max_ping_time
-			MM_N.ping_approx = FixedDiv(MM_N.ping_time, 30*TICRATE)
-
-			MM:pingMurderers(min(MM_N.max_ping_time, 5*TICRATE), MM_N.ping_approx)
-		end
-		MM_N.ping_time = max(0, $-1)
-
-		for k,pos in pairs(MM_N.ping_positions) do
-			pos.time = max($-1, 0)
-			if not (pos.time) then
-				table.remove(MM_N.ping_positions, k)
-			end
-		end
-	end
-	
-	--Funny
-	if leveltime == 10*TICRATE and isserver then
-		CV_Set(CV_FindVar("restrictskinchange"),1)
-	end
-	
-	-- Set the locked skincolor 
-	if leveltime == 10*TICRATE then
-		for p in players.iterate do
-			if not (p and p.mo and p.mm) then continue end
-			if p.mm.joinedmidgame then continue end
-			if p.spectator then continue end
-			
-			p.mm.permanentcolor = p.skincolor
-			p.mm.permanentskin = skins[p.skin].name
-			
-			-- r_ = restored
-			p.mm_save.r_color = p.skincolor 
-			p.mm_save.r_skin = skins[p.skin].name
-		end
-	end
-	
-	if leveltime >= 10*TICRATE then
-		for p in players.iterate do
-			if not (p and p.mo and p.mm) then continue end
-			if p.mm.joinedmidgame then continue end
-			if p.spectator then continue end
-			
-			if p.mm.permanentcolor ~= nil then
-				if p.mm.permanentcolor ~= p.skincolor 
-				and p.mo.color ~= p.mm.lastcolor then
-					p.skincolor = p.mm.permanentcolor
-					
-					p.mo.color = p.mm.lastcolor
-				end
-			end
-			
-			p.mm.lastcolor = p.mo.color 
-		end
-	end
-	
-	-- gun management
-	if leveltime > 10*TICRATE
-	and not MM:playerWithGun()
-	and not MM_N.gameover
-	and innocents >= 1 then
-		local wpns = MM:GetCertainDroppedItems("gun")
-
-		if #wpns then
-			for _,wpn in pairs(wpns) do
-				if wpn.timealive == nil then
-					wpn.timealive = 0
-				end
-
-				wpn.timealive = $+1
-
-				if wpn.timealive > 20*TICRATE then
-					-- give player gun
-					local p = randomPlayer(_eligibleGunPlayer)
-					if p then
-						MM:GiveItem(p, "gun")
-						for play in players.iterate do
-							if play == p
-								chatprintf(play,"\x82*You have been given the gun!",true)
-							else
-								chatprintf(play,"\x82*A random player has received the gun due to inactivity!")
-							end
-						end
-						MM:discordMessage("***A random player has received the gun due to inactivity!***\n")
-						P_RemoveMobj(wpn)
-					end
-				end
-			end
-		else
-			local p = randomPlayer(_eligibleGunPlayer)
-			if p and not MM:canGameEnd() then
-				MM:GiveItem(p, "gun")
-				for play in players.iterate
-					if play == p
-						chatprintf(play,"\x82*You have been given the gun!",true)
-					else
-						chatprintf(play,"\x82*A random player has received the gun due to the gun despawning!")
-					end
-				end
-				MM:discordMessage("***A random player has received the gun due to the gun despawning!***\n")
-			end
-		end
+	for k,func in pairs(funcs.ongoing) do
+		func()
 	end
 end)
 
@@ -348,3 +71,13 @@ addHook("PlayerSpawn", function(player)
 		end
 	end
 end)
+
+addScript "Waiting"
+addScript "Game Over"
+
+addScript "Overtime"
+addScript "PTSR Overtime"
+addScript "Showdown"
+addScript "Game End"
+addScript "Restrict"
+addScript "Gun Manager"

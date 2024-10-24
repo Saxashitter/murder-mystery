@@ -3,6 +3,8 @@ return {
 	spectator = false,
 	got_weapon = false,
 
+	clues = {},
+
 	-- Never show this info in tab menu.
 	alias = {
 		name = nil, -- String

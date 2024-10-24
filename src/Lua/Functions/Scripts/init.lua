@@ -10,69 +10,65 @@ local function canBeRole(p, count)
 	return true
 end
 
+local function set_overtime_point()
+	local possiblePoints = {}
+	for mt in mapthings.iterate do
+		if mt.type <= 35 then
+			local z = P_FloorzAtPos(mt.x*FU,mt.y*FU,mt.z*FU,
+				mobjinfo[MT_PLAYER].height
+			)
+			
+			table.insert(possiblePoints,{x = mt.x*FU, y = mt.y*FU, z = z, a = mt.angle*ANG1, type = mt.type})
+		end
+	end
+	
+	local chosenPoint = possiblePoints[P_RandomRange(1,#possiblePoints)]
+	
+	MM_N.overtime_ticker = 0
+	
+	if chosenPoint == nil then return end
+	
+	--Find the farthest possible point
+	local olddist = 4096*FU
+	for k,v in ipairs(possiblePoints) do
+		if v == chosenPoint then continue end
+		
+		--add 256 as a small buffer to let people get to the middle
+		local distTo = R_PointToDist2(v.x,v.y, chosenPoint.x,chosenPoint.y) + 256*FU
+		if distTo < olddist then continue end
+		
+		MM_N.overtime_startingdist = distTo
+		olddist = distTo
+	end
+	
+	MM_N.overtime_point = P_SpawnMobj(
+		chosenPoint.x,
+		chosenPoint.y,
+		chosenPoint.z,
+		MT_THOK
+	)
+	MM_N.overtime_point.state = S_THOK
+	MM_N.overtime_point.tics = -1
+	MM_N.overtime_point.fuse = -1
+	MM_N.overtime_point.flags2 = $|MF2_DONTDRAW
+	
+	local garg = P_SpawnMobjFromMobj(
+		MM_N.overtime_point,
+		0,0,0,
+		MT_GARGOYLE
+	)
+	garg.flags = MF_NOCLIPTHING|MF_SOLID
+	garg.colorized = true
+	garg.color = SKINCOLOR_GALAXY
+	garg.scale = $*2
+	garg.angle = chosenPoint.a
+
 return function(self, maploaded)
 	if maploaded then
-		local possiblePoints = {}
-		for mt in mapthings.iterate do
-			if mt.type <= 35 then
-				local z = P_FloorzAtPos(mt.x*FU,mt.y*FU,mt.z*FU,
-					mobjinfo[MT_PLAYER].height
-				)
-				
-				table.insert(possiblePoints,{x = mt.x*FU, y = mt.y*FU, z = z, a = mt.angle*ANG1, type = mt.type})
-			end
-		end
-		
-		local chosenPoint = possiblePoints[P_RandomRange(1,#possiblePoints)]
-		
-		MM_N.overtime_ticker = 0
-		
-		if chosenPoint == nil then return end
-		
-		--Find the farthest possible point
-		local olddist = 4096*FU
-		for k,v in ipairs(possiblePoints) do
-			if v == chosenPoint then continue end
-			
-			--add 256 as a small buffer to let people get to the middle
-			local distTo = R_PointToDist2(v.x,v.y, chosenPoint.x,chosenPoint.y) + 256*FU
-			if distTo < olddist then continue end
-			
-			MM_N.overtime_startingdist = distTo
-			olddist = distTo
-		end
-		
-		MM_N.overtime_point = P_SpawnMobj(
-			chosenPoint.x,
-			chosenPoint.y,
-			chosenPoint.z,
-			MT_THOK
-		)
-		MM_N.overtime_point.state = S_THOK
-		MM_N.overtime_point.tics = -1
-		MM_N.overtime_point.fuse = -1
-		MM_N.overtime_point.flags2 = $|MF2_DONTDRAW
-		
-		local garg = P_SpawnMobjFromMobj(
-			MM_N.overtime_point,
-			0,0,0,
-			MT_GARGOYLE
-		)
-		garg.flags = MF_NOCLIPTHING|MF_SOLID
-		garg.colorized = true
-		garg.color = SKINCOLOR_GALAXY
-		garg.scale = $*2
-		garg.angle = chosenPoint.a
-		
-		/*
-		P_SetOrigin(consoleplayer.mo,
-			chosenPoint.x,
-			chosenPoint.y,
-			chosenPoint.z
-		)
-		*/
+		set_overtime_point()
+		MM:giveOutClues(5)
 
-		MM.runHook("PostOvertimePointSet")
+		MM.runHook("PostMapLoad")
 		return
 	end
 	

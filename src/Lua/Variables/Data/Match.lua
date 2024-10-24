@@ -7,6 +7,10 @@ return {
 	murderers = {},
 	innocents = {},
 
+	clues_amount = 0,
+	clues_in_map = false,
+	clues = {},
+
 	speed_cap = 28*FU,
 
 	waiting_for_players = false,

@@ -42,5 +42,7 @@ return function(self)
 			continue
 		end
 		table.insert(MM_N.innocents, p)
+		
+		p.mm.cur_map = P_RandomRange(1, #MM_N.mapVote) -- Be on random selection when vote starts.
 	end
 end

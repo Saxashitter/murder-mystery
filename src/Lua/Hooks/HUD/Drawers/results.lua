@@ -71,7 +71,7 @@ return function(v, p)
 		display_results = false
 	end
 	if (p and p.mm and p.mm.joinedmidgame) then
-		ft = "You joined during a game!"
+		ft = "You joined midgame!"
 		display_results = false
 	end
 

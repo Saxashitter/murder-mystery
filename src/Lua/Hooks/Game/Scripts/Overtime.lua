@@ -26,4 +26,17 @@ return function()
 			end
 		end
 	end
+	
+	--Overtime storm
+	if MM_N.showdown 
+	or not MM_N.time
+		if MM_N.overtime_ticker == 0 then
+			S_StartSound(nil,sfx_kc4b)
+			if mapmusname ~= MM_N.showdown_song then
+				mapmusname = MM_N.showdown_song
+				S_ChangeMusic(MM_N.showdown_song, true)
+			end
+		end
+		MM:handleOvertime()
+	end
 end

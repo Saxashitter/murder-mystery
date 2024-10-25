@@ -33,7 +33,7 @@ return function()
 		end
 	end
 	
-	if MM_N.end_ticker >= 5*TICRATE then
+	/*if MM_N.end_ticker >= 5*TICRATE then
 		local song = "MMWINR"
 		local p = consoleplayer
 
@@ -46,9 +46,9 @@ return function()
 		end
 
 		MM_N.results_ticker = $+1
-	end
+	end*/
 
-	if MM_N.end_ticker >= 15*TICRATE then
+	if MM_N.end_ticker >= 5*TICRATE then
 		MM_N.end_ticker = 1
 		MM:startVote()
 	end

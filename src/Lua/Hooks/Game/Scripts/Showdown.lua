@@ -14,7 +14,7 @@ return function()
 	-- 1 innocent? start showdown
 	if is_showdown(innocents, count)
 	and not MM_N.showdown then
-		MM_N.showdown = true
+		MM:startShowdown()
 	end
 
 	if MM_N.showdown then

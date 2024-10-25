@@ -1,4 +1,5 @@
 local getCount = MM.require "Libs/getCount"
+local randomPlayer = MM.require "Libs/getRandomPlayer"
 
 local function _eligibleGunPlayer(p)
 	return p

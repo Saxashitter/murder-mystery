@@ -6,7 +6,7 @@ return function(self)
 	
 	MM_N.mapVote = {}
 
-	mapmusname = "MMINTR"
+	mapmusname = "_CHSEL"
 	S_ChangeMusic(mapmusname)
 	
 	local addedMaps = 0
@@ -42,5 +42,7 @@ return function(self)
 			continue
 		end
 		table.insert(MM_N.innocents, p)
+		
+		p.mm.cur_map = P_RandomRange(1, #MM_N.mapVote) -- Be on random selection when vote starts.
 	end
 end

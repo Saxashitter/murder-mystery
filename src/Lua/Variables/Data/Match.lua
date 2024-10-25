@@ -19,9 +19,6 @@ return {
 	showdown_song = "MMOVRT",
 	showdown_ticker = 0,
 
-	ptsr_mode = true,
-	ptsr_overtime_ticker = 0, -- luigi please fix ur variable names (overtime ticker is showdown ticker)
-
 	overtime_point = nil,
 	overtime_ticker = 0,
 	overtime_startingdist = 6000*FU,

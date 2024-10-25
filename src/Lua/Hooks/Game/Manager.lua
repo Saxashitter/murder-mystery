@@ -76,7 +76,6 @@ addScript "Waiting"
 addScript "Game Over"
 
 addScript "Overtime"
-addScript "PTSR Overtime"
 addScript "Showdown"
 addScript "Game End"
 addScript "Restrict"

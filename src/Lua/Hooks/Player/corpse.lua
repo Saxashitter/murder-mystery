@@ -108,11 +108,13 @@ end, MT_PLAYER)
 addHook("ThinkFrame", function()
 	if not MM:isMM() then return end
 
-	for p in players.iterate() do
-		if p.mo and not (p.mo.health) then
-			if MM_N.gameover
+	if MM_N.gameover
+	and not MM_N.voting
+		for p in players.iterate() do
+			if p.mo and not (p.mo.health) then
+				
+				--Endcam cutscene
 				if MM_N.end_ticker < 3*TICRATE
-				and not MM_N.voting
 					p.deadtimer = min($,3)
 					p.mo.momx,p.mo.momy,p.mo.momz = 0,0,0
 					p.mo.flags2 = $ &~MF2_DONTDRAW
@@ -120,7 +122,6 @@ addHook("ThinkFrame", function()
 					continue
 					
 				elseif MM_N.end_ticker == 3*TICRATE
-				and not MM_N.voting
 					local corpse = P_SpawnMobjFromMobj(p.mo, 0,0,0, MT_THOK)
 					
 					corpse.skin = p.mo.skin
@@ -136,13 +137,13 @@ addHook("ThinkFrame", function()
 					P_InstaThrust(corpse, p.mo.deathangle, -8*FU)
 					P_SetObjectMomZ(corpse,6*FU)
 				end
+				
+				p.mo.flags2 = $|MF2_DONTDRAW
+				continue
 			end
-			
-			p.mo.flags2 = $|MF2_DONTDRAW
-			continue
 		end
 	end
-
+	
 	for _,corpse in pairs(MM_N.corpses) do
 		if not (corpse and corpse.valid) then
 			table.remove(MM_N.corpses, _)

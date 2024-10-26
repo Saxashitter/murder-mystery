@@ -11,7 +11,7 @@ MM.endTypes = {
 	}
 }
 
-return function(self, endType)
+return function(self, endType, sniped)
 	if MM_N.gameover then return end
 
 	local endType = MM.endTypes[endType] or 1
@@ -19,7 +19,9 @@ return function(self, endType)
 	MM_N.endType = endType
 	MM_N.gameover = true
 
-	S_StopMusic(consoleplayer)
+	if not MM_N.sniped_end then
+		S_StopMusic(consoleplayer)
+	end
 	
 	for mo in mobjs.iterate()
 		if not (mo and mo.valid) then continue end

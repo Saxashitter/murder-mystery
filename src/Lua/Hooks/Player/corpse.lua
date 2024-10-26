@@ -49,6 +49,26 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	target.deathangle = angle
 	
 	if MM:canGameEnd() and not MM_N.gameover then
+		-- funny sniper sound
+		if target.player.mm.role == 2 and source and source.valid then
+			local dist = R_PointToDist2(
+				R_PointToDist2(target.x, target.y, source.x, source.y), target.z,
+				0, source.z
+			)
+			local required_dist = FU*4500
+			local required_speed = FU*20
+			if not P_IsObjectOnGround(target) then
+				required_dist = FU*2500
+				required_speed = FU*12
+			end
+			if dist > required_dist and target.player.speed > required_speed then
+				MM_N.sniped_end = true
+				S_ChangeMusic("mmtf2o", false, nil)
+			end
+			-- print("dist " .. dist/FU)
+			-- print("speed " .. target.player.speed/FU)
+		end
+
 		S_StartSound(nil,sfx_buzz3)
 		S_StartSound(nil,sfx_s253)
 		local facingangle = target.player.drawangle + ANGLE_180

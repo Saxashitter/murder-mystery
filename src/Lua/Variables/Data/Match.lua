@@ -41,4 +41,5 @@ return {
 	--round ended because all innocents/murderers left the game
 	disconnect_end = false,
 	killing_end = false,
+	sniped_end = false
 }

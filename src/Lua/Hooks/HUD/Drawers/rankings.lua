@@ -3,7 +3,11 @@ local TILEHEIGHT = 16
 local TILEMARGIN = 4
 local ROWLENGTH = 300 / TILEWIDTH
 
-local function isDead(p)
+--TODO: spectators and innocents during showdown always know the role
+--		of other people
+
+--if shouldialwaysknow is true, 
+local function isDead(p,shouldialwaysknow)
 	-- print("death", (not (p and p.mo and p.mo.valid)), p.spectator, p.mo.health <= 0)
 	if p.mm and p.mm.joinedmidgame then
 		return true

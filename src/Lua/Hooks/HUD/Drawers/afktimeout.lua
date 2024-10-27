@@ -6,6 +6,7 @@ local function HUD_AFKDrawer(v,p,c)
 	if not (p.mm) then return end
 	
 	if p.mm.afktimer < AFK_TIMEOUT - (10*TR)+1 then return end
+	if p.mm.afkhelpers.timeuntilreset ~= 2*TR then return end
 	
 	local flash = ((leveltime%(2*TR)) < 30*TR) and (leveltime/5 & 1) and V_REDMAP or 0
 	local y = 120

@@ -19,6 +19,9 @@ return function(p)
 	
 	if afk.timedout
 	or (MM_N.waiting_for_players)
+	or (MM_N.gameover)
+	or (p.mm.spectator)
+		p.mm.afktimer = 0
 		return
 	end
 	

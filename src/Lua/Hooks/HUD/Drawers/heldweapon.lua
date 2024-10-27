@@ -17,6 +17,11 @@ return function(v,p)
 	local x = 45*FU
 	local y = 155*FU
 	local hiddenc
+	if p.mm.inventory.hidden then
+		--EZ colorswap to signify hidden weapon
+		--to SIGMAfy
+		hiddenc = v.getColormap(TC_RAINBOW,SKINCOLOR_SILVER)
+	end
 
 	v.drawScaled(x - slidein, y, FU, patch, V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_50TRANS)
 
@@ -80,10 +85,6 @@ return function(v,p)
 
 		if p.mm.inventory.hidden then
 			t = 0
-			
-			--EZ colorswap to signify hidden weapon
-			--to SIGMAfy
-			hiddenc = v.getColormap(TC_RAINBOW,SKINCOLOR_SILVER)
 		end
 
 		yoffset = ease.outquad(t*cd,0,-10*FU)

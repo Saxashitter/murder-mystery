@@ -28,6 +28,14 @@ return {
 	lastside = 0,
 	buttons = 0,
 	
+	afktimer = 0,
+	afkhelpers = {
+		timedout = false,
+		timeuntilreset = 0,
+		lastangle = 0,
+		lastaiming = 0
+	},
+	
 	outofbounds = false,
 	oob_dist = 0,
 

@@ -1,14 +1,47 @@
 freeslot("SPR_BGLS")
 
+local numtotrans = {
+	[9] = FF_TRANS90,
+	[8] = FF_TRANS80,
+	[7] = FF_TRANS70,
+	[6] = FF_TRANS60,
+	[5] = FF_TRANS50,
+	[4] = FF_TRANS40,
+	[3] = FF_TRANS30,
+	[2] = FF_TRANS20,
+	[1] = FF_TRANS10,
+	[0] = 0,
+}
+
+local function onPoint(point1,point2)
+	/*
+	print(string.format(
+		"onPoint(): x1 = %f y1 = %f, x2 = %f y2 = %f",
+		FixedFloor(point1.x),FixedFloor(point1.y),
+		FixedFloor(point2.x),FixedFloor(point2.y)
+		)
+	)
+	*/
+	local x1,y1 = FixedFloor(point1.x),FixedFloor(point1.y)
+	local x2,y2 = FixedFloor(point2.x),FixedFloor(point2.y)
+	return (x1 >= x2 - FU and x1 <= x2 + FU) and (y1 >= y2 - FU and y1 <= y2 + FU)
+end
+
 return function(self)
 	local point = MM_N.overtime_point
+	
+	if (leveltime < 10*TICRATE) then return end
 	
 	if not (point and point.valid)
 		MM_N.overtime_ticker = 0
 		return
 	end
 	MM_N.overtime_ticker = $+1
-
+	if not (MM_N.time)
+	and not MM_N.showdown
+		MM_N.overtime_ticker = $+1
+	end
+	
 	local dist = MM_N.overtime_startingdist - (MM_N.overtime_ticker*FU*2)
 	dist = max($,1028*FU)
 	
@@ -46,6 +79,15 @@ return function(self)
 		laser.frame = A|FF_FULLBRIGHT
 		laser.scale = $
 		
+		point.laser_splat = P_SpawnMobjFromMobj(point,0,0,0,MT_THOK)
+		local laser = point.laser_splat
+		laser.tics = -1
+		laser.fuse = -1
+		laser.renderflags = $|RF_FLOORSPRITE|RF_NOCOLORMAPS
+		laser.sprite = SPR_BGLS
+		laser.frame = B|FF_FULLBRIGHT
+		laser.scale = $
+		
 	end
 	
 	/*
@@ -63,9 +105,17 @@ return function(self)
 	
 	local color = P_RandomRange(SKINCOLOR_GALAXY,SKINCOLOR_NOBLE)
 	for i,laser in ipairs(point.lasers)
+		if not (laser and laser.valid)
+			table.remove(point.lasers,i)
+			continue
+		end
+		
 		if laser.myindex > maxiter/FU
+			laser.destscale = 0
+			laser.scalespeed = FixedDiv(laser.scale,TICRATE*FU)
+			laser.fuse = TICRATE
 			table.remove(point.lasers,laser.myindex)
-			P_RemoveMobj(laser)
+			--P_RemoveMobj(laser)
 			continue
 		end
 		
@@ -91,6 +141,10 @@ return function(self)
 		end
 		
 	end
+	
+	--people like to hide behind these so dont let em do that
+	local mysin = sin(FixedAngle(MM_N.overtime_ticker*5*FU))
+	local fade = numtotrans[mysin*6 / FU] or 0
 	do
 		local laser = point.laser_eye
 		do
@@ -98,9 +152,49 @@ return function(self)
 			local fz = laser.z --P_FloorzAtPos(laser.x,laser.y,20*FU)
 			laser.spriteyscale = FixedDiv(cz - fz, 10*laser.scale)
 		end
-		laser.spritexscale = FU + sin(FixedAngle(MM_N.overtime_ticker*5*FU))/5
+		laser.spritexscale = FU + mysin/5
 		laser.color = SKINCOLOR_GALAXY
 		laser.dispoffset = -4
+		laser.frame = ($ &~FF_TRANSMASK)|fade
+		P_MoveOrigin(laser,
+			point.x,
+			point.y,
+			point.z
+		)
+	end
+	do
+		local laser = point.laser_splat
+		laser.spritexscale = FU + mysin/5
+		laser.spriteyscale = laser.spritexscale
+		laser.color = SKINCOLOR_GALAXY
+		laser.dispoffset = -5
+		laser.frame = ($ &~FF_TRANSMASK)|fade
+		P_MoveOrigin(laser,
+			point.x,
+			point.y,
+			point.z
+		)
+	end
+	if (point.garg and point.garg.valid)
+		point.garg.spriteyoffset = ease.inoutquad(FU/4,$, 32*FU + (mysin/3)*20)
+		P_MoveOrigin(point.garg,
+			point.x,
+			point.y,
+			point.z
+		)
+		point.garg.angle = point.angle
+	else
+		local garg = P_SpawnMobjFromMobj(
+			point,
+			0,0,0,
+			MT_GARGOYLE
+		)
+		garg.flags = MF_NOCLIPTHING
+		garg.colorized = true
+		garg.color = SKINCOLOR_GALAXY
+		garg.scale = $*2
+		garg.angle = point.angle
+		point.garg = garg
 	end
 	
 	/*
@@ -164,5 +258,47 @@ return function(self)
 		p.mm.outofbounds = true
 		
 	end
+
+	if dist > 1028*FU then return end
 	
+	if not (point.destpoint)
+		point.eased = 0
+		point.destpoint = point.otherpoints[P_RandomRange(1,#point.otherpoints)]
+		point.startpoint = {
+			x = point.x,
+			y = point.y,
+			z = point.z,
+			a = point.angle
+		}
+	end
+	if onPoint(point,point.destpoint)
+		repeat
+			point.destpoint = point.otherpoints[P_RandomRange(1,#point.otherpoints)]
+		until not onPoint(point,point.destpoint)
+		point.eased = 0
+		point.startpoint = {
+			x = point.x,
+			y = point.y,
+			z = point.z,
+			a = point.angle
+		}
+	end
+	
+	local nextpoint = point.destpoint
+	local easetics = 60*TICRATE
+	local frac = (FU/easetics)*point.eased
+	local x = ease.inoutquad(frac, point.startpoint.x, nextpoint.x)
+	local y = ease.inoutquad(frac, point.startpoint.y, nextpoint.y)
+	local z = ease.inoutquad(frac, point.startpoint.z, nextpoint.z)
+	P_MoveOrigin(point,
+		x,y,z
+	)
+	point.angle = FixedAngle(
+		ease.inoutquad(frac,
+			AngleFixed(point.startpoint.a),
+			AngleFixed(nextpoint.a)
+		)
+	)
+	point.eased = $+1
+		
 end

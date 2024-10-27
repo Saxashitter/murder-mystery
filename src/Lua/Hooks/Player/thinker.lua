@@ -29,9 +29,10 @@ addHook("PlayerThink", function(p)
 			G_DoReborn(#p)
 			p.deadtimer = 0
 		end
-
+		p.mm.oob_ticker = 0
+		
 		MM.runHook("DeadPlayerThink", p)
-
+		
 		return
 	end
 
@@ -46,8 +47,9 @@ addHook("PlayerThink", function(p)
 	end
 
 	MM.runHook("PlayerThink", p)
-
+	
 	if p.mm.outofbounds
+	and not MM_N.gameover
 		p.mm.oob_ticker = $+1
 		if p.mm.oob_ticker == 3*TICRATE
 			P_KillMobj(p.mo) 
@@ -62,3 +64,4 @@ MM:addPlayerScript(dofile("Hooks/Player/Scripts/Role Handler"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/Nerfs"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/Map Vote"), true)
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/Uno Reverse RNG"))
+MM:addPlayerScript(dofile("Hooks/Player/Scripts/AFKHandle"))

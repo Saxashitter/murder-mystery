@@ -22,11 +22,12 @@ local function set_overtime_point()
 		end
 	end
 	
-	local chosenPoint = possiblePoints[P_RandomRange(1,#possiblePoints)]
+	local chosenKey = P_RandomRange(1,#possiblePoints)
+	local chosenPoint = possiblePoints[chosenKey]
+	if chosenPoint == nil then return end
 	
 	MM_N.overtime_ticker = 0
 	
-	if chosenPoint == nil then return end
 	
 	--Find the farthest possible point
 	local olddist = 4096*FU
@@ -57,11 +58,15 @@ local function set_overtime_point()
 		0,0,0,
 		MT_GARGOYLE
 	)
-	garg.flags = MF_NOCLIPTHING|MF_SOLID
+	garg.flags = MF_NOCLIPTHING
 	garg.colorized = true
 	garg.color = SKINCOLOR_GALAXY
 	garg.scale = $*2
 	garg.angle = chosenPoint.a
+	MM_N.overtime_point.garg = garg
+	
+	table.remove(possiblePoints,chosenKey)
+	MM_N.overtime_point.otherpoints = possiblePoints
 end
 
 return function(self, maploaded)

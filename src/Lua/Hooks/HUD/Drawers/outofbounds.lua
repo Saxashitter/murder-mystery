@@ -43,21 +43,23 @@ local function HUD_OOBDrawer(v,p,c)
 	)
 	
 	local flash = ((leveltime%(2*TR)) < 30*TR) and (leveltime/5 & 1) and V_REDMAP or 0
-	v.drawString(160,160,
+	local y = 120
+	v.drawString(160,y,
 		"! OUT OF BOUNDS !",
 		flash|V_SNAPTOBOTTOM,
 		"center"
 	)
-	v.drawString(160,168,
+	v.drawString(160,y+8,
 		"Return to play area",
 		flash|V_SNAPTOBOTTOM,
 		"thin-center"
 	)
 	v.drawScaled(160*FU - (v.cachePatch("STTNUM0").width*FU/2),
-		178*FU,
+		(y + 18)*FU,
 		FU,
 		v.cachePatch("STTNUM"..(3*TR - p.mm.oob_ticker)/TR),
-		V_SNAPTOBOTTOM
+		V_SNAPTOBOTTOM,
+		flash and v.getColormap(TC_RAINBOW,SKINCOLOR_RED) or nil
 	)	
 	
 end

@@ -189,6 +189,8 @@ return function(self, maploaded)
 								100*FU
 							)
 			
+			p.mm_save.cons_murderer_chance = result_m
+			p.mm_save.cons_sheriff_chance = result_s
 			
 			CONS_Printf(p, string.format("\x85Murderer Chance: (%.2f percent)\n\x84Sheriff Chance: (%.2f percent)", result_m, result_s))
 		end

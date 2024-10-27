@@ -21,6 +21,7 @@ return function(p)
 	or (MM_N.waiting_for_players)
 	or (MM_N.gameover)
 	or (p.mm.spectator)
+	or not CV_MM.allowafkkick.value
 		p.mm.afktimer = 0
 		return
 	end

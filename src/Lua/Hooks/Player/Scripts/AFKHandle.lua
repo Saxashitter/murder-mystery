@@ -30,7 +30,7 @@ return function(p)
 	or cmd.buttons & activebuttons)
 	or (afk.lastangle ~= cmd.angleturn << 16)
 	or (afk.lastaiming ~= cmd.aiming)
-		if afk.timeuntilreset < 2*TICRATE
+		if afk.timeuntilreset < 10*TICRATE
 			afk.timeuntilreset = $+1
 		else
 			p.mm.afktimer = $ + 1
@@ -44,7 +44,7 @@ return function(p)
 		end
 	else
 		if afk.timeuntilreset
-			afk.timeuntilreset = $-1
+			afk.timeuntilreset = max($-6,0)
 		else
 			p.mm.afktimer = $*3/4
 		end

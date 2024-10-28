@@ -20,8 +20,13 @@ return function()
 	if (MM_N.end_camera and MM_N.end_camera.valid) then
 		MM:startEndCamera()
 	end
-	
-	if MM_N.end_ticker == 3*TICRATE
+
+	local releaseTic = 3*TICRATE
+	if MM_N.sniped_end then
+		-- for music timing
+		releaseTic = 3*TICRATE + MM.sniper_theme_offset
+	end
+	if MM_N.end_ticker == releaseTic
 		for mo in mobjs.iterate()
 			if not (mo and mo.valid) then continue end
 			

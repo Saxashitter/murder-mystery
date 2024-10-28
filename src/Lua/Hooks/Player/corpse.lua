@@ -134,14 +134,20 @@ addHook("ThinkFrame", function()
 			if p.mo and not (p.mo.health) then
 				
 				--Endcam cutscene
-				if MM_N.end_ticker < 3*TICRATE
+				local releaseTic = 3*TICRATE
+				if MM_N.sniped_end then
+					-- for music timing
+					releaseTic = 3*TICRATE + MM.sniper_theme_offset
+				end
+				if MM_N.end_ticker < releaseTic
 					p.deadtimer = min($,3)
 					p.mo.momx,p.mo.momy,p.mo.momz = 0,0,0
 					p.mo.flags2 = $ &~MF2_DONTDRAW
+					p.mo.flags = $ | MF_NOGRAVITY
 					p.mo.state = (p.mm.end_deathstate and S_PLAY_DEAD or S_PLAY_PAIN)
 					continue
 					
-				elseif MM_N.end_ticker == 3*TICRATE
+				elseif MM_N.end_ticker == releaseTic
 					local corpse = P_SpawnMobjFromMobj(p.mo, 0,0,0, MT_THOK)
 					
 					corpse.skin = p.mo.skin

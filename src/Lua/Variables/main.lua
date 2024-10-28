@@ -17,3 +17,5 @@ end
 MC("role", "innocent")
 MC("role", "sheriff")
 MC("role", "murderer")
+
+MM.sniper_theme_offset = 13

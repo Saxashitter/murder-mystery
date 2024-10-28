@@ -275,8 +275,7 @@ MM:addPlayerScript(function(p)
 				def:onhit(p,p2)
 			end
 			
-			item.hit = 0
-			item.anim = item.max_anim/3
+			item.anim = min(item.max_anim/3, $)
 			if item.hitsfx then
 				S_StartSound(p.mo, item.hitsfx)
 			end

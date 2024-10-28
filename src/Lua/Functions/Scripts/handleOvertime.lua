@@ -39,7 +39,7 @@ return function(self)
 	MM_N.overtime_ticker = $+1
 	if not (MM_N.time)
 	and not MM_N.showdown
-		MM_N.overtime_ticker = $+1
+		MM_N.overtime_ticker = $+2
 	end
 	
 	local dist = MM_N.overtime_startingdist - (MM_N.overtime_ticker*FU*2)

@@ -2,9 +2,10 @@ MM.DroppedMobjs = {}
 local shallowCopy = MM.require "Libs/shallowCopy"
 
 function MM:DropItem(p, slot, randomize, dont_notify, forced)
+	--TODO: weird bug where you cant drop an item even if its in your inventory
 	if not (p and p.mm and #p.mm.inventory.items) then
 		if not dont_notify then
-			chatprintf(p, "* There's nothing to drop...")
+			chatprintf(p, "\x82*There's nothing to drop.")
 		end
 		return
 	end
@@ -14,14 +15,14 @@ function MM:DropItem(p, slot, randomize, dont_notify, forced)
 
 	if not (item) then
 		if not dont_notify then
-			chatprintf(p, "* There's nothing to drop...")
+			chatprintf(p, "\x82*There's nothing to drop.")
 		end
 		return
 	end
 
 	if not (item.droppable) then
 		if not dont_notify then
-			chatprintf(p, "* You can't drop this.")
+			chatprintf(p, "\x82*You can't drop this.")
 		end
 		
 		if not forced then 
@@ -106,7 +107,7 @@ local function manage_unpicked_weapon(mobj)
 		end
 
 		if mobj.restrict[p.mm.role] then
-			chatprintf(p, "* This weapon is prohibited from your role.")
+			chatprintf(p, "\x82*This weapon is prohibited from your role.")
 			continue
 		end
 

@@ -23,6 +23,7 @@ dofile "Variables/main"
 dofile "Functions/main"
 dofile "Console/main"
 dofile "Hooks/main"
+dofile "Clues/main"
 dofile "Items/main"
 
 -- fool-proofing

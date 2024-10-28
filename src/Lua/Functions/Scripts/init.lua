@@ -72,7 +72,7 @@ end
 return function(self, maploaded)
 	if maploaded then
 		set_overtime_point()
-		--MM:giveOutClues(5)
+		MM:giveOutClues(5)
 		
 		MM.runHook("PostMapLoad")
 		return

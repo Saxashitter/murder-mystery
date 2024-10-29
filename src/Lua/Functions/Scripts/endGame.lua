@@ -11,7 +11,7 @@ MM.endTypes = {
 	}
 }
 
-return function(self, endType, sniped)
+return function(self, endType)
 	if MM_N.gameover then return end
 
 	local endType = MM.endTypes[endType] or 1

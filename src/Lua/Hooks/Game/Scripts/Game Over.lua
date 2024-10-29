@@ -1,3 +1,7 @@
+sfxinfo[freeslot "sfx_mmsnp1"].caption = "Spot on!"
+sfxinfo[freeslot "sfx_mmsnp2"].caption = "Good shot, mate!"
+sfxinfo[freeslot "sfx_mmsnp3"].caption = "Fine shot, mate!"
+
 return function()
 	MM_N.end_ticker = $+1
 
@@ -20,8 +24,13 @@ return function()
 	if (MM_N.end_camera and MM_N.end_camera.valid) then
 		MM:startEndCamera()
 	end
-	
-	if MM_N.end_ticker == 3*TICRATE
+
+	local releaseTic = 3*TICRATE
+	if MM_N.sniped_end then
+		-- for music timing
+		releaseTic = 3*TICRATE + MM.sniper_theme_offset
+	end
+	if MM_N.end_ticker == releaseTic
 		for mo in mobjs.iterate()
 			if not (mo and mo.valid) then continue end
 			
@@ -31,6 +40,9 @@ return function()
 			
 			mo.flags = $ &~MF_NOTHINK
 		end
+	end
+	if MM_N.sniped_end and MM_N.end_ticker == releaseTic+8 then
+		S_StartSound(nil, sfx_mmsnp1 + P_RandomRange(0, 2))
 	end
 	
 	/*if MM_N.end_ticker >= 5*TICRATE then

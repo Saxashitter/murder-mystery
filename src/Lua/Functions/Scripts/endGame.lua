@@ -19,7 +19,9 @@ return function(self, endType)
 	MM_N.endType = endType
 	MM_N.gameover = true
 
-	S_StopMusic(consoleplayer)
+	if not MM_N.sniped_end then
+		S_StopMusic(consoleplayer)
+	end
 	
 	for mo in mobjs.iterate()
 		if not (mo and mo.valid) then continue end

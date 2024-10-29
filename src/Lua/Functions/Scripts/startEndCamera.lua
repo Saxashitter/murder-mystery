@@ -34,6 +34,10 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 		MM_N.end_camera.lerpradius = MM_N.end_camera.startradius[1]
 		
 		MM_N.end_camera.swirldur = 3*TICRATE
+		if MM_N.sniped_end then
+			-- for music timing
+			MM_N.end_camera.swirldur = 3*TICRATE + MM.sniper_theme_offset
+		end
 		MM_N.end_camera.startangle = angle + 90*FU
 		MM_N.end_camera.endangle = angle + 810*FU
 		

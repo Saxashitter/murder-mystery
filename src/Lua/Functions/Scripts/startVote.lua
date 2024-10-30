@@ -4,20 +4,24 @@ return function(self)
 	MM_N.voting = true
 	MM_N.end_ticker = 0
 	
-	MM_N.mapVote = {}
+	MM_N.mapVote = {
+		maps = {},
+		state = "voting",
+		ticker = 0
+	}
 
 	mapmusname = "_CHSEL"
 	S_ChangeMusic(mapmusname)
 	
 	local addedMaps = 0
-	while addedMaps < 3 do
+	while addedMaps < 4 do
 		local map = P_RandomRange(1, 1024)
 		if not mapheaderinfo[map] then continue end
 
 		local data = mapheaderinfo[map]
 
 		local mapWasIn = false
-		for _,oldmap in ipairs(MM_N.mapVote) do
+		for _,oldmap in ipairs(MM_N.mapVote.maps) do
 			if map == oldmap.map then mapWasIn = true break end
 		end
 		if mapWasIn then continue end
@@ -27,7 +31,7 @@ return function(self)
 		end
 		if data.bonustype then continue end
 
-		table.insert(MM_N.mapVote, {
+		table.insert(MM_N.mapVote.maps, {
 			map = map,
 			votes = 0
 		})
@@ -43,6 +47,6 @@ return function(self)
 		end
 		table.insert(MM_N.innocents, p)
 		
-		p.mm.cur_map = P_RandomRange(1, #MM_N.mapVote) -- Be on random selection when vote starts.
+		p.mm.cur_map = P_RandomRange(1, #MM_N.mapVote.maps) -- Be on random selection when vote starts.
 	end
 end

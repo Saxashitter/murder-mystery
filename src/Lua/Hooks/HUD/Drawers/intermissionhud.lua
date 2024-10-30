@@ -105,7 +105,7 @@ return function(v)
 
 		local total_width = (icon_width*(#icons-1))
 		local x = ( 160*FU ) - ( total_width*scale/2 )
-		local y = ( (200-32)*FU )
+		local y = ( (200-24)*FU )
 
 		for k,icon in pairs(icons) do
 			v.drawScaled(x, y, scale, icon.patch, trans|V_SNAPTOBOTTOM, icon.color)
@@ -115,28 +115,44 @@ return function(v)
 
 	// MAPS
 
-	for k,map in ipairs(MM_N.mapVote) do
+	local p = displayplayer
+	if p and p.mm and p.mm.cur_map then
+		local arrow = ("\x1d\x1a\x1c\x1b"):sub(p.mm.cur_map, p.mm.cur_map)
+		local color = V_YELLOWMAP
+		if p.mm.selected_map then
+			color = V_GREENMAP
+		end
+		v.drawString(
+			160, 90, arrow, color|trans, "center"
+		)
+	end
+
+	for k,map in ipairs(MM_N.mapVote.maps) do
 		local scale = FU/4
 
-		local p = displayplayer
-
-		local maxMaps = #MM_N.mapVote
+		local maxMaps = #MM_N.mapVote.maps
 		local mapIcon = v.cachePatch(G_BuildMapName(map.map).."P")
-		local iconWidth = mapIcon.width*scale
+		local iconWidth = 160*scale
 		local offset = 60*FU
 		local width = iconWidth*maxMaps
-		width = $+(offset*(maxMaps-1))
+		-- width = $+(offset*(maxMaps-1))
+
+		local ang = k*ANGLE_90
 
 		local x = 160*FU
-		x = $ - (width/2)
-		x = $ + (offset*(k-1))
-		x = $ + (iconWidth*(k-1))
+		x = $ - (iconWidth/2)
+		x = $ + FixedMul(320*sin(ang), scale)
+		-- x = $ + (offset*(k-1))
+		-- x = $ + (iconWidth*(k-1))
 
-		local y = 100*FU
-		y = $ - (mapIcon.height*scale/2)
+		local y = 92*FU
+		y = $ + FixedMul(160*cos(ang), scale)
+		y = $ - (100*scale/2)
 
 		local color = 0
+		local outline = "INACTIVE"
 		if (p and p.mm and p.mm.cur_map == k) then
+			outline = "ACTIVE"
 			if not (p.mm.selected_map) then
 				color = V_YELLOWMAP
 			else
@@ -145,16 +161,19 @@ return function(v)
 		end
 
 		v.drawScaled(x, y, scale, mapIcon, trans)
+		v.drawScaled(x, y, scale*2, v.cachePatch("MM_MAPVOTE_OUTLINE_" .. outline), trans)
 		v.drawString(x+(iconWidth/2),
-			y+(mapIcon.height*scale),
+			y+((mapIcon.height+4)*scale),
 			G_BuildMapTitle(map.map),
 			V_ALLOWLOWERCASE|color|trans,
 			"thin-fixed-center")
-		v.drawString(x+(iconWidth/2),
-			y+(mapIcon.height*scale)+(8*FU),
-			tostring(map.votes),
-			V_ALLOWLOWERCASE|color|trans,
-			"thin-fixed-center")
+		
+		
+		-- v.drawString(x+(iconWidth/2),
+		-- 	y+(mapIcon.height*scale)+(8*FU),
+		-- 	tostring(map.votes),
+		-- 	V_ALLOWLOWERCASE|color|trans,
+		-- 	"thin-fixed-center")
 	end
 
 	// START IN

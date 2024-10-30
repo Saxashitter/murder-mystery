@@ -7,7 +7,7 @@ return function(self)
 	MM_N.mapVote = {
 		maps = {},
 		state = "voting",
-		ticker = 0
+		ticker = 10*TICRATE
 	}
 
 	mapmusname = "_CHSEL"

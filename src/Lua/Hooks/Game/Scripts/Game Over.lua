@@ -2,20 +2,63 @@ sfxinfo[freeslot "sfx_mmsnp1"].caption = "Spot on!"
 sfxinfo[freeslot "sfx_mmsnp2"].caption = "Good shot, mate!"
 sfxinfo[freeslot "sfx_mmsnp3"].caption = "Fine shot, mate!"
 
+local function calcRollX(time, vel)
+	local x = 0
+	local xv = 0
+	for _=1,time do
+		x = $ + xv
+		xv = $ + (FU/MM_N.mapVote.rollvel)
+	end
+	return x
+end
+
 return function()
 	MM_N.end_ticker = $+1
 
 	if MM_N.voting then
-		if MM_N.end_ticker > 15*TICRATE then
-			local selected_map = 1
-			local most_votes = 0
-			for _,map in ipairs(MM_N.mapVote) do
-				if map.votes < most_votes then continue end
-
-				selected_map = map.map
-				most_votes = map.votes
+		MM_N.mapVote.ticker = $ - 1
+		if MM_N.mapVote.state == "voting" and MM_N.mapVote.ticker <= 0 then
+			local pool = {}
+			for _,map in ipairs(MM_N.mapVote.maps) do
+				if map.votes then
+					for _=1,map.votes do
+						table.insert(pool, map.map)
+					end
+				end
 			end
-			G_SetCustomExitVars(selected_map, 2)
+			if not #pool then
+				for _,map in ipairs(MM_N.mapVote.maps) do
+					table.insert(pool, map.map)
+				end
+			end
+			-- Fisher-Yates shuffle algorithm
+			for i = #pool, 2, -1 do
+			local j = P_RandomRange(1, i)
+				pool[i], pool[j] = pool[j], pool[i]
+			end
+			for index, value in ipairs(pool) do
+				print(G_BuildMapTitle(value))
+			end
+			MM_N.mapVote.pool = pool
+			MM_N.mapVote.selected_map = pool[1]
+			MM_N.mapVote.state = "rolling"
+			MM_N.mapVote.ticker = P_RandomRange(4*TICRATE, 7*TICRATE)
+			MM_N.mapVote.rollvel = P_RandomRange(320, 480)
+			MM_N.mapVote.rollx = calcRollX(MM_N.mapVote.ticker)
+		elseif MM_N.mapVote.state == "rolling" then
+			local newx = calcRollX(MM_N.mapVote.ticker)
+			if FixedFloor(MM_N.mapVote.rollx+FU/2) != FixedFloor(newx+FU/2) then
+				S_StartSound(nil, sfx_tink)
+			end
+			MM_N.mapVote.rollx = newx
+
+			if MM_N.mapVote.ticker <= 0 then
+				MM_N.mapVote.state = "done"
+				MM_N.mapVote.ticker = 3*TICRATE
+				S_StartSound(nil, sfx_s3kb3)
+			end
+		elseif MM_N.mapVote.state == "done" and MM_N.mapVote.ticker <= 0 then
+			G_SetCustomExitVars(MM_N.mapVote.selected_map, 2)
 			G_ExitLevel()
 		end
 		return

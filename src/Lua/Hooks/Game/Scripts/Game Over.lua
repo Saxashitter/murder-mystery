@@ -2,7 +2,10 @@ sfxinfo[freeslot "sfx_mmsnp1"].caption = "Spot on!"
 sfxinfo[freeslot "sfx_mmsnp2"].caption = "Good shot, mate!"
 sfxinfo[freeslot "sfx_mmsnp3"].caption = "Fine shot, mate!"
 
-local function calcRollX(time, vel)
+local function calcRollX(time)
+	if time <= 0 then
+		return 0
+	end
 	local x = 0
 	local xv = 0
 	for _=1,time do
@@ -19,32 +22,39 @@ return function()
 		MM_N.mapVote.ticker = $ - 1
 		if MM_N.mapVote.state == "voting" and MM_N.mapVote.ticker <= 0 then
 			local pool = {}
+			local mapc = 0
 			for _,map in ipairs(MM_N.mapVote.maps) do
 				if map.votes then
+					mapc = $ + 1
 					for _=1,map.votes do
 						table.insert(pool, map.map)
 					end
 				end
 			end
-			if not #pool then
-				for _,map in ipairs(MM_N.mapVote.maps) do
-					table.insert(pool, map.map)
+			if mapc == 1 then
+				MM_N.mapVote.state = "done"
+				MM_N.mapVote.selected_map = pool[1]
+				MM_N.mapVote.ticker = 3*TICRATE
+				MM_N.mapVote.unanimous = true
+				S_StartSound(nil, sfx_s3kb3)
+			else
+				if not #pool then
+					for _,map in ipairs(MM_N.mapVote.maps) do
+						table.insert(pool, map.map)
+					end
 				end
+				-- Fisher-Yates shuffle algorithm
+				for i = #pool, 2, -1 do
+				local j = P_RandomRange(1, i)
+					pool[i], pool[j] = pool[j], pool[i]
+				end
+				MM_N.mapVote.pool = pool
+				MM_N.mapVote.selected_map = pool[1]
+				MM_N.mapVote.state = "rolling"
+				MM_N.mapVote.ticker = P_RandomRange(4*TICRATE, 7*TICRATE)
+				MM_N.mapVote.rollvel = P_RandomRange(320, 480)
+				MM_N.mapVote.rollx = calcRollX(MM_N.mapVote.ticker)
 			end
-			-- Fisher-Yates shuffle algorithm
-			for i = #pool, 2, -1 do
-			local j = P_RandomRange(1, i)
-				pool[i], pool[j] = pool[j], pool[i]
-			end
-			for index, value in ipairs(pool) do
-				print(G_BuildMapTitle(value))
-			end
-			MM_N.mapVote.pool = pool
-			MM_N.mapVote.selected_map = pool[1]
-			MM_N.mapVote.state = "rolling"
-			MM_N.mapVote.ticker = P_RandomRange(4*TICRATE, 7*TICRATE)
-			MM_N.mapVote.rollvel = P_RandomRange(320, 480)
-			MM_N.mapVote.rollx = calcRollX(MM_N.mapVote.ticker)
 		elseif MM_N.mapVote.state == "rolling" then
 			local newx = calcRollX(MM_N.mapVote.ticker)
 			if FixedFloor(MM_N.mapVote.rollx+FU/2) != FixedFloor(newx+FU/2) then

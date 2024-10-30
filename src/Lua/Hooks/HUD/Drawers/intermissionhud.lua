@@ -207,9 +207,13 @@ return function(v)
 		local y = 100*FU
 		y = $ - (100*scale/2)
 		v.drawScaled(x, y, scale, v.cachePatch(G_BuildMapName(map).."P"), trans)
+		local wintext = "WINNER"
+		if MM_N.mapVote.unanimous then
+			wintext = "UNANIMOUS WINNER"
+		end
 		v.drawString(x+(FU*80/2),
 			y-(18*scale),
-			"WINNER:",
+			wintext,
 			V_ALLOWLOWERCASE|trans,
 			"fixed-center")
 		v.drawString(x+(FU*80/2),

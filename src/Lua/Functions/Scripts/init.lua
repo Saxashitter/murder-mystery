@@ -96,7 +96,7 @@ return function(self, maploaded)
 		count = $+1
 	end
 
-	MM_N.waiting_for_players = false--count < 2
+	MM_N.waiting_for_players = count < 2
 
 	if not (self:isMM() and count >= 2) then return end
 	

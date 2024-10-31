@@ -18,11 +18,9 @@ return function()
 	end
 
 	if MM_N.showdown then
-		if not (MM_N.ptsr_mode and MM_N.time < 20*TICRATE) then
-			if mapmusname ~= MM_N.showdown_song then
-				mapmusname = MM_N.showdown_song
-				S_ChangeMusic(MM_N.showdown_song, true)
-			end
+		if mapmusname ~= MM_N.showdown_song then
+			mapmusname = MM_N.showdown_song
+			S_ChangeMusic(MM_N.showdown_song, true)
 		end
 		MM_N.showdown_ticker = $+1
 	end

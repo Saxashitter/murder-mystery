@@ -28,21 +28,21 @@ local function onPoint(point1,point2)
 end
 
 return function(self)
-	local point = MM_N.overtime_point
+	local point = MM_N.storm_point
 	
 	if (leveltime < 10*TICRATE) then return end
 	
 	if not (point and point.valid)
-		MM_N.overtime_ticker = 0
+		MM_N.storm_ticker = 0
 		return
 	end
-	MM_N.overtime_ticker = $+1
+	MM_N.storm_ticker = $+1
 	if not (MM_N.time)
 	and not MM_N.showdown
-		MM_N.overtime_ticker = $+2
+		MM_N.storm_ticker = $+2
 	end
 	
-	local dist = MM_N.overtime_startingdist - (MM_N.overtime_ticker*FU*2)
+	local dist = MM_N.storm_startingdist - (MM_N.storm_ticker*FU*2)
 	dist = max($,1028*FU)
 	
 	local pi = (22*FU/7)
@@ -143,7 +143,7 @@ return function(self)
 	end
 	
 	--people like to hide behind these so dont let em do that
-	local mysin = sin(FixedAngle(MM_N.overtime_ticker*5*FU))
+	local mysin = sin(FixedAngle(MM_N.storm_ticker*5*FU))
 	local fade = numtotrans[mysin*6 / FU] or 0
 	do
 		local laser = point.laser_eye

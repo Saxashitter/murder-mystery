@@ -1,8 +1,12 @@
 return function()
 	-- time management
 	MM_N.time = max(0, $-1)
-
 	if not (MM_N.time)
+	and not MM_N.overtime then
+		MM:startOvertime()
+	end
+
+	if MM_N.overtime
 	and not MM_N.showdown then 
 		if not MM_N.ping_time then
 			MM_N.pings_done = $+1
@@ -26,17 +30,20 @@ return function()
 			end
 		end
 	end
-	
+
+	if MM_N.overtime then
+		if not MM_N.showdown
+		and mapmusname ~= "MMOVRT" then
+			mapmusname = "MMOVRT"
+			S_ChangeMusic(mapmusname, true)
+		end
+
+		MM_N.overtime_ticker = $+1
+	end
+
 	--Overtime storm
 	if MM_N.showdown 
-	or not MM_N.time
-		if MM_N.overtime_ticker == 0 then
-			S_StartSound(nil,sfx_kc4b)
-			if mapmusname ~= MM_N.showdown_song then
-				mapmusname = MM_N.showdown_song
-				S_ChangeMusic(MM_N.showdown_song, true)
-			end
-		end
-		MM:handleOvertime()
+	or MM_N.overtime then
+		MM:handleStorm()
 	end
 end

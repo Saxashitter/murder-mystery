@@ -19,9 +19,12 @@ return {
 	showdown_song = "MMOVRT",
 	showdown_ticker = 0,
 
-	overtime_point = nil,
+	overtime = false,
 	overtime_ticker = 0,
-	overtime_startingdist = 6000*FU,
+
+	storm_point = nil,
+	storm_ticker = 0,
+	storm_startingdist = 6000*FU,
 
 	gameover = false,
 	voting = false,

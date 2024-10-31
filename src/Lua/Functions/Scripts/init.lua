@@ -26,7 +26,7 @@ local function set_overtime_point()
 	local chosenPoint = possiblePoints[chosenKey]
 	if chosenPoint == nil then return end
 	
-	MM_N.overtime_ticker = 0
+	MM_N.storm_ticker = 0
 	
 	
 	--Find the farthest possible point
@@ -42,19 +42,19 @@ local function set_overtime_point()
 		olddist = distTo
 	end
 	
-	MM_N.overtime_point = P_SpawnMobj(
+	MM_N.storm_point = P_SpawnMobj(
 		chosenPoint.x,
 		chosenPoint.y,
 		chosenPoint.z,
 		MT_THOK
 	)
-	MM_N.overtime_point.state = S_THOK
-	MM_N.overtime_point.tics = -1
-	MM_N.overtime_point.fuse = -1
-	MM_N.overtime_point.flags2 = $|MF2_DONTDRAW
+	MM_N.storm_point.state = S_THOK
+	MM_N.storm_point.tics = -1
+	MM_N.storm_point.fuse = -1
+	MM_N.storm_point.flags2 = $|MF2_DONTDRAW
 	
 	local garg = P_SpawnMobjFromMobj(
-		MM_N.overtime_point,
+		MM_N.storm_point,
 		0,0,0,
 		MT_GARGOYLE
 	)
@@ -63,10 +63,10 @@ local function set_overtime_point()
 	garg.color = SKINCOLOR_GALAXY
 	garg.scale = $*2
 	garg.angle = chosenPoint.a
-	MM_N.overtime_point.garg = garg
+	MM_N.storm_point.garg = garg
 	
 	table.remove(possiblePoints,chosenKey)
-	MM_N.overtime_point.otherpoints = possiblePoints
+	MM_N.storm_point.otherpoints = possiblePoints
 end
 
 return function(self, maploaded)

@@ -4,15 +4,25 @@ local AFK_TIMEOUT = 60*TICRATE
 local function handleTimeout(p)
 	if p == server
 	or IsPlayerAdmin(p)
+	--TODO: cvar to toggle between nonadmins getting:
+	/*      
+		Kicked
+		Banned
+		Killed
+	*/
+	
+	or (true)
 		P_KillMobj(p.mo,nil,nil,DMG_SPECTATOR)
 		chatprintf(p,"\x82*You have been made a spectator for being AFK.")
 		p.mm.afkhelpers.timedout = false
+		--TODO: add corpse immediately
 	else
 		COM_BufAddText(server,"kick "..#p.." AFK")
 	end
 	
 end
 
+--TODO: this is just shitty lol
 return function(p)
 	local cmd = p.cmd
 	local afk = p.mm.afkhelpers
@@ -26,10 +36,10 @@ return function(p)
 		return
 	end
 	
-	if not (cmd.forwardmove or cmd.sidemove
+	if not ((cmd.forwardmove or cmd.sidemove
 	or cmd.buttons & activebuttons)
 	or (afk.lastangle ~= cmd.angleturn << 16)
-	or (afk.lastaiming ~= cmd.aiming)
+	or (afk.lastaiming ~= cmd.aiming))
 		if afk.timeuntilreset < 10*TICRATE
 			afk.timeuntilreset = $+1
 		else
@@ -44,7 +54,7 @@ return function(p)
 		end
 	else
 		if afk.timeuntilreset
-			afk.timeuntilreset = max($-6,0)
+			afk.timeuntilreset = min(max($-6,0),2*TICRATE)
 		else
 			p.mm.afktimer = $*3/4
 		end

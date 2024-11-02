@@ -2,16 +2,10 @@ local activebuttons = BT_JUMP|BT_WEAPONNEXT|BT_WEAPONPREV|BT_ATTACK|BT_CUSTOM1|B
 local AFK_TIMEOUT = 60*TICRATE
 
 local function handleTimeout(p)
+	if CV_MM.afkkickmode.value == 0 then return end
 	if p == server
 	or IsPlayerAdmin(p)
-	--TODO: cvar to toggle between nonadmins getting:
-	/*      
-		Kicked
-		Banned
-		Killed
-	*/
-	
-	or (true)
+	or (CV_MM.afkkickmode.value == 2) -- "kill" mode
 		P_KillMobj(p.mo,nil,nil,DMG_SPECTATOR)
 		chatprintf(p,"\x82*You have been made a spectator for being AFK.")
 		p.mm.afkhelpers.timedout = false
@@ -27,11 +21,14 @@ return function(p)
 	local cmd = p.cmd
 	local afk = p.mm.afkhelpers
 	
-	if afk.timedout
-	or (MM_N.waiting_for_players)
+	if (MM_N.waiting_for_players)
 	or (MM_N.gameover)
 	or (p.mm.spectator)
-	or not CV_MM.allowafkkick.value
+		return
+	end
+
+	if afk.timedout
+	or not CV_MM.afkkickmode.value
 		p.mm.afktimer = 0
 		return
 	end

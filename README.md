@@ -26,7 +26,7 @@ git clone --recursive https://github.com/vyvir/ravager
 Enter the PAK3 directory:
 
 ```
-cd ravager ; cd PAK3
+cd ravager ; cd PaK3
 ```
 
 Install PAK3 dependencies:

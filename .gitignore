@@ -2,3 +2,5 @@ build/
 PaK3
 PaK3/
 .vscode/
+.directory
+package-lock.json

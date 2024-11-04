@@ -14,7 +14,7 @@ This mode is 100% re-usable.
 
 Install the following dependencies:
 ```
-sudo zypper in make nodejs-common
+sudo zypper in make nodejs nodejs-common npm
 ```
 
 Clone the repository:

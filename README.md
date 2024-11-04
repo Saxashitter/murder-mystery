@@ -8,6 +8,63 @@ Our main inspiration is ROBLOX's Murder Mystery 2, and we aim to make the mode m
 
 This mode is 100% re-usable.
 
+## How to build it?
+
+### OpenSUSE
+
+Install the following dependencies:
+```
+sudo zypper in make nodejs-common
+```
+
+Clone the repository:
+
+```
+git clone --recursive https://github.com/vyvir/ravager
+```
+
+Enter the PAK3 directory:
+
+```
+cd ravager ; cd PAK3
+```
+
+Install PAK3 dependencies:
+
+```
+npm install
+```
+
+Go back to parent directory:
+
+```
+cd ..
+```
+
+Create 'build' directory:
+
+```
+mkdir -p build
+```
+
+Build the pk3:
+
+```
+make
+```
+
+Test the newly built pk3:
+
+```
+make runlinux
+```
+
+Build and test the newly built pk3:
+
+```
+make buildrunlinux
+```
+
 ## How can I help?
 If you can code, try making a pull request for something you want!
 If you can do art, compose, etc. Hit me up at **@literally_mario on Discord!**

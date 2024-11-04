@@ -1,9 +1,11 @@
 .PHONY: build runlinux buildrunlinux
 
+SRB2RUN = flatpak run org.srb2.SRB2
+
 build:
 	node PaK3/main.js src/ build/build.pk3
 
 runlinux:
-	cd ~/.srb2/; ./lsdl2srb2 $(SRB2OPT) -file $(CURDIR)/build/build.pk3
+	$(SRB2RUN) -file $(CURDIR)/build/build.pk3
 
 buildrunlinux: build runlinux

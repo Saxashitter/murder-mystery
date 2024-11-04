@@ -20,13 +20,13 @@ sudo zypper in make nodejs nodejs-common npm
 Clone the repository:
 
 ```
-git clone --recursive https://github.com/vyvir/ravager
+git clone --recursive https://github.com/Saxashitter/murder-mystery.git
 ```
 
 Enter the PAK3 directory:
 
 ```
-cd ravager ; cd PaK3
+cd murder-mystery ; cd PaK3
 ```
 
 Install PAK3 dependencies:

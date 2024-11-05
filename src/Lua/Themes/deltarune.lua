@@ -5,6 +5,11 @@ theme.transition = false
 theme.transition_time = 0
 theme.music = "RUDBST"
 
+local KRIS_X = 90*FU
+local RALSEI_X = 53*FU
+local SUSIE_X = 70*FU
+local KRIS_Y = 170*FU
+
 local function draw_parallax(v, x, y, scale, patch, flags)
 	local width = patch.width
 	local height = patch.height
@@ -37,12 +42,33 @@ end
 
 local background
 local strips
+local kris
+local susie
+local ralsei
 function theme.draw(v, tics)
 	if not background then
 		background = v.cachePatch"DELTABG_1"
 	end
 	if not strips then
 		strips = v.cachePatch"DELTABG_2"
+	end
+	if not kris then
+		kris = {}
+		for i = 0,5 do
+			kris[i] = v.cachePatch("KRIS"..tostring(i))
+		end
+	end
+	if not ralsei then
+		ralsei = {}
+		for i = 0,4 do
+			ralsei[i] = v.cachePatch("RALSEI"..tostring(i))
+		end
+	end
+	if not susie then
+		susie = {}
+		for i = 0,7 do
+			susie[i] = v.cachePatch("SUSIE"..tostring(i))
+		end
 	end
 
 	local x_speed = FU/4
@@ -58,6 +84,14 @@ function theme.draw(v, tics)
 
 	draw_parallax(v, x,y, FU, strips, V_SNAPTOTOP|V_SNAPTOLEFT|V_40TRANS)
 	draw_parallax(v, -x,-y, FU, strips, V_SNAPTOTOP|V_SNAPTOLEFT|V_40TRANS)
+
+	local krisf = tics/3 % 6
+	local ralseif = tics/3 % 5
+	local susief = tics/3 % 8
+
+	v.drawScaled(SUSIE_X, KRIS_Y, FU, susie[susief], V_SNAPTOLEFT)
+	v.drawScaled(RALSEI_X, KRIS_Y, FU, ralsei[ralseif], V_SNAPTOLEFT)
+	v.drawScaled(KRIS_X, KRIS_Y, FU, kris[krisf], V_SNAPTOLEFT)
 end
 
 return theme

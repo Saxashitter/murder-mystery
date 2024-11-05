@@ -102,7 +102,8 @@ return function(self, maploaded)
 
 	if not (self:isMM() and count >= 2) then return end
 
-	local special_count = P_RandomRange(1, max(1, min(count/3, 3)))
+	// local special_count = P_RandomRange(1, max(1, min(count/3, 3)))
+	local special_count = 1
 
 	local murdererP = {}
 	local sheriffP = {}
@@ -132,8 +133,6 @@ return function(self, maploaded)
 			murderer_refs[_p] = true
 		end
 		murdererP[i] = p
-
-		print(murdererP[i].name.." is murderer!")
 	end
 	
 	-- Insert sheriff chances in sheriff_chance_table.
@@ -160,7 +159,6 @@ return function(self, maploaded)
 			sheriff_refs[_p] = true
 		end
 		sheriffP[i] = p
-		print(sheriffP[i].name.." is sheriff!")
 	end
 
 	for _,p in pairs(murdererP) do

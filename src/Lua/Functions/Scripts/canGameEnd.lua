@@ -19,11 +19,9 @@ return function(self)
 	end
 
 	if not innocent then
-		print "END IT"
 		return true, 2
 	end
 	if not murderer then
-		print "END IT 2"
 		return true, 1
 	end
 

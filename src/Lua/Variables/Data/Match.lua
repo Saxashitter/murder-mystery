@@ -7,6 +7,8 @@ return {
 	murderers = {},
 	innocents = {},
 
+	theme = "srb2",
+
 	clues_amount = 0,
 	clues_in_map = false,
 	clues = {},

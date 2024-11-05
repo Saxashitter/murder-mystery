@@ -14,6 +14,14 @@ MM.endTypes = {
 return function(self, endType)
 	if MM_N.gameover then return end
 
+	-- select theme
+	local themes = {}
+	for k,v in pairs(MM.themes) do
+		table.insert(themes, k)
+	end
+
+	MM_N.theme = themes[P_RandomRange(1, #themes)]
+
 	local endType = MM.endTypes[endType] or 1
 
 	MM_N.endType = endType

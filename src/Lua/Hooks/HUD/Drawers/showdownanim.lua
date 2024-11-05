@@ -50,7 +50,7 @@ return function(v, p)
 		end
 		showdown_text = Squiggle(160*FU,
 			200*FU,
-			FU*4,
+			FU*3,
 			string.sub(showdown_str, 1, 1),
 			"center",
 			SKINCOLOR_RED,

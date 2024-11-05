@@ -1,32 +1,7 @@
 local int_ease = MM.require "Libs/int_ease"
-
-local function draw_parallax(v, x, y, scale, patch, flags)
-	local width = patch.width
-	local height = patch.height
-
-	local screen_width = v.width()/v.dupx()
-	local screen_height = v.height()/v.dupy()
-
-	x = $ % (width*scale)
-	y = $ % (height*scale)
-
-	x = $-(width*scale)
-	y = $-(height*scale)
-
-	local ox = x
-	local oy = y
-
-	while y < screen_height*FU do
-		while x < screen_width*FU do
-			v.drawScaled(x, y, scale, patch, flags)
-			x = $+(width*scale)
-		end
-		x = ox
-		y = $+(height*scale)
-	end
-end
-
 local MAX_FADE = 20
+
+local VWarp = MM.require "Libs/vwarp"
 
 return function(v)
 	if not MM_N.voting then return end
@@ -37,20 +12,31 @@ return function(v)
 	local tics = MM_N.end_ticker
 	local tics_after = max(0, MM_N.end_ticker-MAX_FADE)
 
-	// PARALLAX
+	// DRAW THEME
 
-	local patch = v.cachePatch("SRB2BACK")
-	local scale = FU/2
-
-	local scroll = tics*scale
+	local theme = MM.themes[MM_N.theme or "srb2"]
 
 	local t = FixedDiv(min(tics, MAX_FADE), MAX_FADE)
-	local trans = ease.linear(t, 10, 0) << V_ALPHASHIFT
+	local trans = ease.linear(t, 10, 0)
 
-	if not (tics) then return end
-	if trans == 10 << V_ALPHASHIFT then return end
+	local settings = {}
 
-	draw_parallax(v, scroll, scroll, scale, patch, V_SNAPTOTOP|V_SNAPTOLEFT|trans)
+	if theme.start_transparent then
+		if not (tics) then return end
+		if trans == 10 << V_ALPHASHIFT then return end
+	
+		settings.transp = trans
+	end
+
+	if theme.stretch then
+		local sw = v.width()/v.dupx()
+		local sh = v.height()/v.dupy()
+		settings.xscale = FixedDiv(sw, 320)
+		settings.yscale = FixedDiv(sh, 200)
+		settings.xorigin = -(sw-320)*FU/2
+	end
+
+	theme.draw(VWarp(v, settings), tics)
 
 	// RESULTS
 
@@ -200,6 +186,7 @@ return function(v)
 			v.drawScaled(x, y, scale*2, v.cachePatch("MM_MAPVOTE_OUTLINE_" .. outline), trans)
 		end
 	elseif MM_N.mapVote.state == "done" then
+		local scale = FU/2
 		local map = MM_N.mapVote.selected_map
 		local x = 160*FU
 		x = $ - (80/2)*FU

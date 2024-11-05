@@ -68,26 +68,27 @@ local modname = "SAXAMM"
 local function addHud(name)
 	local func,hudtype = dofile("Hooks/HUD/Drawers/"..name)
 
-	huds[name] = {func or "None", hudtype or "game"}
+	table.insert(huds, {name, func or "None", hudtype or "game"})
 end
 
 addHook("MapLoad",do
 	MMHUD.ticker = 0
 	MMHUD.xoffset = HUD_BEGINNINGXOFF
+	MMHUD.toptexts = {}
 end)
 
 addHook("HUD", function(v,p,c)
 	if MM:isMM() then
 		if not hudwasmm then
-			for name, data in pairs(huds) do
-				local drawFunc = data[1]
+			for i, data in ipairs(huds) do
+				local drawFunc = data[2]
 
 				if drawFunc == "None" then drawFunc = nil end
 	
-				if (is_hud_modded(name)
-				and not customhud.ItemExists(name))
-				or not is_hud_modded(name) then
-					customhud.SetupItem(name, modname, drawFunc, data[2])
+				if (is_hud_modded(data[1])
+				and not customhud.ItemExists(data[1]))
+				or not is_hud_modded(data[1]) then
+					customhud.SetupItem(data[1], modname, drawFunc, data[3])
 					continue
 				end
 
@@ -116,14 +117,14 @@ addHook("HUD", function(v,p,c)
 	MMHUD.xoffset = HUD_BEGINNINGXOFF
 	
 	if hudwasmm
-		for name,data in pairs(huds) do
+		for i,data in pairs(huds) do
 
-			if not is_hud_modded(name) then
-				customhud.SetupItem(name, "vanilla")
+			if not is_hud_modded(data[1]) then
+				customhud.SetupItem(data[1], "vanilla")
 				continue
 			end
 
-			customhud.disable(name)
+			customhud.disable(data[1])
 		end
 	end
 	
@@ -140,9 +141,10 @@ addHud "heldweapon"
 addHud "availableitems"
 addHud "weapontime"
 addHud "info"
+addHud "toptext"
 addHud "seenplayer"
-addHud "results"
 addHud "showdownanim"
+addHud "results"
 addHud "intermissiontally"
 addHud "rankings"
 addHud "intermissionhud"

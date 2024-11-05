@@ -13,15 +13,31 @@ end
 local function draw_byte(v, x, y, s, byte, flags, color)
 	local byte_str = string.format("STCFN%03d", byte)
 
-	if not v.patchExists(byte_str) then return end
+	if not v.patchExists(byte_str) then return space end
 
 	local patch = patchc(v, byte_str)
 
 	v.drawScaled(x, y, s, patch, flags, color)
+	return patch.width
 end
 
-local function get_text_width(str, scale)
-	return #str * (space*scale)
+local function get_text_width(v, str, scale)
+	local width = 0
+
+	for i = 1, #str do
+		local byte = string.sub(str, i, i):byte()
+
+		local gwidth = space
+		local byte_str = string.format("STCFN%03d", byte)
+
+		if v.patchExists(byte_str) then
+			gwidth = patchc(v, byte_str).width
+		end
+
+		width = $+(gwidth*scale)
+	end
+
+	return width
 end
 
 local function draw_text(self, v, flags)
@@ -30,7 +46,7 @@ local function draw_text(self, v, flags)
 
 	if not (#self.text) then return end
 
-	local width = get_text_width(self.text, self.scale)
+	local width = get_text_width(v, self.text, self.scale)
 
 	if self.align == "center" then
 		x = $-(width/2)
@@ -59,7 +75,7 @@ local function draw_text(self, v, flags)
 		if self.color then
 			color = v.getColormap(TC_RAINBOW, self.color)
 		end
-		draw_byte(v, _x, _y, self.scale, byte, flags, color)
+		local space = draw_byte(v, _x, _y, self.scale, byte, flags, color)
 		x = $+(space*self.scale)
 		angle = $+self.change
 	end

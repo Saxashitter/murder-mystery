@@ -10,7 +10,9 @@ return function(self)
 		ticker = 10*TICRATE
 	}
 
-	mapmusname = "_CHSEL"
+	local theme = MM.themes[MM_N.theme or "srb2"]
+
+	mapmusname = theme.music or "CHRSEL"
 	S_ChangeMusic(mapmusname)
 	
 	local addedMaps = 0

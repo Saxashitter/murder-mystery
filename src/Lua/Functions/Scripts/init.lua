@@ -71,6 +71,8 @@ end
 
 return function(self, maploaded)
 	if maploaded then
+		if not MM:isMM() then return end
+
 		set_overtime_point()
 		MM:giveOutClues(5)
 		
@@ -99,10 +101,15 @@ return function(self, maploaded)
 	MM_N.waiting_for_players = count < 2
 
 	if not (self:isMM() and count >= 2) then return end
-	
-	local murdererP
-	local sheriffP
-	
+
+	local special_count = P_RandomRange(1, max(1, min(count/3, 3)))
+
+	local murdererP = {}
+	local sheriffP = {}
+
+	local murderer_refs = {}
+	local sheriff_refs = {}
+
 	local murderer_chance_table = {} 
 	local sheriff_chance_table = {}
 	
@@ -116,7 +123,18 @@ return function(self, maploaded)
 		end
 	end
 	
-	murdererP = murderer_chance_table[P_RandomRange(1,#murderer_chance_table)]
+	for i = 1,special_count do
+		local p
+		while not (p and p.valid) do
+			local _p = murderer_chance_table[P_RandomRange(1,#murderer_chance_table)]
+			if murderer_refs[_p] then continue end
+			p = _p
+			murderer_refs[_p] = true
+		end
+		murdererP[i] = p
+
+		print(murdererP[i].name.." is murderer!")
+	end
 	
 	-- Insert sheriff chances in sheriff_chance_table.
 	for p in players.iterate do
@@ -129,71 +147,81 @@ return function(self, maploaded)
 			table.insert(sheriff_chance_table, p)
 		end
 	end
-	
-	sheriffP = sheriff_chance_table[P_RandomRange(1,#sheriff_chance_table)]
 
-	murdererP.mm.role = MMROLE_MURDERER -- murderer
-	murdererP.mm_save.murderer_chance_multi = 1
-
-	sheriffP.mm.role = MMROLE_SHERIFF -- sheriff
-	sheriffP.mm_save.sheriff_chance_multi = 1
+	for i = 1,special_count do
+		local p
+		while not (p and p.valid) do
+			local _p = sheriff_chance_table[P_RandomRange(1,#sheriff_chance_table)]
 	
-	if murdererP and murdererP.valid
-	and sheriffP and sheriffP.valid then
-		for p in players.iterate do
-			if not (p and p.valid and p.mm and p.mm_save) then continue end
+			if sheriff_refs[_p] then continue end
+
+			p = _p
+
+			sheriff_refs[_p] = true
+		end
+		sheriffP[i] = p
+		print(sheriffP[i].name.." is sheriff!")
+	end
+
+	for _,p in pairs(murdererP) do
+		p.mm.role = MMROLE_MURDERER -- murderer
+		p.mm_save.murderer_chance_multi = 1
+	end
+
+	for _,p in pairs(sheriffP) do
+		p.mm.role = MMROLE_SHERIFF -- sheriff
+		p.mm_save.sheriff_chance_multi = 1
+	end
+
+	for p in players.iterate do
+		if not (p and p.valid and p.mm and p.mm_save) then continue end
+		
+		if (p.mm.role ~= MMROLE_MURDERER) then 
+			p.mm_save.murderer_chance_multi = $ + 1
+		end 
+
+		if (p.mm.role ~= MMROLE_SHERIFF) then 
+			p.mm_save.sheriff_chance_multi = $ + 1
+		end
+		
+		local m_chancecount = 0
+		local s_chancecount = 0
+		
+		local m_percent = "???%"
+		local s_percent = "???%"
+		
+		for _p in players.iterate do
+			if not (_p and _p.valid and _p.mm and _p.mm_save) then continue end
 			
-			if (p ~= murdererP) then 
-				p.mm_save.murderer_chance_multi = $ + 1
-			end 
-
-			if (p ~= sheriffP) then 
-				p.mm_save.sheriff_chance_multi = $ + 1
+			for i=1,_p.mm_save.murderer_chance_multi do
+				m_chancecount = $ + 1
+			end
+			
+			for i=1,_p.mm_save.sheriff_chance_multi do
+				s_chancecount = $ + 1
 			end
 		end
 		
-		for p in players.iterate do
-			if not (p and p.valid and p.mm and p.mm_save) then continue end
-			
-			local m_chancecount = 0
-			local s_chancecount = 0
-			
-			local m_percent = "???%"
-			local s_percent = "???%"
-			
-			for _p in players.iterate do
-				if not (_p and _p.valid and _p.mm and _p.mm_save) then continue end
-				
-				for i=1,_p.mm_save.murderer_chance_multi do
-					m_chancecount = $ + 1
-				end
-				
-				for i=1,_p.mm_save.sheriff_chance_multi do
-					s_chancecount = $ + 1
-				end
-			end
-			
-			local result_m = FixedMul( 
-								FixedDiv(
-									p.mm_save.murderer_chance_multi*FU,
-									m_chancecount*FU
-								),
-								100*FU
-							)
-							
-			local result_s = FixedMul( 
-								FixedDiv(
-									p.mm_save.sheriff_chance_multi*FU,
-									s_chancecount*FU
-								),
-								100*FU
-							)
-			
-			p.mm_save.cons_murderer_chance = result_m
-			p.mm_save.cons_sheriff_chance = result_s
-			
-			CONS_Printf(p, string.format("\x85Murderer Chance: (%.2f percent)\n\x84Sheriff Chance: (%.2f percent)", result_m, result_s))
-		end
+		local result_m = FixedMul( 
+							FixedDiv(
+								p.mm_save.murderer_chance_multi*FU,
+								m_chancecount*FU
+							),
+							100*FU
+						)
+						
+		local result_s = FixedMul( 
+							FixedDiv(
+								p.mm_save.sheriff_chance_multi*FU,
+								s_chancecount*FU
+							),
+							100*FU
+						)
+		
+		p.mm_save.cons_murderer_chance = result_m
+		p.mm_save.cons_sheriff_chance = result_s
+		
+		CONS_Printf(p, string.format("\x85Murderer Chance: (%.2f percent)\n\x84Sheriff Chance: (%.2f percent)", result_m, result_s))
 	end
 	
 	if isserver then

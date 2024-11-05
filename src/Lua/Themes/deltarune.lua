@@ -66,10 +66,6 @@ local function draw_player(v, x, y, scale, data, flags)
 	return player
 end
 
-function theme.transitiondraw(v, tics)
-
-end
-
 local background
 local strips
 local kris

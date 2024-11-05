@@ -74,6 +74,7 @@ end)
 
 addScript "Waiting"
 addScript "Game Over"
+addScript "Theme Transition"
 
 addScript "Overtime"
 addScript "Showdown"

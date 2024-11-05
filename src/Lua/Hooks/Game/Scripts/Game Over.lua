@@ -115,6 +115,6 @@ return function()
 
 	if MM_N.end_ticker >= 5*TICRATE then
 		MM_N.end_ticker = 1
-		MM:startVote()
+		MM:startTransition()
 	end
 end, "gameover"

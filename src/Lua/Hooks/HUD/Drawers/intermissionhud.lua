@@ -3,11 +3,36 @@ local MAX_FADE = 20
 
 local VWarp = MM.require "Libs/vwarp"
 
-return function(v)
-	if not MM_N.voting then return end
-	if MM_N.end_ticker == nil then return end
+local function return_settings(v, theme, transition)
+	local settings = {}
 
+	if theme.start_transparent
+	and not transition then
+		local tics = MM_N.end_ticker
+		local t = FixedDiv(min(tics, MAX_FADE), MAX_FADE)
+		local trans = ease.linear(t, 10, 0)
+
+		if not (tics) then return false end
+		if trans == 10 << V_ALPHASHIFT then return false end
+
+		settings.transp = trans
+	end
+
+	if theme.stretch then
+		local sw = v.width()/v.dupx()
+		local sh = v.height()/v.dupy()
+		settings.xscale = FixedDiv(sw, 320)
+		settings.yscale = FixedDiv(sh, 200)
+		settings.xorigin = -(sw-320)*FU/2
+	end
+
+	return settings
+end
+
+local function draw_hud(v)
 	// DEFINITION
+
+	if MM_N.end_ticker == nil then return end
 
 	local tics = MM_N.end_ticker
 	local tics_after = max(0, MM_N.end_ticker-MAX_FADE)
@@ -19,22 +44,8 @@ return function(v)
 	local t = FixedDiv(min(tics, MAX_FADE), MAX_FADE)
 	local trans = ease.linear(t, 10, 0)
 
-	local settings = {}
-
-	if theme.start_transparent then
-		if not (tics) then return end
-		if trans == 10 << V_ALPHASHIFT then return end
-	
-		settings.transp = trans
-	end
-
-	if theme.stretch then
-		local sw = v.width()/v.dupx()
-		local sh = v.height()/v.dupy()
-		settings.xscale = FixedDiv(sw, 320)
-		settings.yscale = FixedDiv(sh, 200)
-		settings.xorigin = -(sw-320)*FU/2
-	end
+	local settings = return_settings(v, theme)
+	if settings == false then return end
 
 	theme.draw(VWarp(v, settings), tics)
 
@@ -211,8 +222,6 @@ return function(v)
 	end
 
 	// START IN
-
-
 	v.drawString(160, 200-20, "JOIN US AT https://discord.gg/PxT4XKhZxd", V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_REDMAP|trans, "center")
 	if MM_N.mapVote then
 		local time = (MM_N.mapVote.ticker-1)/TICRATE+1
@@ -226,5 +235,24 @@ return function(v)
 		if #prefix then
 			v.drawString(160, 200-10, prefix..tostring(time).." SECONDS", V_SNAPTOBOTTOM|V_YELLOWMAP|trans, "center")
 		end
+	end
+end
+
+return function(v)
+	if not MM_N.voting
+	and not MM_N.transition then return end
+
+	local theme = MM.themes[MM_N.theme or "srb2"]
+
+	if MM_N.voting then
+		draw_hud(v)
+	end
+
+	local settings = return_settings(v, theme, true)
+	if settings == false then return end
+
+	if theme.transitiondraw then
+		// DRAW TRANSITION OVER EVERYTHING
+		theme.transitiondraw(VWarp(v, settings), MM_N.transition_time)
 	end
 end,"gameandscores"

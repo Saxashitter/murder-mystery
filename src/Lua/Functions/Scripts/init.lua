@@ -128,10 +128,12 @@ return function(self, maploaded)
 		local p
 		while not (p and p.valid) do
 			local _p = murderer_chance_table[P_RandomRange(1,#murderer_chance_table)]
-			if murderer_refs[_p] then continue end
-			p = _p
-			murderer_refs[_p] = true
+			if not murderer_refs[_p] then
+				p = _p
+				murderer_refs[_p] = true
+			end
 		end
+		print "got murderer"
 		murdererP[i] = p
 	end
 	
@@ -152,21 +154,23 @@ return function(self, maploaded)
 		while not (p and p.valid) do
 			local _p = sheriff_chance_table[P_RandomRange(1,#sheriff_chance_table)]
 	
-			if sheriff_refs[_p] then continue end
-
-			p = _p
-
-			sheriff_refs[_p] = true
+			if not sheriff_refs[_p] then
+				p = _p
+				sheriff_refs[_p] = true
+			end
 		end
+		print "got sheriff"
 		sheriffP[i] = p
 	end
 
 	for _,p in pairs(murdererP) do
+		print "assigned murderer"
 		p.mm.role = MMROLE_MURDERER -- murderer
 		p.mm_save.murderer_chance_multi = 1
 	end
 
 	for _,p in pairs(sheriffP) do
+		print "assigned sheriff"
 		p.mm.role = MMROLE_SHERIFF -- sheriff
 		p.mm_save.sheriff_chance_multi = 1
 	end

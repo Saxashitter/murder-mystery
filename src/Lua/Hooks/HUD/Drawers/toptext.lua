@@ -4,9 +4,8 @@ MMHUD.toptexts = {
 	strs = {}
 }
 
-addHook("MapLoad", do
+addHook("MapChange", do
 	MMHUD.toptexts = {
-		y = -text_height,
 		strs = {}
 	}
 end)
@@ -25,7 +24,7 @@ function MMHUD:PushToTop(text, subtext, tics)
 end
 
 return function(v)
-	if not (#MMHUD.toptexts.strs) then return end
+	if not (MMHUD.toptexts.strs and #MMHUD.toptexts.strs) then return end
 
 	local listForRemoval = {}
 

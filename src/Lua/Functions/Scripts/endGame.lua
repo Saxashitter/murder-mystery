@@ -21,6 +21,9 @@ return function(self, endType)
 	end
 
 	MM_N.theme = themes[P_RandomRange(1, #themes)]
+	if MM.themes[MM_N.theme].init then
+		MM.themes[MM_N.theme].init(endType)
+	end
 
 	local endType = MM.endTypes[endType] or 1
 

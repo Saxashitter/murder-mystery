@@ -2,16 +2,17 @@
 
 rawset(_G, "MM_N", {})
 rawset(_G, "MM", {})
+freeslot("TOL_SAXAMM")
 
 G_AddGametype({
     name = "Murder Mystery",
     identifier = "SAXAMM",
-    typeoflevel = TOL_MATCH|TOL_TAG,
+    typeoflevel = TOL_MATCH|TOL_TAG|TOL_SAXAMM,
     rules = GTR_FRIENDLYFIRE|GTR_SPAWNINVUL,
     intermissiontype = int_match,
     headerleftcolor = 222,
     headerrightcolor = 84,
-	description = "wip"
+	description = "Who murdered this guy? It's a mystery!"
 })
 
 MM.require = dofile "Libs/require"

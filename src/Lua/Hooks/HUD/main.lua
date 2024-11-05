@@ -1,8 +1,8 @@
 local huds = {
-	["rings"] = {"None", "game"},
-	["time"] = {"None", "game"},
-	["score"] = {"None", "game"},
-	["lives"] = {"None", "game"}
+	{"rings", "None", "game"};
+	{"score", "None", "game"};
+	{"time", "None", "game"};
+	{"lives", "None", "game"}
 }
 
 customhud.SetupFont("STCFN")
@@ -88,11 +88,11 @@ addHook("HUD", function(v,p,c)
 				if (is_hud_modded(data[1])
 				and not customhud.ItemExists(data[1]))
 				or not is_hud_modded(data[1]) then
-					customhud.SetupItem(data[1], modname, drawFunc, data[3])
+					customhud.SetupItem(data[1], modname, drawFunc, data[3], i)
 					continue
 				end
 
-				customhud.enable(name)
+				customhud.enable(data[1])
 			end
 		end
 
@@ -117,8 +117,7 @@ addHook("HUD", function(v,p,c)
 	MMHUD.xoffset = HUD_BEGINNINGXOFF
 	
 	if hudwasmm
-		for i,data in pairs(huds) do
-
+		for i,data in ipairs(huds) do
 			if not is_hud_modded(data[1]) then
 				customhud.SetupItem(data[1], "vanilla")
 				continue
@@ -143,8 +142,8 @@ addHud "weapontime"
 addHud "info"
 addHud "toptext"
 addHud "seenplayer"
-addHud "showdownanim"
 addHud "results"
 addHud "intermissiontally"
 addHud "rankings"
 addHud "intermissionhud"
+addHud "showdownanim"

@@ -9,6 +9,7 @@ local KRIS_X = 90*FU
 local RALSEI_X = 53*FU
 local SUSIE_X = 70*FU
 local KRIS_Y = 170*FU
+local PLAYER_X = (320*FU)-KRIS_X
 
 local function draw_parallax(v, x, y, scale, patch, flags)
 	local width = patch.width
@@ -34,6 +35,35 @@ local function draw_parallax(v, x, y, scale, patch, flags)
 		x = ox
 		y = $+(height*scale)
 	end
+end
+
+local function return_player(v, data)
+	return v.getSprite2Patch(data.skin, data.spr2, false, data.frame, data.rot)
+end
+
+local function draw_player(v, x, y, scale, data, flags)
+	flags = flags or 0
+
+	local player = return_player(v, data)
+
+	x = $+(player.leftoffset*scale)
+	y = $+(player.topoffset*scale)
+
+	if data.rot > 5 then
+		if flags & V_FLIP then
+			flags = $ & ~V_FLIP
+			x = $-(player.width*scale)
+		else
+			flags = $|V_FLIP
+			x = $+(player.width*scale)
+		end
+	end
+
+	local color = v.getColormap(data.skin, data.color)
+
+	v.drawScaled(x, y, scale, player, flags, color)
+
+	return player
 end
 
 function theme.transitiondraw(v, tics)
@@ -72,7 +102,7 @@ function theme.draw(v, tics)
 	end
 
 	local x_speed = FU/4
-	local y_speed = FU/8
+	local y_speed = FU/7
 
 	local x = tics*x_speed
 	local y = tics*y_speed
@@ -82,8 +112,8 @@ function theme.draw(v, tics)
 
 	v.drawStretched(0, 0, FixedDiv(sw, 320), FixedDiv(sh, 190), background, V_SNAPTOLEFT|V_SNAPTOTOP)
 
-	draw_parallax(v, x,y, FU, strips, V_SNAPTOTOP|V_SNAPTOLEFT|V_40TRANS)
-	draw_parallax(v, -x,-y, FU, strips, V_SNAPTOTOP|V_SNAPTOLEFT|V_40TRANS)
+	draw_parallax(v, x,y, FU, strips, V_SNAPTOTOP|V_SNAPTOLEFT|V_80TRANS)
+	draw_parallax(v, -x,-y, FU, strips, V_SNAPTOTOP|V_SNAPTOLEFT|V_80TRANS)
 
 	local krisf = tics/3 % 6
 	local ralseif = tics/3 % 5
@@ -92,6 +122,23 @@ function theme.draw(v, tics)
 	v.drawScaled(SUSIE_X, KRIS_Y, FU, susie[susief], V_SNAPTOLEFT)
 	v.drawScaled(RALSEI_X, KRIS_Y, FU, ralsei[ralseif], V_SNAPTOLEFT)
 	v.drawScaled(KRIS_X, KRIS_Y, FU, kris[krisf], V_SNAPTOLEFT)
+
+	if not (consoleplayer and consoleplayer.valid) then return end
+
+	local scale = FU/2
+	local data = {
+		skin = consoleplayer.skin,
+		spr2 = SPR2_STND,
+		color = consoleplayer.skincolor,
+		frame = A,
+		rot = 3
+	}
+
+	local player = return_player(v, data)
+	local PLAYER_X = PLAYER_X-(player.width*scale/4)
+	local PLAYER_Y = KRIS_Y-(player.height*scale)
+
+	draw_player(v, PLAYER_X, PLAYER_Y, scale, data, V_SNAPTORIGHT)
 end
 
 return theme

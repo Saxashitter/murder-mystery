@@ -71,14 +71,14 @@ local function HUD_RoleDrawer(v,p)
 			local mchance = p.mm_save.cons_murderer_chance
 			local schance = p.mm_save.cons_sheriff_chance
 			
-			v.drawString(320*FU + off - 30*FU,
+			v.drawString(320*FU + off,
 				y + (2*FU),
 				string.format("%.2f",mchance).."%",
 				V_SNAPTOTOP|V_SNAPTORIGHT|V_REDMAP,
 				"thin-fixed-right"
 			)
 			v.drawString(320*FU + off,
-				y + (2*FU),
+				y + (2*FU) + (10*FU),
 				string.format("%.2f",schance).."%",
 				V_SNAPTOTOP|V_SNAPTORIGHT|V_BLUEMAP,
 				"thin-fixed-right"

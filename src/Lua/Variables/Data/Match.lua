@@ -4,6 +4,8 @@ return {
 	time = match_time+10*TICRATE,
 	maxtime = match_time,
 
+	special_count = 0,
+
 	murderers = {},
 	innocents = {},
 

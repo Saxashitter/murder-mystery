@@ -1,13 +1,9 @@
 local text_height = 20*FU
 
-MMHUD.toptexts = {
-	strs = {}
-}
+MMHUD.texts = {}
 
 addHook("MapChange", do
-	MMHUD.toptexts = {
-		strs = {}
-	}
+	MMHUD.texts = {}
 end)
 
 local function lerp(a, b, t)
@@ -15,7 +11,14 @@ local function lerp(a, b, t)
 end
 
 function MMHUD:PushToTop(text, subtext, tics)
-	table.insert(MMHUD.toptexts.strs, {
+	for k,v in pairs(MMHUD.texts) do
+		if k < #MMHUD.texts-2
+		and v.tics > 9 then
+			v.tics = 9
+		end
+	end
+
+	table.insert(MMHUD.texts, {
 		text = text or "TEST",
 		subtext = subtext or "Description",
 		y = -text_height,
@@ -24,13 +27,13 @@ function MMHUD:PushToTop(text, subtext, tics)
 end
 
 return function(v)
-	if not (MMHUD.toptexts.strs and #MMHUD.toptexts.strs) then return end
+	if not (MMHUD.texts and #MMHUD.texts) then return end
 
 	local listForRemoval = {}
 
-	for i,str in pairs(MMHUD.toptexts.strs) do
-		local i = #MMHUD.toptexts.strs-i
-		local target_y = text_height*i
+	for i,str in pairs(MMHUD.texts) do
+		local i = #MMHUD.texts-i
+		local target_y = 35*FU + text_height*i
 		local trans = 0
 
 		if str.tics >= 0 then
@@ -55,9 +58,9 @@ return function(v)
 	end
 
 	for _,str in pairs(listForRemoval) do
-		for k,v in pairs(MMHUD.toptexts.strs) do
+		for k,v in pairs(MMHUD.texts) do
 			if str == v then
-				table.remove(MMHUD.toptexts.strs, k)
+				table.remove(MMHUD.texts, k)
 				break
 			end
 		end

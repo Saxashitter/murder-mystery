@@ -74,7 +74,6 @@ end
 addHook("MapLoad",do
 	MMHUD.ticker = 0
 	MMHUD.xoffset = HUD_BEGINNINGXOFF
-	MMHUD.toptexts = {}
 end)
 
 addHook("HUD", function(v,p,c)

@@ -92,12 +92,12 @@ return function(self, maploaded)
 		count = $+1
 	end
 
-
 	MM_N.waiting_for_players = count < 2
 
 	if not (self:isMM() and count >= 2) then return end
 
 	local special_count = P_RandomRange(1, max(1, min(count/3, 3)))
+	MM_N.special_count = special_count
 
 	MM:assignRoles(special_count)
 

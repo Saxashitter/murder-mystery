@@ -39,17 +39,28 @@ local function HUD_InfoDrawer(v)
 	--rings?
 	do
 		v.drawScaled(6*FU - slidein,
-			20*FU,
+			21*FU,
 			FU*3/4,
 			v.cachePatch("NRNG1"),
 			V_SNAPTOLEFT|V_SNAPTOTOP
 		)
 		v.drawString(20*FU - slidein,
-			20*FU,
+			21*FU,
 			p.rings,
 			V_SNAPTOLEFT|V_SNAPTOTOP,
 			"fixed"
 		)	
+	end
+
+	-- murderers count
+	do
+		local color = leveltime/6 % 2 and V_REDMAP or V_BLUEMAP
+		v.drawString(6*FU - slidein,
+			33*FU,
+			"SPECIAL COUNT: ".. MM_N.special_count,
+			V_SNAPTOTOP|V_SNAPTOLEFT|color,
+			"thin-fixed"
+		)
 	end
 end
 

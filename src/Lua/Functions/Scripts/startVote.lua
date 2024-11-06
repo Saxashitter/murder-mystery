@@ -28,7 +28,7 @@ return function(self)
 		end
 		if mapWasIn then continue end
 
-		if not (data.typeoflevel & TOL_MATCH) then
+		if not (data.typeoflevel & (TOL_MATCH|TOL_SAXAMM)) then
 			continue
 		end
 		if data.bonustype then continue end

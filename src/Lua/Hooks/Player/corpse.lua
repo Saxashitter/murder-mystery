@@ -41,7 +41,24 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		chatprintf(source.player, "\x82*That was not the murderer. You were killed for friendly fire!", true)
 		P_DamageMobj(source, nil, nil, 999, DMG_INSTAKILL)
 	end
-	
+
+	if target.player.mm.role == MMROLE_MURDERER
+	and not MM:canGameEnd()
+	and MM_N.special_count >= 2 then
+		local text = "\x82*"..target.player.name.." was a murderer!"
+
+		if source
+		and source.player then
+			text = $.." // Died to "..source.player.name
+		elseif source
+			text = $.." // Died to an mobj."
+		else
+			text = $.." // Died to a hazard."
+		end
+
+		chatprint(text)
+	end
+
 	--numbers for hacky hud stuff
 	target.player.mm.whokilledme = source or 123123
 	

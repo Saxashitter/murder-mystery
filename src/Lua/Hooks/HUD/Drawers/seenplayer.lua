@@ -24,9 +24,9 @@ addHook("SeenPlayer", function(player, seenplayer)
 
 		if player
 		and player.mm
-		and player.mm.role == MMROLE_MURDERER
-		and seenplayer.mm.role == MMROLE_MURDERER then
-			draw_tag = "Murderer"
+		and player.mm.role ~= MMROLE_INNOCENT
+		and seenplayer.mm.role == player.mm.role then
+			draw_tag = player.mm.role == MMROLE_MURDERER and "Murderer" or "Sheriff"
 		end
 
 		return false

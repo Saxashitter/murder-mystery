@@ -37,10 +37,11 @@ local function manage_position(p, item, set)
 
 	local x = xx-yx
 	local y = yy+xy
-	local h = FixedMul(p.mo.height/2, p.mo.scale)
+	local h = p.mo.height/2
 	local z = FixedMul(h, item.pos.z)
 
 	item.mobj.angle = p.mo.angle
+	item.mobj.scale = p.mo.scale
 	item.mobj.fuse = 1
 	tpfunc(item.mobj,
 		p.mo.x + x,

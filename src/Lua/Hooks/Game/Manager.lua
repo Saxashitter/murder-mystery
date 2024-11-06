@@ -1,6 +1,6 @@
 local randomPlayer = MM.require "Libs/getRandomPlayer"
 
-local funcs = {gameover = {}, ongoing = {}, waiting = {}}
+local funcs = {gameover = {}, ongoing = {}, waiting = {}, global = {}}
 local function addScript(name)
 	local func, type = dofile("Hooks/Game/Scripts/"..name)
 	table.insert(funcs[type or "ongoing"], func)
@@ -30,6 +30,10 @@ end)
 
 addHook("ThinkFrame", function()
 	if not MM:isMM() then return end
+
+	for k,func in pairs(funcs.global) do
+		func()
+	end
 
 	if MM_N.gameover then
 		for k,func in pairs(funcs.gameover) do

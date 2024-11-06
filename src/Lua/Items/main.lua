@@ -94,10 +94,10 @@ local ITEM_STRUCT = {
 	
 	animation = true,
 	damage = true,
-	weaponize = true, -- enable to put item in right hand and allow for dual-wielding with regular items
-	droppable = false, -- enable to let item be dropped
-	shootable = false, -- enable to make weapon shoot projectiles instead of stabbing
-	shootmobj = MT_THOK, -- the mobj type it shoots
+	weaponize = true,
+	droppable = false,
+	shootable = false,
+	shootmobj = MT_THOK,
 
 	restrict = {},
 

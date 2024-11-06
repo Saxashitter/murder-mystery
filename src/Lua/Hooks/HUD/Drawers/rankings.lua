@@ -26,6 +26,7 @@ end
 
 local SECRECY_NOTSECRET = 0
 local SECRECY_MURDERERALLOWED = 1
+local SECRECY_SHERIFFALLOWED = -1
 local SECRECY_SECRET = 2
 
 local roles = MM.require "Variables/Data/Roles"
@@ -58,7 +59,7 @@ local ROLESTYLES = {
 	Sheriff = {
 		bg = "MM_PLAYERLIST_BG_SHERRIF",
 		subtitle = "\x84Sheriff",
-		secrecy = SECRECY_SECRET,
+		secrecy = SECRECY_SHERIFFALLOWED,
 		standardRole = true
 	}
 }
@@ -86,9 +87,16 @@ local function getViewedPlayerRole(player, viewer)
 		privilegeLevel = SECRECY_SECRET
 	elseif (viewer.mm and viewer.mm.role == MMROLE_MURDERER) then
 		privilegeLevel = SECRECY_MURDERERALLOWED
+	elseif (viewer.mm and viewer.mm.role == MMROLE_SHERIFF) then
+		privilegeLevel = SECRECY_SHERIFFALLOWED
 	end
+
 	-- print(player.name .. ": " .. role .. " with secrecy " .. secrecyLevel .. " and priv " .. privilegeLevel)
-	if (privilegeLevel < secrecyLevel) then
+	if role == "Sheriff" then
+		if privilegeLevel ~= SECRECY_SHERIFFALLOWED then
+			role = "Unknown"
+		end
+	elseif (privilegeLevel < secrecyLevel) then
 		role = "Unknown"
 	end
 	return role

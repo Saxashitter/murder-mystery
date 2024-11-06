@@ -5,6 +5,7 @@ end
 doAndInsert("isMM")
 doAndInsert("init")
 doAndInsert("playerInit")
+doAndInsert("assignRoles")
 doAndInsert("canGameEnd")
 doAndInsert("endGame")
 doAndInsert("pingMurderers")

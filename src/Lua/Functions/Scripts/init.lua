@@ -85,95 +85,21 @@ return function(self, maploaded)
 		P_RemoveMobj(MM_N.end_camera)
 		MM_N.end_camera = nil
 	end
-	
-	local lastMurderers = {}
-	local lastSheriffs = {}
 
-	for p in players.iterate do
-		self:playerInit(p, true)
-	end
-	
 	local count = 0
 	for p in players.iterate do
+		self:playerInit(p, true)
 		count = $+1
 	end
+
 
 	MM_N.waiting_for_players = count < 2
 
 	if not (self:isMM() and count >= 2) then return end
 
-	// local special_count = P_RandomRange(1, max(1, min(count/3, 3)))
-	local special_count = 1
+	local special_count = P_RandomRange(1, max(1, min(count/3, 3)))
 
-	local murdererP = {}
-	local sheriffP = {}
-
-	local murderer_refs = {}
-	local sheriff_refs = {}
-
-	local murderer_chance_table = {} 
-	local sheriff_chance_table = {}
-	
-	-- Insert murderer chances in murderer_chance_table.
-	for p in players.iterate do
-		if not (p and p.valid and p.mm and p.mm_save) 
-		and not canBeRole(p, count) then continue end
-		
-		for i=1,p.mm_save.murderer_chance_multi do
-			table.insert(murderer_chance_table, p)
-		end
-	end
-	
-	for i = 1,special_count do
-		local p
-		while not (p and p.valid) do
-			local _p = murderer_chance_table[P_RandomRange(1,#murderer_chance_table)]
-			if not murderer_refs[_p] then
-				p = _p
-				murderer_refs[_p] = true
-			end
-		end
-		print "got murderer"
-		murdererP[i] = p
-	end
-	
-	-- Insert sheriff chances in sheriff_chance_table.
-	for p in players.iterate do
-		if not (p and p.valid and p.mm and p.mm_save)
-		and not canBeRole(p, count) then continue end
-		
-		if (p == murdererP) then continue end
-		
-		for i=1,p.mm_save.sheriff_chance_multi do
-			table.insert(sheriff_chance_table, p)
-		end
-	end
-
-	for i = 1,special_count do
-		local p
-		while not (p and p.valid) do
-			local _p = sheriff_chance_table[P_RandomRange(1,#sheriff_chance_table)]
-	
-			if not sheriff_refs[_p] then
-				p = _p
-				sheriff_refs[_p] = true
-			end
-		end
-		print "got sheriff"
-		sheriffP[i] = p
-	end
-
-	for _,p in pairs(murdererP) do
-		print "assigned murderer"
-		p.mm.role = MMROLE_MURDERER -- murderer
-		p.mm_save.murderer_chance_multi = 1
-	end
-
-	for _,p in pairs(sheriffP) do
-		print "assigned sheriff"
-		p.mm.role = MMROLE_SHERIFF -- sheriff
-		p.mm_save.sheriff_chance_multi = 1
-	end
+	MM:assignRoles(special_count)
 
 	for p in players.iterate do
 		if not (p and p.valid and p.mm and p.mm_save) then continue end

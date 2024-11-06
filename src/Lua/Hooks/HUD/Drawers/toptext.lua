@@ -37,8 +37,10 @@ return function(v)
 		local trans = 0
 
 		if str.tics >= 0 then
-			str.tics = max(0, $-1)
-
+			if not paused
+				str.tics = max(0, $-1)
+			end
+			
 			if not (str.tics) then
 				listForRemoval[#listForRemoval+1] = str
 				continue

@@ -67,23 +67,6 @@ local function HUD_RoleDrawer(v,p)
 		v.drawScaled(x + off, y, FU, patch, V_SNAPTOTOP|V_SNAPTORIGHT|V_50TRANS)
 		v.drawString(x + off, y + (2*FU), version, V_SNAPTOTOP|V_SNAPTORIGHT|V_80TRANS, "thin-fixed")
 		
-		if p == consoleplayer
-			local mchance = p.mm_save.cons_murderer_chance
-			local schance = p.mm_save.cons_sheriff_chance
-			
-			v.drawString(320*FU + off,
-				y + (2*FU),
-				string.format("%.2f",mchance).."%",
-				V_SNAPTOTOP|V_SNAPTORIGHT|V_REDMAP,
-				"thin-fixed-right"
-			)
-			v.drawString(320*FU + off,
-				y + (2*FU) + (10*FU),
-				string.format("%.2f",schance).."%",
-				V_SNAPTOTOP|V_SNAPTORIGHT|V_BLUEMAP,
-				"thin-fixed-right"
-			)
-		end
 	end
 	
 	if p.spectator 

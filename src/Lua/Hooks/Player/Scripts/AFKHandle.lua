@@ -3,12 +3,14 @@ local AFK_TIMEOUT = 60*TICRATE
 
 local function handleTimeout(p)
 	if CV_MM.afkkickmode.value == 0 then return end
+	
 	if p == server
 	or IsPlayerAdmin(p)
 	or (CV_MM.afkkickmode.value == 2) -- "kill" mode
 		P_KillMobj(p.mo,nil,nil,DMG_SPECTATOR)
 		chatprintf(p,"\x82*You have been made a spectator for being AFK.")
 		p.mm.afkhelpers.timedout = false
+		p.mm.whokilledme = "an AFK heart attack."
 		--TODO: add corpse immediately
 	else
 		COM_BufAddText(server,"kick "..#p.." AFK")

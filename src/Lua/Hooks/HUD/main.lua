@@ -52,12 +52,13 @@ local function is_hud_modded(name)
 end
 
 local TR = TICRATE
-local HUD_BEGINNINGXOFF = 300*FU
+local HUD_BEGINNINGXOFF = 350*FU
 
 --DO NOT SYNCH!!!!!!!!
 local MMHUD = {
 	ticker = 0,
 	xoffset = HUD_BEGINNINGXOFF,
+	weaponslidein = HUD_BEGINNINGXOFF,
 }
 rawset(_G, "MMHUD", MMHUD)
 
@@ -74,6 +75,7 @@ end
 addHook("MapLoad",do
 	MMHUD.ticker = 0
 	MMHUD.xoffset = HUD_BEGINNINGXOFF
+	MMHUD.weaponslidein = HUD_BEGINNINGXOFF
 end)
 
 addHook("HUD", function(v,p,c)
@@ -102,10 +104,19 @@ addHook("HUD", function(v,p,c)
 		
 		if not MM.gameover
 			if MMHUD.ticker >= TR*3/2
+				MMHUD.weaponslidein = ease.inquart(FU*9/10,$,0)
+				if MM_N.waiting_for_players
+					MMHUD.xoffset = ease.inquart(FU*9/10,$,0)
+				end
+			end
+			if MMHUD.ticker >= 10*TR
+			and not MM_N.waiting_for_players
 				MMHUD.xoffset = ease.inquart(FU*9/10,$,0)
+				MMHUD.weaponslidein = ease.inexpo(FU*7/10,$,HUD_BEGINNINGXOFF)
 			end
 		else
 			MMHUD.xoffset = ease.inexpo(FU*7/10,$,HUD_BEGINNINGXOFF)
+			MMHUD.weaponslidein = ease.inexpo(FU*7/10,$,HUD_BEGINNINGXOFF)
 		end
 		
 		hudwasmm = true

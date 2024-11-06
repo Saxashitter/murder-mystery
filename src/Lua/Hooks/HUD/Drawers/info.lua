@@ -36,7 +36,7 @@ local function HUD_InfoDrawer(v)
 		)
 	end
 	
-	--rings?
+	--rings
 	do
 		v.drawScaled(6*FU - slidein,
 			21*FU,
@@ -53,6 +53,7 @@ local function HUD_InfoDrawer(v)
 	end
 
 	-- murderers count
+	/*
 	do
 		local color = leveltime/6 % 2 and V_REDMAP or V_BLUEMAP
 		v.drawString(6*FU - slidein,
@@ -62,6 +63,7 @@ local function HUD_InfoDrawer(v)
 			"thin-fixed"
 		)
 	end
+	*/
 end
 
 return HUD_InfoDrawer,"gameandscores"

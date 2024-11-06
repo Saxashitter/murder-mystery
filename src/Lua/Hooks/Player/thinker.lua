@@ -52,7 +52,9 @@ addHook("PlayerThink", function(p)
 	and not MM_N.gameover
 		p.mm.oob_ticker = $+1
 		if p.mm.oob_ticker == 3*TICRATE
-			P_KillMobj(p.mo) 
+			p.mo.color = SKINCOLOR_GALAXY
+			p.mo.colorized = true
+			P_KillMobj(p.mo)
 		end
 	else
 		p.mm.oob_ticker = 0

@@ -42,21 +42,42 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		P_DamageMobj(source, nil, nil, 999, DMG_INSTAKILL)
 	end
 
-	if target.player.mm.role == MMROLE_MURDERER
+	if target.player.mm.role ~= MMROLE_INNOCENT
 	and not MM:canGameEnd()
 	and MM_N.special_count >= 2 then
-		local text = "\x82*"..target.player.name.." was a murderer!"
-
-		if source
-		and source.player then
-			text = $.." // Died to "..source.player.name
-		elseif source
-			text = $.." // Died to an mobj."
-		else
-			text = $.." // Died to a hazard."
+		if target.player.mm.role == MMROLE_MURDERER
+			local text = "\x82*"..target.player.name.." was a murderer!"
+			
+			/*
+			if source
+			and source.player then
+				text = $.." // Died to "..source.player.name
+			elseif source
+				--died to an mobj
+				text = $.." // Died to an mobj."
+			else
+				text = $.." // Died to a hazard."
+			end
+			*/
+			
+			chatprint(text)
 		end
-
-		chatprint(text)
+		
+		--TODO: test this
+		local color = roles[target.player.mm.role].colorcode
+		for p in players.iterate()
+			if not (p.mm) then continue end
+			if (p.mm.spectator) then continue end
+			
+			if (p.mm.role == target.player.mm.role)
+			and (p == consoleplayer)
+				MMHUD:PushToTop("TEAMMATE DEAD",
+					"Your teammate, "..color..target.player.name.."\x80 died!",
+					5*TICRATE
+				)
+			end
+		end
+		
 	end
 
 	--numbers for hacky hud stuff

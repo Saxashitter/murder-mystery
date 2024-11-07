@@ -273,7 +273,7 @@ MM:addPlayerScript(function(p)
 			end
 			
 			if def.onhit then
-				def:onhit(p,p2)
+				def.onhit(item,p,p2)
 			end
 			
 			item.anim = min(item.max_anim/3, $)

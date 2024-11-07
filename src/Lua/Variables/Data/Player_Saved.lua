@@ -6,8 +6,5 @@ return {
 	cons_murderer_chance = 0,
 	cons_sheriff_chance = 0,
 	
-	r_color = nil,
-	r_skin = nil,
-	
 	lastRole = nil,
 }

@@ -68,7 +68,7 @@ addHook("PlayerSpawn", function(player)
 		if not (player.mm) then return end
 		
 		if not player.spectator and leveltime < 10*TICRATE then
-			if player.mm_save.r_skin ~= nil then
+			if player.mm_save.swapped then
 				R_SetPlayerSkin(player, player.mm_save.r_skin)
 				player.mm_save.r_skin = nil
 			end
@@ -83,5 +83,5 @@ addScript "Theme Transition"
 addScript "Overtime"
 addScript "Showdown"
 addScript "Game End"
-addScript "Restrict"
+// addScript "Restrict"
 addScript "Gun Manager"

@@ -36,126 +36,112 @@ weapon.equipsfx = sfx_None
 weapon.attacksfx = sfx_None
 
 weapon.hiddenforothers = true
-
 weapon.cantouch = true
+
+local function get_alias(player)
+	local mo = player.mo
+	local alias
+	local ext = {}
+
+	local oa = player.mm.alias
+
+	if not oa then
+		alias = {}
+		alias.name = player.name
+		alias.skin = mo.skin
+		alias.color = mo.color
+		alias.skincolor = player.skincolor
+		alias.perm_level = MM:getpermlevel(player)
+		alias.posingas = player
+
+		local alias_addon = MM.runHook("CreateAlias", player, alias)
+
+		if type(alias_addon) == "table" then
+			for k,v in pairs(alias_addon) do
+				alias[k] = v
+			end
+		end
+	else
+		alias = oa
+	end
+
+	ext.x = mo.x
+	ext.y = mo.y
+	ext.z = mo.z
+	ext.angle = mo.angle
+	ext.drawangle = player.drawangle
+	ext.momx = mo.momx
+	ext.momy = mo.momy
+	ext.momz = mo.momz
+	ext.state = mo.state
+	ext.sprite = mo.sprite
+	ext.frame = mo.frame & FF_FRAMEMASK
+	ext.perm_level = 0
+
+	alias.ext = ext
+
+	return alias
+end
+
+local function apply_alias_to_player(player, alias)
+	if not (alias.ext) then 
+		return
+	end
+
+	local mo = player.mo
+	local ext = alias.ext
+
+	player.mm.alias = alias
+	if not player.mm.alias_save then
+		player.mm.alias_save = {
+			skin = player.skin,
+			skincolor = player.skincolor
+		}
+	end
+
+	P_SetOrigin(mo, ext.x, ext.y, ext.z)
+	mo.angle = ext.angle
+	mo.momx = ext.momx
+	mo.momy = ext.momy
+	mo.momz = ext.momz
+	mo.state = ext.state
+	mo.frame = $|ext.frame
+	player.drawangle = ext.drawangle
+	
+	mo.color = alias.color
+	player.skincolor = alias.skincolor
+	R_SetPlayerSkin(player, alias.skin)
+
+	MM.runHook("ApplyAlias", player, alias)
+
+	player.mm.alias = alias
+	alias.ext = nil
+
+	-- This is for if you swap back to your original body.
+	-- You shouldn't have an alias set if you're going back to your own body
+	if player.mm.alias.posingas ~= nil then
+		if player.mm.alias.posingas.valid and player.mm.alias.posingas == player then
+			player.mm.alias = nil
+		end
+	end
+
+	return true
+end
 
 function weapon:onhit(player, player2)
 	local mo1 = player.mo
 	local mo2 = player2.mo
-	
+
 	if (player.mm and player2.mm) and
 	(mo1 and mo1.valid) and
 	(mo2 and mo2.valid) then
-		local old = {
-			[1] = {
-				name = player.mm.alias.name or player.name,
-				skin = mo1.skin,
-				color = mo1.color,
-				x = mo1.x,
-				y = mo1.y,
-				z = mo1.z,
-				angle = mo1.angle,
-				drawangle = player.drawangle,
-				momx = mo1.momx,
-				momy = mo1.momy,
-				momz = mo1.momz,
-				state = mo1.state,
-				sprite = mo1.sprite,
-				frame = (mo1.frame & FF_FRAMEMASK),
-				perm_level = 0, -- set later
-			},
-			[2] = {
-				name = player2.mm.alias.name or player2.name,
-				skin = mo2.skin,
-				color = mo2.color,
-				x = mo2.x,
-				y = mo2.y,
-				z = mo2.z,
-				angle = mo2.angle,
-				drawangle = player2.drawangle,
-				momx = mo2.momx,
-				momy = mo2.momy,
-				momz = mo2.momz,
-				state = mo2.state,
-				sprite = mo2.sprite,
-				frame = (mo2.frame & FF_FRAMEMASK),
-				perm_level = 0, -- set later
-			},
-		}
-		
-		-- where "set later" comes in play
-		if player.mm.alias.perm_level ~= nil then
-			old[1].perm_level = player.mm.alias.perm_level
-		else
-			old[1].perm_level = MM:getpermlevel(player)
-		end
-		
-		if player2.mm.alias.perm_level ~= nil then
-			old[2].perm_level = player2.mm.alias.perm_level
-		else
-			old[2].perm_level = MM:getpermlevel(player2)
-		end
-		
-		
-		-- Player 1
-		P_SetOrigin(mo1, old[2].x, old[2].y, old[2].z)
-		mo1.angle = old[2].angle
-		mo1.momx = old[2].momx
-		mo1.momy = old[2].momy
-		mo1.momz = old[2].momz
-		mo1.state = old[2].state
-		--mo1.sprite = old[2].sprite
-		mo1.frame = $|old[2].frame
-		player.drawangle = old[2].drawangle
-		
-		mo1.color = old[2].color
-		R_SetPlayerSkin(player, old[2].skin)
-		player.mm.alias.name = old[2].name
-		player.mm.alias.skin = old[2].skin
-		player.mm.alias.skincolor = old[2].color
-		player.mm.alias.perm_level = old[2].perm_level
-		player.mm.alias.posingas = player2
-		
-		-- Player 2
-		P_SetOrigin(mo2, old[1].x, old[1].y, old[1].z)
-		mo2.angle = old[1].angle
-		mo2.momx = old[1].momx
-		mo2.momy = old[1].momy
-		mo2.momz = old[1].momz
-		mo2.state = old[1].state
-		--mo2.sprite = old[1].sprite
-		mo2.frame = $|old[1].frame
-		player2.drawangle = old[1].drawangle
-		
-		mo2.color = old[1].color
-		R_SetPlayerSkin(player2, old[1].skin)
-		player2.mm.alias.name = old[1].name
-		player2.mm.alias.skin = old[1].skin
-		player2.mm.alias.skincolor = old[1].color
-		player2.mm.alias.perm_level = old[1].perm_level
-		player2.mm.alias.posingas = player
-		
-		-- This is for if you swap back to your original body.
-		-- You shouldn't have an alias set if you're going back to your own body
-		if player.mm.alias.posingas ~= nil then
-			if player.mm.alias.posingas.valid and player.mm.alias.posingas == player then
-				player.mm.alias = {}
-			end
-		end
-		
-		if player2.mm.alias.posingas ~= nil then
-			if player2.mm.alias.posingas.valid and player2.mm.alias.posingas == player2 then
-				player2.mm.alias = {}
-			end
-		end
-		
-		local wp = MM:FetchInventorySlot(player)
-		
-		/*
-		if (wp.timeleft <= 0) then
-			wp.timeleft = 15*TICRATE
-		end
-		*/
+		self.hit = 0
+
+		local alias = get_alias(player)
+		local alias2 = get_alias(player2)
+
+		apply_alias_to_player(player, alias2)
+		apply_alias_to_player(player2, alias)
 	end
 end
 

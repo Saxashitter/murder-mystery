@@ -13,17 +13,7 @@ return function(self, p, mapchange)
 	if midgame then
 		p.mm.joinedmidgame = true
 		p.mm.spectator = true
-	elseif p.mo and p.mo.valid then
-		-- r_ = restored
-		if p.mm_save.swapped_last_round then
-			p.skincolor = p.mm_save.r_color
-			p.mo.color = p.skincolor
-
-			p.mo.skin = p.mm_save.r_skin
-
-			p.mm_save.r_color = nil
-			p.mm_save.swapped = false
-		end
+		p.spectator = true
 	end
 
 	MM.runHook("PlayerInit", p, midgame)

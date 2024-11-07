@@ -6,15 +6,12 @@ return function(self)
 
 		local alias = p.mm.alias_save
 
-		print "yea"
-
 		R_SetPlayerSkin(p, alias.skin)
 		p.skincolor = alias.skincolor
 	end
 
 	if not theme.transition then
 		MM:startVote()
-		print("The theme doesn't have a transition, continue.")
 		return
 	end
 

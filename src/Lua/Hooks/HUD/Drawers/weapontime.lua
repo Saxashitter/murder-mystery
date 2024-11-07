@@ -79,7 +79,7 @@ local function HUD_TimeForWeapon(v,p)
 	if leveltime >= 10*TICRATE + 5 then return end
 	
 	local time = (10*TICRATE)-leveltime
-	if (leveltime <= 4)
+	if (leveltime < TR)
 		teammates = nil
 	end
 
@@ -138,7 +138,7 @@ local function HUD_TimeForWeapon(v,p)
 		)
 	end
 	
-	if (leveltime >= 4)
+	if (leveltime >= TR)
 		HUD_TFW_DrawTeammates(v,p)
 	end
 end

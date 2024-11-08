@@ -4,6 +4,7 @@ return {
 	got_weapon = false,
 
 	clues = {},
+	clues_collected = 0,
 
 	-- Never show this info in tab menu.
 	alias = nil,

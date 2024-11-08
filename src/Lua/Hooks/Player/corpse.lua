@@ -71,9 +71,9 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 			
 			if (p.mm.role == target.player.mm.role)
 			and (p == consoleplayer)
-				MMHUD:PushToTop("TEAMMATE DEAD",
-					"Your teammate, "..color..target.player.name.."\x80 died!",
-					5*TICRATE
+				MMHUD:PushToTop(5*TICRATE,
+					"TEAMMATE DEAD",
+					"Your teammate, "..color..target.player.name.."\x80 died!"
 				)
 			end
 		end

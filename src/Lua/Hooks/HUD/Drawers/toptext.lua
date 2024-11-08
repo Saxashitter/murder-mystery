@@ -10,7 +10,7 @@ local function lerp(a, b, t)
 	return FixedMul(a, FU-t) + FixedMul(b, t)
 end
 
-function MMHUD:PushToTop(text, subtext, tics)
+function MMHUD:PushToTop(tics, text, ...)
 	for k,v in pairs(MMHUD.texts) do
 		if k < #MMHUD.texts-2
 		and v.tics > 9 then
@@ -20,7 +20,7 @@ function MMHUD:PushToTop(text, subtext, tics)
 
 	table.insert(MMHUD.texts, {
 		text = text or "TEST",
-		subtext = subtext or "Description",
+		subtexts = {...}, --subtext or "Description",
 		y = -text_height,
 		tics = tics or -1
 	})
@@ -31,9 +31,9 @@ return function(v)
 
 	local listForRemoval = {}
 
+	local target_y = 35*FU + text_height
 	for i,str in pairs(MMHUD.texts) do
 		local i = #MMHUD.texts-i
-		local target_y = 35*FU + text_height*i
 		local trans = 0
 
 		if str.tics >= 0 then
@@ -56,7 +56,13 @@ return function(v)
 		str.y = lerp($, target_y, FU/7)
 
 		v.drawString(160*FU, str.y, str.text, V_SNAPTOTOP|trans, "fixed-center")
-		v.drawString(160*FU, str.y+(text_height/2), str.subtext, V_SNAPTOTOP|trans, "thin-fixed-center")
+		
+		local worky = text_height/2
+		for _,subt in ipairs(str.subtexts) do
+			v.drawString(160*FU, str.y+worky, subt, V_SNAPTOTOP|trans, "thin-fixed-center")
+			worky = $ + text_height/2
+		end
+		target_y = $ + worky
 	end
 
 	for _,str in pairs(listForRemoval) do

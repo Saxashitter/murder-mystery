@@ -36,6 +36,7 @@ function MM:giveOutClues(amount)
 		newPos.y = thing.y*FU
 
 		local z = P_FloorzAtPos(newPos.x, newPos.y, 0, mobjinfo[MT_PLAYER].height)
+		z = z + (thing.z*FU)
 
 		newPos.z = z
 

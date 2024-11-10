@@ -9,6 +9,8 @@ local roles = MM.require "Variables/Data/Roles"
 local function HUD_RoleDrawer(v,p)
 	if not (p.mm) then return end
 	
+	MMHUD.interpolate(v,true)
+	
 	local patch = v.cachePatch("MMROLE")
 	local off = MMHUD.xoffset
 	

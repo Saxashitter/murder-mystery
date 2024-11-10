@@ -2,6 +2,8 @@ local function HUD_InfoDrawer(v)
 	local p = displayplayer
 	local slidein = MMHUD.xoffset
 	
+	MMHUD.interpolate(v,true)
+	
 	--Timer
 	do
 		local flash = false

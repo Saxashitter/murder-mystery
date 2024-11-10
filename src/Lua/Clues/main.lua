@@ -77,9 +77,9 @@ MM:addPlayerScript(function(p)
 	for i,clue in ipairs(p.mm.clues) do
 		local pos = clue.ref
 
-		if abs(p.mo.x-pos.x) > p.mo.radius
-		or abs(p.mo.y-pos.y) > p.mo.radius
-		or abs(p.mo.z-pos.z) > p.mo.height then
+		if abs(p.mo.x-pos.x) > p.mo.radius*3/2
+		or abs(p.mo.y-pos.y) > p.mo.radius*3/2
+		or abs(p.mo.z-pos.z) > p.mo.height*3/2 then
 			continue
 		end
 

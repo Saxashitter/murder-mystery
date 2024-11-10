@@ -40,7 +40,7 @@ local function set_overtime_point()
 		if distTo < olddist then continue end
 		olddist = distTo
 	end
-	MM_N.overtime_startingdist = olddist
+	MM_N.storm_startingdist = olddist
 	print(string.format("Final storm dist: %f",olddist))
 
 

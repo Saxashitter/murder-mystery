@@ -19,11 +19,10 @@ MC("role", "sheriff")
 MC("role", "murderer")
 
 MM.sniper_theme_offset = 13
+MM.themes = {} -- intermission themes
 
-MM.themes = {}
 local function addTheme(name)
 	MM.themes[name] = dofile("Themes/"..name)
 end
 
-addTheme"srb2"
-addTheme"deltarune"
+addTheme "srb2"

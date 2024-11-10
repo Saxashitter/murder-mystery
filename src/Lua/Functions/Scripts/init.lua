@@ -27,21 +27,23 @@ local function set_overtime_point()
 	if chosenPoint == nil then return end
 	
 	MM_N.storm_ticker = 0
-	
-	
+
+	print("MM:init(): Setting up storm radius...")
 	--Find the farthest possible point
 	local olddist = 4096*FU
 	for k,v in ipairs(possiblePoints) do
 		if v == chosenPoint then continue end
-		
+
 		--add 256 as a small buffer to let people get to the middle
 		local distTo = R_PointToDist2(v.x,v.y, chosenPoint.x,chosenPoint.y) + 256*FU
+		print(string.format("Calcing farthest point... i=%d distTo=%f olddist=%f",k,distTo,olddist))
 		if distTo < olddist then continue end
-		
-		MM_N.overtime_startingdist = distTo
 		olddist = distTo
 	end
-	
+	MM_N.overtime_startingdist = olddist
+	print(string.format("Final storm dist: %f",olddist))
+
+
 	MM_N.storm_point = P_SpawnMobj(
 		chosenPoint.x,
 		chosenPoint.y,

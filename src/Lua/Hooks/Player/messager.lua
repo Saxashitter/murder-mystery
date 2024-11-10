@@ -69,13 +69,15 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	local alias = src.mm.alias
 	
 	local perm_level = MM:getpermlevel(src)
-	
-	if alias.perm_level ~= nil then
-		perm_level = alias.perm_level
-	end
-	
-	if alias.name then
-		plrname = alias.name
+
+	if alias then
+		if alias.perm_level ~= nil then
+			perm_level = alias.perm_level
+		end
+		
+		if alias.name then
+			plrname = alias.name
+		end
 	end
 	
 	local dist = R_PointToDist2(consoleplayer.mo.x, consoleplayer.mo.y,
@@ -95,7 +97,8 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 
 	local color = skinColorToChatColor(src.mo and src.mo.color or src.skincolor)
 	
-	if alias.skincolor then
+	if alias
+	and alias.skincolor then
 		color = skinColorToChatColor(alias.skincolor)
 	end
 	

@@ -3,10 +3,10 @@ local libs = {}
 local function require(value)
 	value = $:gsub(".lua", "")
 	if not libs[value] then
-		libs[value] = dofile(value)
+		libs[value] = {dofile(value)}
 	end
 
-	return libs[value]
+	return unpack(libs[value])
 end
 
 return require

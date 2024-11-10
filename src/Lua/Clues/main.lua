@@ -1,5 +1,7 @@
 dofile "Clues/freeslot"
 
+local GetMobjSpawnHeight, GetMapThingSpawnHeight = MM.require "Libs/MapThingLib"
+
 function MM:spawnClueMobj(p, pos)
 	local mobj = P_SpawnMobj(pos.x, pos.y, pos.z, MT_MM_CLUESPAWN)
 
@@ -9,19 +11,11 @@ function MM:spawnClueMobj(p, pos)
 	mobj.drawonlyforplayer = p
 	mobj.color = p.mo.color
 
+	if pos.flip then
+		mobj.flags2 = $|MF2_OBJECTFLIP
+	end
+
 	return mobj
-end
-
-function MM:spawnClue(pos)
-	if not MM:isMM() then return end
-
-	MM_N.clues_in_map = true
-
-	MM_N.clues[#MM_N.clues+1] = {
-		x = pos.x,
-		y = pos.y,
-		z = pos.z
-	}
 end
 
 function MM:giveOutClues(amount)
@@ -35,10 +29,10 @@ function MM:giveOutClues(amount)
 		newPos.x = thing.x*FU
 		newPos.y = thing.y*FU
 
-		local z = P_FloorzAtPos(newPos.x, newPos.y, 0, mobjinfo[MT_PLAYER].height)
-		z = z + (thing.z*FU)
-
+		local z = GetMapThingSpawnHeight(MT_MM_CLUESPAWN, thing, newPos.x, newPos.y)
 		newPos.z = z
+
+		newPos.flip = (thing.options & MTF_OBJECTFLIP)
 
 		table.insert(cluePositions, newPos)
 	end

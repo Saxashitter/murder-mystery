@@ -1,4 +1,5 @@
-local text_height = 20*FU
+local text_height = 5*FU
+local subtext_height = 4*FU
 
 MMHUD.texts = {}
 
@@ -11,10 +12,11 @@ local function lerp(a, b, t)
 end
 
 function MMHUD:PushToTop(tics, text, ...)
-	for k,v in pairs(MMHUD.texts) do
-		if k < #MMHUD.texts-2
-		and v.tics > 9 then
-			v.tics = 9
+	if #MMHUD.texts > 8 then
+		local amount = #MMHUD.texts - 8
+
+		for i = 1,amount do
+			table.remove(MMHUD.texts, 1)
 		end
 	end
 
@@ -31,10 +33,11 @@ return function(v)
 
 	local listForRemoval = {}
 
-	local target_y = 35*FU + text_height
+	local target_y = 36*FU
 	for i,str in pairs(MMHUD.texts) do
 		local i = #MMHUD.texts-i
 		local trans = 0
+		local total_height = 0
 
 		if str.tics >= 0 then
 			if not paused
@@ -54,15 +57,20 @@ return function(v)
 		end
 
 		str.y = lerp($, target_y, FU/7)
+		total_height = text_height
 
-		v.drawString(160*FU, str.y, str.text, V_SNAPTOTOP|trans, "fixed-center")
-		
-		local worky = text_height/2
-		for _,subt in ipairs(str.subtexts) do
-			v.drawString(160*FU, str.y+worky, subt, V_SNAPTOTOP|trans, "thin-fixed-center")
-			worky = $ + text_height/2
+		v.drawString(6*FU, str.y, str.text, V_SNAPTOTOP|trans, "small-fixed")
+
+		for i,subt in ipairs(str.subtexts) do
+			local y = str.y+text_height
+
+			y = $+(subtext_height*(i-1))
+
+			v.drawString(6*FU, y, subt, V_SNAPTOTOP|trans, "small-thin-fixed")
+			total_height = $ + subtext_height
 		end
-		target_y = $ + worky
+
+		target_y = $ + total_height
 	end
 
 	for _,str in pairs(listForRemoval) do

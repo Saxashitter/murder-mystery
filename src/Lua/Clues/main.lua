@@ -109,7 +109,9 @@ MM:addPlayerScript(function(p)
 					MM:GiveItem(p, "gun")
 				end
 
-				MMHUD:PushToTop(3*TICRATE, text, subtext)
+				if p == displayplayer then
+					MMHUD:PushToTop(3*TICRATE, text, subtext)
+				end
 				break
 			end
 		end

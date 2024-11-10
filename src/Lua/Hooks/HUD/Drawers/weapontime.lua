@@ -1,4 +1,5 @@
 local roles = MM.require "Variables/Data/Roles"
+local TR = TICRATE
 
 local vowels = {
 	["a"] = true,

@@ -46,6 +46,7 @@ function MM:giveOutClues(amount)
 		local clues = {}
 		local found = {}
 	
+		clues.amount = amount
 		for i = 1, amount do
 			local clue
 
@@ -73,7 +74,7 @@ MM:addPlayerScript(function(p)
 
 	if not (#p.mm.clues) then return end
 
-	for i,clue in pairs(p.mm.clues) do
+	for i,clue in ipairs(p.mm.clues) do
 		local pos = clue.ref
 
 		if abs(p.mo.x-pos.x) > p.mo.radius
@@ -92,19 +93,25 @@ MM:addPlayerScript(function(p)
 	for _,remove in pairs(removalList) do
 		for i,clue in pairs(p.mm.clues) do
 			if clue == remove then
+				local text = "CLUE FOUND!"
+
 				S_StartSound(p.mo, sfx_cluecl)
 				if clue.mobj.valid then
 					P_RemoveMobj(clue.mobj)
 				end
 
 				table.remove(p.mm.clues, i)
+				local subtext = tostring(#p.mm.clues).."/"..tostring(p.mm.clues.amount).." remaining..."
 
+				if not (#p.mm.clues) then
+					text = "YOU FOUND THEM ALL!"
+					subtext = "Your clues gave you a shotgun!"
+					MM:GiveItem(p, "gun")
+				end
+
+				MMHUD:PushToTop(3*TICRATE, text, subtext)
 				break
 			end
 		end
-	end
-
-	if not (#p.mm.clues) then -- YOU GOT ALL OF EM
-		MM:GiveItem(p, "gun")
 	end
 end)

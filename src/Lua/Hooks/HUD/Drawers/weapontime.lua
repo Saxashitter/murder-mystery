@@ -72,7 +72,6 @@ local function HUD_TimeForWeapon(v,p)
 	if not MM:isMM() then return end
 	if not (p.mo and p.mo.health and p.mm) then return end
 	
-	/*
 	if MM_N.waiting_for_players then
 		v.drawString(160*FU,
 			40*FU - MMHUD.weaponslidein,
@@ -82,7 +81,6 @@ local function HUD_TimeForWeapon(v,p)
 		)
 		return
 	end
-	*/
 	
 	if leveltime >= 10*TR + 5 then return end
 	

@@ -3,8 +3,10 @@ local TILEHEIGHT = 16
 local TILEMARGIN = 4
 local ROWLENGTH = 300 / TILEWIDTH
 
---TODO: spectators and innocents during showdown always know the role
+--[done?]TODO: spectators and innocents during showdown always know the role
 --		of other people
+--[done?]TODO: murderers should always know who is dead, using this tablist
+--		as a checklist
 
 --if shouldialwaysknow is true, 
 local function isDead(p,shouldialwaysknow)
@@ -12,8 +14,19 @@ local function isDead(p,shouldialwaysknow)
 	if p.mm and p.mm.joinedmidgame then
 		return true
 	end
-
-	if MM_N.knownDeadPlayers[#p] then
+	
+	--those who should ALWAYS know
+	if consoleplayer.mm.role == MMROLE_MURDERER
+	or consoleplayer.mm.spectator
+		if (not (p and p.mo and p.mo.valid))
+		or p.spectator
+		or p.mo.health <= 0
+		or p.mm and p.mm.spectator
+			return true
+		end
+	end
+	
+	if MM_N.knownDeadPlayers[#p]
 		return true
 	end
 
@@ -199,6 +212,13 @@ local function HUD_TabScoresDrawer(v)
 			v.draw(x, y, v.cachePatch("MM_PLAYERLIST_OUTLINE_SPEC"))
 		end
 	end
+	v.drawString(
+		160,
+		yroot + (TILEHEIGHT+TILEMARGIN)*((#playerlist - 1)/ROWLENGTH) + 20,
+		"\x85"..MM_N.special_count.." Murderer"..(MM_N.special_count ~= 1 and "s" or '').."\x80 this round.",
+		V_ALLOWLOWERCASE,
+		"thin-center"
+	)
 end
 
 return HUD_TabScoresDrawer

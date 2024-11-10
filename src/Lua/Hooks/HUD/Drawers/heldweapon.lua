@@ -78,7 +78,7 @@ return function(v,p)
 			v.cachePatch(item.display_icon or "MISSING"), --v.cachePatch("MISSING"),
 			V_SNAPTOLEFT|V_SNAPTOBOTTOM|trans
 		)
-			
+		
 		local cd = item.cooldown
 		local maxdelay = item.max_cooldown
 		local t = maxdelay > 0 and FU/maxdelay or 0

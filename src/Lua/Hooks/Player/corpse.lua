@@ -163,6 +163,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	MM.runHook("CorpseSpawn", target, corpse)
 end, MT_PLAYER)
 
+--TODO: player mobjs arent hidden anymore
 addHook("ThinkFrame", function()
 	if not MM:isMM() then return end
 

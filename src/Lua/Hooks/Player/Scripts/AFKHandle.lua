@@ -10,7 +10,7 @@ local function handleTimeout(p)
 		P_KillMobj(p.mo,nil,nil,DMG_SPECTATOR)
 		chatprintf(p,"\x82*You have been made a spectator for being AFK.")
 		p.mm.afkhelpers.timedout = false
-		p.mm.whokilledme = "an AFK heart attack."
+		p.mm.whokilledme = "Killed by an AFK heart attack."
 		--TODO: add corpse immediately
 	else
 		COM_BufAddText(server,"kick "..#p.." AFK")

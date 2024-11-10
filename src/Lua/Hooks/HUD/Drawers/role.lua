@@ -7,6 +7,8 @@ local roles = MM.require "Variables/Data/Roles"
 
 --cant think of a good way to draw & get the length using just 1 loop
 local function HUD_RoleDrawer(v,p)
+	if not (p.mm) then return end
+	
 	local patch = v.cachePatch("MMROLE")
 	local off = MMHUD.xoffset
 	

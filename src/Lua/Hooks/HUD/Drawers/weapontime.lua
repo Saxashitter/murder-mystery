@@ -10,6 +10,7 @@ local vowels = {
 }
 
 local teammates
+
 local function HUD_TFW_DrawTeammates(v,p)
 	if (p.mm.role == MMROLE_INNOCENT) then return end
 	
@@ -29,6 +30,10 @@ local function HUD_TFW_DrawTeammates(v,p)
 	if #teammates
 		local work = 0
 		for k,play in ipairs(teammates)
+			if not (play and play.valid)
+				table.remove(teammates,k)
+				continue
+			end
 			
 			local hires = FU
 			if (skins[play.skin].highresscale)
@@ -67,6 +72,7 @@ local function HUD_TimeForWeapon(v,p)
 	if not MM:isMM() then return end
 	if not (p.mo and p.mo.health and p.mm) then return end
 	
+	/*
 	if MM_N.waiting_for_players then
 		v.drawString(160*FU,
 			40*FU - MMHUD.weaponslidein,
@@ -76,10 +82,11 @@ local function HUD_TimeForWeapon(v,p)
 		)
 		return
 	end
+	*/
 	
-	if leveltime >= 10*TICRATE + 5 then return end
+	if leveltime >= 10*TR + 5 then return end
 	
-	local time = (10*TICRATE)-leveltime
+	local time = (10*TR)-leveltime
 	if (leveltime < TR)
 		teammates = nil
 	end
@@ -107,33 +114,47 @@ local function HUD_TimeForWeapon(v,p)
 		V_SNAPTOTOP|V_ALLOWLOWERCASE,
 		roles[p.mm.role].weapon and "thin-fixed-center" or "fixed-center"
 	)
-	v.drawScaled(160*FU - (v.cachePatch("STTNUM0").width*FU/2),
-		50*FU - MMHUD.weaponslidein,
-		FU,
-		v.cachePatch("STTNUM"..(time/TICRATE)),
-		V_SNAPTOTOP
-	)
-
+	do
+		local letterpatch = v.cachePatch("STTNUM"..(time/TR))
+		local letteroffset = v.cachePatch("STTNUM0").width*FU/2
+		local yoff = 0
+		if time/TR <= 3
+			letterpatch = v.cachePatch("RACE"..(time/TR == 0 and "GO" or (time/TR)))
+			letteroffset = letterpatch.width*FU/2
+			if (time % TR) > TR*3/4
+				yoff = 9*FU - (TR - (time % TR))*FU
+				yoff = ease.linear(FU*3/4,$,0)
+			end
+		end
+		
+		v.drawScaled(160*FU - letteroffset,
+			50*FU - MMHUD.weaponslidein - yoff,
+			FU,
+			letterpatch,
+			V_SNAPTOTOP
+		)
+	end
+	
 	v.drawString(160*FU,
-		140*FU + MMHUD.weaponslidein,
-		"\x85"..MM_N.special_count.." Murderer"..(MM_N.special_count > 1 and "s" or '').."\x80 this round.",
+		120*FU + MMHUD.weaponslidein,
+		"\x85"..MM_N.special_count.." Murderer"..(MM_N.special_count ~= 1 and "s" or '').."\x80 this round.",
 		V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
 		"thin-fixed-center"
 	)
 	if p == consoleplayer
 		local mchance = p.mm_save.cons_murderer_chance
 		local schance = p.mm_save.cons_sheriff_chance
-		local y = 148*FU + MMHUD.weaponslidein
+		local y = 128*FU + MMHUD.weaponslidein
 		
 		v.drawString(160*FU,
 			y,
-			string.format("%.2f",mchance).."% Murderer chance",
+			string.format("%.2f",mchance).."% chance to be a Murderer",
 			V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_REDMAP,
 			"thin-fixed-center"
 		)
 		v.drawString(160*FU,
 			y + (8*FU),
-			string.format("%.2f",schance).."% Sheriff chance",
+			string.format("%.2f",schance).."% chance to be a Sheriff",
 			V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_BLUEMAP,
 			"thin-fixed-center"
 		)

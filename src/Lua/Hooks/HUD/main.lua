@@ -80,7 +80,7 @@ end)
 
 MMHUD.interpolate = function(v,set)
 	if (v.interpolate ~= nil)
-		return v.interpolate(set)
+		return -1 --v.interpolate(set)
 	else
 		return -1
 	end

@@ -32,7 +32,8 @@ return {
 	storm_point = nil,
 	storm_ticker = 0,
 	storm_startingdist = 6000*FU,
-
+	storm_usedpoints = false,
+	
 	gameover = false,
 	voting = false,
 	mapVote = {},

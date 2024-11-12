@@ -30,6 +30,69 @@ end
 return function(self)
 	local point = MM_N.storm_point
 	
+	if CV_MM.debug.value
+	and MM_N.storm_startingdist ~= nil
+		local dist = MM_N.storm_startingdist
+		local pi = (22*FU/7)
+		local circ = FixedMul(2*pi, dist/6)
+		local maxiter = FixedDiv(circ, 80*FU + 20*FU)
+		
+		if not (point.debug_lasers)
+			point.debug_lasers = {}
+			for i = 0,maxiter/FU - 1
+				local angle = FixedAngle(leveltime*FU) + FixedAngle(FixedDiv(360*FU,maxiter)*i)
+				point.debug_lasers[i] = P_SpawnMobjFromMobj(point,
+					P_ReturnThrustX(nil,angle,dist),
+					P_ReturnThrustY(nil,angle,dist),
+					0,
+					MT_THOK
+				)
+				local laser = point.debug_lasers[i]
+				laser.myindex = i
+				laser.tics = -1
+				laser.fuse = -1
+				laser.renderflags = $|RF_PAPERSPRITE|RF_NOCOLORMAPS
+				laser.blendmode = AST_ADD
+				laser.sprite = SPR_BGLS
+				laser.frame = A|FF_FULLBRIGHT
+				laser.scale = $*2
+			end
+		end
+		for i = 0, maxiter/FU - 1 --laser in ipairs(point.debug_lasers)
+			local laser = point.debug_lasers[i]
+			if not (laser and laser.valid)
+				table.remove(point.debug_lasers,i)
+				continue
+			end
+			
+			local angle = FixedAngle(leveltime*FU) + FixedAngle(FixedDiv(360*FU,maxiter)*i)
+			local xthrust = point.x + P_ReturnThrustX(nil,angle,dist)
+			local ythrust = point.y + P_ReturnThrustY(nil,angle,dist)
+			P_MoveOrigin(laser,
+				xthrust,
+				ythrust,
+				point.z
+			)
+			laser.z = P_FloorzAtPos(
+				xthrust,
+				ythrust,
+				laser.floorz, 20*FU
+			) + FU
+			laser.angle = angle + ANGLE_90
+			do
+				local cz = laser.subsector.sector and laser.subsector.sector.ceilingheight or P_CeilingzAtPos(laser.x,laser.y,laser.ceilingz, 20*FU)
+				local fz = laser.z --P_FloorzAtPos(laser.x,laser.y,20*FU)
+				laser.spriteyscale = FixedDiv(cz - fz, 10*laser.scale)
+			end
+			
+		end
+		
+		if not (not MM_N.time
+		or MM_N.showdown)
+			return
+		end
+	end
+	
 	if (leveltime < 10*TICRATE) then return end
 	
 	if not (point and point.valid)
@@ -43,7 +106,9 @@ return function(self)
 	end
 	
 	local dist = MM_N.storm_startingdist - (MM_N.storm_ticker*FU*2)
-	dist = max($,1028*FU)
+	dist = max($,
+		MM_N.storm_usedpoints and MM_N.storm_startingdist/8 or 1028*FU
+	)
 	
 	local pi = (22*FU/7)
 	local circ = FixedMul(2*pi, dist/6)

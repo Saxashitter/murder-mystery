@@ -5,6 +5,10 @@ return function()
 		S_StartSound(nil,leveltime == 9*TICRATE and sfx_s3kad or sfx_s3ka7)
 	end
 	
+	if CV_MM.debug.value
+		MM:handleStorm()
+	end
+	
 	-- time management
 	MM_N.time = max(0, $-1)
 	if not (MM_N.time)

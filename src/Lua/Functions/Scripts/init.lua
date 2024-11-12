@@ -29,6 +29,7 @@ local function set_overtime_point()
 		if mt.type == mobjinfo[MT_MM_STORMDIST].doomednum
 			if #radiuspoints < 2
 				table.insert(radiuspoints,{x = mt.x*FU, y = mt.y*FU})
+				print("Found a Storm Point...")
 			else
 				print("\x82WARNING:\x80 This map has more than 2 Storm Radius Points! Only place 2 on each edge of your desired range.")
 			end
@@ -43,13 +44,13 @@ local function set_overtime_point()
 		end
 	end
 	
+	MM_N.storm_ticker = 0
+	
 	local chosenKey = P_RandomRange(1,#possiblePoints)
 	local chosenPoint = possiblePoints[chosenKey]
 	if chosenPoint == nil then return end
 	
-	MM_N.storm_ticker = 0
-	
-	if #radiuspoints == 0
+	if #radiuspoints < 2
 		--Find the farthest possible point
 		local olddist = 4096*FU
 		for k,v in ipairs(possiblePoints) do
@@ -67,6 +68,7 @@ local function set_overtime_point()
 			rp[1].x, rp[1].y,
 			rp[2].x, rp[2].y
 		)
+		MM_N.storm_usedpoints = true
 	end
 
 	MM_N.storm_point = P_SpawnMobj(

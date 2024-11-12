@@ -1,4 +1,9 @@
 return function()
+	if CV_MM.debug.value 
+		MM_N.waiting_for_players = false
+		return
+	end
+	
 	local playersIn = 0
 	for p in players.iterate do
 		playersIn = $+1

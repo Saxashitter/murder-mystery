@@ -62,7 +62,6 @@ local MMHUD = {
 }
 rawset(_G, "MMHUD", MMHUD)
 
-
 local hudwasmm = false
 local modname = "SAXAMM"
 
@@ -165,3 +164,4 @@ addHud "intermissiontally"
 addHud "rankings"
 addHud "intermissionhud"
 addHud "showdownanim"
+addHud "debug"

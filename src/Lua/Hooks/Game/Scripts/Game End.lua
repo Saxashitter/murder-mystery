@@ -1,4 +1,6 @@
 return function()
+	if CV_MM.debug.value then return end
+	
 	local canEnd, endType = MM:canGameEnd()
 
 	if canEnd then

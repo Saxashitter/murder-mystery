@@ -6,6 +6,7 @@ function MM:spawnClueMobj(p, pos)
 	local mobj = P_SpawnMobj(pos.x, pos.y, pos.z, MT_MM_CLUESPAWN)
 
 	mobj.state = S_THOK
+	mobj.frame = $|FF_FULLBRIGHT
 	mobj.tics = -1
 	mobj.fuse = -1
 	mobj.drawonlyforplayer = p

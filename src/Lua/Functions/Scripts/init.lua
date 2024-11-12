@@ -10,9 +10,30 @@ local function canBeRole(p, count)
 	return true
 end
 
+freeslot("MT_MM_STORMDIST")
+mobjinfo[MT_MM_STORMDIST] = {
+	--$Name Storm Radius Point
+	--$Sprite BGLSC0
+	--$Category SaxaMM
+	flags = MF_NOSECTOR|MF_NOTHINK|MF_SCENERY,
+	radius = 28*FRACUNIT,
+	height = 1,
+	doomednum = 3002,
+	spawnstate = S_NULL
+}
+
 local function set_overtime_point()
 	local possiblePoints = {}
+	local radiuspoints = {}
 	for mt in mapthings.iterate do
+		if mt.type == mobjinfo[MT_MM_STORMDIST].doomednum
+			if #radiuspoints < 2
+				table.insert(radiuspoints,{x = mt.x*FU, y = mt.y*FU})
+			else
+				print("\x82WARNING:\x80 This map has more than 2 Storm Radius Points! Only place 2 on each edge of your desired range.")
+			end
+		end
+		
 		if mt.type <= 35 then
 			local z = P_FloorzAtPos(mt.x*FU,mt.y*FU,mt.z*FU,
 				mobjinfo[MT_PLAYER].height
@@ -27,19 +48,26 @@ local function set_overtime_point()
 	if chosenPoint == nil then return end
 	
 	MM_N.storm_ticker = 0
+	
+	if #radiuspoints == 0
+		--Find the farthest possible point
+		local olddist = 4096*FU
+		for k,v in ipairs(possiblePoints) do
+			if v == chosenPoint then continue end
 
-	--Find the farthest possible point
-	local olddist = 4096*FU
-	for k,v in ipairs(possiblePoints) do
-		if v == chosenPoint then continue end
-
-		--add 256 as a small buffer to let people get to the middle
-		local distTo = R_PointToDist2(v.x,v.y, chosenPoint.x,chosenPoint.y) + 256*FU
-		if distTo < olddist then continue end
-		olddist = distTo
+			--add 256 as a small buffer to let people get to the middle
+			local distTo = R_PointToDist2(v.x,v.y, chosenPoint.x,chosenPoint.y) + 256*FU
+			if distTo < olddist then continue end
+			olddist = distTo
+		end
+		MM_N.storm_startingdist = olddist
+	else
+		local rp = radiuspoints
+		MM_N.storm_startingdist = R_PointToDist2(
+			rp[1].x, rp[1].y,
+			rp[2].x, rp[2].y
+		)
 	end
-	MM_N.storm_startingdist = olddist
-
 
 	MM_N.storm_point = P_SpawnMobj(
 		chosenPoint.x,

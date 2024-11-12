@@ -7,7 +7,7 @@ local roles = MM.require "Variables/Data/Roles"
 
 --cant think of a good way to draw & get the length using just 1 loop
 local function HUD_RoleDrawer(v,p)
-	if not (p.mm) then return end
+	if not (p.mm and roles[p.mm.role]) then return end
 	
 	MMHUD.interpolate(v,true)
 	
@@ -15,6 +15,7 @@ local function HUD_RoleDrawer(v,p)
 	local off = MMHUD.xoffset
 	
 	local longest_width = 0
+	----Calc "Killed by" string
 	local killername = "your own stupidity."
 	local killerstring = "Killed by "
 	if p.spectator then
@@ -35,7 +36,9 @@ local function HUD_RoleDrawer(v,p)
 			killerstring = "Joined midgame."
 		end
 	end
-
+	----
+	
+	----Role name
 	do
 		if p.spectator 
 		or not (p.mo and p.mo.valid)
@@ -45,7 +48,9 @@ local function HUD_RoleDrawer(v,p)
 			longest_width = v.stringWidth("  "..roles[p.mm.role].name,V_ALLOWLOWERCASE,"normal")
 		end
 	end
+	----
 	
+	----Calculate widest string
 	do
 		local y = 10*FU
 		if not p.spectator
@@ -71,8 +76,18 @@ local function HUD_RoleDrawer(v,p)
 		v.drawScaled(x + off, y, FU, patch, V_SNAPTOTOP|V_SNAPTORIGHT|V_50TRANS)
 		v.drawString(x + off, y + (2*FU), version, V_SNAPTOTOP|V_SNAPTORIGHT|V_80TRANS, "thin-fixed")
 		
+		if MM_N.clues_amount ~= 0
+			v.drawString(320*FU + off,
+				y+10*FU,
+				(#p.mm.clues).."/"..MM_N.clues_amount.." Clues left",
+				V_SNAPTOTOP|V_SNAPTORIGHT|V_ALLOWLOWERCASE,
+				"thin-fixed-right"
+			)
+		end
 	end
+	----
 	
+	----Draw "Killed by"
 	if p.spectator 
 	or not (p.mo and p.mo.valid)
 	or p.mo.health == 0 then
@@ -99,8 +114,7 @@ local function HUD_RoleDrawer(v,p)
 		end
 		return
 	end
-	
-	if not (p.mm and roles[p.mm.role]) then return end
+	----
 	
 	v.drawString(320*FU + off,
 		0,

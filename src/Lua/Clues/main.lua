@@ -77,7 +77,18 @@ MM:addPlayerScript(function(p)
 
 	for i,clue in ipairs(p.mm.clues) do
 		local pos = clue.ref
-
+		
+		if P_RandomChance(FU/2)
+			local wind = P_SpawnMobj(
+				pos.x + P_RandomRange(-18,18)*p.mo.scale,
+				pos.y + P_RandomRange(-18,18)*p.mo.scale,
+				pos.z + (p.mo.height/2) + P_RandomRange(-20,20)*p.mo.scale,
+				MT_BOXSPARKLE
+			)
+			wind.drawonlyforplayer = p
+			P_SetObjectMomZ(wind,P_RandomRange(1,3)*FU)
+		end
+		
 		if abs(p.mo.x-pos.x) > p.mo.radius*3/2
 		or abs(p.mo.y-pos.y) > p.mo.radius*3/2
 		or abs(p.mo.z-pos.z) > p.mo.height*3/2 then

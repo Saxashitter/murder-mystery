@@ -89,6 +89,16 @@ local function manage_unpicked_weapon(mobj)
 	mobj.angle = angle
 	mobj.flags = 0
 
+	if P_RandomChance(FU/2)
+		local wind = P_SpawnMobj(
+			mobj.x + P_RandomRange(-18,18)*mobj.scale,
+			mobj.y + P_RandomRange(-18,18)*mobj.scale,
+			mobj.z + (mobj.height/2) + P_RandomRange(-20,20)*mobj.scale,
+			MT_BOXSPARKLE
+		)
+		P_SetObjectMomZ(wind,P_RandomRange(1,3)*FU)
+	end
+	
 	if def.dropthinker then
 		def.dropthinker(mobj)
 	end

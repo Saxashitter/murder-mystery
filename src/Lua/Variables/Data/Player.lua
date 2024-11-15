@@ -32,6 +32,8 @@ return {
 		lastaiming = 0
 	},
 	
+	interact = {},
+	
 	outofbounds = false,
 	oob_dist = 0,
 

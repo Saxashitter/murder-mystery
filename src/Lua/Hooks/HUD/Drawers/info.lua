@@ -8,7 +8,7 @@ local function HUD_InfoDrawer(v)
 	do
 		local flash = false
 		local timetic = MM_N.time
-		timetic = min(max($,0), MM_N.maxtime)
+		timetic = not (MM_N.overtime and not MM_N.showdown) and min(max($,0), MM_N.maxtime)+TICRATE or 0
 		
 		local minutes = G_TicsToMinutes(timetic, true)
 		local seconds = G_TicsToSeconds(timetic)
@@ -54,18 +54,6 @@ local function HUD_InfoDrawer(v)
 		)	
 	end
 
-	-- murderers count
-	/*
-	do
-		local color = leveltime/6 % 2 and V_REDMAP or V_BLUEMAP
-		v.drawString(6*FU - slidein,
-			33*FU,
-			"SPECIAL COUNT: ".. MM_N.special_count,
-			V_SNAPTOTOP|V_SNAPTOLEFT|color,
-			"thin-fixed"
-		)
-	end
-	*/
 end
 
 return HUD_InfoDrawer,"gameandscores"

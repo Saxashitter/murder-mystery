@@ -48,7 +48,10 @@ function MM:DropItem(p, slot, randomize, dont_notify, forced)
 	mobj.pickupid = item.id
 	mobj.pickupsfx = item.pickupsfx
 	mobj.restrict = shallowCopy(item.restrict)
-
+	
+	mobj.pickupwait = TICRATE
+	mobj.sourcep = p
+	
 	mobj.magtime = 0
 
 	mobj.flags = 0
@@ -88,7 +91,16 @@ local function manage_unpicked_weapon(mobj)
 	mobj.spriteyoffset = z
 	mobj.angle = angle
 	mobj.flags = 0
-
+	
+	if (displayplayer and displayplayer.valid)
+		local p = displayplayer
+		if (p == mobj.sourcep and mobj.pickupwait > 0)
+			mobj.frame = $|FF_TRANS50
+		else
+			mobj.frame = $ &~FF_TRANSMASK
+		end
+	end
+	
 	if P_RandomChance(FU/2)
 		local wind = P_SpawnMobj(
 			mobj.x + P_RandomRange(-18,18)*mobj.scale,
@@ -102,7 +114,7 @@ local function manage_unpicked_weapon(mobj)
 	if def.dropthinker then
 		def.dropthinker(mobj)
 	end
-
+	
 	// PICK ME UP. PICK ME UP.
 	for p in players.iterate do
 		if not (p.mo
@@ -110,7 +122,10 @@ local function manage_unpicked_weapon(mobj)
 		and p.mm
 		and not p.mm.spectator
 		and not p.mm.picking_up) then continue end
-
+		
+		--You have to wait to pick this up again
+		if (p == mobj.sourcep and mobj.pickupwait > 0) then continue end
+		
 		if not (p.cmd.buttons & BT_CUSTOM3
 		and not (p.lastbuttons & BT_CUSTOM3)) then
 			continue
@@ -148,6 +163,8 @@ local function manage_unpicked_weapon(mobj)
 			return true
 		end
 	end
+	
+	mobj.pickupwait = max(0,$-1)
 end
 
 addHook("PostThinkFrame", do

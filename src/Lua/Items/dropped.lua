@@ -27,7 +27,7 @@ local Pickup_Interaction = MM.addInteraction(function(p,mobj)
 		P_RemoveMobj(mobj)
 		return true
 	end
-end,"PickupWeapon")
+end,"Pickup_Interaction")
 
 function MM:DropItem(p, slot, randomize, dont_notify, forced)
 	--TODO: weird bug where you cant drop an item even if its in your inventory
@@ -169,7 +169,7 @@ local function manage_unpicked_weapon(mobj)
 		end
 		*/
 
-		MM.interactPoint(p,mobj,nil,"Pick up",BT_CUSTOM3,TICRATE/2,Pickup_Interaction)
+		MM.interactPoint(p,mobj,def.display_name or "Item","Pick up",BT_CUSTOM3,TICRATE/7,Pickup_Interaction)
 	end
 	
 	mobj.pickupwait = max(0,$-1)

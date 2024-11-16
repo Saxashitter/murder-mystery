@@ -5,6 +5,10 @@ local INTER_RANGE = 64*FU
 --use this funcion as an include, at the top and in whitespace (dont use during runtime)
 --@identifier is a string to be used as a name/identifier
 MM.addInteraction = function(func,identifier)
+	if func == nil
+		error("MM.addInteraction(): argument 1 must be a function",2)
+		return
+	end
 	if identifier == nil
 		error("MM.addInteraction(): argument 2 must be a string identifier",2)
 		return
@@ -52,13 +56,6 @@ MM.sortInteracts = function(p,a,b)
 	
 	local aDist = R_PointToDist2(p.mo.x,p.mo.y, a.mo.x,a.mo.y)
 	local bDist = R_PointToDist2(p.mo.x,p.mo.y, b.mo.x,b.mo.y)
-	/*
-	print(string.format("adist: %.2f - bdist: %.2f (= %.2f)"..tostring(bDist <= aDist),
-		bDist,
-		aDist,
-		bDist - aDist
-	))
-	*/
 	
 	if bDist <= aDist then
 		return false
@@ -93,11 +90,15 @@ MM.interactPoint = function(p,mobj,name,intertext,button,time,funcid)
 	table.insert(p.mm.interact.points,{
 		mo = mobj,
 		name = name or "Thing",
+		
 		interacttext = intertext or "Interact",
 		interacttime = time or TICRATE/4,
 		interacting = 0,
+		timesinteracted = 0,
+		
 		button = button or 0,
 		timespan = 0,
+		
 		--the best way i can think of doing this without archiving a func
 		--would be to have a lookup id to a LUT of funcs that another function
 		--can add functions to
@@ -106,6 +107,7 @@ MM.interactPoint = function(p,mobj,name,intertext,button,time,funcid)
 		--idk what this is for
 		hud = {
 			xscale = 0,
+			goingaway = false,
 		}
 	})
 	if #p.mm.interact > 1

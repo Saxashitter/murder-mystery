@@ -18,31 +18,33 @@
 */
 
 local TR = TICRATE
-local TWEENTIME = TR/2
 
 local sglib = MM.require("Libs/sglib")
-
-local scales = {}
 
 local function interpolate(v,set)
 	if v.interpolate ~= nil then v.interpolate(set) end
 end
 
+--TODO: this source edit really needs a setorigin for interp...
 local function HUD_InteractDrawer(v,p,cam)
 	if (p.mm.interact == nil) then return end
 	
+	--Re-sort so inactive widgets dont overlap the active one
+	local placehold_inter = p.mm.interact
+	table.sort(placehold_inter,function(a,b)
+		return not MM.sortInteracts(p,a,b)
+	end)
+	
 	interpolate(v,true)
-	for k,inter in ipairs(p.mm.interact)
+	for k,inter in ipairs(placehold_inter)
 		local mo = inter.mo
 		
-		local timespan = min(inter.timespan,TWEENTIME)
-		local trans = (k ~= 1 and V_50TRANS or 0)
+		local trans = (k ~= #placehold_inter and V_50TRANS or 0)
 		do
 			local icon = v.cachePatch("MM_INTERBOX")
 			local w2s = sglib.ObjectTracking(v,p,cam,mo)
 			
-			scales[k] = ($ ~= nil) and ease.outquad(FU/4,$,FixedDiv(timespan*FU,TWEENTIME*FU)) or 0
-			local scalef = scales[k]
+			local scalef = inter.hud.xscale
 			
 			local x = w2s.x - (FixedMul(icon.width*FU,scalef)/2)
 			if w2s.onScreen or true
@@ -50,7 +52,7 @@ local function HUD_InteractDrawer(v,p,cam)
 					scalef,
 					FU,
 					icon,
-					trans and V_90TRANS or V_50TRANS
+					trans and V_80TRANS or V_50TRANS
 				)
 				
 				v.drawString(x + 30*FU,

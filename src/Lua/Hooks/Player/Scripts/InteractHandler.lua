@@ -1,11 +1,16 @@
 --Handle Roblox Interact Hud
 
 local INTER_RANGE = 64*FU
+local TWEENTIME = TICRATE/2
 
 return function(p)
 	local me = p.realmo
 	
 	if not (me and me.valid) then return end
+	
+	if leveltime < 5
+		p.thokpoint1,p.thokpoint2,p.thokpoint3 = nil,nil,nil
+	end
 	
 	if leveltime == 2*TICRATE
 	or leveltime == 3*TICRATE
@@ -27,12 +32,12 @@ return function(p)
 			p.thokpoint3 = thok
 		end
 	end
-	MM.interactPoint(p,p.thokpoint1,p.name,nil,BT_CUSTOM3)
-	MM.interactPoint(p,p.thokpoint2,p.name,nil,BT_CUSTOM3)
-	MM.interactPoint(p,p.thokpoint3,p.name,nil,BT_CUSTOM3)
+	MM.interactPoint(p,p.thokpoint1,"Thok 1",nil,BT_CUSTOM3)
+	MM.interactPoint(p,p.thokpoint2,"Thok 2",nil,BT_CUSTOM3)
+	MM.interactPoint(p,p.thokpoint3,"Thok 3",nil,BT_CUSTOM3)
 	
 	table.sort(p.mm.interact,function(a,b)
-		MM.sortInteracts(p,a,b)
+		return MM.sortInteracts(p,a,b)
 	end)
 	
 	local interacting = false
@@ -43,12 +48,13 @@ return function(p)
 		print(not (mo and mo.valid),
 			not (P_CheckSight(me,mo)),
 			(R_PointToDist2(me.x,me.y, mo.x,mo.y) > FixedMul(INTER_RANGE,me.scale) + mo.radius),
+			MM.canInteract(p,mo),
 			inter.timespan
 		)
 		
-		if not (mo and mo.valid)
-		or not (P_CheckSight(me,mo))
-		or (R_PointToDist2(me.x,me.y, mo.x,mo.y) > FixedMul(INTER_RANGE,me.scale) + mo.radius)
+		inter.hud.xscale = ease.outquad(FU/4,$,FixedDiv(inter.timespan*FU,TWEENTIME*FU))
+		
+		if not MM.canInteract(p,mo)
 			inter.interacting = 0
 			if inter.timespan <= 0
 				table.remove(p.mm.interact,k)
@@ -58,7 +64,7 @@ return function(p)
 			continue
 		end
 		
-		inter.timespan = min($+1,TICRATE/2) --% (5*TICRATE)
+		inter.timespan = min($+2,TWEENTIME) --% (5*TICRATE)
 		
 		--only one thing at a time
 		if not interacting
@@ -68,6 +74,8 @@ return function(p)
 			else
 				inter.interacting = $*3/4
 			end
+		else
+			inter.interacting = $*3/4
 		end
 	end
 end

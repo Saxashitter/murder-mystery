@@ -23,7 +23,7 @@ function MM:giveOutClues(amount)
 	local cluePositions = {}
 
 	for thing in mapthings.iterate do
-		if thing.type ~= 3001 then continue end
+		if thing.type ~= mobjinfo[MT_MM_CLUESPAWN].doomednum then continue end
 
 		local newPos = {}
 

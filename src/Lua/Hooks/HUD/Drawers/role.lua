@@ -76,14 +76,6 @@ local function HUD_RoleDrawer(v,p)
 		v.drawScaled(x + off, y, FU, patch, V_SNAPTOTOP|V_SNAPTORIGHT|V_50TRANS)
 		v.drawString(x + off, y + (2*FU), version, V_SNAPTOTOP|V_SNAPTORIGHT|V_80TRANS, "thin-fixed")
 		
-		if MM_N.clues_amount ~= 0
-			v.drawString(320*FU + off,
-				y+10*FU,
-				(#p.mm.clues).."/"..MM_N.clues_amount.." Clues left",
-				V_SNAPTOTOP|V_SNAPTORIGHT|V_ALLOWLOWERCASE,
-				"thin-fixed-right"
-			)
-		end
 	end
 	----
 	

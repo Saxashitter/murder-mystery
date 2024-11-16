@@ -101,7 +101,7 @@ end
 return function(self, maploaded)
 	if maploaded then
 		if not MM:isMM() then return end
-
+		
 		set_overtime_point()
 		MM:giveOutClues(5)
 		
@@ -129,8 +129,13 @@ return function(self, maploaded)
 	MM_N.special_count = special_count
 
 	MM:assignRoles(special_count)
-
+	
+	local innocents = 0
 	for p in players.iterate do
+		if (p.mm and p.mm.role ~= MMROLE_MURDERER)
+			innocents = $+1
+		end
+		
 		if not (p and p.valid and p.mm and p.mm_save) then continue end
 		
 		if (p.mm.role ~= MMROLE_MURDERER) then 
@@ -180,6 +185,7 @@ return function(self, maploaded)
 		
 		CONS_Printf(p, string.format("\x85Murderer Chance: (%.2f percent)\n\x84Sheriff Chance: (%.2f percent)", result_m, result_s))
 	end
+	MM_N.minimum_killed = max(1,innocents/5)
 	
 	if isserver then
 		CV_Set(CV_FindVar("restrictskinchange"),0)

@@ -28,7 +28,7 @@ COM_AddCommand("MM_TimeTo0", function(p)
 end, COM_ADMIN)
 
 COM_AddCommand("suicide", function(p)
-	if MM:isMM()
+	if MM:isMM() and not CV_MM.debug.value
 		CONS_Printf(p,"You can't use this in Murder Mystery.")
 	else
 		if not (p.mo and p.mo.valid)
@@ -58,3 +58,12 @@ COM_AddCommand("suicide", function(p)
 	end
 end)
 
+COM_AddCommand("MM_toptextsay", function(p,time,header,...)
+	if not MM:isMM() then return end
+	
+	local args = {...}
+	MMHUD:PushToTop((tonumber(time) or 5)*TICRATE,
+		header,
+		unpack(args)
+	)
+end, COM_ADMIN)

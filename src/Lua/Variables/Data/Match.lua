@@ -48,6 +48,8 @@ return {
 
 	corpses = {},
 	knownDeadPlayers = {},
+	minimum_killed = 0,
+	peoplekilled = 0,
 
 	--round ended because all innocents/murderers left the game
 	disconnect_end = false,

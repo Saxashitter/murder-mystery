@@ -29,7 +29,19 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	for k,v in pairs(target.player.mm.inventory.items) do
 		MM:DropItem(target.player, k, true, true)
 	end
-
+	
+	if target.player.mm.role ~= MMROLE_MURDERER
+		MM_N.peoplekilled = $+1
+		--people like to shoot each other and fall into pits,
+		--so we wouldnt be able to get those kills
+		/*
+		if (source and source.valid)
+		and (source.player)
+		and (source.player.mm.role == MMROLE_MURDERER)
+		end
+		*/
+	end
+	
 	if (source
 	and source.player
 	and source.player.mm
@@ -42,42 +54,41 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		P_DamageMobj(source, nil, nil, 999, DMG_INSTAKILL)
 	end
 
-	if target.player.mm.role ~= MMROLE_INNOCENT
-	and not MM:canGameEnd()
+	if not MM:canGameEnd()
 	and MM_N.special_count >= 2 then
-		if target.player.mm.role == MMROLE_MURDERER
-			local text = "\x82*"..target.player.name.." was a murderer!"
-			
-			/*
-			if source
-			and source.player then
-				text = $.." // Died to "..source.player.name
-			elseif source
-				--died to an mobj
-				text = $.." // Died to an mobj."
-			else
-				text = $.." // Died to a hazard."
+		if target.player.mm.role ~= MMROLE_INNOCENT
+			if target.player.mm.role == MMROLE_MURDERER
+				local text = "\x82*"..target.player.name.." was a murderer!"
+				
+				/*
+				if source
+				and source.player then
+					text = $.." // Died to "..source.player.name
+				elseif source
+					--died to an mobj
+					text = $.." // Died to an mobj."
+				else
+					text = $.." // Died to a hazard."
+				end
+				*/
+				
+				chatprint(text)
 			end
-			*/
 			
-			chatprint(text)
-		end
-		
-		--TODO: test this
-		local color = roles[target.player.mm.role].colorcode
-		for p in players.iterate()
-			if not (p.mm) then continue end
-			if (p.mm.spectator) then continue end
-			
-			if (p.mm.role == target.player.mm.role)
-			and (p == consoleplayer)
-				MMHUD:PushToTop(5*TICRATE,
-					"TEAMMATE DEAD",
-					"Your teammate, "..color..target.player.name.."\x80 died!"
-				)
+			local color = roles[target.player.mm.role].colorcode
+			for p in players.iterate()
+				if not (p.mm) then continue end
+				if (p.mm.spectator) then continue end
+				
+				if (p.mm.role == target.player.mm.role)
+				and (p == consoleplayer)
+					MMHUD:PushToTop(5*TICRATE,
+						"TEAMMATE DEAD",
+						"Your teammate, "..color..target.player.name.."\x80 died!"
+					)
+				end
 			end
 		end
-		
 	end
 
 	--numbers for hacky hud stuff
@@ -88,7 +99,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	
 	if MM:canGameEnd() and not MM_N.gameover then
 		-- funny sniper sound
-		if target.player.mm.role == 2 and source and source.valid then
+		if target.player.mm.role == MMROLE_SHERIFF and source and source.valid then
 			local dist = R_PointToDist2(
 				R_PointToDist2(target.x, target.y, source.x, source.y), target.z,
 				0, source.z

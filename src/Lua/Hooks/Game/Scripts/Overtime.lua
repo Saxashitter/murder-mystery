@@ -5,6 +5,17 @@ return function()
 		S_StartSound(nil,leveltime == 9*TICRATE and sfx_s3kad or sfx_s3ka7)
 	end
 	
+	--people might've joined or left, so recalc minimum kills
+	if leveltime == 10*TICRATE
+		local innocents = 0
+		for p in players.iterate do
+			if (p.mm and p.mm.role ~= MMROLE_MURDERER)
+				innocents = $+1
+			end
+		end
+		MM_N.minimum_killed = max(1,innocents/5)
+	end
+	
 	if CV_MM.debug.value
 		MM:handleStorm()
 	end
@@ -13,7 +24,14 @@ return function()
 	MM_N.time = max(0, $-1)
 	if not (MM_N.time)
 	and not MM_N.overtime then
-		MM:startOvertime()
+		if MM_N.peoplekilled >= MM_N.minimum_killed
+			MM:startOvertime()
+		else
+			MM:endGame(1)
+			MM_N.disconnect_end = true
+			MM_N.end_ticker = 3*TICRATE - 1
+			S_StartSound(nil,sfx_s253)
+		end
 	end
 
 	if MM_N.overtime

@@ -135,7 +135,7 @@ local function HUD_TimeForWeapon(v,p)
 	end
 	
 	v.drawString(160*FU,
-		120*FU + MMHUD.weaponslidein,
+		150*FU + MMHUD.weaponslidein,
 		"\x85"..MM_N.special_count.." Murderer"..(MM_N.special_count ~= 1 and "s" or '').."\x80 this round.",
 		V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
 		"thin-fixed-center"
@@ -143,7 +143,7 @@ local function HUD_TimeForWeapon(v,p)
 	if p == consoleplayer
 		local mchance = p.mm_save.cons_murderer_chance
 		local schance = p.mm_save.cons_sheriff_chance
-		local y = 128*FU + MMHUD.weaponslidein
+		local y = 158*FU + MMHUD.weaponslidein
 		
 		v.drawString(160*FU,
 			y,

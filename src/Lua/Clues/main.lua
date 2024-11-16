@@ -80,7 +80,9 @@ function MM:giveOutClues(amount)
 	for p in players.iterate do
 		local clues = {}
 		local found = {}
-	
+		
+		if (p.mm.role == MMROLE_MURDERER) then continue end
+		
 		clues.amount = amount
 		for i = 1, amount do
 			local clue
@@ -141,7 +143,7 @@ MM:addPlayerScript(function(p)
 			if clue == remove then
 				local text = "CLUE FOUND!"
 
-				S_StartSound(p.mo, sfx_cluecl)
+				S_StartSound(p.mo, sfx_cluecl,p)
 				if clue.mobj.valid then
 					P_RemoveMobj(clue.mobj)
 				end

@@ -19,23 +19,24 @@ function MM:spawnClueMobj(p, pos)
 	return mobj
 end
 
-local falloffNums = {}
-
-for i = 301, 307 do
-	falloffNums[i] = true
-end
-for i = 330, 335 do
-	falloffNums[i] = true -- im lazy to write all of the numbers manually
-end
+local fallbackNums = {
+	[303] = true,
+	[330] = true,
+	[331] = true,
+	[332] = true,
+	[333] = true,
+	[334] = true,
+	[335] = true
+}
 
 function MM:giveOutClues(amount)
 	local cluePositions = {}
-	local falloffThings = {}
+	local fallbackThings = {}
 
 	for thing in mapthings.iterate do
 		if thing.type ~= 3001 then
-			if falloffNums[thing.type] then
-				table.insert(falloffThings, thing)
+			if fallbackNums[thing.type] then
+				table.insert(fallbackThings, thing)
 			end
 			continue
 		end
@@ -54,8 +55,8 @@ function MM:giveOutClues(amount)
 	end
 	
 	if not #cluePositions
-	and #falloffThings then
-		for _, thing in ipairs(falloffThings) do
+	and #fallbackThings then
+		for _, thing in ipairs(fallbackThings) do
 			-- i love copying code!!
 			local newPos = {}
 

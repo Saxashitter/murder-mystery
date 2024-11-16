@@ -30,7 +30,7 @@ local function HUD_InteractDrawer(v,p,cam)
 	if (p.mm.interact == nil) then return end
 	
 	--Re-sort so inactive widgets dont overlap the active one
-	local placehold_inter = p.mm.interact
+	local placehold_inter = p.mm.interact.points
 	table.sort(placehold_inter,function(a,b)
 		return not MM.sortInteracts(p,a,b)
 	end)
@@ -38,6 +38,7 @@ local function HUD_InteractDrawer(v,p,cam)
 	interpolate(v,true)
 	for k,inter in ipairs(placehold_inter)
 		local mo = inter.mo
+		if not (mo and mo.valid) then mo = inter.backup end
 		
 		local trans = (k ~= #placehold_inter and V_50TRANS or 0)
 		do
@@ -47,25 +48,40 @@ local function HUD_InteractDrawer(v,p,cam)
 			local scalef = inter.hud.xscale
 			
 			local x = w2s.x - (FixedMul(icon.width*FU,scalef)/2)
-			if w2s.onScreen or true
-				v.drawStretched(x, w2s.y,
+			local y = w2s.y
+			local timetic = FixedDiv(
+				(p.mm.interact.interacted and inter.interacttime or inter.interacting)*FU,
+				inter.interacttime*FU
+			)
+			do				
+				v.drawStretched(x, y,
 					scalef,
 					FU,
 					icon,
 					trans and V_80TRANS or V_50TRANS
 				)
 				
-				v.drawString(x + 30*FU,
-					w2s.y + 3*FU,
-					inter.name,
-					V_ALLOWLOWERCASE|trans,
-					"thin-fixed"
-				)
-				v.drawString(x + 30*FU,
-					w2s.y + 13*FU,
-					inter.interacttext,
-					V_ALLOWLOWERCASE|V_GRAYMAP|trans,
-					"thin-fixed"
+				if not timetic
+					v.drawString(x + 30*FU,
+						y + 3*FU,
+						inter.name,
+						V_ALLOWLOWERCASE|trans,
+						"thin-fixed"
+					)
+					v.drawString(x + 30*FU,
+						y + 13*FU,
+						inter.interacttext,
+						V_ALLOWLOWERCASE|V_GRAYMAP|trans,
+						"thin-fixed"
+					)
+				end
+				
+				v.drawScaled(x + (timetic == 0 and 15*FU or 0),
+					y + 16*FU,
+					FU,
+					v.cachePatch("MM_INTERBALLBG"),
+					trans and V_60TRANS or V_30TRANS,
+					v.getColormap(nil,SKINCOLOR_GREY)
 				)
 				
 				local resolution = 55
@@ -82,8 +98,8 @@ local function HUD_InteractDrawer(v,p,cam)
 								i*FU
 							)-90*FU
 						)
-						v.drawScaled(x + 15*FU + radi*cos(angle),
-							w2s.y + 16*FU + radi*sin(angle),
+						v.drawScaled(x + radi*cos(angle),
+							y + 16*FU + radi*sin(angle),
 							FU/6,
 							v.cachePatch("MM_INTERBALL"),
 							trans,

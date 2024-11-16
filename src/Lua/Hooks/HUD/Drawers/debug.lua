@@ -2,6 +2,7 @@ local strings = {
 	"storm.starting_dist",
 	"storm.usedpoints",
 	"storm.ticker",
+	"interact.interacted",
 }
 
 return function(v,p)
@@ -22,6 +23,7 @@ return function(v,p)
 		[1] = string.format("%f",MM_N.storm_startingdist),
 		[2] = MM_N.storm_usedpoints,
 		[3] = MM_N.storm_ticker,
+		[4] = p.mm.interact.interacted
 	}
 	
 	for k,str in ipairs(strings)

@@ -32,7 +32,11 @@ return {
 		lastaiming = 0
 	},
 	
-	interact = {},
+	interact = {
+		--the actual points of interests
+		points = {},
+		interacted = false,
+	},
 	
 	outofbounds = false,
 	oob_dist = 0,

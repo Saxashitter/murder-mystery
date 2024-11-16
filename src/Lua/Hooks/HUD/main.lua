@@ -149,6 +149,7 @@ end)
 
 addHud "outofbounds"
 addHud "afktimeout"
+addHud "interacthud"
 addHud "endgamepointer"
 addHud "murdererping"
 addHud "showdownicon"

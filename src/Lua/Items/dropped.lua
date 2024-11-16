@@ -1,6 +1,34 @@
 MM.DroppedMobjs = {}
 local shallowCopy = MM.require "Libs/shallowCopy"
 
+local Pickup_Interaction = MM.addInteraction(function(p,mobj)
+	local def = MM.Items[mobj.pickupid]
+	
+	if mobj.restrict[p.mm.role] then
+		chatprintf(p, "\x82*This weapon is prohibited from your role.")
+		return
+	end
+	
+	if def.pickup
+	and def.pickup(mobj, p) then
+		return
+	end
+
+	local item = MM:GiveItem(p, mobj.pickupid)
+
+	if item then
+		if mobj.pickupsfx then
+			S_StartSound(p.mo, mobj.pickupsfx)
+		end
+		if def.postpickup then
+			def.postpickup(item, p)
+		end
+
+		P_RemoveMobj(mobj)
+		return true
+	end
+end,"Pickup_Interaction")
+
 function MM:DropItem(p, slot, randomize, dont_notify, forced)
 	--TODO: weird bug where you cant drop an item even if its in your inventory
 	if not (p and p.mm and #p.mm.inventory.items) then
@@ -126,16 +154,12 @@ local function manage_unpicked_weapon(mobj)
 		--You have to wait to pick this up again
 		if (p == mobj.sourcep and mobj.pickupwait > 0) then continue end
 		
+		/*
 		if not (p.cmd.buttons & BT_CUSTOM3
 		and not (p.lastbuttons & BT_CUSTOM3)) then
 			continue
 		end
-
-		if mobj.restrict[p.mm.role] then
-			chatprintf(p, "\x82*This weapon is prohibited from your role.")
-			continue
-		end
-
+		
 		local radius = p.mo.radius*4
 
 		if abs(p.mo.x - mobj.x) > radius
@@ -143,25 +167,9 @@ local function manage_unpicked_weapon(mobj)
 		or abs(p.mo.z - mobj.z) > p.mo.height then
 			continue
 		end
+		*/
 
-		if def.pickup
-		and def.pickup(mobj, p) then
-			continue
-		end
-
-		local item = MM:GiveItem(p, mobj.pickupid)
-
-		if item then
-			if mobj.pickupsfx then
-				S_StartSound(p.mo, mobj.pickupsfx)
-			end
-			if def.postpickup then
-				def.postpickup(item, p)
-			end
-
-			P_RemoveMobj(mobj)
-			return true
-		end
+		MM.interactPoint(p,mobj,def.display_name or "Item","Pick up",BT_CUSTOM3,TICRATE/7,Pickup_Interaction)
 	end
 	
 	mobj.pickupwait = max(0,$-1)

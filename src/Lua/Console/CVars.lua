@@ -9,7 +9,7 @@ CV_MM.afkkickmode = CV_RegisterVar({
 
 CV_MM.debug = CV_RegisterVar({
 	name = "mm_debug",
-	defaultvalue = "Off",
+	defaultvalue = "On",
 	flags = CV_NETVAR,
 	PossibleValue = CV_OnOff
 })

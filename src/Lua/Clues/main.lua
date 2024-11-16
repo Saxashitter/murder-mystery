@@ -19,11 +19,27 @@ function MM:spawnClueMobj(p, pos)
 	return mobj
 end
 
+local fallbackNums = {
+	[303] = true,
+	[330] = true,
+	[331] = true,
+	[332] = true,
+	[333] = true,
+	[334] = true,
+	[335] = true
+}
+
 function MM:giveOutClues(amount)
 	local cluePositions = {}
+	local fallbackThings = {}
 
 	for thing in mapthings.iterate do
-		if thing.type ~= mobjinfo[MT_MM_CLUESPAWN].doomednum then continue end
+		if thing.type ~= 3001 then
+			if fallbackNums[thing.type] then
+				table.insert(fallbackThings, thing)
+			end
+			continue
+		end
 
 		local newPos = {}
 
@@ -37,7 +53,25 @@ function MM:giveOutClues(amount)
 
 		table.insert(cluePositions, newPos)
 	end
+	
+	if not #cluePositions
+	and #fallbackThings then
+		for _, thing in ipairs(fallbackThings) do
+			-- i love copying code!!
+			local newPos = {}
 
+			newPos.x = thing.x*FU
+			newPos.y = thing.y*FU
+
+			local z = GetMapThingSpawnHeight(MT_MM_CLUESPAWN, thing, newPos.x, newPos.y)
+			newPos.z = z
+
+			newPos.flip = (thing.options & MTF_OBJECTFLIP)
+
+			table.insert(cluePositions, newPos)
+		end
+	end
+	
 	if not (#cluePositions) then return end
 
 	amount = min(#cluePositions, amount)

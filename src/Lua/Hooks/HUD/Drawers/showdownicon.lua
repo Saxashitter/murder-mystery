@@ -20,8 +20,9 @@ return function(v,p,c)
 	if p.mm.role == MMROLE_MURDERER then
 		for player in players.iterate do
 			if not (player and player.mo and player.mo.health and player.mm and player.mm.role ~= MMROLE_MURDERER) then continue end
-
-			local icon = v.getSprite2Patch(player.skin, SPR2_LIFE, false, A, 0)
+			if P_CheckSight(p.mo,player.mo) then continue end
+			
+			local icon = v.cachePatch("MM_SHOWDOWNMARK") --v.getSprite2Patch(player.skin, SPR2_LIFE, false, A, 0)
 			local to_screen = sglib.ObjectTracking(v,p,c,player.mo)
 
 			if not to_screen.onScreen then continue end
@@ -31,7 +32,7 @@ return function(v,p,c)
 			local trans = int_ease(t, 10, 0)
 
 			if trans == 10 << V_ALPHASHIFT then continue end
-			v.drawScaled(to_screen.x, to_screen.y, (FU/2)*3/2, icon, (trans*V_10TRANS), v.getColormap(player.skin, player.mo.color))
+			v.drawScaled(to_screen.x, to_screen.y, (FU/4), icon, (trans*V_10TRANS), v.getColormap(nil, player.mo.color))
 		end
 		return
 	end

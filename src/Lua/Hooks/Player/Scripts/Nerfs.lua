@@ -3,6 +3,7 @@ local speedCap = MM.require "Libs/speedCap"
 return function(p)
 	local sonic = skins["sonic"]
 	
+	p.charflags = $ &~(SF_DASHMODE|SF_RUNONWATER|SF_CANBUSTWALLS)
 	p.charability = CA_NONE
 	p.charability2 = CA2_NONE
 	p.jumpfactor = sonic.jumpfactor

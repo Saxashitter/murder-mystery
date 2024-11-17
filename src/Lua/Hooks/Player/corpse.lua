@@ -225,7 +225,16 @@ addHook("ThinkFrame", function()
 			table.remove(MM_N.corpses, _)
 			continue
 		end
-
+		
+		if corpse.playerid -- idk why the MF2_DONTDRAW above is only when the game ends :P, maybe y'all should see that?
+		and (players[corpse.playerid] and players[corpse.playerid].valid)
+		and (players[corpse.playerid].mo and players[corpse.playerid].mo.valid)
+			if not players[corpse.playerid].mo.health
+			and not (players[corpse.playerid].mo.flags2 & MF2_DONTDRAW) then
+				players[corpse.playerid].mo.flags2 = $1|MF2_DONTDRAW
+			end
+		end
+		
 		MM.runHook("CorpseThink", corpse)
 
 		for p in players.iterate do

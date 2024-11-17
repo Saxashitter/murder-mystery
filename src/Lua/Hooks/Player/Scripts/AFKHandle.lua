@@ -26,7 +26,6 @@ return function(p)
 	if (MM_N.waiting_for_players)
 	or (MM_N.gameover)
 	or (p.mm.spectator)
-	or (p.mm.role == MMROLE_INNOCENT)
 		return
 	end
 

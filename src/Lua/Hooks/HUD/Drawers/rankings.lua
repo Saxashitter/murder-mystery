@@ -202,6 +202,32 @@ local function HUD_TabScoresDrawer(v)
 				style
 			)
 		end
+		
+		--draw ping
+		do
+			local pingclr = V_REDMAP
+			local pingstr = p.ping.."ms"
+			if p.bot
+				pingstr = "BOT"
+				pingclr = V_GRAYMAP
+			elseif (p.ping < 128)
+				pingclr = V_GREENMAP
+			elseif (p.ping < 256)
+				pingclr = V_YELLOWMAP
+			end
+			if (p == server)
+				pingstr = "SERV"
+				pingclr = V_AQUAMAP
+			end
+			
+			v.drawString(
+				x+17, y+10,
+				pingstr,
+				pingclr|V_ALLOWLOWERCASE,
+				"small"
+			)
+		end
+		
 		if roleStyle.overlay then
 			v.draw(x, y, v.cachePatch(roleStyle.overlay), roleStyle.overlayFlags)
 		end

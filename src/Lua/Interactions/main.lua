@@ -47,6 +47,9 @@ end
 
 --Only interact with the closest point of interest
 MM.sortInteracts = function(p,a,b)
+	if (a == nil) then return true end
+	if (b == nil) then return false end
+	
 	if not (a.mo and a.mo.valid)
 		return true
 	end

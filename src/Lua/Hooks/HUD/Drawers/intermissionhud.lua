@@ -94,6 +94,7 @@ local function draw_hud(v)
 				patch = patch,
 				color = v.getColormap(p.skin, p.skincolor),
 				name = p.name,
+				skin = p.skin,
 				rings = p.rings
 			})
 		end
@@ -105,7 +106,8 @@ local function draw_hud(v)
 		local y = ( (200-24)*FU )
 
 		for k,icon in pairs(icons) do
-			v.drawScaled(x, y, scale, icon.patch, trans|V_SNAPTOBOTTOM, icon.color)
+			local myscale = FixedMul(scale,skins[icon.skin].highresscale or FU)
+			v.drawScaled(x, y, myscale, icon.patch, trans|V_SNAPTOBOTTOM, icon.color)
 			x = $+(icon_width*scale)
 		end
 	end

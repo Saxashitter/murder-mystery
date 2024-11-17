@@ -31,15 +31,14 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	end
 	
 	if target.player.mm.role ~= MMROLE_MURDERER
-		MM_N.peoplekilled = $+1
 		--people like to shoot each other and fall into pits,
 		--so we wouldnt be able to get those kills
-		/*
+		--actually i changed my mind
 		if (source and source.valid)
 		and (source.player)
 		and (source.player.mm.role == MMROLE_MURDERER)
+			MM_N.peoplekilled = $+1
 		end
-		*/
 	end
 	
 	if (source

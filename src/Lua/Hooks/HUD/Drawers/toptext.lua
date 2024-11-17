@@ -34,7 +34,7 @@ return function(v)
 	local listForRemoval = {}
 	local slidein = MMHUD.xoffset
 
-	local target_y = 35*FU
+	local target_y = 16*FU
 	for i,str in pairs(MMHUD.texts) do
 		local i = #MMHUD.texts-i
 		local trans = 0

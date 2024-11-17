@@ -61,8 +61,13 @@ end)
 COM_AddCommand("MM_toptextsay", function(p,time,header,...)
 	if not MM:isMM() then return end
 	
+	if not tostring(time)
+		CONS_Printf(p,"mm_toptextsay <time> <header> <...>")
+		return
+	end
+	
 	local args = {...}
-	MMHUD:PushToTop((tonumber(time) or 5)*TICRATE,
+	MMHUD:PushToTop(abs(tonumber(time) or 5)*TICRATE,
 		header,
 		unpack(args)
 	)

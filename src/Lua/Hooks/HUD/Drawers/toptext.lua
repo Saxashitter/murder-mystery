@@ -60,14 +60,14 @@ return function(v)
 		str.y = lerp($, target_y, FU/7)
 		total_height = text_height
 
-		v.drawString(160*FU + slidein, str.y, str.text, V_SNAPTOTOP|trans, "fixed-center")
+		v.drawString(160*FU, str.y - slidein, str.text, V_SNAPTOTOP|trans, "fixed-center")
 
 		for i,subt in ipairs(str.subtexts) do
 			local y = str.y+text_height
 
 			y = $+(subtext_height*(i-1))
 
-			v.drawString(160*FU + slidein, y, subt, V_SNAPTOTOP|trans, "thin-fixed-center")
+			v.drawString(160*FU, y - slidein, subt, V_SNAPTOTOP|trans, "thin-fixed-center")
 			total_height = $ + subtext_height
 		end
 

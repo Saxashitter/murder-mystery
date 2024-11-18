@@ -9,6 +9,9 @@ return function(self, p, mapchange)
 	end
 
 	local midgame = not mapchange and leveltime > 10*TICRATE
+	if MM_N.waiting_for_players then
+		midgame = false
+	end
 
 	if midgame then
 		p.mm.joinedmidgame = true

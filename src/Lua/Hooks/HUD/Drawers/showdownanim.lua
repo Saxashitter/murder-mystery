@@ -14,6 +14,7 @@ local SW_SUBSTR = "IT'S A SHOWDOWN! "
 
 local fade = 0
 local side_x = -128*(FU*3/2)
+local versus_y = -46*(FU*3/4)
 local str_y = 200*FU
 local substr_y = 200*FU
 local letters = {}
@@ -24,6 +25,7 @@ local swspr = {}
 local function init_vars()
 	fade = 0
 	side_x = -128*(FU*3/2)
+	versus_y = -46*(FU*3/4)
 	str_y = 200*FU
 	substr_y = 200*FU
 	letters = {}
@@ -157,18 +159,23 @@ return function(v, p)
 		state = 2
 	end
 
+	local screen_height = (v.height()/v.dupy())*FU
+
 	local draw_sides = true
+	local versus = v.cachePatch("MM_VERSUS")
 
 	if state == 1 then
-		side_x = ease.linear(FU/5, $, 128*FU/3)
+		side_x = ease.linear(FU/5, $, 0*FU)
 		str_y = ease.linear(FU/3, $, 170*FU)
 		substr_y = ease.linear(FU/3, $, 120*FU)
+		versus_y = ease.linear(FU/5, $, (screen_height/2)-(versus.height*(FU*3/4)/2))
 
 		fade = min($+1, 13)
 	elseif state == 2 then
-		side_x = ease.linear(FU/5, $, -128*(FU*3/2))
+		side_x = ease.linear(FU/5, $, -128*FU)
 		str_y = ease.linear(FU/3, $, 200*FU)
 		substr_y = ease.linear(FU/3, $, 200*FU)
+		versus_y = ease.linear(FU/5, $, 0)
 		fade = max(0, $-1)
 		draw_sides = fade > 0
 	end
@@ -201,9 +208,11 @@ return function(v, p)
 			str = "GET THAT INNOCENT!"
 		end
 
-		v.drawString(160*FU, str_y+(8*(str_scale)), str, V_SNAPTOBOTTOM, "thin-fixed-center")
+		v.drawString(160*FU, str_y+(8*str_scale), str, V_SNAPTOBOTTOM, "thin-fixed-center")
 
 		draw_side(v, side_x, MM_N.showdown_right, true)
 		draw_side(v, side_x, MM_N.showdown_left, false)
+
+		v.drawScaled(160*FU-(versus.width*(FU*3/4)/2), versus_y, FU*3/4, versus, V_SNAPTOTOP)
 	end
 end

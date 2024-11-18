@@ -21,6 +21,8 @@ return {
 	speed_cap = 28*FU,
 
 	waiting_for_players = false,
+	found_player = false,
+	waiting_start_time = 7*TICRATE,
 
 	showdown = false,
 	showdown_song = "MMOVRT",

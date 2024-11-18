@@ -148,9 +148,14 @@ mobjinfo[MT_MM_INTERACT_POINT] = {
 	--$Arg2Type 0
 	
 	--$Arg3 Button
-	--$Arg3Type 11
+	--$Arg3Type 12
 	--$Arg3Enum {128="Spin"; 1024="Toss flag"; 4096="Fire Normal", 8196="Custom 1"; 16385="Custom 2"; 32768="Custom 3"}
 	--$Arg3Flags {128="Spin"; 1024="Toss flag"; 4096="Fire Normal", 8196="Custom 1"; 16385="Custom 2"; 32768="Custom 3"}
+	
+	--$Arg4 Trigger Tag
+	--$Arg4Default 0
+	--$Arg4Type 0
+	
 	flags = MF_NOGRAVITY|MF_NOSECTOR|MF_NOCLIP|MF_NOCLIPHEIGHT|MF_NOCLIPTHING,
 	radius = 16*FRACUNIT,
 	height = 32*FRACUNIT,

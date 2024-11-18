@@ -5,6 +5,7 @@ mobjinfo[MT_MM_CLUESPAWN] = {
 	--$Name Clue Spawner
 	--$Sprite UNKNB0
 	--$Category SaxaMM
+	--$NotAngled
 	flags = MF_NOGRAVITY,
 	radius = 16*FRACUNIT,
 	height = 32*FRACUNIT,

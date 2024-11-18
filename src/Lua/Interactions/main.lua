@@ -67,7 +67,12 @@ MM.sortInteracts = function(p,a,b)
 end
 
 MM.canInteract = function(p,mobj) --Point of interest
+	if p.mm.interact == nil then return false end
+	if (p.spectator or p.mm.spectator) then return false end
+	
 	local me = p.realmo
+	
+	if not (me.health) then return false end
 	if not (me and me.valid) then return false end
 	if not (mobj and mobj.valid)then return false end
 	
@@ -78,10 +83,8 @@ MM.canInteract = function(p,mobj) --Point of interest
 end
 
 MM.interactPoint = function(p,mobj,name,intertext,button,time,funcid)
-	if p.mm.interact == nil then return end
-	
-	if (p.mm.interact.interacted) then return end
 	if not MM.canInteract(p,mobj) then return end
+	if (p.mm.interact.interacted) then return end
 	
 	for k,inter in ipairs(p.mm.interact.points)
 		--Dont add the same mobj multiple times
@@ -119,3 +122,53 @@ MM.interactPoint = function(p,mobj,name,intertext,button,time,funcid)
 		end)
 	end
 end
+
+local MT_Interaction = MM.addInteration(function(p,mo)
+	if mo.calling_tag ~= 0
+		P_LinedefExecute(mo.calling_tag,p.mo)
+	end
+end,"MapthingInteraction")
+
+freeslot("MT_MM_INTERACT_POINT")
+mobjinfo[MT_MM_INTERACT_POINT] = {
+	--$Name Interaction Point
+	--$Sprite UNKNB0
+	--$Category SaxaMM
+
+	--$Arg0 Name ID
+	--$Arg0Default 0
+	--$Arg0Type 0
+
+	--$Arg1 Interaction Desc. ID
+	--$Arg1Default 0
+	--$Arg1Type 0
+	
+	--$Arg2 Interact Duration
+	--$Arg2Default 0
+	--$Arg2Type 0
+	
+	--$Arg3 Button
+	--$Arg3Type 11
+	--$Arg3Enum {128="Spin"; 1024="Toss flag"; 4096="Fire Normal", 8196="Custom 1"; 16385="Custom 2"; 32768="Custom 3"}
+	--$Arg3Flags {128="Spin"; 1024="Toss flag"; 4096="Fire Normal", 8196="Custom 1"; 16385="Custom 2"; 32768="Custom 3"}
+	flags = MF_NOGRAVITY|MF_NOSECTOR|MF_NOCLIP|MF_NOCLIPHEIGHT|MF_NOCLIPTHING,
+	radius = 16*FRACUNIT,
+	height = 32*FRACUNIT,
+	doomednum = 5000,
+	spawnstate = S_INVISIBLE
+}
+
+addHook("MapThingSpawn",function(mt,mo)
+	
+end,MT_MM_INTERACT_POINT)
+addHook("MobjThinker",function(point)
+	for p in players.iterate
+		MM.interactPoint(p,point,
+			point.name,
+			point.desc,
+			point.button,
+			point.duration,
+			MT_Interaction
+		)
+	end
+end,MT_MM_INTERACT_POINT)

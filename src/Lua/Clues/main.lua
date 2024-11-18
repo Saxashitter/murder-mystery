@@ -114,6 +114,7 @@ MM:addPlayerScript(function(p)
 	for i,clue in ipairs(p.mm.clues) do
 		local pos = clue.ref
 		
+		--TODO: this and dropped item sparkles dont sustain fullbrite
 		if P_RandomChance(FU/2)
 			local wind = P_SpawnMobj(
 				pos.x + P_RandomRange(-18,18)*p.mo.scale,
@@ -121,6 +122,7 @@ MM:addPlayerScript(function(p)
 				pos.z + (p.mo.height/2) + P_RandomRange(-20,20)*p.mo.scale,
 				MT_BOXSPARKLE
 			)
+			wind.frame = $|FF_FULLBRIGHT
 			wind.drawonlyforplayer = p
 			P_SetObjectMomZ(wind,P_RandomRange(1,3)*FU)
 		end

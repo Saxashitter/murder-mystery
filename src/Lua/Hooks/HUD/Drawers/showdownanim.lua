@@ -9,16 +9,27 @@ MM.showdownSprites = {
 	-- i wanna plan to add custom sprites for this sometime soon
 }
 
-local Squiggle = MM.require "HUDObjs/squiggletext"
-local int_ease = MM.require "Libs/int_ease"
+local SW_STR = "SHOWDOWN!!"
+local SW_SUBSTR = "IT'S A SHOWDOWN! "
 
-local last_innocent_data
-local murderer_data
-local showdown_text
-local showdown_str = "SHOWDOWN!!"
+local fade = 0
+local side_x = -128*(FU*3/2)
+local str_y = 200*FU
+local substr_y = 200*FU
+local letters = {}
+local letter_cooldown = 0
 local init = false
-
 local swspr = {}
+
+local function init_vars()
+	fade = 0
+	side_x = -128*(FU*3/2)
+	str_y = 200*FU
+	substr_y = 200*FU
+	letters = {}
+	letter_cooldown = 0
+	init = false
+end
 
 local function return_sw_spr(v, sn)
 	if not (MM.showdownSprites[sn]) then
@@ -54,111 +65,145 @@ local function draw_sw_spr(v, x, y, scale, sn, flags, c)
 	return patch
 end
 
+local FONT = "STCFN"
+local function manage_letters(v)
+	if #letters >= #SW_STR then return end
+
+	local stri = #letters+1
+	local str = string.sub(SW_STR, stri, stri)
+
+	local byte = str:byte()
+
+	letters[stri] = v.cachePatch(string.format("STCFN%03d", byte))
+	S_StopSoundByID(nil, sfx_wepchg)
+	S_StartSoundAtVolume(nil, sfx_wepchg, 225)
+end
+
+local function draw_substr(v)
+	local str_width = v.stringWidth(SW_SUBSTR, 0, "small")
+
+	local sw = (v.width()/v.dupx())
+
+	local x = ((leveltime % str_width) - str_width)*FU
+	local y = substr_y
+	local ox = x
+
+	while y < 200*FU do
+		while x < (sw*FU) do
+			v.drawString(x, y, SW_SUBSTR, V_SNAPTOBOTTOM|V_SNAPTOLEFT|V_50TRANS|V_REDMAP, "small-fixed")
+			x = $+(str_width*FU)
+		end
+		y = $+5*FU
+		x = (ox-(str_width*FU/3)) % (str_width*FU)
+		ox = x
+	end
+end
+
+local function draw_side(v, x, data, right)
+	if not (data and #data) then return end
+
+	local right_length = #data
+	local right_key = right_length-1 // wrapper
+	local right_scale = FU
+	local right_height = 128*FU
+	local right_yoff = 0
+	local flags = V_SNAPTOLEFT
+
+	if right_key then
+		for i = 1,right_key do // poor code ik but im having a brain aneursym
+			right_scale = max(FU/6, $*3/4)
+		end
+		right_yoff = (128*right_scale)/5
+		right_height = (128*right_scale)
+	end
+
+	local right_totalheight = (right_height*right_length)-(right_yoff*right_key)
+
+	local y = (100*FU)-(right_totalheight/2)
+
+	if right then
+		x = (320*FU)-$
+		flags = V_SNAPTORIGHT|V_FLIP
+	end
+
+	for k,data in ipairs(data) do
+		draw_sw_spr(v,
+			x+v.RandomRange(-2*FU, 2*FU),
+			y+v.RandomRange(-2*FU, 2*FU),
+			right_scale, data.skin,
+			flags,
+			data.color
+		)
+		y = $+right_height-right_yoff
+	end
+end
+
 return function(v, p)
 	if (not MM_N.showdown or MM_N.gameover) then
-		last_innocent_data = nil
-		murderer_data = nil
-		init = false
-		showdown_text = nil
+		init_vars()
 		return
 	end
 
-	if not (MM_N.showdown_ticker) then return end
+	if not (MM_N.showdown) then return end
 
 	if not init then
-		showdown_text = Squiggle(160*FU,
-			200*FU,
-			FU*3,
-			string.sub(showdown_str, 1, 1),
-			"center",
-			SKINCOLOR_RED,
-			{
-				shake = true,
-				wiggle = false
-			},
-			V_SNAPTOBOTTOM)
 		init = true
 	end
-
-	local start_t = max(0, min(FixedDiv(MM_N.showdown_ticker, TICRATE), FU))
-	local end_t = max(0, min(FixedDiv((3*TICRATE)-MM_N.showdown_ticker, TICRATE), FU))
-
-	local t = MM_N.showdown_ticker < TICRATE and start_t or end_t
+	
+	local state = 1
 
 	-- insert showdown animation here, not ready yet
-	if MM_N.showdown_ticker < 3*TICRATE then
-		local twn = int_ease(t, 0, 16)
-		v.fadeScreen(0xFF00, twn)
+	if MM_N.showdown_ticker >= 3*TICRATE then
+		state = 2
+	end
 
-		local right_length = #MM_N.showdown_right
-		local right_key = right_length-1 // wrapper
-		local right_scale = FU
-		local right_height = 128*FU
-		local right_yoff = 0
+	local draw_sides = true
 
-		if right_key then
-			for i = 1,right_key do // poor code ik but im having a brain aneursym
-				right_scale = max(FU/6, $*3/4)
-			end
-			right_yoff = (128*right_scale)/5
-			right_height = (128*right_scale)
+	if state == 1 then
+		side_x = ease.linear(FU/5, $, 128*FU/3)
+		str_y = ease.linear(FU/3, $, 170*FU)
+		substr_y = ease.linear(FU/3, $, 120*FU)
+
+		fade = min($+1, 13)
+	elseif state == 2 then
+		side_x = ease.linear(FU/5, $, -128*(FU*3/2))
+		str_y = ease.linear(FU/3, $, 200*FU)
+		substr_y = ease.linear(FU/3, $, 200*FU)
+		fade = max(0, $-1)
+		draw_sides = fade > 0
+	end
+
+	manage_letters(v)
+	v.fadeScreen(0xFF00, fade)
+
+	local str_scale = FU*3/2
+	local width = 8*(#letters*str_scale)
+
+	local str_x = (160*FU)-(width/2)
+
+	if draw_sides then
+		draw_substr(v)
+
+		for k,patch in ipairs(letters) do
+			v.drawScaled(
+				str_x+v.RandomRange(-FU, FU),
+				str_y+v.RandomRange(-FU, FU),
+				str_scale,
+				patch,
+				V_SNAPTOBOTTOM,
+				v.getColormap(TC_RAINBOW, SKINCOLOR_RED)
+			)
+			str_x = $+(8*str_scale)
 		end
 
-		local right_totalheight = (right_height*right_length)-(right_yoff*right_key)
-
-		local x = ease.outcubic(t, -128*right_scale, -128*(right_scale/3))
-		local y = (100*FU)-(right_totalheight/2)
-		for k,data in ipairs(MM_N.showdown_right) do
-			draw_sw_spr(v,
-				(320*FU)-x+v.RandomRange(-2*FU, 2*FU),
-				y+v.RandomRange(-2*FU, 2*FU),
-				right_scale, data.skin,
-				V_SNAPTORIGHT|V_FLIP,
-				data.color)
-			y = $+right_height-right_yoff
+		local str = "The murderer can see you, RUN!"
+		if (p and p.mm and p.mm.role == MMROLE_MURDERER) then
+			str = "GET THAT INNOCENT!"
 		end
 
-		local left_length = #MM_N.showdown_left
-		local left_key = left_length-1 // wrapper
-		local left_scale = FU
-		local left_height = 128*FU
-		local left_yoff = 0
+		v.drawString(160*FU, str_y+(8*(str_scale)), str, V_SNAPTOBOTTOM, "thin-fixed-center")
 
-		if left_key then
-			for i = 1,left_key do // poor code ik but im having a brain aneursym
-				left_scale = max(FU/6, $*3/4)
-			end
-			left_yoff = (128*left_scale)/5
-			left_height = (128*left_scale)
-		end
-
-		local left_totalheight = (left_height*left_length)-(left_yoff*left_key)
-
-		local x = ease.outcubic(t, -128*left_scale, -128*(left_scale/3))
-		local y = (100*FU)-(left_totalheight/2)
-		for k,data in ipairs(MM_N.showdown_left) do
-			draw_sw_spr(v,
-				x+v.RandomRange(-2*FU, 2*FU),
-				y+v.RandomRange(-2*FU, 2*FU),
-				left_scale, data.skin,
-				V_SNAPTOLEFT,
-				data.color)
-			y = $+left_height-left_yoff
-		end
-
-		local width = v.nameTagWidth "SHOWDOWN!"
-		local x = (160*FU)-(width*(FU/2))
-		local y = ease.outcubic(t, 200*FU, 162*FU)
-
-		/*x = $+v.RandomRange(-2*FU, 2*FU)
-		y = $+v.RandomRange(-2*FU, 2*FU)
-
-		v.drawScaledNameTag(x, y, "SHOWDOWN", V_SNAPTOBOTTOM, FU, SKINCOLOR_RED, SKINCOLOR_WHITE)*/
-
-		local text_twn = ease.linear(FixedDiv(MM_N.showdown_ticker, 16), 1, #showdown_str)
-
-		showdown_text.text = string.sub(showdown_str, 1, text_twn)
-		showdown_text.y = y
-		showdown_text:draw(v)
+		draw_side(v, side_x, MM_N.showdown_right, true)
+		draw_side(v, side_x, MM_N.showdown_left, false)
 	end
 end

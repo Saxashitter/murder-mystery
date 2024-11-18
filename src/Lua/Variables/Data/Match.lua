@@ -27,6 +27,8 @@ return {
 	showdown = false,
 	showdown_song = "MMOVRT",
 	showdown_ticker = 0,
+	showdown_left = {},
+	showdown_right = {},
 
 	overtime = false,
 	overtime_ticker = 0,

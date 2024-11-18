@@ -16,38 +16,56 @@ local last_innocent_data
 local murderer_data
 local showdown_text
 local showdown_str = "SHOWDOWN!!"
-local got_players = false
+local init = false
+
+local swspr = {}
+
+local function return_sw_spr(v, sn)
+	if not (MM.showdownSprites[sn]) then
+		sn = "sonic"
+	end
+
+	if not (swspr[sn]) then
+		swspr[sn] = v.cachePatch(MM.showdownSprites[sn])
+	end
+
+	return swspr[sn]
+end
+
+local function draw_sw_spr(v, x, y, scale, sn, flags, c)
+	local patch = return_sw_spr(v, sn)
+
+	flags = flags or 0
+
+	/*if flip then
+		x = $-(patch.width*scale)
+
+		if not (flags & V_FLIP) then
+			flags = $|V_FLIP
+		else
+			flags = $ & ~V_FLIP
+		end
+	end*/
+
+	local color = v.getColormap(sn, c)
+
+	v.drawScaled(x, y, scale, patch, flags, color)
+
+	return patch
+end
 
 return function(v, p)
 	if (not MM_N.showdown or MM_N.gameover) then
 		last_innocent_data = nil
 		murderer_data = nil
-		got_players = false
+		init = false
 		showdown_text = nil
 		return
 	end
 
-	-- its showdown? iterate through players and get the last innocent and murderers
-	if not got_players then
-		for p in players.iterate do
-			if not (p and p.mo and p.mo.health and p.mm and not p.mm.spectator) then continue end
+	if not (MM_N.showdown_ticker) then return end
 
-			if p.mm.role ~= 2 then
-				last_innocent_data = {
-					skin = p.mo.skin,
-					color = p.mo.color
-				}
-				continue
-			end
-
-			murderer_data = {
-				skin = p.mo.skin,
-				color = p.mo.color
-			}
-
-			if (last_innocent_data and murderer_data) then break end
-			-- TODO: rewrite code and put in where showdown starts, this is just a placeholder cause im lazy
-		end
+	if not init then
 		showdown_text = Squiggle(160*FU,
 			200*FU,
 			FU*3,
@@ -59,10 +77,8 @@ return function(v, p)
 				wiggle = false
 			},
 			V_SNAPTOBOTTOM)
-		got_players = true
+		init = true
 	end
-
-	if not (MM_N.showdown_ticker) then return end
 
 	local start_t = max(0, min(FixedDiv(MM_N.showdown_ticker, TICRATE), FU))
 	local end_t = max(0, min(FixedDiv((3*TICRATE)-MM_N.showdown_ticker, TICRATE), FU))
@@ -74,34 +90,60 @@ return function(v, p)
 		local twn = int_ease(t, 0, 16)
 		v.fadeScreen(0xFF00, twn)
 
-		if last_innocent_data then
-			local data = last_innocent_data
-			local patch = v.cachePatch(MM.showdownSprites[data.skin] or MM.showdownSprites["sonic"])
-			local scale = FU
-			local color = v.getColormap(data.skin, data.color)
+		local right_length = #MM_N.showdown_right
+		local right_key = right_length-1 // wrapper
+		local right_scale = FU
+		local right_height = 128*FU
+		local right_yoff = 0
 
-			local x = ease.outcubic(t, -patch.width*FU, -patch.width*(FU/3))
-			local y = 20*FU
-
-			x = $+v.RandomRange(-2*FU, 2*FU)
-			y = $+v.RandomRange(-2*FU, 2*FU)
-
-			v.drawScaled((320*FU)-x, y, FU, patch, V_SNAPTORIGHT|V_FLIP, color)
+		if right_key then
+			for i = 1,right_key do // poor code ik but im having a brain aneursym
+				right_scale = max(FU/6, $*3/4)
+			end
+			right_yoff = (128*right_scale)/5
+			right_height = (128*right_scale)
 		end
-		
-		if murderer_data then
-			local data = murderer_data
-			local patch = v.cachePatch(MM.showdownSprites[data.skin] or MM.showdownSprites["sonic"])
-			local scale = FU
-			local color = v.getColormap(data.skin, data.color)
 
-			local x = ease.outcubic(t, -patch.width*FU, -patch.width*(FU/3))
-			local y = 20*FU
+		local right_totalheight = (right_height*right_length)-(right_yoff*right_key)
 
-			x = $+v.RandomRange(-2*FU, 2*FU)
-			y = $+v.RandomRange(-2*FU, 2*FU)
+		local x = ease.outcubic(t, -128*right_scale, -128*(right_scale/3))
+		local y = (100*FU)-(right_totalheight/2)
+		for k,data in ipairs(MM_N.showdown_right) do
+			draw_sw_spr(v,
+				(320*FU)-x+v.RandomRange(-2*FU, 2*FU),
+				y+v.RandomRange(-2*FU, 2*FU),
+				right_scale, data.skin,
+				V_SNAPTORIGHT|V_FLIP,
+				data.color)
+			y = $+right_height-right_yoff
+		end
 
-			v.drawScaled(x, y, FU, patch, V_SNAPTOLEFT, color)
+		local left_length = #MM_N.showdown_left
+		local left_key = left_length-1 // wrapper
+		local left_scale = FU
+		local left_height = 128*FU
+		local left_yoff = 0
+
+		if left_key then
+			for i = 1,left_key do // poor code ik but im having a brain aneursym
+				left_scale = max(FU/6, $*3/4)
+			end
+			left_yoff = (128*left_scale)/5
+			left_height = (128*left_scale)
+		end
+
+		local left_totalheight = (left_height*left_length)-(left_yoff*left_key)
+
+		local x = ease.outcubic(t, -128*left_scale, -128*(left_scale/3))
+		local y = (100*FU)-(left_totalheight/2)
+		for k,data in ipairs(MM_N.showdown_left) do
+			draw_sw_spr(v,
+				x+v.RandomRange(-2*FU, 2*FU),
+				y+v.RandomRange(-2*FU, 2*FU),
+				left_scale, data.skin,
+				V_SNAPTOLEFT,
+				data.color)
+			y = $+left_height-left_yoff
 		end
 
 		local width = v.nameTagWidth "SHOWDOWN!"

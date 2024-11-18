@@ -135,22 +135,21 @@ mobjinfo[MT_MM_INTERACT_POINT] = {
 	--$Sprite UNKNB0
 	--$Category SaxaMM
 
-	--$Arg0 Name ID
-	--$Arg0Default 0
-	--$Arg0Type 0
-
-	--$Arg1 Interaction Desc. ID
-	--$Arg1Default 0
-	--$Arg1Type 0
+	--Arg0 Use string arg1
+	--Arg1Default 0
+	--Arg1Type 0
+	
+	--Arg1 Use string arg2
+	--Arg1Default 0
+	--Arg1Type 0
 	
 	--$Arg2 Interact Duration
 	--$Arg2Default 0
 	--$Arg2Type 0
 	
 	--$Arg3 Button
-	--$Arg3Type 12
-	--$Arg3Enum {128="Spin"; 1024="Toss flag"; 4096="Fire Normal", 8196="Custom 1"; 16385="Custom 2"; 32768="Custom 3"}
-	--$Arg3Flags {128="Spin"; 1024="Toss flag"; 4096="Fire Normal", 8196="Custom 1"; 16385="Custom 2"; 32768="Custom 3"}
+	--$Arg3Type 11
+	--$Arg3Enum {128="Spin"; 1024="Toss flag"; 4096="Fire Normal"; 32768="Custom 3";}
 	
 	--$Arg4 Trigger Tag
 	--$Arg4Default 0

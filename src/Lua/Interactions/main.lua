@@ -123,7 +123,7 @@ MM.interactPoint = function(p,mobj,name,intertext,button,time,funcid)
 	end
 end
 
-local MT_Interaction = MM.addInteration(function(p,mo)
+local MT_Interaction = MM.addInteraction(function(p,mo)
 	if mo.calling_tag ~= 0
 		P_LinedefExecute(mo.calling_tag,p.mo)
 	end

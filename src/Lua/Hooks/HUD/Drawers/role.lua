@@ -56,20 +56,20 @@ local function HUD_RoleDrawer(v,p)
 		if not p.spectator
 			for k,va in ipairs(roles[p.mm.role].desc) do
 				longest_width = max($,
-					v.stringWidth("  "..va,V_ALLOWLOWERCASE,"thin")
+					v.stringWidth("  "..va,V_ALLOWLOWERCASE,"small")
 				)
-				y = $+8*FU
+				y = $+4*FU
 			end
 		else
 			longest_width = max($,
-				v.stringWidth("  "..killerstring,V_ALLOWLOWERCASE,"thin")
+				v.stringWidth("  "..killerstring,V_ALLOWLOWERCASE,"small")
 			)
-			y = $+8*FU
+			y = 4*FU
 
 			longest_width = max($,
-				v.stringWidth("  You cannot interact with alive people.",V_ALLOWLOWERCASE,"thin")
+				v.stringWidth("  You cannot interact with alive people.",V_ALLOWLOWERCASE,"small")
 			)
-			y = $+8*FU
+			y = $+4*FU
 		end
 		
 		local x = (320*FU) - longest_width*FU
@@ -95,13 +95,13 @@ local function HUD_RoleDrawer(v,p)
 				8*FU,
 				killerstring,
 				V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
-				"thin-fixed-right"
+				"small-fixed-right"
 			)
 			v.drawString(320*FU + off,
 				16*FU,
 				"You cannot interact with alive people.",
 				V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
-				"thin-fixed-right"
+				"small-fixed-right"
 			)
 		end
 		return
@@ -116,10 +116,10 @@ local function HUD_RoleDrawer(v,p)
 	)
 	for k,va in ipairs(roles[p.mm.role].desc)
 		v.drawString(320*FU + off,
-			(8*k)*FU,
+			(8+(4*(k-1)))*FU,
 			va,
 			V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
-			"thin-fixed-right"
+			"small-fixed-right"
 		)
 	end
 end

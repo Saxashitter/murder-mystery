@@ -154,8 +154,16 @@ local function HUD_TabScoresDrawer(v)
 		end
 		v.draw(x, y, thisBgPatch, V_50TRANS)
 		
-		local p_skin = p.mm.permanentskin or p.skin
-		local p_skincolor = p.mm.permanentcolor or p.skincolor
+		local p_skin = p.skin
+		local p_skincolor = p.skincolor
+		local name = p.name
+
+		if p.mm
+		and p.mm.alias then
+			p_skin = p.mm.alias.skin
+			p_skincolor = p.mm.alias.skincolor
+			name = p.mm.alias.name
+		end
 
 		--#region life icon
 		local iconpatch = v.getSprite2Patch(p_skin, SPR2_XTRA, false, A)
@@ -168,7 +176,6 @@ local function HUD_TabScoresDrawer(v)
 
 		--#region name rendering
 		local style = "small"
-		local name = p.name
 		-- name = string.sub(name, 1, sin(ANG2*leveltime)/(FU/12)+14)
 		if v.stringWidth(name, 0, "small") >= (TILEWIDTH-18) then
 			style = "small-thin"

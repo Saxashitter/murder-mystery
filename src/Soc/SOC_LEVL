@@ -5,4 +5,3 @@ NoZone = true
 Music = MANS2M
 TypeOfLevel = SaxaMM
 NoVisitNeeded = true
-Lua.MM_ClueAmount = 7

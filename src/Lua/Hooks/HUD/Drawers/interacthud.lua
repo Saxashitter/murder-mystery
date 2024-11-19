@@ -11,6 +11,8 @@ local buttontotext = {
 	[BT_CUSTOM2] = "C2",
 	[BT_CUSTOM3] = "C3",
 	[BT_TOSSFLAG] = "TF",
+	[BT_SPIN] = "S",
+	[BT_FIRENORMAL] = "FN",
 }
 
 --TODO: this source edit really needs a setorigin for interp...

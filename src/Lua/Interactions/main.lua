@@ -123,7 +123,7 @@ MM.interactPoint = function(p,mobj,name,intertext,button,time,funcid)
 	end
 end
 
-local MT_Interaction = MM.addInteraction(function(p,mo)
+local MT_Interaction = MM.addInteration(function(p,mo)
 	if mo.calling_tag ~= 0
 		P_LinedefExecute(mo.calling_tag,p.mo)
 	end
@@ -135,36 +135,40 @@ mobjinfo[MT_MM_INTERACT_POINT] = {
 	--$Sprite UNKNB0
 	--$Category SaxaMM
 
-	--Arg0 Use string arg1
-	--Arg1Default 0
-	--Arg1Type 0
+	--$StringArg0 Name
+	--$StringArg0ToolTip The top text on the\ninteraction prompt. (Ex. Button)
 	
-	--Arg1 Use string arg2
-	--Arg1Default 0
-	--Arg1Type 0
+	--$StringArg1 Action
+	--$StringArg1ToolTip The bottom text on the\ninteraction prompt. (Ex. Press)
 	
-	--$Arg2 Interact Duration
+	--$Arg0 Interact Duration
+	--$Arg0Default 0
+	--$Arg0Type 0
+	
+	--$Arg1 Button
+	--$Arg1Type 11
+	--$Arg1Enum {128="Spin"; 1024="Toss flag"; 4096="Fire Normal"; 32768="Custom 3";}
+	
+	--$Arg2 Trigger Tag
 	--$Arg2Default 0
 	--$Arg2Type 0
-	
-	--$Arg3 Button
-	--$Arg3Type 11
-	--$Arg3Enum {128="Spin"; 1024="Toss flag"; 4096="Fire Normal"; 32768="Custom 3";}
-	
-	--$Arg4 Trigger Tag
-	--$Arg4Default 0
-	--$Arg4Type 0
 	
 	flags = MF_NOGRAVITY|MF_NOSECTOR|MF_NOCLIP|MF_NOCLIPHEIGHT|MF_NOCLIPTHING,
 	radius = 16*FRACUNIT,
 	height = 32*FRACUNIT,
 	doomednum = 5000,
-	spawnstate = S_INVISIBLE
+	spawnstate = S_UNKNOWN
 }
 
 addHook("MapThingSpawn",function(mt,mo)
+	mo.name = mt.stringargs[0]
+	mo.desc = mt.stringargs[1]
 	
+	mo.duration = mt.args[0]
+	mo.button = mt.args[1]
+	mo.calling_tag = mt.args[2]
 end,MT_MM_INTERACT_POINT)
+
 addHook("MobjThinker",function(point)
 	for p in players.iterate
 		MM.interactPoint(p,point,

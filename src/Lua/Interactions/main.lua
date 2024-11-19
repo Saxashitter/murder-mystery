@@ -123,7 +123,7 @@ MM.interactPoint = function(p,mobj,name,intertext,button,time,funcid)
 	end
 end
 
-local MT_Interaction = MM.addInteration(function(p,mo)
+local MT_Interaction = MM.addInteraction(function(p,mo)
 	if mo.calling_tag ~= 0
 		P_LinedefExecute(mo.calling_tag,p.mo)
 	end
@@ -132,9 +132,10 @@ end,"MapthingInteraction")
 freeslot("MT_MM_INTERACT_POINT")
 mobjinfo[MT_MM_INTERACT_POINT] = {
 	--$Name Interaction Point
-	--$Sprite UNKNB0
+	--$Sprite BGLSD0
 	--$Category SaxaMM
-
+	--$NotAngled
+	
 	--$StringArg0 Name
 	--$StringArg0ToolTip The top text on the\ninteraction prompt. (Ex. Button)
 	
@@ -157,10 +158,10 @@ mobjinfo[MT_MM_INTERACT_POINT] = {
 	radius = 16*FRACUNIT,
 	height = 32*FRACUNIT,
 	doomednum = 5000,
-	spawnstate = S_UNKNOWN
+	spawnstate = S_INVISIBLE
 }
 
-addHook("MapThingSpawn",function(mt,mo)
+addHook("MapThingSpawn",function(mo,mt)
 	mo.name = mt.stringargs[0]
 	mo.desc = mt.stringargs[1]
 	
@@ -171,7 +172,7 @@ end,MT_MM_INTERACT_POINT)
 
 addHook("MobjThinker",function(point)
 	for p in players.iterate
-		MM.interactPoint(p,point,
+		MM.interactPoint(p, point,
 			point.name,
 			point.desc,
 			point.button,

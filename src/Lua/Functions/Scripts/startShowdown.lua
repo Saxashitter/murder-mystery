@@ -10,7 +10,6 @@ return function()
 				skin = p.mo.skin,
 				color = p.mo.color
 			})
-			print "added to right side"
 			continue
 		end
 
@@ -18,9 +17,7 @@ return function()
 			skin = p.mo.skin,
 			color = p.mo.color
 		})
-		print "added to left side"
 	end
 
-	MMHUD:PushToTop(5*TICRATE,"SHOWDOWN", "There's 1 person left, the murderer can see where he is!")
 	S_StartSound(nil,sfx_kc4b)
 end

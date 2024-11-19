@@ -82,22 +82,33 @@ local function manage_letters(v)
 end
 
 local function draw_substr(v)
-	local str_width = v.stringWidth(SW_SUBSTR, 0, "small")
+	local str_width = v.stringWidth(SW_SUBSTR)
 
 	local sw = (v.width()/v.dupx())
 
 	local x = ((leveltime % str_width) - str_width)*FU
 	local y = substr_y
 	local ox = x
+	local scroll = true
 
 	while y < 200*FU do
-		while x < (sw*FU) do
-			v.drawString(x, y, SW_SUBSTR, V_SNAPTOBOTTOM|V_SNAPTOLEFT|V_50TRANS|V_REDMAP, "small-fixed")
-			x = $+(str_width*FU)
+		if scroll then
+			while x < (sw*FU) do
+				v.drawString(x, y, SW_SUBSTR, V_SNAPTOBOTTOM|V_SNAPTOLEFT|V_50TRANS|V_REDMAP, "fixed")
+				x = $+(str_width*FU)
+			end
+		else
+			x = sw*FU - $
+			while x >= -(str_width*FU) do
+				v.drawString(x, y, SW_SUBSTR, V_SNAPTOBOTTOM|V_SNAPTOLEFT|V_50TRANS|V_REDMAP, "fixed")
+				x = $-(str_width*FU)
+			end
 		end
-		y = $+5*FU
+
+		y = $+9*FU
 		x = (ox-(str_width*FU/3)) % (str_width*FU)
 		ox = x
+		scroll = not scroll
 	end
 end
 
@@ -175,7 +186,7 @@ return function(v, p)
 		side_x = ease.linear(FU/5, $, -128*FU)
 		str_y = ease.linear(FU/3, $, 200*FU)
 		substr_y = ease.linear(FU/3, $, 200*FU)
-		versus_y = ease.linear(FU/5, $, 0)
+		versus_y = ease.linear(FU/5, $, -versus.height*FU)
 		fade = max(0, $-1)
 		draw_sides = fade > 0
 	end
@@ -191,6 +202,20 @@ return function(v, p)
 	if draw_sides then
 		draw_substr(v)
 
+		local str = "The murderer can see you, RUN!"
+		local max_width = v.stringWidth(str, 0, "thin")
+		max_width = (max($, 8*#letters)*FU)+(4*FU)
+
+		local max_height = (8*str_scale)+(8*FU)+(4*FU)
+
+		v.drawStretched(160*FU - (max_width/2),
+			str_y - 2*FU,
+			max_width,
+			max_height,
+			v.cachePatch("1PIXEL"),
+			V_SNAPTOBOTTOM|V_40TRANS
+		)
+
 		for k,patch in ipairs(letters) do
 			v.drawScaled(
 				str_x+v.RandomRange(-FU, FU),
@@ -202,8 +227,6 @@ return function(v, p)
 			)
 			str_x = $+(8*str_scale)
 		end
-
-		local str = "The murderer can see you, RUN!"
 		if (p and p.mm and p.mm.role == MMROLE_MURDERER) then
 			str = "GET THAT INNOCENT!"
 		end

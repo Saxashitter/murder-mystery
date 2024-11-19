@@ -29,7 +29,6 @@ local function set_overtime_point()
 		if mt.type == mobjinfo[MT_MM_STORMDIST].doomednum
 			if #radiuspoints < 2
 				table.insert(radiuspoints,{x = mt.x*FU, y = mt.y*FU})
-				print("Found a Storm Point...")
 			else
 				print("\x82WARNING:\x80 This map has more than 2 Storm Radius Points! Only place 2 on each edge of your desired range.")
 			end

@@ -1,5 +1,4 @@
 local TR = TICRATE
-local AFK_TIMEOUT = 60*TR
 
 local function HUD_AFKDrawer(v,p,c)
 	if not MM:isMM() then return end
@@ -16,7 +15,7 @@ local function HUD_AFKDrawer(v,p,c)
 	local text = "! YOU WILL BE ????? !"
 	if CV_MM.afkkickmode.value == 1 then
 		text = "! YOU WILL BE KICKED !"
-	elseif CV_MM.afkkickmode.value == 1 then
+	elseif CV_MM.afkkickmode.value == 2 then
 		text = "! YOU WILL BE KILLED !"
 	end
 

@@ -73,7 +73,8 @@ function MM:giveOutClues(amount)
 	end
 	
 	if not (#cluePositions) then return end
-
+	
+	--weird issue where it would default to 5 even if theres more clue amounts?
 	amount = min(#cluePositions, amount)
 	MM_N.clues_amount = amount
 

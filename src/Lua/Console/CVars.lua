@@ -2,9 +2,9 @@ rawset(_G,"CV_MM",{})
 
 CV_MM.afkkickmode = CV_RegisterVar({
 	name = "mm_afkmode",
-	defaultvalue = "off",
+	defaultvalue = "Off",
 	flags = CV_NETVAR,
-	PossibleValue = {off = 0, kick = 1, kill = 2}
+	PossibleValue = {Off = 0, Kick = 1, Kill = 2}
 })
 
 CV_MM.debug = CV_RegisterVar({

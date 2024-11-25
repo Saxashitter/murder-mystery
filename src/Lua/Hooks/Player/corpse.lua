@@ -47,7 +47,6 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	and target
 	and target.player
 	and target.player.mm
-	and (source.player.mm.role == MMROLE_SHERIFF)
 	and roles[source.player.mm.role].team == roles[target.player.mm.role].team
 	and not roles[source.player.mm.role].cankillmates) then
 		chatprintf(source.player, "\x82*That was not the murderer. You were killed for friendly fire!", true)

@@ -1,3 +1,5 @@
+--TODO: we dont really need this
+
 local version = dofile("version")
 if #version > 7 then
 	version = $:sub(1,7)
@@ -7,6 +9,7 @@ local roles = MM.require "Variables/Data/Roles"
 
 --cant think of a good way to draw & get the length using just 1 loop
 local function HUD_RoleDrawer(v,p)
+	local p = consoleplayer
 	if not (p.mm and roles[p.mm.role]) then return end
 	
 	MMHUD.interpolate(v,true)
@@ -124,4 +127,4 @@ local function HUD_RoleDrawer(v,p)
 	end
 end
 
-return HUD_RoleDrawer
+return HUD_RoleDrawer,"scores"

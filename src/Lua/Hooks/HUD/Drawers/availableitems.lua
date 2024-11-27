@@ -75,9 +75,9 @@ return function(v, p)
 	local items = inv.items
 	local count = inv.count
 
-	local x = 8*FU - MMHUD.xoffset
+	local x = 130*FU - MMHUD.xoffset
 	local y = 175*FU
-	local scale = FU*3/count
+	local scale = FU*2/count
 	
 	if items[inv.cur_sel] ~= itemname.oldid
 		itemname.tics = 3*TICRATE
@@ -91,7 +91,7 @@ return function(v, p)
 			local trans = itemname.tics < 10 and (9 - itemname.tics)<<V_ALPHASHIFT or 0
 			v.drawString(x, y - 12*FU,
 				curitem.display_name,
-				V_SNAPTOLEFT|V_SNAPTOBOTTOM|trans|V_ALLOWLOWERCASE,
+				V_SNAPTOBOTTOM|trans|V_ALLOWLOWERCASE,
 				"thin-fixed"
 			)
 		end
@@ -106,7 +106,7 @@ return function(v, p)
 			selected = i == inv.cur_sel,
 			timeleft = items[i] and items[i].timeleft,
 			graphic = items[i] and items[i].display_icon,
-			flags = V_SNAPTOLEFT|V_SNAPTOBOTTOM,
+			flags = V_SNAPTOBOTTOM,
 			inv = inv,
 			item = items[i],
 		}

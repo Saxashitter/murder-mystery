@@ -31,19 +31,20 @@ local ITEM_DEF = {
 	-- so, what these values would be if you want the default to be on the upper right of the player is...
 	-- {x = FU, y = FU, z = 0}
 
-	stick = true, -- disable if you wanna manually handle weapon sticking
-	-- useful for cooldowns after throwing a weapon, or if you just want to do a fake-drop or something
-	hiddenforothers = false, -- determines if the stick is hidden for others
-	-- stick needs to be true for this to operate correctly
+	stick = true,				-- disable if you wanna manually handle weapon sticking
+									-- useful for cooldowns after throwing a weapon, or if you just want to do a fake-drop or something
+	hiddenforothers = false,	-- determines if the stick is hidden for others
+									-- stick needs to be true for this to operate correctly
 	cantouch = false,
-	animation = true, -- enable if you want the weapon to be tweened between it's hit pos and default pos
-	damage = true, -- enable if this can damage people
-	weaponize = true, -- make item identify as a weapon (#woke /j)
-	-- weapons are usually on the players right hand, while items are on the players left
-	droppable = false, -- enable to let item be dropped
-	shootable = false, -- enable to make weapon shoot projectiles instead of stabbing
-	shootmobj = MT_THOK, -- the mobj type it shoots
-	restrict = {}, -- restricts pickup from certain roles
+	animation = true,			-- enable if you want the weapon to be tweened between it's hit pos and default pos
+	damage = true,				-- enable if this can damage people
+	weaponize = true,			-- make item identify as a weapon (#woke /j)
+									-- weapons are usually on the players right hand, while items are on the players left
+	droppable = false,			-- enable to let item be dropped
+	allowdropmobj = true,		-- determines whether dropping the item will spawn another to be picked up
+	shootable = false,			-- enable to make weapon shoot projectiles instead of stabbing
+	shootmobj = MT_THOK,		-- the mobj type it shoots
+	restrict = {},				-- restricts pickup from certain roles
 	/* example:
 	{
 		[MMROLE_INNOCENT] = true

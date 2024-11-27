@@ -67,7 +67,7 @@ local function HUD_RoleDrawer(v,p)
 			longest_width = max($,
 				v.stringWidth("  "..killerstring,V_ALLOWLOWERCASE,"small")
 			)
-			y = 4*FU
+			y = $+4*FU
 
 			longest_width = max($,
 				v.stringWidth("  You cannot interact with alive people.",V_ALLOWLOWERCASE,"small")
@@ -101,7 +101,7 @@ local function HUD_RoleDrawer(v,p)
 				"small-fixed-right"
 			)
 			v.drawString(320*FU + off,
-				16*FU,
+				12*FU,
 				"You cannot interact with alive people.",
 				V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
 				"small-fixed-right"

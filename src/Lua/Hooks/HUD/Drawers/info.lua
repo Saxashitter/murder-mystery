@@ -9,6 +9,7 @@ local function HUD_InfoDrawer(v)
 		local flash = false
 		local timetic = MM_N.time
 		timetic = not (MM_N.overtime and not MM_N.showdown) and min(max($,0), MM_N.maxtime)+TICRATE or 0
+		timetic = min($,MM_N.maxtime)
 		
 		local minutes = G_TicsToMinutes(timetic, true)
 		local seconds = G_TicsToSeconds(timetic)

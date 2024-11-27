@@ -157,7 +157,9 @@ MM:addPlayerScript(function(p)
 				if not (#p.mm.clues) then
 					text = "YOU FOUND THEM ALL!"
 					subtext = "Your clues gave you a shotgun!"
-					MM:GiveItem(p, "gun")
+					local item = MM:GiveItem(p, "gun")
+					item.droppable = false
+					item.allowdropmobj = false
 				end
 
 				if p == displayplayer then

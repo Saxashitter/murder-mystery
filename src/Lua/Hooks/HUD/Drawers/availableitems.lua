@@ -74,19 +74,19 @@ return function(v, p)
 	local inv = p.mm.inventory
 	local items = inv.items
 	local count = inv.count
-
-	local x = 130*FU - MMHUD.xoffset
-	local y = 175*FU
+	local curitem = items[inv.cur_sel]
+	
+	local x = 130*FU
+	local y = 175*FU + MMHUD.xoffset
 	local scale = FU*2/count
 	
-	if items[inv.cur_sel] ~= itemname.oldid
+	if curitem ~= itemname.oldid
 		itemname.tics = 3*TICRATE
 	end
 	
 	if itemname.tics
 		itemname.tics = $-1
 		
-		local curitem = items[inv.cur_sel]
 		if curitem and curitem.display_name
 			local trans = itemname.tics < 10 and (9 - itemname.tics)<<V_ALPHASHIFT or 0
 			v.drawString(x, y - 12*FU,
@@ -113,5 +113,33 @@ return function(v, p)
 
 		x = $+(36*scale)
 	end
-	itemname.oldid = items[inv.cur_sel]
+	itemname.oldid = curitem
+	
+	--controls
+	x = 5*FU - MMHUD.xoffset
+	y = 170*FU
+	
+	v.drawString(
+		x,y,
+		"[C1] - "..(inv.hidden and "Show" or "Hide").." Items",
+		V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
+		"thin-fixed"
+	)
+	y = $+8*FU
+	
+	if curitem and curitem.droppable then
+		v.drawString(x,y,
+			"[C2] - Drop weapon",
+			V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
+			"thin-fixed"
+		)
+		y = $+8*FU
+	end
+	
+	v.drawString(x,y,
+		"[FIRE] - Use weapon",
+		V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
+		"thin-fixed"
+	)
+	
 end

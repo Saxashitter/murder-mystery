@@ -51,6 +51,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	and not roles[source.player.mm.role].cankillmates) then
 		chatprintf(source.player, "\x82*That was not the murderer. You were killed for friendly fire!", true)
 		P_DamageMobj(source, nil, nil, 999, DMG_INSTAKILL)
+		target.player.mm.whokilledme = "Killed by someone else's stupidity."
 	end
 
 	if not MM:canGameEnd()

@@ -9,6 +9,7 @@ MM.showdownSprites = {
 	-- i wanna plan to add custom sprites for this sometime soon
 }
 
+--this is super extra and blocks a lot of vision
 local SW_STR = "SHOWDOWN!!"
 local SW_SUBSTR = "IT'S A SHOWDOWN! "
 
@@ -94,13 +95,13 @@ local function draw_substr(v)
 	while y < 200*FU do
 		if scroll then
 			while x < (sw*FU) do
-				v.drawString(x, y, SW_SUBSTR, V_SNAPTOBOTTOM|V_SNAPTOLEFT|V_50TRANS|V_REDMAP, "fixed")
+				v.drawString(x, y, SW_SUBSTR, V_SNAPTOBOTTOM|V_50TRANS|V_REDMAP, "fixed")
 				x = $+(str_width*FU)
 			end
 		else
 			x = sw*FU - $
 			while x >= -(str_width*FU) do
-				v.drawString(x, y, SW_SUBSTR, V_SNAPTOBOTTOM|V_SNAPTOLEFT|V_50TRANS|V_REDMAP, "fixed")
+				v.drawString(x, y, SW_SUBSTR, V_SNAPTOBOTTOM|V_50TRANS|V_REDMAP, "fixed")
 				x = $-(str_width*FU)
 			end
 		end

@@ -325,6 +325,7 @@ return function(self)
 	end
 
 	if dist > 1028*FU then return end
+	if point.otherpoints == nil or #point.otherpoints < 2 then return end
 	
 	if not (point.destpoint)
 		point.eased = 0

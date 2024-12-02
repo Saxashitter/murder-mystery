@@ -82,7 +82,7 @@ function MM:giveOutClues(amount)
 		local clues = {}
 		local found = {}
 		
-		if (p.mm.role == MMROLE_MURDERER) then continue end
+		if (p.mm.role ~= MMROLE_INNOCENT) then continue end
 		
 		clues.amount = amount
 		for i = 1, amount do

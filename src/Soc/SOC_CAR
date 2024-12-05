@@ -1,0 +1,123 @@
+Freeslot
+SPR_KERT
+SPR_TELE
+SPR_H2TR
+SPR_H2BK
+SPR_H2VH
+SPR_H2BB
+SPR_H2BT
+MT_H2BULB
+MT_H2VHS
+MT_H2BOTTLE
+MT_H2BOOKS
+MT_H2TREE
+MT_KARTSCENE
+MT_TELE
+S_H2TREE
+S_KARTSCENE
+S_TELESCENE
+S_H2BOOKS
+S_H2VHS
+S_H2BOTTLE
+S_H2BULB
+sfx_opm
+
+State S_KARTSCENE
+SpriteName = KERT
+SpriteFrame = A
+Duration = -1
+
+State S_TELESCENE
+SpriteName = TELE
+SpriteFrame = A
+Duration = -1
+
+State S_H2TREE
+SpriteName = H2TR
+SpriteFrame = A
+Duration = -1
+
+State S_H2BOOKS
+SpriteName = H2BK
+SpriteFrame = A
+Duration = -1
+
+State S_H2BULB
+SpriteName = H2BB
+SpriteFrame = A
+Duration = -1
+
+State S_H2VHS
+SpriteName = H2VH
+SpriteFrame = A
+Duration = -1
+
+State S_H2BOTTLE
+SpriteName = H2BT
+SpriteFrame = A
+Duration = -1
+
+Object MT_TELE
+MapThingNum = 4270
+Spawnstate = S_TELESCENE
+Spawnhealth = 6900
+Radius = 20*FRACUNIT
+Height = 90*FRACUNIT
+MaSS = 100
+Flags = MF_SOLID|MF_SCENERY|MF_NOTHINK|MF_PAPERCOLLISION
+
+Object MT_H2BOTTLE
+MapThingNum = 4275
+Spawnstate = S_H2BOTTLE
+Spawnhealth = 6900
+Radius = 20*FRACUNIT
+Height = 40*FRACUNIT
+MaSS = 100
+Flags = MF_SOLID|MF_SCENERY|MF_NOTHINK|MF_PAPERCOLLISION
+
+Object MT_H2TREE
+MapThingNum = 4271
+Spawnstate = S_H2TREE
+Spawnhealth = 6900
+Radius = 20*FRACUNIT
+Height = 60*FRACUNIT
+MaSS = 100
+Flags = MF_SOLID|MF_SCENERY|MF_NOTHINK|MF_PAPERCOLLISION
+
+Object MT_H2BOOKS
+MapThingNum = 4272
+Spawnstate = S_H2BOOKS
+Spawnhealth = 6900
+Radius = 20*FRACUNIT
+Height = 40*FRACUNIT
+MaSS = 100
+Flags = MF_SOLID|MF_SCENERY|MF_NOTHINK|MF_PAPERCOLLISION
+
+Object MT_KARTSCENE
+MapThingNum = 4269
+Spawnstate = S_KARTSCENE
+Spawnhealth = 6900
+Radius = 80*FRACUNIT
+Height = 80*FRACUNIT
+MaSS = 100
+Flags = MF_SOLID|MF_SCENERY|MF_NOTHINK
+
+Object MT_H2VHS
+MapThingNum = 4273
+Spawnstate = S_H2VHS
+Spawnhealth = 6900
+Radius = 20*FRACUNIT
+Height = 10*FRACUNIT
+MaSS = 100
+Flags = MF_SOLID|MF_SCENERY|MF_NOTHINK|MF_PAPERCOLLISION
+
+Object MT_H2BULB
+MapThingNum = 4274
+Spawnstate = S_H2BULB
+Spawnhealth = 6900
+Radius = 16*FRACUNIT
+Height = 8*FRACUNIT
+MaSS = 100
+Flags = MF_SOLID|MF_SCENERY|MF_NOTHINK|MF_PAPERCOLLISION
+
+

@@ -5,4 +5,19 @@ NoZone = true
 Music = MANS2M
 TypeOfLevel = SaxaMM
 NoVisitNeeded = true
+Selectheading = Murder Mystery
 Lua.MM_ClueAmount = 7
+
+Level H2
+Levelname = House
+TypeOfLevel = SaxaMM
+Act = 2
+Nozone = true
+Keywords = HS2
+SkyNum = 69
+RecordAttack = true
+LevelSelect = 1
+SaveGame = true
+SkyboxScale = 64
+NoVisitNeeded = true
+Selectheading = Murder Mystery

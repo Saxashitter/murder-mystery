@@ -7,11 +7,27 @@ local function interval(t, s, d)
 end
 
 local function follow(mobj, mul)
+	/*
 	P_MoveOrigin(mobj,
 		mobj.origin[1] + P_ReturnThrustX(nil,mobj.angle,-mobj.lerpradius),
 		mobj.origin[2] + P_ReturnThrustY(nil,mobj.angle,-mobj.lerpradius),
 		mobj.z
 	)
+	*/
+	P_MoveOrigin(mobj,
+		mobj.origin[1], --+ P_ReturnThrustX(nil,mobj.angle,-mobj.lerpradius),
+		mobj.origin[2], --+ P_ReturnThrustY(nil,mobj.angle,-mobj.lerpradius),
+		mobj.z
+	)
+	local maxmove = 32
+	for i = 0,maxmove
+		local move = (i == maxmove) and -mobj.lerpradius or FixedDiv(-mobj.lerpradius,maxmove*FU)*i
+		P_TryMove(mobj,
+			mobj.origin[1] + P_ReturnThrustX(nil,mobj.angle,move),
+			mobj.origin[2] + P_ReturnThrustY(nil,mobj.angle,move),
+			true
+		)
+	end
 end
 
 return function(self, origin, focusang, finalradius, panduration, panspeed)
@@ -19,14 +35,25 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 		local angle = AngleFixed(focusang)
 		
 		MM_N.end_camera = P_SpawnMobjFromMobj(origin,
+			/*
 			P_ReturnThrustX(nil,focusang,-1200*FU),
 			P_ReturnThrustY(nil,focusang,-1200*FU),
+			*/
+			0,0,
 			origin.height,
 			MT_THOK
 		)
 		MM_N.end_camera.tics = -1
 		MM_N.end_camera.fuse = -1
 		MM_N.end_camera.flags2 = $|MF2_DONTDRAW
+		MM_N.end_camera.flags = MF_NOCLIPTHING|MF_NOGRAVITY
+		MM_N.end_camera.radius = 8*FU
+		MM_N.end_camera.height = 2*FU
+		P_TryMove(MM_N.end_camera,
+			origin.x + P_ReturnThrustX(nil,focusang,-1200*FU),
+			origin.y + P_ReturnThrustY(nil,focusang,-1200*FU),
+			true
+		)
 		
 		MM_N.end_camera.origin = {origin.x,origin.y,origin.z + origin.height}
 		MM_N.end_camera.startradius = {1200*FU,800*FU}

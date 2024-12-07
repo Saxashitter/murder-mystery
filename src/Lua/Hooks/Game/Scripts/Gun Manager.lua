@@ -16,7 +16,7 @@ return function()
 	local _,innocents = getCount()
 
 	-- gun management
-	if not (leveltime >= 10*TICRATE
+	if not (not MM:pregame()
 	and not MM:playerWithGun()
 	and innocents >= 1) then
 		return

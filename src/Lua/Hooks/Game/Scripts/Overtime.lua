@@ -1,12 +1,12 @@
 return function()
 	--starting countdown
-	if (leveltime >= (6*TICRATE - 1) and leveltime <= 9*TICRATE)
+	if (leveltime >= (MM_N.pregame_time - 4*TICRATE - 1) and leveltime <= MM_N.pregame_time - TICRATE)
 	and (leveltime % TICRATE == 0)
-		S_StartSound(nil,leveltime == 9*TICRATE and sfx_s3kad or sfx_s3ka7)
+		S_StartSound(nil,leveltime == MM_N.pregame_time - TICRATE and sfx_s3kad or sfx_s3ka7)
 	end
 	
 	--people might've joined or left, so recalc minimum kills
-	if leveltime == 10*TICRATE
+	if leveltime == MM_N.pregame_time
 		local innocents = 0
 		for p in players.iterate do
 			if (p.mm and p.mm.role ~= MMROLE_MURDERER)

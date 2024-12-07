@@ -116,7 +116,7 @@ addHook("HUD", function(v,p,c)
 					MMHUD.xoffset = ease.inquart(FU*9/10,$,0)
 				end
 			end
-			if MMHUD.ticker >= 10*TR
+			if not MM:pregame()
 			and not MM_N.waiting_for_players
 				MMHUD.xoffset = ease.inquart(FU*9/10,$,0)
 				MMHUD.weaponslidein = ease.inexpo(FU*7/10,$,HUD_BEGINNINGXOFF)

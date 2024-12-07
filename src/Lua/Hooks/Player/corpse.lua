@@ -157,6 +157,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	corpse.skin = target.skin
 	corpse.color = target.color
 	corpse.state = S_PLAY_BODY
+	corpse.colorized = target.colorized
 
 	corpse.angle = angle
 	corpse.flags = 0

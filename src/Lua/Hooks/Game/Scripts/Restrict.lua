@@ -1,6 +1,6 @@
 return function()
 	--Funny
-	if leveltime == 10*TICRATE and isserver then
+	if leveltime == MM_N.pregame_time and isserver then
 		CV_Set(CV_FindVar("restrictskinchange"),1)
 	end
 end

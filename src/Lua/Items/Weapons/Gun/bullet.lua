@@ -52,7 +52,12 @@ addHook("MobjMoveCollide", function(ring, pmo)
 
 	if ring.z > pmo.z+pmo.height then return end
 	if pmo.z > ring.z+ring.height then return end
-
+	
+	if pmo.player and pmo.player.mm
+	and pmo.player.mm.role == MMROLE_SHERIFF
+		return
+	end
+	
 	P_DamageMobj(pmo, ring, (ring.target and ring.target.valid) and ring.target or ring, 999, DMG_INSTAKILL)
 	P_RemoveMobj(ring)
 end, MT_MM_BULLET)

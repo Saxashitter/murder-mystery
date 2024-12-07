@@ -1,8 +1,10 @@
 local match_time = 190*TICRATE
+local pregame_time = 10*TICRATE
 
 return {
-	time = match_time+10*TICRATE,
+	time = match_time+pregame_time,
 	maxtime = match_time,
+	pregame_time = pregame_time,
 
 	special_count = 0,
 

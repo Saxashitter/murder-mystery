@@ -93,7 +93,7 @@ return function(self)
 		end
 	end
 	
-	if (leveltime < 10*TICRATE) then return end
+	if (MM:pregame()) then return end
 	
 	if not (point and point.valid)
 		MM_N.storm_ticker = 0

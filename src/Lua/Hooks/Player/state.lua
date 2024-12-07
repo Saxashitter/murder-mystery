@@ -16,7 +16,7 @@ function MM.changeState(state)
 	cur_state = state
 end
 
-addHook("PlayerCmd', function(p, cmd)
+addHook("PlayerCmd", function(p, cmd)
 	if cur_state then
 		lastbuttons = buttons
 		buttons = cmd.buttons

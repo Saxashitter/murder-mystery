@@ -49,9 +49,11 @@ addHook("PlayerThink", function(p)
 	MM.runHook("PlayerThink", p)
 	
 	if p.mm.outofbounds
-	and not MM_N.gameover
-		p.mm.oob_ticker = $+1
+		if not MM_N.gameover
+			p.mm.oob_ticker = $+1
+		end
 		if p.mm.oob_ticker == 3*TICRATE
+		and p.mo.health
 			p.mo.color = SKINCOLOR_GALAXY
 			p.mo.colorized = true
 			P_KillMobj(p.mo)

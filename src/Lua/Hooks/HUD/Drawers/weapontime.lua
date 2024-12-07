@@ -83,9 +83,9 @@ local function HUD_TimeForWeapon(v,p)
 		return
 	end
 	
-	if leveltime >= 10*TR + 5 then return end
+	if leveltime >= MM_N.pregame_time + 5 then return end
 	
-	local time = (10*TR)-leveltime
+	local time = (MM_N.pregame_time)-leveltime
 	if (leveltime < TR)
 		teammates = nil
 	end
@@ -115,23 +115,36 @@ local function HUD_TimeForWeapon(v,p)
 	)
 	do
 		local letterpatch = v.cachePatch("STTNUM"..(time/TR))
-		local letteroffset = v.cachePatch("STTNUM0").width*FU/2
+		local letteroffset = v.cachePatch("STTNUM0").width*FU * tostring(time/TR):len()
 		local yoff = 0
 		if time/TR <= 3
 			letterpatch = v.cachePatch("RACE"..(time/TR == 0 and "GO" or (time/TR)))
-			letteroffset = letterpatch.width*FU/2
+			letteroffset = letterpatch.width*FU
 			if (time % TR) > TR*3/4
 				yoff = 9*FU - (TR - (time % TR))*FU
 				yoff = ease.linear(FU*3/4,$,0)
 			end
+			v.drawScaled(160*FU - letteroffset/2,
+				50*FU - MMHUD.weaponslidein - yoff,
+				FU,
+				letterpatch,
+				V_SNAPTOTOP
+			)
+		else
+			local work = 0
+			local tstr = tostring(time/TR)
+			for i = 1,string.len(tstr)
+				v.drawScaled(160*FU - letteroffset/2 + work,
+					50*FU - MMHUD.weaponslidein - yoff,
+					FU,
+					v.cachePatch("STTNUM"..string.sub(tstr,i,i)),
+					V_SNAPTOTOP
+				)
+				work = $ + v.cachePatch("STTNUM0").width*FU
+			end
+
 		end
 		
-		v.drawScaled(160*FU - letteroffset,
-			50*FU - MMHUD.weaponslidein - yoff,
-			FU,
-			letterpatch,
-			V_SNAPTOTOP
-		)
 	end
 	
 	v.drawString(160*FU,

@@ -67,7 +67,7 @@ addHook("PlayerSpawn", function(player)
 	if player.mo and player.mo.valid then
 		if not (player.mm) then return end
 		
-		if not player.spectator and leveltime < 10*TICRATE then
+		if not player.spectator and MM:pregame() then
 			if player.mm_save.swapped then
 				R_SetPlayerSkin(player, player.mm_save.r_skin)
 				player.mm_save.r_skin = nil

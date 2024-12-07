@@ -8,7 +8,7 @@ return function(self, p, mapchange)
 		p.mm_save = shallowCopy(savedPlayerVars)
 	end
 
-	local midgame = not mapchange and leveltime > 10*TICRATE
+	local midgame = not mapchange and not MM:pregame()
 	if MM_N.waiting_for_players then
 		midgame = false
 	end

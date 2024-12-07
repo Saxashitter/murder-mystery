@@ -1,0 +1,24 @@
+Freeslot
+MT_MINU
+SPR_MINU
+S_MINU_0
+
+State S_MINU_0
+SpriteName = MINU
+SpriteFrame = A
+Var1 = 0
+Var2 = 0
+
+Object MT_MINU
+Sprite = MINU0
+MapThingNum = 4095
+SpawnState = S_MINU_0
+Radius = 36*FRACUNIT
+Height = 150*FRACUNIT
+Flags = MF_SOLID|MF_NOGRAVITY
+SpawnHealth = 1
+ReactionTime = 20
+#$Title Mini Nuke
+#$Sprite MINUA0
+#$Category Eggship (SaxaMM)
+$NotAngled

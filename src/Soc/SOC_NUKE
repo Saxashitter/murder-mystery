@@ -1,0 +1,24 @@
+Freeslot
+MT_NUKE
+SPR_NUKE
+S_NUKE_0
+
+State S_NUKE_0
+SpriteName = NUKE
+SpriteFrame = A
+Var1 = 0
+Var2 = 0
+
+Object MT_NUKE
+Sprite = NUKEA0
+MapThingNum = 4094
+SpawnState = S_NUKE_0
+Radius = 36*FRACUNIT
+Height = 375*FRACUNIT
+Flags = MF_SOLID|MF_NOGRAVITY
+SpawnHealth = 1
+ReactionTime = 20
+#$Title Nuke
+#$Sprite NUKEA0
+#$Category Eggship (SaxaMM)
+$NotAngled

@@ -1,3 +1,4 @@
+# luigibudd
 Level I2
 Levelname = Mansion
 Act = 2
@@ -8,6 +9,7 @@ NoVisitNeeded = true
 Selectheading = Murder Mystery
 Lua.MM_ClueAmount = 7
 
+# @lemerksiscool
 Level H2
 Levelname = House
 TypeOfLevel = SaxaMM
@@ -20,4 +22,15 @@ LevelSelect = 1
 SaveGame = true
 SkyboxScale = 64
 NoVisitNeeded = true
+Selectheading = Murder Mystery
+
+# @pyrodiac
+Level ES
+Levelname = Seaegg
+Subtitle = Unfinished
+NoZone = true
+Music = MMSHIP
+Typeoflevel = SaxaMM
+Skynum = 6
+Weather = 5
 Selectheading = Murder Mystery

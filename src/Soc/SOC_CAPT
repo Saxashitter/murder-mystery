@@ -1,0 +1,14 @@
+sound sfx_bkrm
+Caption = Familiar Buzzing
+
+sound sfx_pip1
+Caption = Pipe Enter
+
+sound sfx_pip2
+Caption = Pipe Bump
+
+sound sfx_pip3
+Caption = Pipe Exit
+
+sound sfx_anou
+Caption = Cover your ears, kids.

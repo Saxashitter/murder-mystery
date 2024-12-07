@@ -35,6 +35,7 @@ weapon.shootmobj = dofile "Items/Weapons/Gun/bullet"
 weapon.pickupsfx = sfx_gnpick
 weapon.equipsfx = sfx_gequip
 weapon.attacksfx = sfx_gnfire
+weapon.allowdropmobj = true
 
 function weapon:postpickup(p)
 	if roles[p.mm.role].team == true then

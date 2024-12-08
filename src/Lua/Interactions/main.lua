@@ -161,7 +161,7 @@ mobjinfo[MT_MM_INTERACT_POINT] = {
 	--$Arg3 Cooldown
 	--$Arg3Default 0
 	--$Arg3Type 0
-	--$Arg2Tooltip How long the point will need to wait in order for players to interact with it again.
+	--$Arg3Tooltip How long the point will need to wait in order for players to interact with it again.
 	
 	flags = MF_NOGRAVITY|MF_NOSECTOR|MF_NOCLIP|MF_NOCLIPHEIGHT|MF_NOCLIPTHING,
 	radius = 16*FRACUNIT,

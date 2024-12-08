@@ -127,6 +127,7 @@ local MT_Interaction = MM.addInteraction(function(p,mo)
 	if mo.calling_tag ~= 0
 		P_LinedefExecute(mo.calling_tag,p.mo)
 	end
+	mo.cooldown = mo.set_cooldown
 end,"MapthingInteraction")
 
 freeslot("MT_MM_INTERACT_POINT")
@@ -145,14 +146,22 @@ mobjinfo[MT_MM_INTERACT_POINT] = {
 	--$Arg0 Interact Duration
 	--$Arg0Default 0
 	--$Arg0Type 0
+	--$Arg0Tooltip How long a player needs to interact in order to activate.
 	
 	--$Arg1 Button
 	--$Arg1Type 11
 	--$Arg1Enum {128="Spin"; 1024="Toss flag"; 4096="Fire Normal"; 32768="Custom 3";}
+	--$Arg1Tooltip The button the player needs to hold.
 	
 	--$Arg2 Trigger Tag
 	--$Arg2Default 0
 	--$Arg2Type 0
+	--$Arg2Tooltip This tag will be called when interacted with.
+	
+	--$Arg3 Cooldown
+	--$Arg3Default 0
+	--$Arg3Type 0
+	--$Arg2Tooltip How long the point will need to wait in order for players to interact with it again.
 	
 	flags = MF_NOGRAVITY|MF_NOSECTOR|MF_NOCLIP|MF_NOCLIPHEIGHT|MF_NOCLIPTHING,
 	radius = 16*FRACUNIT,
@@ -168,9 +177,16 @@ addHook("MapThingSpawn",function(mo,mt)
 	mo.duration = mt.args[0]
 	mo.button = mt.args[1]
 	mo.calling_tag = mt.args[2]
+	mo.set_cooldown = mt.args[3]
+	mo.cooldown = 0
 end,MT_MM_INTERACT_POINT)
 
 addHook("MobjThinker",function(point)
+	if point.cooldown
+		point.cooldown = $-1
+		return
+	end
+	
 	for p in players.iterate
 		MM.interactPoint(p, point,
 			point.name,

@@ -74,7 +74,8 @@ MM.canInteract = function(p,mobj) --Point of interest
 	
 	if not (me.health) then return false end
 	if not (me and me.valid) then return false end
-	if not (mobj and mobj.valid)then return false end
+	if not (mobj and mobj.valid) then return false end
+	if (mobj.cooldown) then return false end
 	
 	if R_PointToDist2(me.x,me.y, mobj.x,mobj.y) > FixedMul(INTER_RANGE,me.scale)+mobj.radius then return false end
 	if not P_CheckSight(me,mobj) then return false end

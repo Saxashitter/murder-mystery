@@ -19,7 +19,7 @@ local function HUD_GoalDrawer(v,p)
 		local complete = MM_N.peoplekilled >= MM_N.minimum_killed and V_YELLOWMAP or 0
 		v.drawString(x,
 			y,
-			MM_N.peoplekilled.."/"..MM_N.minimum_killed.." People killed",
+			MM_N.peoplekilled.." People killed",
 			V_SNAPTOTOP|V_SNAPTOLEFT|V_ALLOWLOWERCASE|complete,
 			"thin-fixed"
 		)

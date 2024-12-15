@@ -27,7 +27,7 @@ local function HUD_RoleDrawer(v,p)
 		"fixed-right"
 	)
 	
-	if leveltime <= 20*TICRATE	
+	if leveltime <= MM_N.pregame_time*2
 		v.drawString(320*FU + off,
 			8*FU,
 			"Press TAB to view more",

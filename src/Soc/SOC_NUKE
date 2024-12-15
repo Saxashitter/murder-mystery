@@ -10,7 +10,6 @@ Var1 = 0
 Var2 = 0
 
 Object MT_NUKE
-Sprite = NUKEA0
 MapThingNum = 4094
 SpawnState = S_NUKE_0
 Radius = 36*FRACUNIT

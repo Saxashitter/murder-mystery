@@ -152,7 +152,7 @@ local function draw_side(v, x, data, right)
 	end
 end
 
-return function(v, p)
+return function(v, p, cam)
 	if (not MM_N.showdown or MM_N.gameover) then
 		init_vars()
 		return
@@ -193,22 +193,26 @@ return function(v, p)
 	end
 
 	manage_letters(v)
-	v.fadeScreen(0xFF00, fade)
-
+	if cam.chase
+		v.fadeScreen(0xFF00, fade)
+	end
+	
 	local str_scale = FU*3/2
 	local width = 8*(#letters*str_scale)
 
 	local str_x = (160*FU)-(width/2)
 
 	if draw_sides then
-		draw_substr(v)
-
+		if cam.chase
+			draw_substr(v)
+		end
+		
 		local str = "The murderer can see you, RUN!"
 		local max_width = v.stringWidth(str, 0, "thin")
 		max_width = (max($, 8*#letters)*FU)+(4*FU)
 
 		local max_height = (8*str_scale)+(8*FU)+(4*FU)
-
+		
 		v.drawStretched(160*FU - (max_width/2),
 			str_y - 2*FU,
 			max_width,
@@ -216,7 +220,7 @@ return function(v, p)
 			v.cachePatch("1PIXEL"),
 			V_SNAPTOBOTTOM|V_40TRANS
 		)
-
+		
 		for k,patch in ipairs(letters) do
 			v.drawScaled(
 				str_x+v.RandomRange(-FU, FU),
@@ -233,10 +237,12 @@ return function(v, p)
 		end
 
 		v.drawString(160*FU, str_y+(8*str_scale), str, V_SNAPTOBOTTOM, "thin-fixed-center")
-
-		draw_side(v, side_x, MM_N.showdown_right, true)
-		draw_side(v, side_x, MM_N.showdown_left, false)
-
-		v.drawScaled(160*FU-(versus.width*(FU*3/4)/2), versus_y, FU*3/4, versus, V_SNAPTOTOP)
+		
+		if cam.chase
+			draw_side(v, side_x, MM_N.showdown_right, true)
+			draw_side(v, side_x, MM_N.showdown_left, false)
+			
+			v.drawScaled(160*FU-(versus.width*(FU*3/4)/2), versus_y, FU*3/4, versus, V_SNAPTOTOP)
+		end
 	end
 end

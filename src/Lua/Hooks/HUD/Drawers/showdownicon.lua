@@ -16,7 +16,8 @@ return function(v,p,c)
 	*/
 	
 	if not (p and p.mm and p.mm.role) then return end
-
+	if not (p.mo and p.mo.valid) then return end
+	
 	if p.mm.role == MMROLE_MURDERER then
 		for player in players.iterate do
 			if not (player and player.mo and player.mo.health and player.mm and player.mm.role ~= MMROLE_MURDERER) then continue end

@@ -165,6 +165,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	corpse.tics = -1
 	corpse.fuse = -1
 	corpse.shadowscale = target.shadowscale
+	corpse.radius = target.radius
 	
 	P_InstaThrust(corpse, angle, -8*FU)
 	P_SetObjectMomZ(corpse,6*FU)

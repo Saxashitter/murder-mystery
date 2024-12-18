@@ -31,7 +31,10 @@ return function(self)
 	local point = MM_N.storm_point
 	
 	--Uh oh
-	if not (point and point.valid) then return end
+	if not (point and point.valid)
+		MM_N.storm_ticker = 0
+		return
+	end
 	
 	if CV_MM.debug.value
 	and MM_N.storm_startingdist ~= nil
@@ -98,19 +101,24 @@ return function(self)
 	
 	if (MM:pregame()) then return end
 	
-	if not (point and point.valid)
-		MM_N.storm_ticker = 0
-		return
-	end
 	MM_N.storm_ticker = $+1
 	if not (MM_N.time)
 	and not MM_N.showdown
 		MM_N.storm_ticker = $+2
 	end
 	
-	local dist = MM_N.storm_startingdist - (MM_N.storm_ticker*FU*2)
+	local storm_ticker = MM_N.storm_ticker
+	local smalldist = MM_N.storm_usedpoints and MM_N.storm_startingdist/8 or 1028*FU
+	
+	--Cap so we dont overflow
+	do
+		local distmax = MM_N.storm_startingdist - smalldist
+		storm_ticker = min($, distmax/FU/2)
+	end
+	
+	local dist = MM_N.storm_startingdist - (storm_ticker*FU*2)
 	dist = max($,
-		MM_N.storm_usedpoints and MM_N.storm_startingdist/8 or 1028*FU
+		smalldist
 	)
 	
 	local pi = (22*FU/7)

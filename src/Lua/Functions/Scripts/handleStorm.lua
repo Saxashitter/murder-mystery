@@ -299,38 +299,46 @@ return function(self)
 	
 	for p in players.iterate
 		if not p.mm then continue end
-		
-		p.mm.outofbounds = false
-		p.mm.oob_dist = 0
-		
 		if p.spectator
 		or (p.playerstate ~= PST_LIVE)
+		or not (p.mo and p.mo.valid)
+		--Move this here because otherwise we would never be considered
+		--in bounds during the endcam, eventually killing us
+		or MM_N.gameover
+			p.mm.outofbounds = false
+			p.mm.oob_dist = 0
 			continue
 		end
 		
-		if not (p.mo and p.mo.valid)
-			continue
-		end
+		p.mm.lastoob = p.mm.outofbounds
+		p.mm.ouofbounds = false
 		
 		local me = p.mo
 		
 		local pDist = R_PointToDist2(me.x,me.y, point.x,point.y)
 		p.mm.oob_dist = pDist
 		
-		if pDist <= dist
-			continue
+		if pDist > dist
+			p.mm.outofbounds = true
+			
+			if not p.mm.lastoob
+				S_StartSound(me,P_RandomRange(sfx_mmste0,sfx_mmste1),p)
+			end
+		else
+			if p.mm.lastoob
+				S_StartSound(me,P_RandomRange(sfx_mmstl0,sfx_mmstl2),p)
+			end
+			
+			p.mm.outofbounds = false
 		end
-		
-		--Move this here because otherwise we would never be considered
-		--in bounds during the endcam, eventually killing us
-		if MM_N.gameover then continue end
-		
-		p.mm.outofbounds = true
-		
 	end
 
 	if dist > 1028*FU then return end
 	if point.otherpoints == nil or #point.otherpoints < 2 then return end
+	if point.movecooldown
+		point.movecooldown = $-1
+		return
+	end
 	
 	if not (point.destpoint)
 		point.eased = 0
@@ -353,6 +361,9 @@ return function(self)
 			z = point.z,
 			a = point.angle
 		}
+		
+		--wait before moving again...
+		point.movecooldown = 20*TICRATE
 	end
 	
 	local nextpoint = point.destpoint
@@ -371,5 +382,5 @@ return function(self)
 		)
 	)
 	point.eased = $+1
-		
+	
 end

@@ -52,3 +52,12 @@ setmetatable(MM, {
 		rawset(self, key, value)
 	end
 })
+
+for i = 0,1
+	freeslot("sfx_mmste"..i)
+	sfxinfo[sfx_mmste0 + i].caption = "\x89".."Entered storm!\x80"
+end
+for i = 0,2
+	freeslot("sfx_mmstl"..i)
+	sfxinfo[sfx_mmstl0 + i].caption = "\x89".."Exited storm\x80"
+end

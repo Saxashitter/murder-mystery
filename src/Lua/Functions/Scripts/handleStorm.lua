@@ -205,6 +205,11 @@ return function(self)
 			laser.spriteyscale = FixedDiv(cz - fz, 10*laser.scale)
 		end
 		
+		--okay ig... there could be a better way to do this
+		if not S_SoundPlaying(laser,sfx_laser)
+			S_StartSound(laser,sfx_laser)
+		end
+		
 	end
 	
 	--people like to hide behind these so dont let em do that

@@ -18,6 +18,7 @@ local buttontotext = {
 --TODO: this source edit really needs a setorigin for interp...
 local function HUD_InteractDrawer(v,p,cam)
 	if (p.mm.interact == nil) then return end
+	if (p.spectator) then return end
 	
 	--Re-sort so inactive widgets dont overlap the active one
 	local placehold_inter = p.mm.interact.points

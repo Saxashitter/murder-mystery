@@ -9,6 +9,16 @@ NoVisitNeeded = true
 Selectheading = Murder Mystery
 Lua.MM_ClueAmount = 7
 
+Level I1
+Levelname = Mil Base
+Skynum = 4
+NoZone = true
+Music = MILBSM
+TypeOfLevel = SaxaMM
+NoVisitNeeded = true
+Selectheading = Murder Mystery
+Lua.MM_ClueAmount = 6
+
 # @lemerksiscool
 Level H2
 Levelname = House

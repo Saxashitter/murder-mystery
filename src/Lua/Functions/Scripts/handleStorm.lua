@@ -30,6 +30,9 @@ end
 return function(self)
 	local point = MM_N.storm_point
 	
+	--Uh oh
+	if not (point and point.valid) then return end
+	
 	if CV_MM.debug.value
 	and MM_N.storm_startingdist ~= nil
 		local dist = MM_N.storm_startingdist
@@ -115,8 +118,11 @@ return function(self)
 	local maxiter = FixedDiv(circ, 80*FU + 20*FU)
 	
 	if not (point.lasers)
+	or (#point.lasers == 0) --WTFF
 		point.lasers = {}
 		for i = 0,maxiter/FU - 1
+			if (point.lasers[i] and point.lasers[i].valid) then continue end
+			
 			local angle = FixedAngle(leveltime*FU) + FixedAngle(FixedDiv(360*FU,maxiter)*i)
 			point.lasers[i] = P_SpawnMobjFromMobj(point,
 				P_ReturnThrustX(nil,angle,dist),
@@ -135,24 +141,27 @@ return function(self)
 			laser.scale = $*2
 		end
 		
-		point.laser_eye = P_SpawnMobjFromMobj(point,0,0,0,MT_THOK)
-		local laser = point.laser_eye
-		laser.tics = -1
-		laser.fuse = -1
-		laser.renderflags = $|RF_NOCOLORMAPS
-		laser.sprite = SPR_BGLS
-		laser.frame = A|FF_FULLBRIGHT
-		laser.scale = $
+		if not (point.laser_eye and point.laser_eye.valid)
+			point.laser_eye = P_SpawnMobjFromMobj(point,0,0,0,MT_THOK)
+			local laser = point.laser_eye
+			laser.tics = -1
+			laser.fuse = -1
+			laser.renderflags = $|RF_NOCOLORMAPS
+			laser.sprite = SPR_BGLS
+			laser.frame = A|FF_FULLBRIGHT
+			laser.scale = $
+		end
 		
-		point.laser_splat = P_SpawnMobjFromMobj(point,0,0,0,MT_THOK)
-		local laser = point.laser_splat
-		laser.tics = -1
-		laser.fuse = -1
-		laser.renderflags = $|RF_FLOORSPRITE|RF_NOCOLORMAPS
-		laser.sprite = SPR_BGLS
-		laser.frame = B|FF_FULLBRIGHT
-		laser.scale = $
-		
+		if not (point.laser_splat and point.laser_splat.valid)
+			point.laser_splat = P_SpawnMobjFromMobj(point,0,0,0,MT_THOK)
+			local laser = point.laser_splat
+			laser.tics = -1
+			laser.fuse = -1
+			laser.renderflags = $|RF_FLOORSPRITE|RF_NOCOLORMAPS
+			laser.sprite = SPR_BGLS
+			laser.frame = B|FF_FULLBRIGHT
+			laser.scale = $
+		end
 	end
 	
 	/*

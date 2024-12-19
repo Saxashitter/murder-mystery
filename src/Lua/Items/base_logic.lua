@@ -217,7 +217,11 @@ MM:addPlayerScript(function(p)
 		item.cooldown = item.max_cooldown
 
 		if item.shootable then
-			local bullet = P_SpawnMobjFromMobj(p.mo, 0,0,p.mo.height/2, item.shootmobj)
+			local bullet = P_SpawnMobjFromMobj(p.mo,
+				0,0,
+				FixedDiv(p.mo.height,p.mo.scale)/2,
+				item.shootmobj
+			)
 
 			bullet.angle = p.mo.angle
 			bullet.aiming = p.aiming

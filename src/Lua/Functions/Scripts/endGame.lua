@@ -26,7 +26,8 @@ return function(self, endType)
 	end
 
 	local endType = MM.endTypes[endType] or 1
-
+	MM:discordMessage("***"..endType.name.."***\n")
+	
 	MM_N.endType = endType
 	MM_N.gameover = true
 

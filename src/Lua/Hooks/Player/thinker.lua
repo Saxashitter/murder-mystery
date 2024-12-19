@@ -52,7 +52,7 @@ addHook("PlayerThink", function(p)
 		if not MM_N.gameover
 			p.mm.oob_ticker = $+1
 		end
-		if p.mm.oob_ticker == 3*TICRATE
+		if p.mm.oob_ticker == MM_PLAYER_STORMMAX
 		and p.mo.health
 			p.mo.color = SKINCOLOR_GALAXY
 			p.mo.colorized = true

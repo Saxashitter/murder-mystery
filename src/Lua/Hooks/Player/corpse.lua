@@ -147,6 +147,38 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 			MM_N.end_killer = target
 		end
 		MM:discordMessage("***The round has ended!***\n")
+		
+		do
+			local sherrifs = {}
+			local murderers = {}
+			for p in players.iterate
+				if not (p.mm) then continue end
+				
+				local status = (p.mm.spectator) and " (Dead)" or ''
+				if (p.mm.role == MMROLE_SHERIFF)
+					table.insert(sherrifs,p.name..status)
+				elseif (p.mm.role == MMROLE_MURDERER)
+					table.insert(murderers,p.name..status)
+				end
+			end
+			
+			if #murderers > 0
+				local str = ''
+				for k,name in ipairs(murderers)
+					str = $ .. "*"..name.."*, "
+				end
+				MM:discordMessage("***Murderers:*** "..str.."\n")
+			end
+			if #sherrifs > 0
+				local str = ''
+				for k,name in ipairs(sherrifs)
+					str = $ .. "*"..name.."*, "
+				end
+				MM:discordMessage("***Sheriffs:*** "..str.."\n")
+			end
+			
+		end
+		
 		return
 	end
 

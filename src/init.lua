@@ -7,6 +7,7 @@ freeslot("TOL_SAXAMM")
 G_AddGametype({
     name = "Murder Mystery",
     identifier = "SAXAMM",
+	--TODO: remove TOL_MATCH|TOL_TAG
     typeoflevel = TOL_MATCH|TOL_TAG|TOL_SAXAMM,
     rules = GTR_FRIENDLYFIRE|GTR_SPAWNINVUL,
     intermissiontype = int_match,
@@ -19,6 +20,7 @@ MM.require = dofile "Libs/require"
 dofile "Libs/CustomHud.lua"
 
 dofile "events"
+dofile "Constants.lua"
 
 dofile "Variables/main"
 dofile "Functions/main"

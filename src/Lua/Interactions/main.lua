@@ -69,6 +69,7 @@ end
 MM.canInteract = function(p,mobj) --Point of interest
 	if p.mm.interact == nil then return false end
 	if (p.spectator or p.mm.spectator) then return false end
+	if (p.pflags & PF_STASIS or p.powers[pw_nocontrol]) then return false end
 	
 	local me = p.realmo
 	

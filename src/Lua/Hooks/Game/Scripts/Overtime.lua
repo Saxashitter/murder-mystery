@@ -25,6 +25,7 @@ return function()
 	if not (MM_N.time)
 	and not MM_N.overtime then
 		if MM_N.peoplekilled >= MM_N.minimum_killed
+		or MM_N.showdown
 			MM:startOvertime()
 		else
 			MM:endGame(1)

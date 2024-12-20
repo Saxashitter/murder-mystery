@@ -13,7 +13,7 @@ return function()
 				innocents = $+1
 			end
 		end
-		MM_N.minimum_killed = max(1,innocents/5)
+		MM_N.minimum_killed = max(1,innocents/3)
 	end
 	
 	if CV_MM.debug.value

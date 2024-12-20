@@ -7,7 +7,7 @@ states[freeslot "S_MM_KNIFE"] = {
 sfxinfo[freeslot "sfx_kequip"].caption = "Knife equip"
 sfxinfo[freeslot "sfx_kffire"] = { 
 	caption = "Stab",
-	flags = SF_X8AWAYSOUND
+	flags = SF_X4AWAYSOUND
 }
 
 return S_MM_KNIFE

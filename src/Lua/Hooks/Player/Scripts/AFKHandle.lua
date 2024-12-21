@@ -45,7 +45,9 @@ return function(p)
 	
 	if afk.timedout
 	or not CV_MM.afkkickmode.value
+	or afk.keepalive
 		p.mm.afktimer = 0
+		afk.keepalive = false
 		return
 	end
 	

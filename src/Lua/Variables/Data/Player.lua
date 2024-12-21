@@ -29,7 +29,8 @@ return {
 		timedout = false,
 		timeuntilreset = 0,
 		lastangle = 0,
-		lastaiming = 0
+		lastaiming = 0,
+		keepalive = false,
 	},
 	
 	interact = {

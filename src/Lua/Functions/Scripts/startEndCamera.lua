@@ -60,7 +60,7 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 		MM_N.end_camera.startradius = {1200*FU,800*FU}
 		MM_N.end_camera.endradius = {finalradius, finalradius/2}
 		MM_N.end_camera.lerpradius = MM_N.end_camera.startradius[1]
-		MM_N.end_camera.startz = origin.z + (origin.height/2)
+		MM_N.end_camera.startz = origin.z + (origin.height)
 		
 		MM_N.end_camera.swirldur = 3*TICRATE
 		if MM_N.sniped_end then

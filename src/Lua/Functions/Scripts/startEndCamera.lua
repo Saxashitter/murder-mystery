@@ -77,6 +77,8 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 		
 		MM_N.end_camera.ticker = 0
 		MM_N.end_camera.angle = R_PointToAngle2(MM_N.end_camera.x,MM_N.end_camera.y, origin.x,origin.y)
+		
+		MM_N.end_camera.endcamera = true
 	--Move
 	else
 		local time = MM_N.end_camera.ticker

@@ -19,6 +19,7 @@ local buttontotext = {
 local function HUD_InteractDrawer(v,p,cam)
 	if (p.mm.interact == nil) then return end
 	if (p.spectator) then return end
+	if (p.awayviewmobj and p.awayviewmobj.dontdrawinteract) then return end
 	
 	--Re-sort so inactive widgets dont overlap the active one
 	local placehold_inter = p.mm.interact.points
@@ -47,13 +48,15 @@ local function HUD_InteractDrawer(v,p,cam)
 				((p.mm.interact.interacted or goingaway) and inter.interacttime or inter.interacting)*FU,
 				inter.interacttime*FU
 			)
-			do				
-				v.drawStretched(x, y,
-					scalef,
-					FU,
-					icon,
-					trans and V_80TRANS or V_50TRANS
-				)
+			do	
+				if scalef > 0
+					v.drawStretched(x, y,
+						scalef,
+						FU,
+						icon,
+						trans and V_80TRANS or V_50TRANS
+					)
+				end
 				
 				if not timetic
 					v.drawString(x + 30*FU,

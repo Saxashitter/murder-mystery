@@ -87,7 +87,8 @@ MM:addPlayerScript(function(p)
 	local sel = 0
 
 	if p.cmd.buttons & BT_CUSTOM1
-	and not (p.lastbuttons & BT_CUSTOM1) then
+	and not (p.lastbuttons & BT_CUSTOM1)
+	and not (MM:pregame()) then
 		inv.hidden = not inv.hidden
 
 		local item = inv.items[inv.cur_sel]

@@ -4,6 +4,9 @@ local strings = {
 	"storm.ticker",
 	"storm.curdist",
 	"storm.realdist",
+	"storm.movecooldown",
+	"storm.canmigrate",
+	"#storm.otherpoints",
 	"interact.interacted",
 }
 
@@ -11,7 +14,7 @@ return function(v,p)
 	if not CV_MM.debug.value then return end
 	
 	local x = 5
-	local y = 40
+	local y = 50
 	local work = 0
 	local flags = V_SNAPTOLEFT|V_SNAPTOTOP|V_ALLOWLOWERCASE
 	
@@ -31,7 +34,10 @@ return function(v,p)
 		[3] = MM_N.storm_ticker,
 		[4] = string.format("%f",dist),
 		[5] = string.format("%f",rdist),
-		[6] = p.mm.interact.interacted,
+		[6] = MM_N.storm_point.movecooldown,
+		[7] = not (MM_N.storm_point.otherpoints == nil or #MM_N.storm_point.otherpoints < 2),
+		[8] = (MM_N.storm_point.otherpoints == nil) and -1 or #MM_N.storm_point.otherpoints,
+		[9] = p.mm.interact.interacted,
 	}
 	
 	for k,str in ipairs(strings)

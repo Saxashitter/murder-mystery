@@ -34,7 +34,7 @@ local function HUD_AFKDrawer(v,p,c)
 		FU,
 		v.cachePatch("STTNUM"..(AFK_TIMEOUT - p.mm.afktimer)/TR),
 		V_SNAPTOBOTTOM,
-		flash and v.getColormap(TC_RAINBOW,SKINCOLOR_RED) or nil
+		flash and v.getStringColormap(V_REDMAP) or nil
 	)	
 	
 end

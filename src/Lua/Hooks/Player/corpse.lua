@@ -97,7 +97,8 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	local angle = (inflictor and inflictor.valid) and R_PointToAngle2(target.x, target.y, inflictor.x, inflictor.y) or target.angle
 	target.deathangle = angle
 	
-	if MM:canGameEnd() and not MM_N.gameover then
+	if MM:canGameEnd() and not MM_N.gameover 
+	and not (CV_MM.debug.value) then
 		-- funny sniper sound
 		if target.player.mm.role == MMROLE_SHERIFF and source and source.valid then
 			local dist = R_PointToDist2(
@@ -217,6 +218,11 @@ addHook("ThinkFrame", function()
 	and not MM_N.voting
 		for p in players.iterate() do
 			if p.mo and not (p.mo.health) then
+				
+				if p.mo.stormkilledme
+					p.mo.color = SKINCOLOR_GALAXY
+					p.mo.colorized = true
+				end
 				
 				--Endcam cutscene
 				local releaseTic = 3*TICRATE

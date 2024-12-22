@@ -107,7 +107,7 @@ return function(self)
 		MM_N.storm_ticker = $+2
 	end
 	
-	local storm_ticker = MM_N.storm_ticker
+	local storm_ticker = MM_N.storm_ticker*2
 	local smalldist = MM_N.storm_usedpoints and MM_N.storm_startingdist/8 or 1028*FU
 	
 	--Cap so we dont overflow
@@ -350,10 +350,28 @@ return function(self)
 		end
 	end
 
-	if dist > 1028*FU then return end
+	if dist > smalldist then return end
 	if point.otherpoints == nil or #point.otherpoints < 2 then return end
-	if point.movecooldown
-		point.movecooldown = $-1
+		
+	if point.movecooldown ~= nil
+		if point.movecooldown
+			point.movecooldown = $-1
+			if point.movecooldown == 0
+				MMHUD:PushToTop(8*TICRATE,
+					"\x89Storm eye Migrating"
+				)
+				S_StartSound(nil,sfx_mmsmig)
+			else
+				return
+			end
+		end
+	else
+		point.movecooldown = 20*TICRATE
+		MMHUD:PushToTop(8*TICRATE,
+			"\x89Storm eye Migrates in",
+			"\x82".."20\x80 seconds"
+		)
+		S_StartSound(nil,sfx_alarm)
 		return
 	end
 	
@@ -368,6 +386,7 @@ return function(self)
 		}
 	end
 	if onPoint(point,point.destpoint)
+	and not point.movecooldown
 		repeat
 			point.destpoint = point.otherpoints[P_RandomRange(1,#point.otherpoints)]
 		until not onPoint(point,point.destpoint)
@@ -381,11 +400,17 @@ return function(self)
 		
 		--wait before moving again...
 		point.movecooldown = 20*TICRATE
+		MMHUD:PushToTop(8*TICRATE,
+			"\x89Storm eye Migrates in",
+			"\x82".."20\x80 seconds"
+		)
+		S_StartSound(nil,sfx_alarm)
+		return
 	end
 	
 	local nextpoint = point.destpoint
 	local easetics = 60*TICRATE
-	local frac = (FU/easetics)*point.eased
+	local frac = min((FU/easetics)*point.eased,FU)
 	local x = ease.inoutquad(frac, point.startpoint.x, nextpoint.x)
 	local y = ease.inoutquad(frac, point.startpoint.y, nextpoint.y)
 	local z = ease.inoutquad(frac, point.startpoint.z, nextpoint.z)

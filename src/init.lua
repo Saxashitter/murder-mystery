@@ -7,7 +7,6 @@ freeslot("TOL_SAXAMM")
 G_AddGametype({
     name = "Murder Mystery",
     identifier = "SAXAMM",
-	--TODO: remove TOL_MATCH|TOL_TAG
     typeoflevel = TOL_SAXAMM,
     rules = GTR_FRIENDLYFIRE|GTR_SPAWNINVUL,
     intermissiontype = int_match,

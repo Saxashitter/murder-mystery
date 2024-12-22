@@ -8,7 +8,7 @@ G_AddGametype({
     name = "Murder Mystery",
     identifier = "SAXAMM",
 	--TODO: remove TOL_MATCH|TOL_TAG
-    typeoflevel = TOL_MATCH|TOL_TAG|TOL_SAXAMM,
+    typeoflevel = TOL_SAXAMM,
     rules = GTR_FRIENDLYFIRE|GTR_SPAWNINVUL,
     intermissiontype = int_match,
     headerleftcolor = 222,

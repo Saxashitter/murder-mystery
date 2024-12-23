@@ -195,6 +195,9 @@ MM:addPlayerScript(function(p)
 		item.hit = max(0, $-1)
 		item.anim = max(0, $-1)
 		item.cooldown = max(0, $-1)
+		if def.thinker
+			def.thinker(item, p)
+		end
 	end
 
 	// drop le weapon

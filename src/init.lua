@@ -63,3 +63,4 @@ for i = 0,2
 	freeslot("sfx_mmstl"..i)
 	sfxinfo[sfx_mmstl0 + i].caption = "\x89".."Exited storm\x80"
 end
+sfxinfo[freeslot("sfx_mmsmig")].caption = "\x89".."Storm migrating\x80"

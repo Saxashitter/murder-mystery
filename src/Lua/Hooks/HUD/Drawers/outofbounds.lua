@@ -29,7 +29,7 @@ local function HUD_OOBDrawer(v,p,c)
 		FU,
 		v.cachePatch("STTNUM"..(MM_PLAYER_STORMMAX - p.mm.oob_ticker)/TR),
 		V_SNAPTOBOTTOM,
-		flash and v.getColormap(TC_RAINBOW,SKINCOLOR_RED) or nil
+		flash and v.getStringColormap(V_REDMAP) or nil
 	)	
 	
 end

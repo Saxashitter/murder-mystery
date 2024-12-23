@@ -93,7 +93,7 @@ local function set_overtime_point()
 	garg.angle = chosenPoint.a
 	MM_N.storm_point.garg = garg
 	
-	table.remove(possiblePoints,chosenKey)
+	--table.remove(possiblePoints,chosenKey)
 	MM_N.storm_point.otherpoints = possiblePoints
 end
 

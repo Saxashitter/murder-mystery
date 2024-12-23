@@ -56,6 +56,7 @@ addHook("PlayerThink", function(p)
 		and p.mo.health
 			p.mo.color = SKINCOLOR_GALAXY
 			p.mo.colorized = true
+			p.mo.stormkilledme = true
 			P_KillMobj(p.mo)
 		end
 	else

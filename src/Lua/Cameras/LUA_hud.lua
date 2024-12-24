@@ -180,6 +180,10 @@ local function HUD_DrawCamera(v,p)
 				player.mo.frame,
 				6
 			)
+			if patch == nil
+				patch = v.cachePatch("MMCAM_FALLBACK")
+				flip = 0
+			end
 			
 			v.drawScaled(x,y,
 				skins[player.skin].highresscale/2,

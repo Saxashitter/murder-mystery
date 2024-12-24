@@ -121,7 +121,7 @@ return function(v, p)
 	
 	v.drawString(
 		x,y,
-		"[C1] - "..(inv.hidden and "Show" or "Hide").." Items",
+		"[C1] - "..(inv.hidden and "Equip" or "Unequip").." Items",
 		V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
 		"thin-fixed"
 	)

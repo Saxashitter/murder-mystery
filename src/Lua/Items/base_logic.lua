@@ -271,6 +271,17 @@ MM:addPlayerScript(function(p)
 			and not roles[p.mm.role].friendlyfire then
 				continue
 			end
+			
+			
+			local adiff = FixedAngle(
+				AngleFixed(R_PointToAngle2(p.mo.x, p.mo.y, p2.mo.x, p2.mo.y)) - AngleFixed(p.mo.angle)
+			)
+			if AngleFixed(adiff) > 180*FU
+				adiff = InvAngle($)
+			end
+			if (AngleFixed(adiff) > 90*FU)
+				continue
+			end
 
 			if MM.runHook("AttackPlayer", p, p2) then
 				continue
@@ -288,7 +299,7 @@ MM:addPlayerScript(function(p)
 			if item.hitsfx then
 				S_StartSound(p.mo, item.hitsfx)
 			end
-			return
+			continue
 		end
 	end
 end)

@@ -244,6 +244,8 @@ addHook("ThinkFrame", function()
 					corpse.skin = p.mo.skin
 					corpse.color = p.mo.color
 					corpse.state = S_PLAY_BODY
+					corpse.colorized = p.mo.colorized
+					corpse.shadowscale = p.mo.shadowscale
 					
 					corpse.angle = p.mo.deathangle
 					corpse.flags = 0

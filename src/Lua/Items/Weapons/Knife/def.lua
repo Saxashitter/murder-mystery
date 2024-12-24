@@ -12,7 +12,7 @@ weapon.display_name = "Knife"
 weapon.display_icon = "MM_KNIFE"
 weapon.state = dofile "Items/Weapons/Knife/freeslot"
 weapon.timeleft = -1
-weapon.hit_time = 6
+weapon.hit_time = 2
 weapon.animation_time = TICRATE
 weapon.cooldown_time = TICRATE + TICRATE/2
 weapon.range = FU*5
@@ -95,6 +95,11 @@ weapon.thinker = function(item, p)
 		
 		P_SpawnLockOn(p, p2.mo, S_LOCKON1)
 	end
+end
+
+--Whiff so people know youre bad at the game
+weapon.onmiss = function(item,p)
+	S_StartSound(p.mo,sfx_kwhiff)
 end
 
 return weapon

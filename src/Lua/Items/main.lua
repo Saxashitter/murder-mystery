@@ -62,7 +62,8 @@ local ITEM_DEF = {
 	attack = func,
 	hit = func,
 	drop = func,
-	dropthinker = func
+	dropthinker = func,
+	onmiss = func,
 }
 
 local ITEM_STRUCT = {

@@ -250,6 +250,8 @@ MM:addPlayerScript(function(p)
 	if (item.damage or item.cantouch)
 	and item.hit
 	and not inv.hidden then
+		local hitsomething = false
+		
 		for p2 in players.iterate do
 			if not (p2 ~= p
 			and p2
@@ -299,7 +301,13 @@ MM:addPlayerScript(function(p)
 			if item.hitsfx then
 				S_StartSound(p.mo, item.hitsfx)
 			end
+			hitsomething = true
 			continue
+		end
+		
+		if not hitsomething
+		and def.onmiss
+			def.onmiss(item,p)
 		end
 	end
 end)

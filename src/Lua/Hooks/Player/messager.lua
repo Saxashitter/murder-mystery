@@ -67,6 +67,33 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 			return true
 	end
 	
+	--talk from cameras
+	if (src.mmcam and src.mmcam.cam and src.mmcam.cam.valid)
+		MMCAM.CameraSay(src,src.mmcam.cam,msg)
+	--talk to cameras
+	elseif #MMCAM.TOTALCAMS ~= nil
+		local me = src.mo
+		for k,cam in ipairs(MMCAM.TOTALCAMS)
+
+			if not (me and me.valid) then break end
+			if not P_CheckSight(me,cam) then continue end
+
+			local dist = R_PointToDist2(me.x,me.y, cam.x,cam.y)
+			if dist > MMCAM.far_dist*cam.scale then continue end
+
+			--send our message to the cameramen (skibidi)
+			for i = 0,#players - 1
+				local p = cam.args.players[i]
+
+				if not (p and p.valid) then continue end
+				if not (p.mm) then continue end
+				if (p.spectator or p.mm.spectator) then continue end
+
+				chatprintf(p,"\x86[CAM]<"..src.name..">\x80 "..msg)
+			end
+		end
+	end
+
 	local plrname = src.name
 	local alias = src.mm.alias
 	
@@ -86,7 +113,8 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 		src.mo.x,
 		src.mo.y)
 
-	if not P_CheckSight(consoleplayer.mo, src.mo) then
+	if not P_CheckSight(consoleplayer.mo, src.mo)
+	and dist >= 192*FU then
 		if dist > (3000*FU)/4 then return true end
 
 		chatprint("\x86You can hear faint talking through the walls...", true)
@@ -127,7 +155,7 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 
 		name = "\x86"..disttext.."\x80".." "..$
 	end
-
+	
 	chatprint(name.."\x80 "..msg, true)
 	return true
 end)

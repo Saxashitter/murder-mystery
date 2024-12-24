@@ -123,6 +123,7 @@ addHook("MapLoad",do
 			local cam = seq.cams[i]
 			if not (cam and cam.valid)
 				print("\x82WARNING\x80: Camera sequence "..k.." is missing camera "..i)
+				S_StartSound(nil,sfx_skid)
 			end
 			
 		end
@@ -585,7 +586,6 @@ for p in players.iterate
 		local args = cam.args
 		local cmd = p.cmd
 		
-		
 		p.awayviewmobj = cam
 		p.awayviewtics = TR
 		p.awayviewaiming = args.aiming
@@ -643,6 +643,18 @@ for p in players.iterate
 		
 		p.cmd.buttons = 0
 		p.mm.afkhelpers.keepalive = true
+		
+		do
+			local thok = P_SpawnMobjFromMobj(p.mo,
+				0,0,
+				FixedDiv(p.mo.height,p.mo.scale) + 12*FU,
+				MT_THOK
+			)
+			thok.fuse = -1
+			thok.tics = 2
+			thok.sprite = SPR_MMCM
+			thok.frame = J|FF_SEMIBRIGHT
+		end
 	else
 		if (mmc.sequence)
 			p.pflags = $ &~PF_FORCESTRAFE

@@ -103,6 +103,51 @@ MMCAM.StopViewing = function(p,cam)
 	cam.args.players[#p] = nil
 	mmc.cam = nil
 	p.awayviewmobj = nil
+	p.awayviewaiming = 0
+end
+
+MMCAM.far_dist = 1024
+MMCAM.dist_values = {
+	["CLOSE"] = MMCAM.far_dist/16,
+	["NEAR"] = MMCAM.far_dist/8,
+	["FAR"] = MMCAM.far_dist/2
+}
+
+MMCAM.CameraSay = function(player,cam,message)
+	message = "<Camera> "..$
+
+	for p in players.iterate
+		if p == player then continue end
+
+		local me = p.realmo
+
+		if not (me and me.valid) then continue end
+		if not P_CheckSight(me,cam) then continue end
+
+		local dist = R_PointToDist2(me.x,me.y, cam.x,cam.y)
+
+		if dist > MMCAM.far_dist*cam.scale then continue end
+
+		local disttext = "[NEAR]"
+		local workmsg = message
+		do
+			local distcheck
+			for name,_dist in pairs(MMCAM.dist_values) do
+				if dist <= _dist*cam.scale
+				and (not distcheck or distcheck > _dist*cam.scale) then
+					disttext = "["..name.."]"
+					distcheck = _dist*cam.scale
+					continue
+				end
+			end
+
+			workmsg = "\x86"..disttext.."\x80".." "..$
+		end
+		
+		if p == consoleplayer
+			chatprint(workmsg,true)
+		end
+	end
 end
 
 MMCAM.CAMS = {}

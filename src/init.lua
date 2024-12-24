@@ -15,6 +15,30 @@ G_AddGametype({
 	description = "Who murdered this guy? It's a mystery!"
 })
 
+for i = 0,1
+	freeslot("sfx_mmste"..i)
+	sfxinfo[sfx_mmste0 + i].caption = "\x89".."Entered storm!\x80"
+end
+for i = 0,2
+	freeslot("sfx_mmstl"..i)
+	sfxinfo[sfx_mmstl0 + i].caption = "\x89".."Exited storm\x80"
+end
+sfxinfo[freeslot("sfx_mmsmig")].caption = "\x89".."Storm migrating\x80"
+
+freeslot("SPR_BGLS")
+freeslot("S_MM_TEAMMATE1")
+states[S_MM_TEAMMATE1] = {
+	sprite = SPR_BGLS,
+	frame = E|FF_SEMIBRIGHT,
+	tics = 2
+}
+freeslot("S_MM_TEAMMATE2")
+states[S_MM_TEAMMATE2] = {
+	sprite = SPR_BGLS,
+	frame = F|FF_SEMIBRIGHT,
+	tics = 2
+}
+
 MM.require = dofile "Libs/require"
 dofile "Libs/CustomHud.lua"
 
@@ -54,13 +78,3 @@ setmetatable(MM, {
 		rawset(self, key, value)
 	end
 })
-
-for i = 0,1
-	freeslot("sfx_mmste"..i)
-	sfxinfo[sfx_mmste0 + i].caption = "\x89".."Entered storm!\x80"
-end
-for i = 0,2
-	freeslot("sfx_mmstl"..i)
-	sfxinfo[sfx_mmstl0 + i].caption = "\x89".."Exited storm\x80"
-end
-sfxinfo[freeslot("sfx_mmsmig")].caption = "\x89".."Storm migrating\x80"

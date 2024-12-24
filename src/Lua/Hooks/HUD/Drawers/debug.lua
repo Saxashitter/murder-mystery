@@ -2,8 +2,8 @@ local strings = {
 	"storm.starting_dist",
 	"storm.usedpoints",
 	"storm.ticker",
-	"storm.curdist",
-	"storm.realdist",
+	"storm.radius",
+	"storm.dest_radius",
 	"storm.movecooldown",
 	"storm.canmigrate",
 	"#storm.otherpoints",
@@ -24,16 +24,12 @@ return function(v,p)
 		"small"
 	)
 	
-	local dist = MM_N.storm_startingdist - (MM_N.storm_ticker*FU*2)
-	local rdist = max(dist,
-		MM_N.storm_usedpoints and MM_N.storm_startingdist/8 or 1028*FU
-	)
 	local values = {
 		[1] = string.format("%f",MM_N.storm_startingdist),
 		[2] = MM_N.storm_usedpoints,
 		[3] = MM_N.storm_ticker,
-		[4] = string.format("%f",dist),
-		[5] = string.format("%f",rdist),
+		[4] = string.format("%f",MM_N.storm_point.storm_radius or 0),
+		[5] = string.format("%f",MM_N.storm_point.storm_destradius or 0),
 		[6] = MM_N.storm_point.movecooldown,
 		[7] = not (MM_N.storm_point.otherpoints == nil or #MM_N.storm_point.otherpoints < 2),
 		[8] = (MM_N.storm_point.otherpoints == nil) and -1 or #MM_N.storm_point.otherpoints,
@@ -42,7 +38,7 @@ return function(v,p)
 	
 	for k,str in ipairs(strings)
 		v.drawString(x,y + work,
-			str.." = "..tostring(values[k]),
+			str.." = \x84"..tostring(values[k]),
 			flags,
 			"small"
 		)

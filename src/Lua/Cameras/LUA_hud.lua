@@ -34,6 +34,7 @@ local function HUD_DrawCamera(v,p)
 	
 	--DEBUG
 	if debug
+	and (Tprtable ~= nil) --takis func
 		local x,y = 5,0
 		
 		for i = 0,#MMCAM.CAMS

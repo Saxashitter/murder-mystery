@@ -8,3 +8,4 @@ These can range from moderation, to maps, to modifiers, to fun cosmetics. Get wh
 
 Murder Map Pack, ZE1 Swarm Map Pack - GLide KS
 MMRadio - Saxashitter, GLide KS
+LeoTM MM Maps - LeoTM, respective map creators

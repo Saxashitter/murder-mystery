@@ -3,6 +3,8 @@ local function HUD_GoalDrawer(v,p)
 	local x = 5*FU - MMHUD.xoffset
 	local y = 34*FU
 	
+	if MM_N.dueling then return end
+	
 	if MM_N.clues_amount ~= 0
 	and p.mm.role == MMROLE_INNOCENT
 		local complete = #p.mm.clues == 0 and V_YELLOWMAP or 0

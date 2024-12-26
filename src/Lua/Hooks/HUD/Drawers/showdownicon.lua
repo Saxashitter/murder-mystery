@@ -5,6 +5,8 @@ return function(v,p,c)
 	if not MM_N.showdown then
 		return
 	end
+
+	if MM_N.dueling then return end
 	
 	/*
 	v.drawString(6*FU - MMHUD.xoffset,

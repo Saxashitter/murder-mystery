@@ -13,6 +13,8 @@ local function _eligibleGunPlayer(p)
 end
 
 return function()
+	if (MM_N.dueling) then return end
+	
 	local _,innocents = getCount()
 
 	-- gun management

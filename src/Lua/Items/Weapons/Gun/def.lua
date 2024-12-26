@@ -38,6 +38,7 @@ weapon.attacksfx = sfx_gnfire
 weapon.allowdropmobj = true
 
 function weapon:postpickup(p)
+	if (MM_N.dueling) then return end
 	if roles[p.mm.role].team == true then
 		self.restrict[p.mm.role] = true
 		self.timeleft = 5*TICRATE

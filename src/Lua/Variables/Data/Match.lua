@@ -1,10 +1,13 @@
-local match_time = 190*TICRATE
+local match_time = 180*TICRATE
+local duel_time = 60*TICRATE
 local pregame_time = 10*TICRATE
 
 return {
 	time = match_time+pregame_time,
 	maxtime = match_time,
 	pregame_time = pregame_time,
+	duel_time = duel_time,
+	dueling = false,
 
 	special_count = 0,
 
@@ -55,6 +58,7 @@ return {
 	corpses = {},
 	knownDeadPlayers = {},
 	minimum_killed = 0,
+	numbertokill = 0,
 	peoplekilled = 0,
 
 	--round ended because all innocents/murderers left the game

@@ -124,12 +124,23 @@ local function HUD_TimeForWeapon(v,p)
 				yoff = 9*FU - (TR - (time % TR))*FU
 				yoff = ease.linear(FU*3/4,$,0)
 			end
-			v.drawScaled(160*FU - letteroffset/2,
-				50*FU - MMHUD.weaponslidein - yoff,
-				FU,
-				letterpatch,
-				V_SNAPTOTOP
-			)
+
+			if (MM_N.dueling and time/TR == 0)
+				v.drawString(160*FU,
+					50*FU - MMHUD.weaponslidein - yoff,
+					"DUEL!!",
+					V_SNAPTOTOP|V_YELLOWMAP,
+					"fixed-center"
+				)
+			else
+				v.drawScaled(160*FU - letteroffset/2,
+					50*FU - MMHUD.weaponslidein - yoff,
+					FU,
+					letterpatch,
+					V_SNAPTOTOP
+				)
+			end
+
 		else
 			local work = 0
 			local tstr = tostring(time/TR)
@@ -155,7 +166,7 @@ local function HUD_TimeForWeapon(v,p)
 	)
 	if p == consoleplayer
 		local mchance = p.mm_save.cons_murderer_chance
-		local schance = p.mm_save.cons_sheriff_chance
+		--local schance = p.mm_save.cons_sheriff_chance
 		local y = 158*FU + MMHUD.weaponslidein
 		
 		v.drawString(160*FU,
@@ -164,12 +175,14 @@ local function HUD_TimeForWeapon(v,p)
 			V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_REDMAP,
 			"thin-fixed-center"
 		)
+		/*
 		v.drawString(160*FU,
 			y + (8*FU),
 			string.format("%.2f",schance).."% chance to be a Sheriff",
 			V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_BLUEMAP,
 			"thin-fixed-center"
 		)
+		*/
 	end
 	
 	if (leveltime >= TR)

@@ -153,6 +153,7 @@ local function draw_hud(v)
 					color = V_YELLOWMAP
 				else
 					color = V_GREENMAP
+					outline = "VOTED"
 				end
 			end
 

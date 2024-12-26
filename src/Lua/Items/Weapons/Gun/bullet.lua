@@ -12,11 +12,18 @@ addHook("MobjThinker", function(mo)
 	mo.momx = FixedMul(32*cos(mo.angle), cos(mo.aiming))
 	mo.momy = FixedMul(32*sin(mo.angle), cos(mo.aiming))
 	mo.momz = 32*sin(mo.aiming)
+	mo.radius = 2*mo.scale
+	mo.height = 4*mo.scale
 
 	for i = 1,256 do
 		if not (mo and mo.valid) then
 			return
 		end
+
+		--we do this so its easier to hit players from farther away, while also 
+		--being able to hit players closer up in small areas
+		mo.radius = $ + mo.scale/4
+		mo.height = $ + mo.scale/2
 
 		if mo.z <= mo.floorz
 		or mo.z+mo.height >= mo.ceilingz then
@@ -29,6 +36,7 @@ addHook("MobjThinker", function(mo)
 			effect.tics = -1
 			effect.fuse = -1
 			effect.state = S_SPRK1
+			effect.radius,effect.height = mo.radius,mo.height
 		end
 
 		P_XYMovement(mo)
@@ -54,7 +62,7 @@ addHook("MobjMoveCollide", function(ring, pmo)
 	if pmo.z > ring.z+ring.height then return end
 	
 	if pmo.player and pmo.player.mm
-	and pmo.player.mm.role == MMROLE_SHERIFF
+	and pmo.player.mm.role == ring.target.player.mm.role
 		return
 	end
 	

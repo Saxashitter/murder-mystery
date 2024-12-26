@@ -29,13 +29,13 @@ freeslot("SPR_BGLS")
 freeslot("S_MM_TEAMMATE1")
 states[S_MM_TEAMMATE1] = {
 	sprite = SPR_BGLS,
-	frame = E|FF_SEMIBRIGHT,
+	frame = E|FF_FULLBRIGHT,
 	tics = 2
 }
 freeslot("S_MM_TEAMMATE2")
 states[S_MM_TEAMMATE2] = {
 	sprite = SPR_BGLS,
-	frame = F|FF_SEMIBRIGHT,
+	frame = F|FF_FULLBRIGHT,
 	tics = 2
 }
 

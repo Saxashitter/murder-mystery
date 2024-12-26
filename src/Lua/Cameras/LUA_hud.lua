@@ -181,6 +181,13 @@ local function HUD_DrawCamera(v,p)
 				player.mo.frame,
 				6
 			)
+			if player.mo.sprite ~= SPR_PLAY
+				patch,flip = v.getSpritePatch(player.mo.sprite,
+					player.mo.frame,
+					6
+				)
+			end
+			
 			if patch == nil
 				patch = v.cachePatch("MMCAM_FALLBACK")
 				flip = 0

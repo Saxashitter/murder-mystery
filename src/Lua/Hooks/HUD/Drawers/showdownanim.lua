@@ -205,6 +205,8 @@ return function(v, p, cam)
 	if draw_sides then
 		if cam.chase
 			draw_substr(v)
+		else
+			str_y = $ - 10*FU
 		end
 		
 		local str = "The murderer can see you, RUN!"
@@ -228,7 +230,7 @@ return function(v, p, cam)
 				str_scale,
 				patch,
 				V_SNAPTOBOTTOM,
-				v.getColormap(TC_RAINBOW, SKINCOLOR_RED)
+				v.getStringColormap(V_REDMAP)
 			)
 			str_x = $+(8*str_scale)
 		end

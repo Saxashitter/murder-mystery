@@ -5,15 +5,31 @@ return function()
 		S_StartSound(nil,leveltime == MM_N.pregame_time - TICRATE and sfx_s3kad or sfx_s3ka7)
 	end
 	
+	local numplay = 0
+	local innocents = 0
+	for p in players.iterate do
+		if not (p.mm) then continue end
+		if (p.spectator or p.mm.specator) then continue end
+		
+		if (p.mm.role ~= MMROLE_MURDERER)
+			innocents = $+1
+		end
+		numplay = $+1
+	end
+	
+	if MM:pregame()
+		MM_N.dueling = numplay == 2
+	end
+	
 	--people might've joined or left, so recalc minimum kills
 	if leveltime == MM_N.pregame_time
-		local innocents = 0
-		for p in players.iterate do
-			if (p.mm and p.mm.role ~= MMROLE_MURDERER)
-				innocents = $+1
-			end
-		end
 		MM_N.minimum_killed = max(1,innocents/3)
+		
+		--we're for SURE dueling
+		if MM_N.dueling
+			MM_N.time = MM_N.duel_time
+			MM_N.maxtime = MM_N.duel_time
+		end
 	end
 	
 	if CV_MM.debug.value
@@ -24,14 +40,19 @@ return function()
 	MM_N.time = max(0, $-1)
 	if not (MM_N.time)
 	and not MM_N.overtime then
-		if MM_N.peoplekilled >= MM_N.minimum_killed
-		or MM_N.showdown
-			MM:startOvertime()
-		else
-			MM:endGame(1)
-			MM_N.disconnect_end = true
-			MM_N.end_ticker = 3*TICRATE - 1
-			S_StartSound(nil,sfx_s253)
+		if not MM_N.dueling
+			if MM_N.peoplekilled >= MM_N.minimum_killed
+			or MM_N.showdown
+			or (CV_MM.debug.value)
+				MM:startOvertime()
+			else
+				MM:endGame(1)
+				MM_N.disconnect_end = true
+				MM_N.end_ticker = 3*TICRATE - 1
+				S_StartSound(nil,sfx_s253)
+			end
+		elseif not MM_N.showdown
+			MM:startShowdown()
 		end
 	end
 

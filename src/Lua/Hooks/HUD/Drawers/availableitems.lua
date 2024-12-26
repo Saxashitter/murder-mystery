@@ -119,6 +119,15 @@ return function(v, p)
 	x = 5*FU - MMHUD.xoffset
 	y = 170*FU
 	
+	if (p.pflags & (PF_ANALOGMODE|PF_DIRECTIONCHAR) == (PF_ANALOGMODE|PF_DIRECTIONCHAR))
+		v.drawString(
+			x,y - 16*FU,
+			"Automatic mode\nis not recommended.",
+			V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_REDMAP|V_RETURN8,
+			"thin-fixed"
+		)
+	end
+	
 	v.drawString(
 		x,y,
 		"[C1] - "..(inv.hidden and "Equip" or "Unequip").." Items",

@@ -34,6 +34,11 @@ local function Init(point)
 	point.storm_timesmigrated = 0
 	
 	local totaltime = 45*TICRATE
+	if (MM_N.overtime and not MM_N.showdown)
+	or (MM_N.dueling)
+		totaltime = $/3
+	end
+
 	point.storm_incre = point.storm_radius - ease.linear(FU/totaltime,
 		point.storm_radius,
 		point.storm_destradius

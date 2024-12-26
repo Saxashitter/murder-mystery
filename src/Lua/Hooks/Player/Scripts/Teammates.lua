@@ -6,6 +6,8 @@ local stateLUT = {
 return function(p)
 	if MM:pregame() then return end
 	if (p.mm.role == MMROLE_INNOCENT) then return end
+	--endgame cutscene
+	if (p.mo.flags & MF_NOTHINK) then return end
 	
 	if not p.mm.teammates
 	or (#p.mm.teammates == 0)

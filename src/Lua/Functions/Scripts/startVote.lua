@@ -22,12 +22,11 @@ return function(self)
 
 		local data = mapheaderinfo[map]
 		
-		local mapWasIn = map == MM_N.lastmap
-		/*
+		local mapWasIn = false
 		for _,oldmap in ipairs(MM_N.mapVote.maps) do
 			if map == oldmap.map then mapWasIn = true break end
 		end
-		*/
+		if not mapWasIn then mapWasIn = map == MM_N.lastmap end
 		if mapWasIn then continue end
 
 		if not (data.typeoflevel & TOL_SAXAMM) then

@@ -231,6 +231,7 @@ MM:addPlayerScript(function(p)
 			bullet.aiming = p.aiming
 			bullet.color = p.mo.color
 			bullet.target = p.mo
+			bullet.origin = item
 
 			P_InstaThrust(bullet, bullet.angle, 32*cos(p.aiming))
 			bullet.momz = 32*sin(p.aiming)

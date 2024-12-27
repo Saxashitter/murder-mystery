@@ -112,6 +112,7 @@ return function(self, maploaded)
 			MM:giveOutClues(clue_amm)
 		end
 		
+		MM_N.lastmap = gamemap
 		MM.runHook("PostMapLoad")
 		return
 	end

@@ -48,6 +48,7 @@ return {
 	mapVote = {},
 	results_ticker = 0,
 	end_ticker = 0,
+	lastmap = -1,
 
 	pings_done = 0,
 	ping_time = 0,

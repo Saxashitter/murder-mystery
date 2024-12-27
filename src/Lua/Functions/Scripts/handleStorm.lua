@@ -25,6 +25,15 @@ local function onPoint(point1,point2)
 	return (x1 >= x2 - FU and x1 <= x2 + FU) and (y1 >= y2 - FU and y1 <= y2 + FU)
 end
 
+local function SetDestRadius(point, time, dest)
+	point.storm_destradius = dest
+	point.storm_incre = point.storm_radius - ease.linear(FU/time,
+		point.storm_radius,
+		dest
+	)
+	
+end
+
 local function Init(point)
 	if point.init then return end
 	
@@ -38,11 +47,7 @@ local function Init(point)
 	or (MM_N.dueling)
 		totaltime = $/3
 	end
-
-	point.storm_incre = point.storm_radius - ease.linear(FU/totaltime,
-		point.storm_radius,
-		point.storm_destradius
-	)
+	SetDestRadius(point, totaltime, point.storm_destradius)
 	
 	point.init = true
 end
@@ -261,6 +266,7 @@ return function(self)
 	end
 	
 	if (point.storm_radius ~= point.storm_destradius)
+	and (MM_N.overtime or MM_N.showdown)
 		local storm_incre = point.storm_incre
 		if not (MM_N.time)
 		and not MM_N.showdown
@@ -364,13 +370,7 @@ return function(self)
 		)
 		S_StartSound(nil,sfx_alarm)
 		
-		point.storm_destradius = $/2
-		
-		local totaltime = 5*TICRATE
-		point.storm_incre = point.storm_radius - ease.linear(FU/totaltime,
-			point.storm_radius,
-			point.storm_destradius
-		)
+		SetDestRadius(point, 5*TICRATE, point.storm_destradius/2)
 		return
 	end
 	

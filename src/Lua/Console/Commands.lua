@@ -72,3 +72,26 @@ COM_AddCommand("MM_toptextsay", function(p,time,header,...)
 		unpack(args)
 	)
 end, COM_ADMIN)
+
+COM_AddCommand("MM_stormradius", function(p,dest,time)
+	if not MM:isMM() then return end
+	if not CV_MM.debug.value then return end
+	if not tofixed then return end
+	
+	if dest == nil then return end
+	if (time == nil) then return end
+	local point = MM_N.storm_point
+	
+	if not (point and point.valid) then return end
+	
+	dest = abs(tofixed($))
+	time = abs(tonumber($))
+	
+	point.storm_destradius = dest
+	point.storm_incre = point.storm_radius - ease.linear(FU/time,
+		point.storm_radius,
+		dest
+	)
+	
+end, COM_ADMIN)
+

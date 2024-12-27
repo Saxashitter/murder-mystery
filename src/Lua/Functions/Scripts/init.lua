@@ -101,6 +101,7 @@ return function(self, maploaded)
 	if maploaded then
 		if not MM:isMM() then return end
 		
+		MM_N.clues_weaponsleft = MM:countPlayers().innocents/3
 		local clue_amm = 5
 		if (mapheaderinfo[gamemap].mm_clueamount ~= nil)
 		and tonumber(mapheaderinfo[gamemap].mm_clueamount)

@@ -58,9 +58,9 @@ addHook("PostThinkFrame", do
 
 	for p in players.iterate do
 		if not (p and p.mo and p.mm) then continue end
-
+		
 		local inv = p.mm.inventory
-
+		
 		for i,item in pairs(inv.items) do
 			if not (item.mobj and item.mobj.valid) then
 				item.mobj = MM:MakeWeaponMobj(p, item)
@@ -72,9 +72,9 @@ addHook("PostThinkFrame", do
 				continue
 			end
 			item.mobj.flags2 = $ & ~MF2_DONTDRAW
-	
+			
 			manage_position(p, item)
-								
+			
 			if item.hiddenforothers then
 				item.mobj.drawonlyforplayer = p
 			end

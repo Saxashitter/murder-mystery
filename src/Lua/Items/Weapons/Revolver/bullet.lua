@@ -49,7 +49,14 @@ addHook("MobjThinker", function(mo)
 		
 		--we do this so its easier to hit players from farther away, while also 
 		--being able to hit players closer up in small areas
+		local gs = P_SpawnGhostMobj(mo)
+		gs.flags2 = $|MF2_DONTDRAW
+		
 		mo.radius = $ + mo.scale/4
+		if not (mo and mo.valid)
+			BulletDies(gs)
+			return
+		end
 		mo.height = $ + mo.scale/2
 		
 		--drop off
@@ -109,7 +116,7 @@ addHook("MobjMoveCollide", function(ring, pmo)
 	
 	P_DamageMobj(pmo, ring, (ring.target and ring.target.valid) and ring.target or ring, 999, DMG_INSTAKILL)
 	BulletDies(ring)
-	P_RemoveMobjMobj(ring)
+	P_RemoveMobj(ring)
 end, MT_MM_REVOLV_BULLET)
 
 addHook("MobjMoveBlocked", function(ring)

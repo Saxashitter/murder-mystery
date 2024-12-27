@@ -16,6 +16,7 @@ return function(self)
 	S_ChangeMusic(mapmusname)
 	
 	local addedMaps = 0
+	local timesrejected = 0
 	while addedMaps < 4 do
 		local map = P_RandomRange(1, 1024)
 		if not mapheaderinfo[map] then continue end
@@ -26,7 +27,15 @@ return function(self)
 		for _,oldmap in ipairs(MM_N.mapVote.maps) do
 			if map == oldmap.map then mapWasIn = true break end
 		end
-		if not mapWasIn then mapWasIn = map == MM_N.lastmap end
+		
+		if MM_N.lastmap ~= -1
+		and (map == MM_N.lastmap)
+		--its no use! let it back in then
+		and timesrejected < 3
+			mapWasIn = true
+			timesrejected = $+1
+		end
+		
 		if mapWasIn then continue end
 
 		if not (data.typeoflevel & TOL_SAXAMM) then

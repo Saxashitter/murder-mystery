@@ -1,5 +1,6 @@
 local getCount = MM.require "Libs/getCount"
 local randomPlayer = MM.require "Libs/getRandomPlayer"
+local roles = MM.require "Variables/Data/Roles"
 
 local function _eligibleGunPlayer(p)
 	return p
@@ -23,8 +24,9 @@ return function()
 	and innocents >= 1) then
 		return
 	end
-
-	local wpns = MM:GetCertainDroppedItems("gun")
+	
+	local lostgun = roles[MMROLE_SHERIFF].weapon or "revolver"
+	local wpns = MM:GetCertainDroppedItems(lostgun)
 
 	if #wpns then
 		for _,wpn in pairs(wpns) do
@@ -38,7 +40,7 @@ return function()
 				-- give player gun
 				local p = randomPlayer(_eligibleGunPlayer)
 				if p then
-					MM:GiveItem(p, "gun")
+					MM:GiveItem(p, lostgunn)
 					for play in players.iterate do
 						if play == p then
 							chatprintf(play,"\x82*You have been given the gun!",true)

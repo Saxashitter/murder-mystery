@@ -82,7 +82,7 @@ function MM:giveOutClues(amount)
 		local clues = {}
 		local found = {}
 		
-		if (p.mm.role ~= MMROLE_INNOCENT) then continue end
+		if (p.mm.role == MMROLE_SHERIFF) then continue end
 		
 		clues.amount = amount
 		for i = 1, amount do
@@ -156,10 +156,26 @@ MM:addPlayerScript(function(p)
 
 				if not (#p.mm.clues) then
 					text = "YOU FOUND THEM ALL!"
-					subtext = "Your clues gave you a shotgun!"
-					local item = MM:GiveItem(p, "gun")
-					item.droppable = false
-					item.allowdropmobj = false
+					subtext = "Your clues gave you a weapon!"
+					
+					local reward = ''
+					if p.mm.role == MMROLE_MURDERER
+						reward = "luger"
+					else
+						if MM_N.clues_weaponsleft
+							reward = P_RandomChance(FU/2) and "gun" or "revolver"
+							MM_N.clues_weaponsleft = $-1
+						else
+							reward = "burger"
+							subtext = "Your clues gave you an item!"
+						end
+					end
+					
+					local item = MM:GiveItem(p, reward)
+					if p.mm.role ~= MMROLE_MURDERER
+						item.droppable = false
+						item.allowdropmobj = false
+					end
 				end
 
 				if p == displayplayer then

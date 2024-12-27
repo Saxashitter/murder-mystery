@@ -23,7 +23,7 @@ roles[MMROLE_INNOCENT].colorcode = "\x83"
 
 -- sheriff
 roles[MMROLE_SHERIFF] = {}
-roles[MMROLE_SHERIFF].weapon = "gun"
+roles[MMROLE_SHERIFF].weapon = "revolver"
 roles[MMROLE_SHERIFF].name = "Sheriff"
 roles[MMROLE_SHERIFF].desc = {"Protect the innocents.", "Investigate murders.", "Find the murderer."}
 roles[MMROLE_SHERIFF].color = V_BLUEMAP

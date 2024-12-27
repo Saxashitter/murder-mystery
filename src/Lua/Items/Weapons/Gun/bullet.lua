@@ -1,6 +1,6 @@
 mobjinfo[freeslot "MT_MM_BULLET"] = {
-	radius = 2*FU,
-	height = 4*FU,
+	radius = 8*FU,
+	height = 16*FU,
 	spawnstate = S_MM_REVOLV_B,
 	flags = MF_NOGRAVITY,
 	deathstate = S_SMOKE1,
@@ -95,7 +95,8 @@ addHook("MobjMoveCollide", function(ring, pmo)
 	if pmo.z > ring.z+ring.height then return end
 	
 	if pmo.player and pmo.player.mm
-	and pmo.player.mm.role == ring.target.player.mm.role
+	and (ring.target.player.mm.role ~= MMROLE_INNOCENT
+	and pmo.player.mm.role == ring.target.player.mm.role)
 		return
 	end
 	

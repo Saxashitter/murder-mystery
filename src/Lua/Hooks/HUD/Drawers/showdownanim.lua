@@ -177,11 +177,12 @@ return function(v, p, cam)
 	local versus = v.cachePatch("MM_VERSUS")
 
 	if state == 1 then
+		local dest = cam.chase and 170 or 160
 		side_x = ease.linear(FU/5, $, 0*FU)
-		str_y = ease.linear(FU/3, $, 170*FU)
+		str_y = ease.linear(FU/3, $, dest*FU)
 		substr_y = ease.linear(FU/3, $, 120*FU)
 		versus_y = ease.linear(FU/5, $, (screen_height/2)-(versus.height*(FU*3/4)/2))
-
+		
 		fade = min($+1, 13)
 	elseif state == 2 then
 		side_x = ease.linear(FU/5, $, -128*FU)
@@ -205,8 +206,6 @@ return function(v, p, cam)
 	if draw_sides then
 		if cam.chase
 			draw_substr(v)
-		else
-			str_y = $ - 10*FU
 		end
 		
 		local str = "The murderer can see you, RUN!"

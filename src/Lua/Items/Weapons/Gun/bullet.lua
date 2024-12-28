@@ -34,9 +34,10 @@ addHook("MobjThinker", function(mo)
 		return
 	end
 	
-	mo.momx = FixedMul(72*cos(mo.angle), cos(mo.aiming))
-	mo.momy = FixedMul(72*sin(mo.angle), cos(mo.aiming))
-	mo.momz = 72*sin(mo.aiming)
+	local speed = 84
+	mo.momx = FixedMul(speed*cos(mo.angle), cos(mo.aiming))
+	mo.momy = FixedMul(speed*sin(mo.angle), cos(mo.aiming))
+	mo.momz = speed*sin(mo.aiming)
 	
 	if (leveltime % 4) == 0
 		P_SpawnGhostMobj(mo).frame = $|FF_SEMIBRIGHT

@@ -10,8 +10,8 @@ states[freeslot("S_MM_REVOLV_B")] = {
 }
 
 mobjinfo[freeslot("MT_MM_REVOLV_BULLET")] = {
-	radius = 3*FU,
-	height = 6*FU,
+	radius = 5*FU,
+	height = 10*FU,
 	spawnstate = S_MM_REVOLV_B,
 	flags = MF_NOGRAVITY,
 	deathstate = S_SMOKE1
@@ -83,6 +83,8 @@ addHook("MobjThinker", function(mo)
 			local ghs = P_SpawnGhostMobj(mo)
 			ghs.frame = (mo.bullframe % E)|FF_SEMIBRIGHT
 			ghs.fuse = $*2
+			ghs.radius = mo.radius
+			ghs.height = mo.height
 			mo.bullframe = $ + 1
 		end
 		

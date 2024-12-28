@@ -69,7 +69,7 @@ weapon.thinker = function(item, p)
 		if AngleFixed(adiff) > 180*FU
 			adiff = InvAngle($)
 		end
-		if (AngleFixed(adiff) > 90*FU)
+		if (AngleFixed(adiff) > 115*FU)
 			continue
 		end
 		

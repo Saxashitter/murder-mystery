@@ -221,7 +221,9 @@ MM:addPlayerScript(function(p)
 
 		if item.shootable then
 			local bullet = P_SpawnMobjFromMobj(p.mo,
-				0,0,
+				--dont spawn in the wall
+				P_ReturnThrustX(nil,p.mo.angle, 2*FU),
+				P_ReturnThrustY(nil,p.mo.angle, 2*FU),
 				FixedDiv(p.mo.height,p.mo.scale)/2,
 				item.shootmobj
 			)
@@ -280,7 +282,7 @@ MM:addPlayerScript(function(p)
 			if AngleFixed(adiff) > 180*FU
 				adiff = InvAngle($)
 			end
-			if (AngleFixed(adiff) > 90*FU)
+			if (AngleFixed(adiff) > 115*FU)
 				continue
 			end
 

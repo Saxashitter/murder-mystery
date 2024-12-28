@@ -51,7 +51,9 @@ function weapon:attack(p)
 		if i == 0 then continue end
 		
 		local bullet = P_SpawnMobjFromMobj(p.mo,
-			0,0,
+			--dont spawn in the wall
+			P_ReturnThrustX(nil,p.mo.angle, 2*FU),
+			P_ReturnThrustY(nil,p.mo.angle, 2*FU),
 			FixedDiv(p.mo.height,p.mo.scale)/2,
 			self.shootmobj
 		)

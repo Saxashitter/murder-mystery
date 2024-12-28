@@ -59,7 +59,7 @@ return function()
 
 	local p = randomPlayer(_eligibleGunPlayer)
 	if p and not MM:canGameEnd() then
-		MM:GiveItem(p, "gun")
+		MM:GiveItem(p, lostgun)
 		for play in players.iterate
 			if play == p
 				chatprintf(play,"\x82*You have been given the gun!",true)

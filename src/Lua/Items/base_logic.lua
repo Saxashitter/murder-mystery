@@ -274,9 +274,8 @@ MM:addPlayerScript(function(p)
 				continue
 			end
 			
-			
 			local adiff = FixedAngle(
-				AngleFixed(R_PointToAngle2(p.mo.x, p.mo.y, p2.mo.x, p2.mo.y)) - AngleFixed(p.mo.angle)
+				AngleFixed(R_PointToAngle2(p.mo.x, p.mo.y, p2.mo.x, p2.mo.y)) - AngleFixed(p.cmd.angleturn << 16)
 			)
 			if AngleFixed(adiff) > 180*FU
 				adiff = InvAngle($)

@@ -20,4 +20,6 @@ return function(p)
 	p.runspeed = 9999*FU
 
 	p.powers[pw_shield] = 0
+	p.powers[pw_underwater] = 0
+	p.powers[pw_spacetime] = 0
 end

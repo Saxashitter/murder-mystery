@@ -164,6 +164,10 @@ MM:addPlayerScript(function(p)
 					else
 						if MM_N.clues_weaponsleft
 							reward = P_RandomChance(FU/2) and "gun" or "revolver"
+							if MM_N.clues_weaponsleft == 1
+								reward = "sword"
+							end
+							
 							MM_N.clues_weaponsleft = $-1
 						else
 							reward = "burger"

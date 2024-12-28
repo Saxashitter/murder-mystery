@@ -190,7 +190,6 @@ MM:addPlayerScript(function(p)
 	local def = MM.Items[item.id]
 
 	// timers
-
 	if not inv.hidden then
 		item.hit = max(0, $-1)
 		item.anim = max(0, $-1)

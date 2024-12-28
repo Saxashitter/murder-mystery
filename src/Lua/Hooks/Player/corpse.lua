@@ -27,7 +27,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	end
 
 	for k,v in pairs(target.player.mm.inventory.items) do
-		MM:DropItem(target.player, k, true, true)
+		MM:DropItem(target.player, k, false, true, true)
 	end
 	
 	if target.player.mm.role ~= MMROLE_MURDERER

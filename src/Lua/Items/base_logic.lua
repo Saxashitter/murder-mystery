@@ -3,7 +3,8 @@ local roles = MM.require "Variables/Data/Roles"
 local function manage_position(p, item, set)
 	if not item.stick then return end
 
-	if not (item.mobj and item.mobj.valid) then
+	if not (item.mobj and item.mobj.valid)
+	and (p.mo.health)
 		item.mobj = MM:MakeWeaponMobj(p, item)
 	end
 
@@ -209,9 +210,16 @@ MM:addPlayerScript(function(p)
 	end
 
 	// attacking/use
-
+	local canfire = false
 	if p.cmd.buttons & BT_ATTACK
-	and not (p.lastbuttons & BT_ATTACK)
+		canfire = true
+		if not item.rapidfire
+		and (p.lastbuttons & BT_ATTACK)
+			canfire = false
+		end
+	end	
+	
+	if canfire
 	and not (item.cooldown) 
 	and not inv.hidden
 	and not MM.runHook("ItemUse", p) then

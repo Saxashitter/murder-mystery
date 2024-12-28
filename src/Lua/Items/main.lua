@@ -44,6 +44,7 @@ local ITEM_DEF = {
 	allowdropmobj = true,		-- determines whether dropping the item will spawn another to be picked up
 	shootable = false,			-- enable to make weapon shoot projectiles instead of stabbing
 	shootmobj = MT_THOK,		-- the mobj type it shoots
+	rapidfire = false,			-- allows shooting by holding down
 	restrict = {},				-- restricts pickup from certain roles
 	/* example:
 	{
@@ -329,6 +330,7 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		item.allowdropmobj = def.allowdropmobj
 		item.shootable = def.shootable
 		item.shootmobj = def.shootmobj
+		item.rapidfire = def.rapidfire
 		item.restrict = shallowCopy(def.restrict)
 
 		item.pickupsfx = def.pickupsfx

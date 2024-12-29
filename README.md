@@ -67,7 +67,7 @@ make buildrunlinux
 
 ## How can I help?
 If you can code, try making a pull request for something you want!
-If you can do art, compose, etc. Hit me up at **@literally_mario on Discord!**
+If you can do art, compose, etc. Hit me up at **@saxashitter on Discord!**
 
 ## Is there an Discord server?
 Yes! https://discord.gg/J6yzyJV8Ta

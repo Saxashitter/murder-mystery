@@ -87,9 +87,9 @@ function MM:DropItem(p, slot, randomize, dont_notify, forced)
 		
 		table.insert(MM.DroppedMobjs, mobj)
 
-		if def.drop then
-			def.drop(mobj, p)
-		end
+	end
+	if def.drop then
+		def.drop(item, p, mobj)
 	end
 	
 	if (item and item.mobj) then

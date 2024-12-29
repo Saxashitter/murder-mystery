@@ -146,24 +146,30 @@ MM:addPlayerScript(function(p)
 	and not MM.runHook("InventorySwitch", p) then
 		S_StartSound(nil,sfx_menu1,p)
 		
+		local olditem = inv.items[inv.cur_sel]
+		local olddef = (olditem) and MM.Items[olditem.id] or nil
+
 		local old_sel = inv.cur_sel
 		inv.cur_sel = $+sel
 
 		if inv.cur_sel < 1 then
-			inv.cur_sel = p.mm.inventory.count
+			inv.cur_sel = inv.count
 		end
-		if inv.cur_sel > p.mm.inventory.count then
+		if inv.cur_sel > inv.count then
 			inv.cur_sel = 1
 		end
 
 		if not inv.hidden then
 			local newitem = inv.items[inv.cur_sel]
 			local newdef = MM.Items[newitem and newitem.id or ""]
-	
-			if item
-			and def
-			and def.unequip then
-				def.unequip(item, p)
+
+			--saxa might be stupid because none of these were defined before
+			--or whoever added this i shouldnt be blaming everything on saxas
+			--good code lol
+			if olditem
+			and olddef
+			and olddef.unequip then
+				olddef.unequip(olditem, p)
 			end
 	
 			if newitem

@@ -1,4 +1,5 @@
 local roles = MM.require "Variables/Data/Roles"
+local doBrakes = MM.require "Libs/speedCap.lua"
 
 local weapon = {}
 
@@ -40,8 +41,32 @@ weapon.hitsfx = sfx_kffire
 weapon.onlyhitone = true
 weapon.droppable = true
 
+local function LungeThink(item,p)
+	local me = p.mo
+	if not (me and me.health) then return end
+	
+	if item.lungetime
+		me.flags = $|MF_NOGRAVITY
+		
+		me.momz = -P_GetMobjGravity(me)*3
+		me.state = S_PLAY_WALK
+		doBrakes(me,15*me.scale)
+		
+		p.drawangle = me.angle
+		
+		item.lungetime = $ - 1
+		
+		if item.lungetime == 0
+			me.flags = $ &~MF_NOGRAVITY
+		end
+	end
+	
+
+end
 weapon.thinker = function(item, p)
 	if not (p and p.valid) then return end
+	
+	LungeThink(item,p)
 	
 	--so FUCKING good
 	local mo = item.mobj
@@ -100,12 +125,29 @@ weapon.attack = function(item,p)
 	--so goood.
 	item.frameanimation = TICRATE
 	item.mobj.frame = B
-	S_StartSound(p.mo,P_RandomChance(FU/2) and sfx_slunge or sfx_sslash)
+	
+	local lunge = P_RandomChance(FU/2)
+	S_StartSound(p.mo, lunge and sfx_slunge or sfx_sslash)
+	
+	if lunge
+		item.lungetime = TICRATE/2
+	end
 end
 
 weapon.unequip = function(item,p)
 	item.frameanimation = nil
 	item.mobj.frame = A
+
+	if item.lungetime
+		p.mo.flags = $ &~MF_NOGRAVITY
+		item.lungetime = nil
+	end
+end
+weapon.drop = function(item,p)
+	if item.lungetime
+		p.mo.flags = $ &~MF_NOGRAVITY
+		item.lungetime = nil
+	end
 end
 
 return weapon

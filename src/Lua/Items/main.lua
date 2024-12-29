@@ -66,6 +66,7 @@ local ITEM_DEF = {
 	drop = func,
 	dropthinker = func,
 	onmiss = func,
+	drawer = func, --for hud
 }
 
 local ITEM_STRUCT = {

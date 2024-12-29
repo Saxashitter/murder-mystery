@@ -64,6 +64,14 @@ local function V_DrawBox(props)
 			SKINCOLOR_WHITE
 		)
 	end
+	
+	if item == nil then return end
+	
+	--def drawer draws over everything?
+	local def = MM.Items[item.id]
+	if (def.drawer)
+		def.drawer(v, props.p, item, x,y, scale, flags, selected, not inv.hidden)
+	end
 end
 
 return function(v, p)
@@ -109,6 +117,7 @@ return function(v, p)
 			flags = V_SNAPTOBOTTOM,
 			inv = inv,
 			item = items[i],
+			p = p,
 		}
 
 		x = $+(36*scale)

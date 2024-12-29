@@ -7,7 +7,7 @@ local MAX_ANIM = TICRATE
 
 weapon.id = "gun"
 weapon.category = "Weapon"
-weapon.display_name = "Gun"
+weapon.display_name = "Shotgun"
 weapon.display_icon = "MM_GUN"
 weapon.state = dofile "Items/Weapons/Gun/freeslot"
 weapon.timeleft = -1
@@ -70,5 +70,14 @@ function weapon:attack(p)
 
 	end
 end
+
+--(v, props.p, item, x,y, scale, flags, selected, not inv.hidden)
+/*
+weapon.drawer = function(v, p,item, x,y,scale,flags, selected, active)
+	if selected and active
+		v.drawString(160,100,"Test",0)
+	end
+end
+*/
 
 return weapon

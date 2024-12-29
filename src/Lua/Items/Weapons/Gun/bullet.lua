@@ -104,6 +104,9 @@ addHook("MobjMoveCollide", function(ring, pmo)
 	if not (ring and ring.valid) then return end
 	if (pmo == ring.target) then return end
 	
+	if ring.z > pmo.z+pmo.height then return end
+	if pmo.z > ring.z+ring.height then return end
+	
 	if (pmo.flags & MF_SHOOTABLE)
 	and not (pmo.player and pmo.player.valid)
 		P_DamageMobj(pmo, ring, (ring.target and ring.target.valid) and ring.target or ring, 2)
@@ -114,9 +117,6 @@ addHook("MobjMoveCollide", function(ring, pmo)
 	
 	if not (pmo and pmo.valid and pmo.player and pmo.health and pmo.player.mm) then return end
 
-	if ring.z > pmo.z+pmo.height then return end
-	if pmo.z > ring.z+ring.height then return end
-	
 	if pmo.player and pmo.player.mm
 	and (ring.target.player.mm.role ~= MMROLE_INNOCENT
 	and pmo.player.mm.role == ring.target.player.mm.role)

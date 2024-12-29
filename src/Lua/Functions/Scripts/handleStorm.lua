@@ -11,6 +11,41 @@ local numtotrans = {
 	[0] = 0,
 }
 
+local ImportantStuff = {
+	"storm_radius",
+	"storm_destradius",
+	"storm_ticker",
+	"storm_timesmigrated",
+	"storm_incre",
+	"debuglasers",
+	"lasers",
+	"garg",
+	"startpoint",
+	"eased",
+	"destpoint",
+	"movecooldown",
+	"otherpoints",
+	"laser_splat",
+	"laser_eye",
+}
+
+--Stores everything important stored in MM_N.storm_point
+local function Backup(point)
+	if MM_N.storm_backup == nil
+		MM_N.storm_backup = {}
+	end
+	
+	for k,v in ipairs(ImportantStuff)
+		MM_N.storm_backup[k] = point[k]
+	end
+end
+
+local function Restore(point)
+	for k,v in pairs(MM_N.storm_backup)
+		point[k] = v
+	end
+end
+
 local function onPoint(point1,point2)
 	/*
 	print(string.format(
@@ -252,11 +287,11 @@ return function(self)
 	
 	if not (point and point.valid) then return end
 	
-	if (MM:pregame()) then return end
+	if (MM:pregame()) then MM_N.storm_backup = nil; return end
 	
 	--Uh oh
 	if not (point and point.valid)
-		--lets just HOPE the gargolye is valid and spawn from there
+		--lets just HOPE the gargoyle is valid and spawn from there
 		local newpoint = P_SpawnMobj(
 			MM_N.storm_garg.x,
 			MM_N.storm_garg.y,
@@ -268,11 +303,15 @@ return function(self)
 		newpoint.fuse = -1
 		newpoint.flags2 = $|MF2_DONTDRAW
 		newpoint.flags = MF_NOCLIPTHING
+		newpoint.garg = MM_N.storm_garg
 		MM_N.storm_point = newpoint
 		point = MM_N.storm_point
+		
+		Restore(point)
 	end
 	
 	Init(point)
+	Backup(point)
 	
 	MM_N.storm_ticker = $+1
 	if not (MM_N.time)

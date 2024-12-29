@@ -148,7 +148,7 @@ local function Update3D(cam,args)
 			thok.sprite = SPR_MMCM
 			thok.frame = CAM_3DFRAME.attach
 			thok.renderflags = RF_FLOORSPRITE|RF_NOSPLATBILLBOARD
-			thok.dontdrawforviewmobj = cam
+			thok.dontdrawforviewmobj = args.viewport
 			args.wiretop = thok
 			
 			P_SetOrigin(thok,thok.x,thok.y, cam.ceilingz)
@@ -164,7 +164,7 @@ local function Update3D(cam,args)
 			thok.fuse = -1
 			thok.sprite = SPR_MMCM
 			thok.frame = CAM_3DFRAME.wire
-			thok.dontdrawforviewmobj = cam
+			thok.dontdrawforviewmobj = args.viewport
 			args.wireL = thok
 			dprint("spawned wireL")
 		end
@@ -178,7 +178,7 @@ local function Update3D(cam,args)
 			thok.sprite = SPR_MMCM
 			thok.frame = CAM_3DFRAME.wire
 			thok.angle = $ + ANGLE_90
-			thok.dontdrawforviewmobj = cam
+			thok.dontdrawforviewmobj = args.viewport
 			args.wireR = thok
 			dprint("spawned wireR")
 		end
@@ -211,7 +211,7 @@ local function Update3D(cam,args)
 				thok.frame = CAM_3DFRAME.top
 				thok.renderflags = RF_FLOORSPRITE|RF_NOSPLATBILLBOARD
 				thok.angle = cam.angle - ANGLE_90
-				thok.dontdrawforviewmobj = cam
+				thok.dontdrawforviewmobj = args.viewport
 				args.body.top = thok
 			end
 			if not (args.body.bottom)
@@ -226,7 +226,7 @@ local function Update3D(cam,args)
 				thok.frame = CAM_3DFRAME.bottom
 				thok.renderflags = RF_FLOORSPRITE|RF_NOSPLATBILLBOARD
 				thok.angle = cam.angle - ANGLE_90
-				thok.dontdrawforviewmobj = cam
+				thok.dontdrawforviewmobj = args.viewport
 				args.body.bottom = thok
 			end
 			if not (args.body.face)
@@ -241,7 +241,7 @@ local function Update3D(cam,args)
 				thok.sprite = SPR_MMCM
 				thok.frame = CAM_3DFRAME.face
 				thok.angle = cam.angle + ANGLE_90
-				thok.dontdrawforviewmobj = cam
+				thok.dontdrawforviewmobj = args.viewport
 				args.body.face = thok
 			end
 			if not (args.body.back)
@@ -256,7 +256,7 @@ local function Update3D(cam,args)
 				thok.sprite = SPR_MMCM
 				thok.frame = CAM_3DFRAME.back
 				thok.angle = cam.angle + ANGLE_90
-				thok.dontdrawforviewmobj = cam
+				thok.dontdrawforviewmobj = args.viewport
 				args.body.back = thok
 			end
 			for i = -1,1,2
@@ -271,7 +271,7 @@ local function Update3D(cam,args)
 				thok.sprite = SPR_MMCM
 				thok.frame = CAM_3DFRAME.side
 				thok.angle = cam.angle
-				thok.dontdrawforviewmobj = cam
+				thok.dontdrawforviewmobj = args.viewport
 				if (i == -1)
 					args.body.sideR = thok
 				else
@@ -297,7 +297,7 @@ local function Update3D(cam,args)
 				thok.color = SKINCOLOR_RED
 				thok.rollangle = args.aiming
 				thok.flags2 = $|MF2_DONTDRAW
-				thok.dontdrawforviewmobj = cam
+				thok.dontdrawforviewmobj = args.viewport
 				if (i == -1)
 					args.body.viewR = thok
 				else
@@ -565,9 +565,32 @@ addHook("MobjThinker",function(cam)
 		scan.y = $ + scan.momy
 	end
 	
+	--SRB2 awayview jank adjusts the camera position to 20 fracs above the Z
+	--so center it so its "Correct"
+	if not args.viewport
+		local thok = P_SpawnMobjFromMobj(cam,
+			0,0,
+			FixedDiv(cam.height,cam.scale)/2,
+			MT_THOK
+		)
+		thok.tics = -1
+		thok.fuse = -1
+		thok.height = 0
+		thok.flags = MF_NOCLIP|MF_NOCLIPHEIGHT|MF_NOTHINK
+		thok.tracer = cam
+		thok.z = $ - 20*FU
+		thok.flags2 = $|MF2_DONTDRAW
+		thok.dontdrawinteract = true
+		args.viewport = thok
+	else
+		args.viewport.z = (cam.z + cam.height/2) - 20*FU
+		args.viewport.angle = cam.angle
+	end
+	
 	if not args.dontdraw
 		Update3D(cam,args)
 	end
+	
 end,MT_MM_CAMERA)
 
 addHook("PreThinkFrame",function(p)
@@ -586,7 +609,7 @@ for p in players.iterate
 		local args = cam.args
 		local cmd = p.cmd
 		
-		p.awayviewmobj = cam
+		p.awayviewmobj = args.viewport
 		p.awayviewtics = TR
 		p.awayviewaiming = args.aiming
 		

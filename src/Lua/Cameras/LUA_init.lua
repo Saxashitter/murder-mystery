@@ -86,7 +86,7 @@ end
 MMCAM.StartViewing = function(p,cam)
 	local mmc = p.mmcam
 	
-	p.awayviewmobj = cam
+	p.awayviewmobj = cam.args.viewport
 	p.awayviewtics = TICRATE
 	p.awayviewaiming = cam.args.aiming
 	

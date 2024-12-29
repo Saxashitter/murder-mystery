@@ -16,6 +16,7 @@ end
 
 return function()
 	if (MM_N.dueling) then return end
+	if (CV_MM.debug.value) then return end
 	
 	local _,innocents = getCount()
 

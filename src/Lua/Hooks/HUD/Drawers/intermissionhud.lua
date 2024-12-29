@@ -114,7 +114,7 @@ local function draw_hud(v)
 
 	// MAPS
 	if MM_N.mapVote.state == "voting" then
-		local p = displayplayer
+		local p = consoleplayer
 		if p and p.mm and p.mm.cur_map then
 			local arrow = ("\x1d\x1a\x1c\x1b"):sub(p.mm.cur_map, p.mm.cur_map)
 			local color = V_YELLOWMAP

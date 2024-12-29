@@ -1,6 +1,7 @@
 local getCount = MM.require "Libs/getCount"
 local randomPlayer = MM.require "Libs/getRandomPlayer"
 local roles = MM.require "Variables/Data/Roles"
+local lostgun = roles[MMROLE_SHERIFF].weapon or "revolver"
 
 local function _eligibleGunPlayer(p)
 	return p
@@ -25,7 +26,6 @@ return function()
 		return
 	end
 	
-	local lostgun = roles[MMROLE_SHERIFF].weapon or "revolver"
 	local wpns = MM:GetCertainDroppedItems(lostgun)
 
 	if #wpns then

@@ -1,5 +1,3 @@
-local roles = MM.require "Variables/Data/Roles"
-
 return function(self)
 	if not self:isMM() then return end
 
@@ -13,7 +11,7 @@ return function(self)
 		end
 
 		for i,item in pairs(p.mm.inventory.items) do
-			if item.id == roles[MMROLE_SHERIFF].weapon then
+			if item.id == "revolver" then
 				return true
 			end
 		end

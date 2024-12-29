@@ -1,6 +1,13 @@
 local function_list = {}
 local INTER_RANGE = 64*FU
 
+local function onPoint(point1,point2)
+	local x1,y1 = FixedFloor(point1.x),FixedFloor(point1.y)
+	local x2,y2 = FixedFloor(point2.x),FixedFloor(point2.y)
+	return (x1 >= x2 - FU and x1 <= x2 + FU) and (y1 >= y2 - FU and y1 <= y2 + FU)
+end
+
+
 --adds a function to the LUT and returns its ID
 --use this funcion as an include, at the top and in whitespace (dont use during runtime)
 --@identifier is a string to be used as a name/identifier
@@ -56,6 +63,9 @@ MM.sortInteracts = function(p,a,b)
 	if not (b.mo and b.mo.valid)
 		return false
 	end
+	
+	--Bruh
+	if onPoint(a.mo,b.mo) then return true end
 	
 	local aDist = R_PointToDist2(p.mo.x,p.mo.y, a.mo.x,a.mo.y)
 	local bDist = R_PointToDist2(p.mo.x,p.mo.y, b.mo.x,b.mo.y)

@@ -10,6 +10,8 @@ local function HUD_DrawGoHere(v,p,c)
 	do
 		local dest = MM_N.storm_point
 		
+		--!!!
+		if not (dest and dest.valid) then return end
 		if P_CheckSight(p.mo,dest) then return end
 		
 		local icon = v.cachePatch("MM_SHOWDOWNMARK") --v.getSprite2Patch(player.skin, SPR2_LIFE, false, A, 0)

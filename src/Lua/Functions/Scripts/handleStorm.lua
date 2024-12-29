@@ -250,13 +250,28 @@ end
 return function(self)
 	local point = MM_N.storm_point
 	
-	--Uh oh
-	if not (point and point.valid)
-		MM_N.storm_ticker = 0
-		return
-	end
+	if not (point and point.valid) then return end
 	
 	if (MM:pregame()) then return end
+	
+	--Uh oh
+	if not (point and point.valid)
+		--lets just HOPE the gargolye is valid and spawn from there
+		local newpoint = P_SpawnMobj(
+			MM_N.storm_garg.x,
+			MM_N.storm_garg.y,
+			MM_N.storm_garg.z,
+			MT_THOK
+		)
+		newpoint.state = S_THOK
+		newpoint.tics = -1
+		newpoint.fuse = -1
+		newpoint.flags2 = $|MF2_DONTDRAW
+		newpoint.flags = MF_NOCLIPTHING
+		MM_N.storm_point = newpoint
+		point = MM_N.storm_point
+	end
+	
 	Init(point)
 	
 	MM_N.storm_ticker = $+1

@@ -80,6 +80,7 @@ local function set_overtime_point()
 	MM_N.storm_point.tics = -1
 	MM_N.storm_point.fuse = -1
 	MM_N.storm_point.flags2 = $|MF2_DONTDRAW
+	MM_N.storm_point.flags = MF_NOCLIPTHING
 	
 	local garg = P_SpawnMobjFromMobj(
 		MM_N.storm_point,
@@ -92,6 +93,7 @@ local function set_overtime_point()
 	garg.scale = $*2
 	garg.angle = chosenPoint.a
 	MM_N.storm_point.garg = garg
+	MM_N.storm_garg = garg
 	
 	--table.remove(possiblePoints,chosenKey)
 	MM_N.storm_point.otherpoints = possiblePoints

@@ -299,7 +299,7 @@ MM:addPlayerScript(function(p)
 			end
 
 			if item.damage then
-				P_DamageMobj(p2.mo, item.mobj, p.mo, 999, DMG_INSTAKILL)
+				P_KillMobj(p2.mo, item.mobj, p.mo, 999)
 			end
 			
 			if def.onhit then
@@ -311,6 +311,11 @@ MM:addPlayerScript(function(p)
 				S_StartSound(p.mo, item.hitsfx)
 			end
 			hitsomething = true
+			
+			if item.onlyhitone
+				item.hit = 0
+				break
+			end
 			continue
 		end
 		

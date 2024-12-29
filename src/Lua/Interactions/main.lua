@@ -148,7 +148,7 @@ mobjinfo[MT_MM_INTERACT_POINT] = {
 	--$Arg0 Interact Duration
 	--$Arg0Default 0
 	--$Arg0Type 0
-	--$Arg0Tooltip How long a player needs to interact in order to activate.
+	--$Arg0Tooltip How long a player needs to interact (in tics) in order to activate.
 	
 	--$Arg1 Button
 	--$Arg1Type 11
@@ -163,7 +163,7 @@ mobjinfo[MT_MM_INTERACT_POINT] = {
 	--$Arg3 Cooldown
 	--$Arg3Default 0
 	--$Arg3Type 0
-	--$Arg3Tooltip How long the point will need to wait in order for players to interact with it again.
+	--$Arg3Tooltip How long the point will need to wait (in tics) in order for players to interact with it again.\n Set to -1 for one-time use.
 	
 	flags = MF_NOGRAVITY|MF_NOSECTOR|MF_NOCLIP|MF_NOCLIPHEIGHT|MF_NOCLIPTHING,
 	radius = 16*FRACUNIT,
@@ -184,8 +184,10 @@ addHook("MapThingSpawn",function(mo,mt)
 end,MT_MM_INTERACT_POINT)
 
 addHook("MobjThinker",function(point)
-	if point.cooldown
-		point.cooldown = $-1
+	if point.cooldown ~= 0
+		if point.cooldown ~= -1
+			point.cooldown = $-1
+		end
 		return
 	end
 	

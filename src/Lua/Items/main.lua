@@ -45,6 +45,7 @@ local ITEM_DEF = {
 	shootable = false,			-- enable to make weapon shoot projectiles instead of stabbing
 	shootmobj = MT_THOK,		-- the mobj type it shoots
 	rapidfire = false,			-- allows shooting by holding down
+	onlyhitone = false,			-- for melees, this weapon wont hit more than 1 person in succession
 	restrict = {},				-- restricts pickup from certain roles
 	/* example:
 	{
@@ -102,6 +103,8 @@ local ITEM_STRUCT = {
 	droppable = false,
 	shootable = false,
 	shootmobj = MT_THOK,
+	rapidfire = false,
+	onlyhitone = false,
 
 	restrict = {},
 
@@ -331,6 +334,7 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		item.shootable = def.shootable
 		item.shootmobj = def.shootmobj
 		item.rapidfire = def.rapidfire
+		item.onlyhitone = def.onlyhitone
 		item.restrict = shallowCopy(def.restrict)
 
 		item.pickupsfx = def.pickupsfx

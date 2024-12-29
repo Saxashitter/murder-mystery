@@ -61,6 +61,7 @@ local ITEM_DEF = {
 	equip = func,
 	unequip = func,
 	thinker = func,
+	hiddenthinker = func,
 	attack = func,
 	hit = func,
 	drop = func,
@@ -274,6 +275,7 @@ function MM:CopyItemFromID(item_id)
 	item.onspawn = nil
 	item.onhit = nil
 	item.thinker = nil
+	item.hiddenthinker = nil
 
 	return item
 end

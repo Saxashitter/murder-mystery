@@ -34,6 +34,7 @@ weapon.shootable = false
 weapon.shootmobj = MT_THOK
 weapon.equipsfx = sfx_None
 weapon.attacksfx = sfx_None
+weapon.allowdropmobj = false
 
 weapon.hiddenforothers = true
 weapon.cantouch = true

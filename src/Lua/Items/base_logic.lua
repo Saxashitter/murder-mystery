@@ -200,6 +200,10 @@ MM:addPlayerScript(function(p)
 		if def.thinker
 			def.thinker(item, p)
 		end
+	else
+		if def.hiddenthinker
+			def.hiddenthinker(item,p)
+		end
 	end
 
 	// drop le weapon

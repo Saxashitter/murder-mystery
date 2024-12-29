@@ -29,13 +29,14 @@ weapon.stick = true
 weapon.animation = true
 weapon.damage = false
 weapon.weaponize = true
-weapon.droppable = true
+weapon.droppable = false
 weapon.shootable = true
 weapon.shootmobj = MT_MM_REVOLV_BULLET
 weapon.pickupsfx = sfx_gnpick
 weapon.equipsfx = sfx_gequip
 weapon.attacksfx = sfx_lugrsh
-weapon.allowdropmobj = true
+weapon.allowdropmobj = false
+weapon.maxshots = 3
 
 function weapon:postpickup(p)
 	if (MM_N.dueling) then return end
@@ -43,6 +44,33 @@ function weapon:postpickup(p)
 		self.restrict[p.mm.role] = true
 		self.timeleft = 5*TICRATE
 	end
+end
+
+--we dont need to do much here
+weapon.hiddenthinker = function(item,p)
+	item.ammoleft = $ or weapon.maxshots
+end
+weapon.thinker = weapon.hiddenthinker
+
+weapon.attack = function(item,p)
+	if item.ammoleft == nil or item.ammoleft == 0 then return end
+	
+	item.ammoleft = $ - 1
+	
+	if item.ammoleft == 0
+		MM:DropItem(p,nil,false,true,true)
+	end
+end
+
+weapon.drawer = function(v, p,item, x,y,scale,flags, selected, active)
+	if not selected then return end
+	if item.ammoleft == nil then return end
+	
+	v.drawString(160*FU,y - 20*FU,
+		"Ammo: "..item.ammoleft.." / "..weapon.maxshots,
+		(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE,
+		"thin-fixed-center"
+	)
 end
 
 return weapon

@@ -20,6 +20,7 @@ local function HUD_InteractDrawer(v,p,cam)
 	if (p.mm.interact == nil) then return end
 	if (p.spectator) then return end
 	if (p.awayviewmobj and p.awayviewmobj.dontdrawinteract) then return end
+	if (MM.gameover) then return end -- If the game is over, we dont care about seeing interaction.
 	
 	--Re-sort so inactive widgets dont overlap the active one
 	local placehold_inter = p.mm.interact.points

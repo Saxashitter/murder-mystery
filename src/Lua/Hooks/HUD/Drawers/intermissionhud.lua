@@ -145,6 +145,8 @@ local function draw_hud(v)
 			y = $ + FixedMul(160*cos(ang), scale)
 			y = $ - (100*scale/2)
 
+			v.drawScaled(x, y, scale, mapIcon, trans)
+			
 			local color = 0
 			local outline = "INACTIVE"
 			if (p and p.mm and p.mm.cur_map == k) then
@@ -154,10 +156,13 @@ local function draw_hud(v)
 				else
 					color = V_GREENMAP
 					outline = "VOTED"
+					v.drawScaled(x, y, scale,
+						mapIcon, trans|V_ADD,
+						v.getColormap(TC_RAINBOW,SKINCOLOR_GREEN)
+					)
 				end
 			end
 
-			v.drawScaled(x, y, scale, mapIcon, trans)
 			v.drawScaled(x, y, scale*2, v.cachePatch("MM_MAPVOTE_OUTLINE_" .. outline), trans)
 			v.drawString(x+(iconWidth/2),
 				y+((mapIcon.height+4)*scale),

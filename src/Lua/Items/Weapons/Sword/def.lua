@@ -32,12 +32,13 @@ weapon.stick = true
 weapon.animation = true
 weapon.damage = true
 weapon.weaponize = true
-weapon.droppable = false
+weapon.droppable = true
 weapon.shootable = false
 weapon.shootmobj = MT_THOK
 weapon.equipsfx = sfx_sequip
 weapon.hitsfx = sfx_kffire
 weapon.onlyhitone = true
+weapon.droppable = true
 
 weapon.thinker = function(item, p)
 	if not (p and p.valid) then return end

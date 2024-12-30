@@ -200,6 +200,35 @@ local function HUD_DrawCamera(v,p)
 				v.getColormap(player.skin,player.mo.color)
 			)
 			
+			if (player.followitem and player.followmobj and player.followmobj.valid)
+			and not (player.followmobj.flags2 & MF2_DONTDRAW)
+				local mo = player.followmobj
+				local fpat, fflip
+				if (mo.sprite2 and mo.skin)
+					fpat, fflip = v.getSprite2Patch(mo.skin,
+						mo.sprite2,false,
+						mo.frame,
+						6
+					)
+				elseif mo.sprite
+					fpat, fflip = v.getSpritePatch(mo.sprite,
+						mo.frame,
+						6
+					)
+				end
+				local scale = skins[player.skin].highresscale/2
+				local offset = FixedDiv(player.mo.z - mo.z, player.mo.scale)
+				offset = FixedMul($,scale)
+				
+				v.drawScaled(x,
+					y + offset,
+					scale,
+					fpat,
+					V_SNAPTOLEFT|V_SNAPTOBOTTOM|(fflip and V_FLIP or 0),
+					v.getColormap(player.skin,mo.color)
+				)
+			end
+			
 			if (i == #p)
 				v.drawScaled(x,
 					y - 30*FU - ((otherskullcounter/11)*FU),

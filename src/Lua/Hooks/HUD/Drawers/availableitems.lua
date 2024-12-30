@@ -84,9 +84,10 @@ return function(v, p)
 	local count = inv.count
 	local curitem = items[inv.cur_sel]
 	
-	local x = 130*FU
+	local x = 160*FU
 	local y = 175*FU + MMHUD.xoffset
 	local scale = FU*2/count
+	x = $ - (count*17*scale)
 	
 	if curitem ~= itemname.oldid
 		itemname.tics = 3*TICRATE

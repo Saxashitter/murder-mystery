@@ -44,11 +44,3 @@ Typeoflevel = SaxaMM
 Skynum = 6
 Weather = 5
 Selectheading = Murder Mystery
-
-level P1
-Levelname = Swamili Swamp
-Nozone = true
-Music = SSWAMP
-TypeOfLevel = SaxaMM
-Selectheading = Murder Mystery
-Skynum = 129

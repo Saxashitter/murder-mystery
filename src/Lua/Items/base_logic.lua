@@ -240,11 +240,16 @@ MM:addPlayerScript(function(p)
 		item.cooldown = item.max_cooldown
 
 		if item.shootable then
+			--one way to do this would be to get the difference of the
+			--characters height and the regular height, and add that
+			--to the z, so it looks like we're firing from the same heigh
+			--ez
+			local offset = (p.mo.height) - FixedMul(mobjinfo[MT_PLAYER].height,p.mo.scale)
 			local bullet = P_SpawnMobjFromMobj(p.mo,
 				--dont spawn in the wall
 				P_ReturnThrustX(nil,p.mo.angle, 2*FU),
 				P_ReturnThrustY(nil,p.mo.angle, 2*FU),
-				FixedDiv(p.mo.height,p.mo.scale)/2,
+				FixedDiv(p.mo.height,p.mo.scale)/2 + offset,
 				item.shootmobj
 			)
 

@@ -204,13 +204,15 @@ local function HUD_DrawCamera(v,p)
 			and not (player.followmobj.flags2 & MF2_DONTDRAW)
 				local mo = player.followmobj
 				local fpat, fflip
-				if (mo.sprite2 and mo.skin)
+				if (mo.skin and mo.sprite == SPR_PLAY)
 					fpat, fflip = v.getSprite2Patch(mo.skin,
 						mo.sprite2,false,
 						mo.frame,
 						6
 					)
-				elseif mo.sprite
+				end
+				
+				if mo.sprite ~= SPR_PLAY
 					fpat, fflip = v.getSpritePatch(mo.sprite,
 						mo.frame,
 						6
@@ -220,13 +222,15 @@ local function HUD_DrawCamera(v,p)
 				local offset = FixedDiv(player.mo.z - mo.z, player.mo.scale)
 				offset = FixedMul($,scale)
 				
-				v.drawScaled(x,
-					y + offset,
-					scale,
-					fpat,
-					V_SNAPTOLEFT|V_SNAPTOBOTTOM|(fflip and V_FLIP or 0),
-					v.getColormap(player.skin,mo.color)
-				)
+				if (fpat ~= nil or mo.sprite ~= SPR_NULL)
+					v.drawScaled(x,
+						y + offset,
+						scale,
+						fpat,
+						V_SNAPTOLEFT|V_SNAPTOBOTTOM|(fflip and V_FLIP or 0),
+						v.getColormap(player.skin,mo.color)
+					)
+				end
 			end
 			
 			if (i == #p)

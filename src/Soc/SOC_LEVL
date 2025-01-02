@@ -43,7 +43,7 @@ TypeOfLevel = SaxaMM
 Selectheading = Murder Mystery
 Skynum = 129
 
-Level ES
+Level P0
 Levelname = Seaegg
 Subtitle = Unfinished
 NoZone = true
@@ -52,5 +52,3 @@ Typeoflevel = SaxaMM
 Skynum = 6
 Weather = 5
 Selectheading = Murder Mystery
-
-#test

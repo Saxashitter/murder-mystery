@@ -37,6 +37,14 @@ weapon.equipsfx = sfx_gequip
 weapon.attacksfx = sfx_revlsh
 weapon.allowdropmobj = true
 
+weapon.bulletthinker = function(mo, i)
+	if (i >= 192)
+		mo.momz = $ - (mo.scale/3)*P_MobjFlip(mo)
+	elseif (i >= 64)
+		mo.momz = $ - (mo.scale/2)*P_MobjFlip(mo)
+	end
+end
+
 function weapon:postpickup(p)
 	if (MM_N.dueling) then return end
 	if roles[p.mm.role].team == true then

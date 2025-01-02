@@ -77,10 +77,10 @@ local function Init(point)
 	point.storm_ticker = 0
 	point.storm_timesmigrated = 0
 	
-	local totaltime = 45*TICRATE
+	local totaltime = P_RandomRange(40,60)*TICRATE
 	if (MM_N.overtime and not MM_N.showdown)
 	or (MM_N.dueling)
-		totaltime = $/3
+		totaltime = $/2
 	end
 	SetDestRadius(point, totaltime, point.storm_destradius)
 	
@@ -118,14 +118,11 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr)
 	laser.color = clr
 	laser.scale = scale
 	
-	laser.z = P_FloorzAtPos(
-		laser.x,
-		laser.y,
-		laser.floorz, 10*scale
-	) + FU
+	local fz = laser.subsector.sector and laser.subsector.sector.floorheight or P_FloorzAtPos(laser.x,laser.y,laser.floorz, 10*laser.scale)
+	fz = $+FU
+	laser.z = fz
 	do
-		local cz = laser.subsector.sector and laser.subsector.sector.ceilingheight or P_CeilingzAtPos(laser.x,laser.y,laser.ceilingz, 20*FU)
-		local fz = laser.z --P_FloorzAtPos(laser.x,laser.y,20*FU)
+		local cz = laser.subsector.sector and laser.subsector.sector.ceilingheight or P_CeilingzAtPos(laser.x,laser.y,laser.ceilingz, 10*laser.scale)
 		laser.spriteyscale = FixedDiv(cz - fz, 10*laser.scale)
 	end
 	

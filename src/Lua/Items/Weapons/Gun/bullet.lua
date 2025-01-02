@@ -40,93 +40,25 @@ addHook("MobjThinker", function(mo)
 		mo.timealive = $+1
 	end
 	
+	local flip = P_MobjFlip(mo)
 	local speed = 84
 	mo.momx = FixedMul(speed*cos(mo.angle), cos(mo.aiming))
 	mo.momy = FixedMul(speed*sin(mo.angle), cos(mo.aiming))
 	mo.momz = speed*sin(mo.aiming)
 	
 	if mo.timealive >= TICRATE/2
-		mo.aiming = $ - ANG1
+		mo.aiming = $ - ANG1*flip
 	end
 	if mo.timealive >= TICRATE/3
-		mo.aiming = $ - ANG1/3
+		mo.aiming = $ - (ANG1/3)*flip
 	end
 	
-	if (leveltime % 4) == 0
+	if (mo.timealive % 4) == 0
 		P_SpawnGhostMobj(mo).frame = $|FF_SEMIBRIGHT
 	end
-	
-	/*
-	mo.momx = FixedMul(32*cos(mo.angle), cos(mo.aiming))
-	mo.momy = FixedMul(32*sin(mo.angle), cos(mo.aiming))
-	mo.momz = 32*sin(mo.aiming)
-
-	for i = 1,256 do
-		if not (mo and mo.valid) then
-			return
-		end
-
-		--we do this so its easier to hit players from farther away, while also 
-		--being able to hit players closer up in small areas
-		mo.radius = $ + mo.scale/4
-		mo.height = $ + mo.scale/2
-
-		if mo.z <= mo.floorz
-		or mo.z+mo.height >= mo.ceilingz then
-			P_RemoveMobj(mo)
-			return
-		end
-
-		if i % 4 == 0 then
-			local effect = P_SpawnMobjFromMobj(mo, 0,0,0, MT_THOK)
-			effect.tics = -1
-			effect.fuse = -1
-			effect.state = S_SPRK1
-			effect.radius,effect.height = mo.radius,mo.height
-		end
-
-		P_XYMovement(mo)
-
-		if not (mo and mo.valid) then
-			return
-		end
-
-		P_ZMovement(mo)
-	end
-
-	if mo and mo.valid then
-		P_RemoveMobj(mo)
-	end
-	*/
 end, MT_MM_BULLET)
 
-addHook("MobjMoveCollide", function(ring, pmo)
-	if not (ring and ring.valid) then return end
-	if (pmo == ring.target) then return end
-	
-	if ring.z > pmo.z+pmo.height then return end
-	if pmo.z > ring.z+ring.height then return end
-	
-	if (pmo.flags & MF_SHOOTABLE)
-	and not (pmo.player and pmo.player.valid)
-		P_DamageMobj(pmo, ring, (ring.target and ring.target.valid) and ring.target or ring, 2)
-		BulletDies(ring)
-		P_RemoveMobj(ring)
-		return
-	end
-	
-	if not (pmo and pmo.valid and pmo.player and pmo.health and pmo.player.mm) then return end
-
-	if pmo.player and pmo.player.mm
-	and (ring.target.player.mm.role ~= MMROLE_INNOCENT
-	and pmo.player.mm.role == ring.target.player.mm.role)
-		return
-	end
-	
-	P_DamageMobj(pmo, ring, (ring.target and ring.target.valid) and ring.target or ring, 999, DMG_INSTAKILL)
-	BulletDies(ring)
-	P_RemoveMobj(ring)
-end, MT_MM_BULLET)
+addHook("MobjMoveCollide", MM.BulletHit, MT_MM_BULLET)
 
 addHook("MobjMoveBlocked", function(ring)
 	if not (ring and ring.valid) then return end

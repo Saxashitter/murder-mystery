@@ -50,24 +50,12 @@ function weapon:attack(p)
 	for i = -2,2
 		if i == 0 then continue end
 		
-		local bullet = P_SpawnMobjFromMobj(p.mo,
-			--dont spawn in the wall
-			P_ReturnThrustX(nil,p.mo.angle, 2*FU),
-			P_ReturnThrustY(nil,p.mo.angle, 2*FU),
-			FixedDiv(p.mo.height,p.mo.scale)/2,
-			self.shootmobj
+		MM.FireBullet(p,MM.Items[self.id],self,
+			p.mo.angle + FixedAngle(P_RandomFixed()*i)*2,
+			p.aiming + FixedAngle(P_RandomFixed()*(P_RandomChance(FU/2) and 1 or -1))*7,
+			false
 		)
-
-		bullet.angle = p.mo.angle + FixedAngle(P_RandomFixed()*i)*2
-		bullet.aiming = p.aiming + FixedAngle(P_RandomFixed()*(P_RandomChance(FU/2) and 1 or -1))*7
-		bullet.color = p.mo.color
-		bullet.target = p.mo
-
-		P_InstaThrust(bullet, bullet.angle, 32*cos(bullet.aiming))
-		bullet.momz = 32*sin(bullet.aiming)
-
-		table.insert(self.bullets, bullet)
-
+		
 	end
 end
 

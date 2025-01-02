@@ -1,5 +1,55 @@
 local roles = MM.require "Variables/Data/Roles"
 
+MM.FireBullet = function(p,def,item, angle, aiming, callhooks)
+	item.hit = item.max_hit
+	item.anim = item.max_anim
+	item.cooldown = item.max_cooldown
+
+	if item.shootable then
+		--THIS IS GLORPSHIT
+		local offset = FixedDiv(p.mo.height, p.mo.scale) - mobjinfo[MT_PLAYER].height
+		local start = FixedDiv(p.mo.height,p.mo.scale)/2
+		local flipped = P_MobjFlip(p.mo) == -1
+		if flipped
+			start = 10*FU
+			offset = 0
+		end
+		
+		local bullet = P_SpawnMobjFromMobj(p.mo,
+			--dont spawn in the wall
+			P_ReturnThrustX(nil,angle, 2*FU),
+			P_ReturnThrustY(nil,angle, 2*FU),
+			start + (offset),
+			item.shootmobj
+		)
+		bullet.angle = angle
+		bullet.aiming = aiming
+		bullet.color = p.mo.color
+		bullet.target = p.mo
+		bullet.origin = item
+		bullet.eflags = $|(p.mo.eflags & MFE_VERTICALFLIP)
+		
+		P_InstaThrust(bullet, bullet.angle, 32*cos(aiming))
+		bullet.momz = 32*sin(aiming)
+		
+		P_SetOrigin(bullet, 
+			p.mo.x + P_ReturnThrustX(nil,p.mo.angle, 2*FU),
+			p.mo.y + P_ReturnThrustY(nil,p.mo.angle, 2*FU),
+			p.mo.z + start + (offset)
+		)
+		table.insert(item.bullets, bullet)
+	end
+	if callhooks
+		if def.attack then
+			def.attack(item, p)
+		end
+		if item.attacksfx then
+			S_StartSound(p.mo, item.attacksfx)
+		end
+	end
+	return bullet
+end
+
 local function manage_position(p, item, set)
 	if not item.stick then return end
 
@@ -49,6 +99,19 @@ local function manage_position(p, item, set)
 		p.mo.y + y,
 		p.mo.z+h+z
 	)
+	
+	if (P_MobjFlip(p.mo) == -1)
+		item.mobj.z = $ - item.mobj.height
+		item.mobj.eflags = $|MFE_VERTICALFLIP
+	else
+		item.mobj.eflags = $ &~MFE_VERTICALFLIP
+	end
+	
+	do
+		local slope = InvAngle(p.aiming)
+		item.mobj.roll = FixedMul(slope, sin(p.mo.angle))
+		item.mobj.pitch = FixedMul(slope, cos(p.mo.angle))
+	end
 	
 	--Hide in 1st person
 	item.mobj.dontdrawforviewmobj = p.mo 
@@ -216,7 +279,9 @@ MM:addPlayerScript(function(p)
 
 	if p.cmd.buttons & BT_CUSTOM2
 	and not (p.lastbuttons & BT_CUSTOM2)
-	and not MM.runHook("ItemDrop", p) then
+	and not MM.runHook("ItemDrop", p)
+	--wtf are you doing???
+	and not MM:pregame() then
 		MM:DropItem(p)
 		return
 	end
@@ -235,41 +300,7 @@ MM:addPlayerScript(function(p)
 	and not (item.cooldown) 
 	and not inv.hidden
 	and not MM.runHook("ItemUse", p) then
-		item.hit = item.max_hit
-		item.anim = item.max_anim
-		item.cooldown = item.max_cooldown
-
-		if item.shootable then
-			--one way to do this would be to get the difference of the
-			--characters height and the regular height, and add that
-			--to the z, so it looks like we're firing from the same heigh
-			--ez
-			local offset = (p.mo.height) - FixedMul(mobjinfo[MT_PLAYER].height,p.mo.scale)
-			local bullet = P_SpawnMobjFromMobj(p.mo,
-				--dont spawn in the wall
-				P_ReturnThrustX(nil,p.mo.angle, 2*FU),
-				P_ReturnThrustY(nil,p.mo.angle, 2*FU),
-				FixedDiv(p.mo.height,p.mo.scale)/2 + offset,
-				item.shootmobj
-			)
-
-			bullet.angle = p.mo.angle
-			bullet.aiming = p.aiming
-			bullet.color = p.mo.color
-			bullet.target = p.mo
-			bullet.origin = item
-
-			P_InstaThrust(bullet, bullet.angle, 32*cos(p.aiming))
-			bullet.momz = 32*sin(p.aiming)
-
-			table.insert(item.bullets, bullet)
-		end
-		if def.attack then
-			def.attack(item, p)
-		end
-		if item.attacksfx then
-			S_StartSound(p.mo, item.attacksfx)
-		end
+		MM.FireBullet(p,def,item, p.mo.angle, p.aiming, true)
 	end
 
 	// hit detection

@@ -46,6 +46,13 @@ function weapon:postpickup(p)
 	end
 end
 
+weapon.bulletthinker = function(mo, i)
+	if (i >= 192)
+		mo.momz = $ - (mo.scale/2)*P_MobjFlip(mo)
+	end
+end
+
+
 --we dont need to do much here
 weapon.hiddenthinker = function(item,p)
 	item.ammoleft = $ or weapon.maxshots

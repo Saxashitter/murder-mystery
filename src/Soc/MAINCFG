@@ -1,9 +1,8 @@
 MainCfg
 GameData = SaxasMurderMystery.dat
 
-# Unlock the funny unlockables
-
-Unlockable 1
-Unlockable 2
-Unlockable 3
-Unlockable 23
+# i._px
+Clear Unlockables
+Clear Emblems
+Clear ExtraEmblems
+Clear ConditionSets

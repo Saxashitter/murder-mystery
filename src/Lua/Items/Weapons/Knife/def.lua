@@ -37,6 +37,7 @@ weapon.shootable = false
 weapon.shootmobj = MT_THOK
 weapon.equipsfx = sfx_kequip
 weapon.hitsfx = sfx_kffire
+weapon.allowdropmobj = false
 
 weapon.thinker = function(item, p)
 	if not (p and p.valid) then return end

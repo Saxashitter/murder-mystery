@@ -7,9 +7,7 @@ local ROWLENGTH = 300 / TILEWIDTH
 --		of other people
 --[done?]TODO: murderers should always know who is dead, using this tablist
 --		as a checklist
-
---if shouldialwaysknow is true, 
-local function isDead(p,shouldialwaysknow)
+local function isDead(p)
 	-- print("death", (not (p and p.mo and p.mo.valid)), p.spectator, p.mo.health <= 0)
 	if p.mm and p.mm.joinedmidgame then
 		return true
@@ -21,7 +19,7 @@ local function isDead(p,shouldialwaysknow)
 		if (not (p and p.mo and p.mo.valid))
 		or p.spectator
 		or p.mo.health <= 0
-		or p.mm and p.mm.spectator
+		or (p.mm and p.mm.spectator)
 			return true
 		end
 	end
@@ -29,11 +27,11 @@ local function isDead(p,shouldialwaysknow)
 	if MM_N.knownDeadPlayers[#p]
 		return true
 	end
-
+	
 	if (p and p.mm and p.mm.role == MMROLE_SHERIFF and p.mm.spectator) then
 		return true
 	end
-
+	
 	return false
 end
 
@@ -50,11 +48,15 @@ local ROLESTYLES = {
 	},
 	Dead = {
 		overlay = "MM_PLAYERLIST_OVERLAY_DEAD",
-		overlayFlags = V_20TRANS,
+		overlayFlags = V_10TRANS,
+		overlayScale = FU/2,
 		subtitle = "\x86" .. "Dead",
 		secrecy = SECRECY_NOTSECRET
 	},
 	MidgameJoin = {
+		overlay = "MM_PLAYERLIST_OVERLAY_DEAD",
+		overlayFlags = V_10TRANS,
+		overlayScale = FU/2,
 		subtitle = "\x82(joined midgame)",
 		secrecy = SECRECY_NOTSECRET
 	},
@@ -93,7 +95,25 @@ local function getViewedPlayerRole(player, viewer)
 		-- i should know what i am
 		return role
 	end
-
+	
+	local imDead = (not (viewer and viewer.mo and viewer.mo.valid))
+	or viewer.spectator
+	or viewer.mo.health <= 0
+	or (viewer.mm and viewer.mm.spectator)
+	
+	if (player.mm.role == viewer.mm.role)
+	and (viewer.mm.role ~= MMROLE_INNOCENT)
+		-- i should know who my teammates are
+		return role
+	end
+	
+	if imDead
+	--if it works it works
+	or isDead(player)
+		-- dead people should know who everyone is
+		return role
+	end
+	
 	local secrecyLevel = (ROLESTYLES[role] and ROLESTYLES[role].secrecy) or 0
 	local privilegeLevel = SECRECY_NOTSECRET
 	if isDead(viewer) or MM_N.gameover or MM_N.showdown /*DEBUG!* / or (viewer.cmd.buttons & BT_CUSTOM3)/**/  then
@@ -236,7 +256,7 @@ local function HUD_TabScoresDrawer(v)
 		end
 		
 		if roleStyle.overlay then
-			v.draw(x, y, v.cachePatch(roleStyle.overlay), roleStyle.overlayFlags)
+			v.drawScaled(x*FU, y*FU, roleStyle.overlayScale or FU, v.cachePatch(roleStyle.overlay), roleStyle.overlayFlags)
 		end
 
 		if p == consoleplayer then

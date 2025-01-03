@@ -52,3 +52,18 @@ Typeoflevel = SaxaMM
 Skynum = 6
 Weather = 5
 Selectheading = Murder Mystery
+
+#@glideks
+Level FI
+LevelName = Flood Industries
+Music = MP_RAI
+NextLevel = FI
+SkyNum = 20
+TypeOfLevel = SaxaMM
+RecordAttack = false
+Keywords = industries
+Weather =  	PRECIP_STORM
+SubTitle = By: GLide KS
+NoZone = true
+NoVisitNeeded = true
+Selectheading = Murder Mystery

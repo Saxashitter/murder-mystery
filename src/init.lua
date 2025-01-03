@@ -8,7 +8,7 @@ G_AddGametype({
     name = "Murder Mystery",
     identifier = "SAXAMM",
     typeoflevel = TOL_SAXAMM,
-    rules = GTR_FRIENDLYFIRE|GTR_SPAWNINVUL,
+    rules = GTR_FRIENDLYFIRE|GTR_SPAWNINVUL|GTR_DEATHMATCHSTARTS,
     intermissiontype = int_match,
     headerleftcolor = 222,
     headerrightcolor = 84,

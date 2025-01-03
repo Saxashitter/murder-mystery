@@ -8,8 +8,6 @@ local secondy = 130*FU
 return function(v,p)
 	if (p.mm and p.mm.spectator) then return end
 	
-	MMHUD.interpolate(v,true)
-	
 	local slidein = MMHUD.xoffset
 	
 	local trans = 0

@@ -1,5 +1,5 @@
 local function_list = {}
-local INTER_RANGE = 64*FU
+rawset(_G,"INTER_RANGE",64*FU)
 
 local function onPoint(point1,point2)
 	local x1,y1 = FixedFloor(point1.x),FixedFloor(point1.y)
@@ -65,7 +65,10 @@ MM.sortInteracts = function(p,a,b)
 	end
 	
 	--Bruh
-	if onPoint(a.mo,b.mo) then return true end
+	if (a.mo.dropip ~= nil and b.mo.dropid ~= nil)
+	and (#p.mm.interact.points == 2)
+		return b.mo.dropid < a.mo.dropid
+	end
 	
 	local aDist = R_PointToDist2(p.mo.x,p.mo.y, a.mo.x,a.mo.y)
 	local bDist = R_PointToDist2(p.mo.x,p.mo.y, b.mo.x,b.mo.y)

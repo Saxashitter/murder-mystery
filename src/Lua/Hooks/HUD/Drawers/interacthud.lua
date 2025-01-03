@@ -39,16 +39,27 @@ local function HUD_InteractDrawer(v,p,cam)
 			local icon = v.cachePatch("MM_INTERBOX")
 			local w2s = sglib.ObjectTracking(v,p,cam,mo)
 			
-			local scalef = inter.hud.xscale
-			
 			local goingaway = inter.hud.goingaway and inter.timesinteracted
-			
-			local x = w2s.x - (FixedMul(icon.width*FU,scalef)/2)
-			local y = w2s.y
 			local timetic = FixedDiv(
 				((p.mm.interact.interacted or goingaway) and inter.interacttime or inter.interacting)*FU,
 				inter.interacttime*FU
 			)
+			
+			local scalef = inter.hud.xscale
+			local longeststr = v.stringWidth("Howlongcan",0,"thin")
+			local longest = max(
+				v.stringWidth(inter.name or '',0,"thin"),
+				v.stringWidth(inter.interacttext or '',0,"thin")
+			)
+			longest = max($ - longeststr, 0)
+			if longest ~= 0
+			and not timetic
+				scalef = $ + FixedDiv(longest*FU,(longeststr + 17)*FU)
+			end
+			
+			
+			local x = w2s.x - (FixedMul(icon.width*FU,scalef)/2)
+			local y = w2s.y
 			do	
 				if scalef > 0
 					v.drawStretched(x, y,

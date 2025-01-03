@@ -78,14 +78,6 @@ addHook("MapLoad",do
 	MMHUD.weaponslidein = HUD_BEGINNINGXOFF
 end)
 
-MMHUD.interpolate = function(v,set)
-	if (v.interpolate ~= nil)
-		return -1 --v.interpolate(set)
-	else
-		return -1
-	end
-end
-
 addHook("HUD", function(v,p,c)
 	if MM:isMM() then
 		if not hudwasmm then

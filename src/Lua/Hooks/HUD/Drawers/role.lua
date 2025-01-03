@@ -12,8 +12,6 @@ local function HUD_RoleDrawer(v,p)
 	local p = consoleplayer
 	if not (p.mm and roles[p.mm.role]) then return end
 	
-	MMHUD.interpolate(v,true)
-	
 	local patch = v.cachePatch("MMROLE")
 	local off = MMHUD.xoffset
 	

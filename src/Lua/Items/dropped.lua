@@ -82,11 +82,12 @@ function MM:DropItem(p, slot, randomize, dont_notify, forced)
 		mobj.sourcep = p
 		
 		mobj.magtime = 0
-
+		
 		mobj.flags = 0
+		mobj.dropid = #MM.DroppedMobjs + 1
 		
 		table.insert(MM.DroppedMobjs, mobj)
-
+		
 	end
 	if def.drop then
 		def.drop(item, p, mobj)
@@ -178,11 +179,30 @@ local function manage_unpicked_weapon(mobj)
 end
 
 addHook("PostThinkFrame", do
+	local lastitem
 	for i,mobj in pairs(MM.DroppedMobjs) do
 		if not (mobj and mobj.valid and not manage_unpicked_weapon(mobj)) then
 			table.remove(MM.DroppedMobjs, i)
 			continue
 		end
+		
+		if (lastitem and lastitem.valid)
+			--dogshit formatting
+			if R_PointToDist2(
+				lastitem.x,lastitem.y,
+				mobj.x,mobj.y
+			) < FixedMul(INTER_RANGE,max(mobj.scale,lastitem.scale)) + mobj.radius
+			and P_IsObjectOnGround(mobj)
+				P_Thrust(mobj,
+					R_PointToAngle2(mobj.x,mobj.y,
+						lastitem.x,lastitem.y
+					),
+					-mobj.scale/2
+				)
+			end
+		end
+		
+		lastitem = mobj
 	end
 end)
 

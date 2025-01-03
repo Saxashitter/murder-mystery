@@ -75,8 +75,6 @@ local function V_DrawBox(props)
 end
 
 return function(v, p)
-	MMHUD.interpolate(v,false)
-	
 	if not (p.mm and not p.mm.spectator) then return end
 
 	local inv = p.mm.inventory

@@ -1,3 +1,11 @@
+local possibleItems = {
+	"gun",
+	"revolver",
+	"luger",
+	"knife",
+	"sword"
+}
+
 return function()
 	--starting countdown
 	if (leveltime >= (MM_N.pregame_time - 4*TICRATE - 1) and leveltime <= MM_N.pregame_time - TICRATE)
@@ -19,6 +27,7 @@ return function()
 	
 	if MM:pregame()
 		MM_N.dueling = numplay == 2
+		MM_N.duel_item = possibleItems[P_RandomRange(1,#possibleItems)]
 	end
 	
 	--people might've joined or left, so recalc minimum kills

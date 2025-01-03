@@ -77,7 +77,10 @@ function MM:giveOutClues(amount)
 	--weird issue where it would default to 5 even if theres more clue amounts?
 	amount = min(#cluePositions, amount)
 	MM_N.clues_amount = amount
-
+	
+	--Bruh
+	if (MM_N.dueling) then return end
+	
 	for p in players.iterate do
 		local clues = {}
 		local found = {}

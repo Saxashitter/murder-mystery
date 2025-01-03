@@ -1,6 +1,9 @@
 return function(self)
 	if not self:isMM() then return end
 
+	--YES!!!!!
+	if MM_N.gavegun then return true; end
+
 	for p in players.iterate do
 		if not (p
 		and p.mo

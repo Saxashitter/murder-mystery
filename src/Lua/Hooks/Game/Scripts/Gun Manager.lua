@@ -27,21 +27,27 @@ return function()
 		return
 	end
 	
+	--shitty
+	if (MM_N.gavegun)
+		MM_N.gavegun = nil
+		return
+	end
+	
 	local wpns = MM:GetCertainDroppedItems(lostgun)
-
 	if #wpns then
 		for _,wpn in pairs(wpns) do
 			if wpn.timealive == nil then
 				wpn.timealive = 0
 			end
-
+			
 			wpn.timealive = $+1
-
+			
 			if wpn.timealive > 20*TICRATE then
 				-- give player gun
 				local p = randomPlayer(_eligibleGunPlayer)
 				if p then
 					MM:GiveItem(p, lostgunn)
+					
 					for play in players.iterate do
 						if play == p then
 							chatprintf(play,"\x82*You have been given the gun!",true)
@@ -49,12 +55,14 @@ return function()
 							chatprintf(play,"\x82*A random player has received the gun due to inactivity!")
 						end
 					end
+					
 					MM:discordMessage("***A random player has received the gun due to inactivity!***\n")
 					P_RemoveMobj(wpn)
 				end
+				MM_N.gavegun = true
 			end
 		end
-
+		
 		return
 	end
 

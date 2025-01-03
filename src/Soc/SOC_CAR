@@ -29,7 +29,7 @@ Duration = -1
 
 State S_TELESCENE
 SpriteName = TELE
-SpriteFrame = A
+SpriteFrame = A|FF_PAPERSPRITE
 Duration = -1
 
 State S_H2TREE
@@ -39,7 +39,7 @@ Duration = -1
 
 State S_H2BOOKS
 SpriteName = H2BK
-SpriteFrame = A
+SpriteFrame = A|FF_PAPERSPRITE
 Duration = -1
 
 State S_H2BULB

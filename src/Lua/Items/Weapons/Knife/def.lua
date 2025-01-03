@@ -102,4 +102,45 @@ weapon.onmiss = function(item,p)
 	S_StartSound(p.mo,sfx_kwhiff)
 end
 
+weapon.attack = function(item,p)
+	local me = p.mo
+	
+	if not (me and me.valid) then return end
+	
+	local angle = p.cmd.angleturn << 16
+	local dist = 16*FU
+	local whiff = P_SpawnMobjFromMobj(me,
+		P_ReturnThrustX(nil,angle, dist),
+		P_ReturnThrustY(nil,angle, dist),
+		FixedDiv(me.height,me.scale)/2,
+		MT_THOK
+	)
+	whiff.state = S_MM_KNIFE_WHIFF
+	whiff.fuse = -1 --whiff.tics
+	whiff.angle = angle
+	whiff.renderflags = $|RF_NOSPLATBILLBOARD
+	whiff.scale = $*5/2
+	whiff.height = 0
+	
+	me.whiff_fx = whiff
+end
+
+MM:addPlayerScript(function(p)
+	local me = p.mo
+	
+	if not (me and me.valid) then return end
+	
+	if (me.whiff_fx and me.whiff_fx.valid)
+		local angle = p.cmd.angleturn << 16
+		local dist = 16*FU
+		
+		P_MoveOrigin(me.whiff_fx,
+			me.x + P_ReturnThrustX(nil,angle, dist),
+			me.y + P_ReturnThrustY(nil,angle, dist),
+			me.z + (me.height/2)
+		)
+		me.whiff_fx.angle = angle
+	end
+end)
+
 return weapon

@@ -11,4 +11,13 @@ sfxinfo[freeslot("sfx_kffire")] = {
 }
 sfxinfo[freeslot("sfx_kwhiff")].caption = "Whiff"
 
+--Sprite credit: instashield by pastel
+states[freeslot("S_MM_KNIFE_WHIFF")] = {
+	sprite = freeslot("SPR_MMWH"),
+	frame = A|FF_FLOORSPRITE|FF_ANIMATE|FF_SEMIBRIGHT,
+	var1 = G,
+	var2 = 1,
+	tics = G + 1
+}
+
 return S_MM_KNIFE

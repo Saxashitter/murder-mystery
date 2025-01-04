@@ -126,6 +126,18 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr)
 		laser.spriteyscale = FixedDiv(cz - fz, 10*laser.scale)
 	end
 	
+	/*
+	do
+		for i = -1,1
+			for j = -1,1
+				local x,y = laser.x + (laser.radius*i),laser.y + (laser.radius*j)
+				local sec = R_PointInSubsector(x,y)
+				sec.flags = $|(1<<6) --MSF_INVERTPRECIP
+			end
+		end
+	end
+	*/
+	
 	--okay ig... there could be a better way to do this
 	if not S_SoundPlaying(laser,sfx_laser)
 		S_StartSound(laser,sfx_laser)
@@ -310,6 +322,13 @@ return function(self)
 	Init(point)
 	Backup(point)
 	
+	if MM_N.storm_ticker == 0
+		for sec in sectors.iterate
+			if sec.ceilingpic == "F_SKY1" then continue end
+			sec.flags = $|(1<<6) --MSF_INVERTPRECIP
+		end
+	end
+	
 	MM_N.storm_ticker = $+1
 	if not (MM_N.time)
 	and not MM_N.showdown
@@ -355,10 +374,13 @@ return function(self)
 			
 			if not p.mm.lastoob
 				S_StartSound(me,P_RandomRange(sfx_mmste0,sfx_mmste1),p)
+				P_SwitchWeather(PRECIP_STORM,p) --lul
 			end
 		else
 			if p.mm.lastoob
 				S_StartSound(me,P_RandomRange(sfx_mmstl0,sfx_mmstl2),p)
+				P_SwitchWeather(MM_N.map_weather,p)
+				S_StopSoundByID(p.mo,sfx_rainin)
 			end
 			
 			p.mm.outofbounds = false

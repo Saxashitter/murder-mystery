@@ -115,11 +115,14 @@ return function(self, maploaded)
 			MM:giveOutClues(clue_amm)
 		end
 		
+		MM_N.map_weather = mapheaderinfo[gamemap].weather
 		MM_N.lastmap = gamemap
 		MM.runHook("PostMapLoad")
+		
 		return
 	end
 	
+	MM_N.map_weather = PRECIP_BLANK
 	MM_N = shallowCopy(matchVars)
 	if (MM_N.end_camera and MM_N.end_camera.valid) then
 		P_RemoveMobj(MM_N.end_camera)

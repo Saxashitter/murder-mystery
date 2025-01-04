@@ -50,17 +50,88 @@ addHook("PlayerThink", function(p)
 	
 	if p.mm.outofbounds
 		if not MM_N.gameover
-			p.mm.oob_ticker = $+1
+			p.mm.oob_ticker = min($+1,MM_PLAYER_STORMMAX)
 		end
+		
+		local sec = (p.mo.subsector.sector)
+		
+		if not S_SoundPlaying(p.mo,sfx_mmstm1)
+			S_StartSound(p.mo,sfx_mmstm1)
+		end
+		if not S_SoundPlaying(p.mo,sfx_mmstm2)
+			S_StartSound(p.mo,sfx_mmstm2)
+		end
+		
+		if sec and sec.valid
+			if sec.ceilingpic ~= "F_SKY1"
+			and (leveltime & 1)
+				local thunderchance = (P_RandomKey(8192))
+				local strike = thunderchance < 70
+				
+				if strike
+					S_StartSoundAtVolume(p.mo, sfx_litng1 + P_RandomKey(4), 255, p)
+					MM.NearbyLightning({
+						x = p.mo.x,
+						y = p.mo.y,
+						z = p.mo.z
+					})
+				elseif (thunderchance < 90)
+					S_StartSoundAtVolume(p.mo, sfx_athun1 + P_RandomKey(2), 80, p)
+				end
+			end
+		end
+		
+		do
+			local rad = FixedDiv(p.mo.radius,p.mo.scale)/FU
+			local hei = FixedDiv(p.mo.height,p.mo.scale)/FU
+			for i = 0,1
+				local spark = P_SpawnMobjFromMobj(p.mo,
+					P_RandomRange(-rad,rad)*FU,
+					P_RandomRange(-rad,rad)*FU,
+					P_RandomRange(0,hei)*FU,
+					MT_WATERZAP
+				)
+				spark.color = SKINCOLOR_GALAXY
+				spark.colorized = true
+				spark.angle = R_PointToAngle2(spark.x,spark.y, p.mo.x,p.mo.y) + ANGLE_90
+				spark.renderflags = $|RF_PAPERSPRITE|RF_NOCOLORMAPS
+				spark.frame = $|FF_FULLBRIGHT|FF_ADD
+				spark.scale = $ + P_RandomRange(0,FU/2)
+			end
+			
+			if P_RandomChance(FU/2)
+			and (leveltime % 3 == 0)
+				local dust = P_SpawnMobjFromMobj(p.mo,
+					P_RandomRange(-rad,rad)*FU,
+					P_RandomRange(-rad,rad)*FU,
+					P_RandomRange(0,hei)*FU,
+					MT_TNTDUST
+				)
+				dust.color = SKINCOLOR_GALAXY
+				dust.colorized = true
+				dust.scale = ($/2) + P_RandomRange(0,FU/2)
+				dust.fuse = $/10
+				dust.angle = R_PointToAngle2(dust.x,dust.y, p.mo.x,p.mo.y)
+				P_Thrust(dust,dust.angle, -P_RandomRange(0,2)*dust.scale)
+				P_SetObjectMomZ(dust,P_RandomRange(-2,2)*FU)
+				dust.flags = $|MF_NOCLIP|MF_NOCLIPHEIGHT
+				dust.frame = $|FF_SEMIBRIGHT
+			end
+		end
+		
 		if p.mm.oob_ticker == MM_PLAYER_STORMMAX
 		and p.mo.health
 			p.mo.color = SKINCOLOR_GALAXY
 			p.mo.colorized = true
 			p.mo.stormkilledme = true
-			P_KillMobj(p.mo)
+			--P_KillMobj(p.mo)
 		end
 	else
 		p.mm.oob_ticker = 0
+		if (p.mo.health)
+			S_StopSoundByID(p.mo,sfx_mmstm1)
+			S_StopSoundByID(p.mo,sfx_mmstm2)
+		end
 	end
 	
 end)

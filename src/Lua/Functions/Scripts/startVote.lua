@@ -14,6 +14,7 @@ return function(self)
 
 	mapmusname = theme.music or "CHRSEL"
 	S_ChangeMusic(mapmusname)
+	P_SwitchWeather(PRECIP_NONE)
 	
 	local addedMaps = 0
 	local timesrejected = 0

@@ -384,7 +384,7 @@ addHook("MobjThinker",function(cam)
 	if not (args) then return end
 	
 	if debug
-		cam.skin = "takisthefox"
+		cam.skin = "sonic"
 		cam.sprite = SPR_PLAY
 		cam.sprite2 = SPR2_STND
 	else

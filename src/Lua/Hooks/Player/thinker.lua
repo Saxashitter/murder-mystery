@@ -124,7 +124,7 @@ addHook("PlayerThink", function(p)
 			p.mo.color = SKINCOLOR_GALAXY
 			p.mo.colorized = true
 			p.mo.stormkilledme = true
-			--P_KillMobj(p.mo)
+			P_KillMobj(p.mo)
 		end
 	else
 		p.mm.oob_ticker = 0

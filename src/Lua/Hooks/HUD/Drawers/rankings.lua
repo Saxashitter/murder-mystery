@@ -196,6 +196,7 @@ local function HUD_TabScoresDrawer(v)
 
 		--#region name rendering
 		local style = "small"
+		local clr = role == "Dead" and V_REDMAP or 0
 		-- name = string.sub(name, 1, sin(ANG2*leveltime)/(FU/12)+14)
 		if v.stringWidth(name, 0, "small") >= (TILEWIDTH-18) then
 			style = "small-thin"
@@ -208,7 +209,7 @@ local function HUD_TabScoresDrawer(v)
 		end
 		v.drawString(
 			x + 17, y,
-			name, V_ALLOWLOWERCASE,
+			name, V_ALLOWLOWERCASE|clr,
 			style
 		)
 		--#endregion

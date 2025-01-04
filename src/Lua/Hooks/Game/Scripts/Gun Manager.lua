@@ -46,7 +46,7 @@ return function()
 				-- give player gun
 				local p = randomPlayer(_eligibleGunPlayer)
 				if p then
-					MM:GiveItem(p, lostgunn)
+					MM:GiveItem(p, lostgun)
 					
 					for play in players.iterate do
 						if play == p then

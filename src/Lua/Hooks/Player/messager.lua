@@ -89,7 +89,7 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 				if not (p.mm) then continue end
 				if (p.spectator or p.mm.spectator) then continue end
 
-				chatprintf(p,"\x86[CAM]<"..src.name..">\x80 "..msg)
+				chatprintf(p,"\x86[CAM]<"..src.name..">\x80 "..msg,true)
 			end
 		end
 	end

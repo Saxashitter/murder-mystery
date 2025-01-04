@@ -1,9 +1,24 @@
-states[freeslot "S_PLAY_BODY"] = {
+freeslot("SPR2_OOF_", "SPR2_SHIT", "S_PLAY_BODY")
+
+states[S_PLAY_BODY] = {
 	sprite = SPR_PLAY,
-	frame = freeslot "SPR2_OOF_"|A,
+	frame = SPR2_OOF_|A,
 	tics = -1
 }
-spr2defaults[SPR2_OOF_] = SPR2_DEAD
+
+spr2defaults[SPR2_OOF_] = SPR2_SHIT --search also for SPR2_SHIT sprites used on some custom chars
+
+/*
+Override existing SPR2_SHIT defaults from custom chars
+even if they're loaded before or after MM
+*/
+addHook("MapLoad", function()
+	spr2defaults[SPR2_SHIT] = SPR2_DEAD
+end)
+
+addHook("MapChange", function()
+	spr2defaults[SPR2_SHIT] = SPR2_DEAD
+end)
 
 local roles = MM.require "Variables/Data/Roles"
 

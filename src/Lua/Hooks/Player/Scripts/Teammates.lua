@@ -24,6 +24,11 @@ return function(p)
 	end
 	
 	for k,play in ipairs(p.mm.teammates)
+		if not (play and play.valid) then
+			table.remove(p.mm.teammates,k)
+			continue
+		end
+		
 		if not (play.mo and play.mo.valid and play.mo.health)
 		or (play.mm.spectator or play.spectator)
 			table.remove(p.mm.teammates,k)

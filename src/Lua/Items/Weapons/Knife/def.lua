@@ -130,6 +130,7 @@ MM:addPlayerScript(function(p)
 	local me = p.mo
 	
 	if not (me and me.valid) then return end
+	if (me.flags & MF_NOTHINK) then return end
 	
 	if (me.whiff_fx and me.whiff_fx.valid)
 		local angle = p.cmd.angleturn << 16

@@ -354,7 +354,14 @@ return function(self)
 		and not MM_N.showdown
 			storm_incre = $*2
 		end
-		point.storm_radius = max($ - storm_incre, point.storm_destradius)
+		
+		if point.storm_destradius > point.storm_radius
+			point.storm_radius = $ - storm_incre
+			point.storm_radius = min($,point.storm_destradius)
+		elseif point.storm_radius > point.storm_destradius
+			point.storm_radius = $ - storm_incre
+			point.storm_radius = max($,point.storm_destradius)
+		end
 	end
 	
 	local dist = point.storm_radius

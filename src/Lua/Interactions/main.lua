@@ -200,6 +200,9 @@ addHook("MobjThinker",function(point)
 	if point.cooldown ~= 0
 		if point.cooldown ~= -1
 			point.cooldown = $-1
+		else
+			--we dont need this anymore
+			P_RemoveMobj(point)
 		end
 		return
 	end

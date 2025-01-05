@@ -105,7 +105,6 @@ COM_AddCommand("MM_stormradius", function(p,dest,time)
 	dest = abs(tofixed($))
 	time = abs(tonumber($))
 	
-	print(time)
 	point.storm_destradius = dest
 	point.storm_incre = point.storm_radius - ease.linear(FU/time,
 		point.storm_radius,

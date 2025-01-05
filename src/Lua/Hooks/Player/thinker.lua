@@ -55,11 +55,13 @@ addHook("PlayerThink", function(p)
 		
 		local sec = (p.mo.subsector.sector)
 		
-		if not S_SoundPlaying(p.mo,sfx_mmstm1)
-			S_StartSound(p.mo,sfx_mmstm1)
-		end
-		if not S_SoundPlaying(p.mo,sfx_mmstm2)
-			S_StartSound(p.mo,sfx_mmstm2)
+		if displayplayer and displayplayer.mo and displayplayer.mo.valid
+			if not S_SoundPlaying(displayplayer.mo,sfx_mmstm1)
+				S_StartSound(displayplayer.mo,sfx_mmstm1)
+			end
+			if not S_SoundPlaying(displayplayer.mo,sfx_mmstm2)
+				S_StartSound(displayplayer.mo,sfx_mmstm2)
+			end
 		end
 		
 		if sec and sec.valid
@@ -129,8 +131,10 @@ addHook("PlayerThink", function(p)
 	else
 		p.mm.oob_ticker = max($ - 4, 0)
 		if (p.mo.health)
-			S_StopSoundByID(p.mo,sfx_mmstm1)
-			S_StopSoundByID(p.mo,sfx_mmstm2)
+		and (displayplayer and displayplayer.mo and displayplayer.mo.valid)
+		and (p == displayplayer)
+			S_StopSoundByID(displayplayer.mo,sfx_mmstm1)
+			S_StopSoundByID(displayplayer.mo,sfx_mmstm2)
 		end
 	end
 	

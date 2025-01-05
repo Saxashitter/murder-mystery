@@ -73,6 +73,24 @@ COM_AddCommand("MM_toptextsay", function(p,time,header,...)
 	)
 end, COM_ADMIN)
 
+local tofixed = tofixed
+if tofixed == nil
+	--L_DecimalFixed
+	tofixed = function(str)
+		if str == nil return nil end
+		local dec_offset = string.find(str,'%.')
+		if dec_offset == nil
+			return (tonumber(str) or 0)*FRACUNIT
+		end
+		local whole = tonumber(string.sub(str ,0,dec_offset-1)) or 0
+		local decimal = tonumber(string.sub(str,dec_offset+1)) or 0
+		whole = $ * FRACUNIT
+		local dec_len = string.len(decimal)
+		decimal = $ * FRACUNIT / (10^dec_len)
+		return whole + decimal
+	end
+end
+
 COM_AddCommand("MM_stormradius", function(p,dest,time)
 	if not MM:isMM() then return end
 	if not CV_MM.debug.value then return end
@@ -87,11 +105,30 @@ COM_AddCommand("MM_stormradius", function(p,dest,time)
 	dest = abs(tofixed($))
 	time = abs(tonumber($))
 	
+	print(time)
 	point.storm_destradius = dest
 	point.storm_incre = point.storm_radius - ease.linear(FU/time,
 		point.storm_radius,
 		dest
 	)
+end, COM_ADMIN)
+
+COM_AddCommand("MM_MakeMeA", function(p, newrole)
+	if not MM:isMM() then return end
+	if not (p.mm) then return end
+	if (p.mm.spectator) then return end
+	if newrole == nil then return end
+	
+	do
+		local todo = string.upper(newrole)
+		local realnum = _G["MMROLE_"..todo]
+		if realnum ~= nil
+			p.mm.got_weapon = false
+			p.mm.role = realnum
+		else
+			CONS_Printf(p,todo.." is not a role.")
+		end
+	end
 	
 end, COM_ADMIN)
 

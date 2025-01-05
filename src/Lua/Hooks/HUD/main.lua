@@ -7,10 +7,6 @@ local huds = {
 
 customhud.SetupFont("STCFN")
 
---Hide power ups on first person
-hudinfo[HUD_POWERUPS].x = 320
-hudinfo[HUD_POWERUPS].y = 200
-
 -- Should match hud_disable_options in lua_hudlib.c
 -- taken from customhud
 local defaultitems = {

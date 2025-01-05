@@ -9,7 +9,6 @@ return function(p)
 	p.charability = CA_NONE
 	p.charability2 = CA2_NONE
 	p.jumpfactor = sonic.jumpfactor
-	p.gotflag = 1 --Increases custom characters compat
 
 	speedCap(p.mo, FixedMul(MM_N.speed_cap,p.mo.scale))
 	p.normalspeed = MM_N.speed_cap

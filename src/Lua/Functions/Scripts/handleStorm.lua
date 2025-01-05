@@ -118,11 +118,14 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr)
 	laser.color = clr
 	laser.scale = scale
 	
-	local fz = laser.subsector.sector and laser.subsector.sector.floorheight or P_FloorzAtPos(laser.x,laser.y,laser.floorz, 10*laser.scale)
+	local sec = R_PointInSubsector(laser.x,laser.y).sector --laser.subsector.sector
+	
+	local fz = sec and P_GetZAt(sec.f_slope, laser.x,laser.y, sec.floorheight or laser.z) or sec.floorheight
 	fz = $+FU
 	laser.z = fz
+	
 	do
-		local cz = laser.subsector.sector and laser.subsector.sector.ceilingheight or P_CeilingzAtPos(laser.x,laser.y,laser.ceilingz, 10*laser.scale)
+		local cz = sec and P_GetZAt(sec.c_slope, laser.x,laser.y,sec.ceilingheight or laser.z) or sec.ceilingheight
 		laser.spriteyscale = FixedDiv(cz - fz, 10*laser.scale)
 	end
 	

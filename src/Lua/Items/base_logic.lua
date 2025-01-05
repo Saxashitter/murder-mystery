@@ -10,6 +10,7 @@ MM.FireBullet = function(p,def,item, angle, aiming, callhooks)
 		local offset = FixedDiv(p.mo.height, p.mo.scale) - mobjinfo[MT_PLAYER].height
 		local start = FixedDiv(p.mo.height,p.mo.scale)/2
 		local flipped = P_MobjFlip(p.mo) == -1
+		offset = max($,0)
 		if flipped
 			start = 10*FU
 			offset = 0

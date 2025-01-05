@@ -66,7 +66,7 @@ addHook("PlayerThink", function(p)
 			if sec.ceilingpic ~= "F_SKY1"
 			and (leveltime & 1)
 				local thunderchance = (P_RandomKey(8192))
-				local strike = thunderchance < 70
+				local strike = thunderchance < 90
 				
 				if strike
 					S_StartSoundAtVolume(p.mo, sfx_litng1 + P_RandomKey(4), 255, p)
@@ -75,7 +75,7 @@ addHook("PlayerThink", function(p)
 						y = p.mo.y,
 						z = p.mo.z
 					})
-				elseif (thunderchance < 90)
+				elseif (thunderchance < 110)
 					S_StartSoundAtVolume(p.mo, sfx_athun1 + P_RandomKey(2), 80, p)
 				end
 			end
@@ -127,7 +127,7 @@ addHook("PlayerThink", function(p)
 			P_KillMobj(p.mo)
 		end
 	else
-		p.mm.oob_ticker = 0
+		p.mm.oob_ticker = max($ - 4, 0)
 		if (p.mo.health)
 			S_StopSoundByID(p.mo,sfx_mmstm1)
 			S_StopSoundByID(p.mo,sfx_mmstm2)

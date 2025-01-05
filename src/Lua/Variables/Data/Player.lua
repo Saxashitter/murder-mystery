@@ -41,6 +41,7 @@ return {
 	
 	outofbounds = false,
 	oob_dist = 0,
+	oob_ticker = 0,
 
 	inventory = {
 		items = {},

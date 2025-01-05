@@ -55,6 +55,7 @@ dofile "Hooks/main"
 dofile "Clues/main"
 dofile "Items/main"
 dofile "Cameras/run"
+dofile "Maps/exec"
 
 -- fool-proofing
 -- basically if you reference a variable thats not in the local table

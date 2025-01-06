@@ -93,7 +93,6 @@ end
 
 COM_AddCommand("MM_stormradius", function(p,dest,time)
 	if not MM:isMM() then return end
-	if not CV_MM.debug.value then return end
 	if not tofixed then return end
 	
 	if dest == nil then return end
@@ -106,7 +105,7 @@ COM_AddCommand("MM_stormradius", function(p,dest,time)
 	time = abs(tonumber($))
 	
 	point.storm_destradius = dest
-	point.storm_incre = point.storm_radius - ease.linear(FU/time,
+	point.storm_incre = point.storm_radius - ease.linear(FU/(time or 1),
 		point.storm_radius,
 		dest
 	)

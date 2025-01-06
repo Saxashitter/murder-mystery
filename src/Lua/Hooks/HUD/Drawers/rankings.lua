@@ -191,7 +191,10 @@ local function HUD_TabScoresDrawer(v)
 		if iconpatch == stndpatch then
 			iconpatch = v.cachePatch("WHODISICON")
 		end
-		v.drawScaled(x*FU, y*FU, FU/2, iconpatch, 0, v.getColormap(p_skin, p_skincolor))
+		local p_cmap = v.getColormap(p_skin, p_skincolor)
+		if userdataType(p_cmap) ~= "colormap" then p_cmap = nil end --!!!
+		
+		v.drawScaled(x*FU, y*FU, FU/2, iconpatch, 0, p_cmap)
 		--#endregion
 
 		--#region name rendering

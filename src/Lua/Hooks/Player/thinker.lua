@@ -56,6 +56,7 @@ addHook("PlayerThink", function(p)
 		local sec = (p.mo.subsector.sector)
 		
 		if displayplayer and displayplayer.mo and displayplayer.mo.valid
+		and (displayplayer == p)
 			if not S_SoundPlaying(displayplayer.mo,sfx_mmstm1)
 				S_StartSound(displayplayer.mo,sfx_mmstm1)
 			end

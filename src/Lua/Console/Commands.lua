@@ -123,6 +123,11 @@ COM_AddCommand("MM_MakeMeA", function(p, newrole)
 		if realnum ~= nil
 			p.mm.got_weapon = false
 			p.mm.role = realnum
+			
+			for play in players.iterate()
+				if not (play.mm) then continue
+				play.mm.teammates = nil
+			end
 		else
 			CONS_Printf(p,todo.." is not a role.")
 		end

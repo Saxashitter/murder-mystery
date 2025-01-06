@@ -25,6 +25,10 @@ mobjinfo[MT_TAKIS_MAN2CAMEO] = {
 addHook("MobjThinker",function(me)
 	if not (me and me.valid) then return end
 	
-	me.spriteyoffset = (sin(leveltime*2*ANG2))
+	if not P_IsObjectOnGround(me)
+		me.spriteyoffset = (sin(leveltime*2*ANG2))
+	else
+		me.spriteyoffset = 0
+	end
 	me.color = SKINCOLOR_FOREST
 end,MT_TAKIS_MAN2CAMEO)

@@ -48,14 +48,14 @@ local ROLESTYLES = {
 	},
 	Dead = {
 		overlay = "MM_PLAYERLIST_OVERLAY_DEAD",
-		overlayFlags = V_10TRANS,
+		overlayFlags = 0,
 		overlayScale = FU/2,
 		subtitle = "\x86" .. "Dead",
 		secrecy = SECRECY_NOTSECRET
 	},
 	MidgameJoin = {
 		overlay = "MM_PLAYERLIST_OVERLAY_DEAD",
-		overlayFlags = V_10TRANS,
+		overlayFlags = 0,
 		overlayScale = FU/2,
 		subtitle = "\x82(joined midgame)",
 		secrecy = SECRECY_NOTSECRET
@@ -192,8 +192,10 @@ local function HUD_TabScoresDrawer(v)
 			iconpatch = v.cachePatch("WHODISICON")
 		end
 		local p_cmap = v.getColormap(p_skin, p_skincolor)
-		if userdataType(p_cmap) ~= "colormap" then p_cmap = nil end --!!!
-		
+		if userdataType(p_cmap) ~= "colormap" --!!!
+			p_cmap = v.getColormap(p.skin, p.skincolor)
+		end
+		if role == "Dead" then p_cmap = v.getColormap(TC_RAINBOW,SKINCOLOR_BLACK) end
 		v.drawScaled(x*FU, y*FU, FU/2, iconpatch, 0, p_cmap)
 		--#endregion
 

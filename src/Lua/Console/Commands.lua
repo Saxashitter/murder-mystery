@@ -114,7 +114,6 @@ end, COM_ADMIN)
 COM_AddCommand("MM_MakeMeA", function(p, newrole)
 	if not MM:isMM() then return end
 	if not (p.mm) then return end
-	if (p.mm.spectator) then return end
 	if newrole == nil then return end
 	
 	do
@@ -125,8 +124,15 @@ COM_AddCommand("MM_MakeMeA", function(p, newrole)
 			p.mm.role = realnum
 			
 			for play in players.iterate()
-				if not (play.mm) then continue
+				if not (play.mm) then continue end
 				play.mm.teammates = nil
+			end
+			
+			if (p.mm.spectator)
+				p.mm.spectator = false
+				p.mm.joinedmidgame = false
+				p.playerstate = PST_REBORN
+				p.mm.role = realnum
 			end
 		else
 			CONS_Printf(p,todo.." is not a role.")

@@ -60,6 +60,7 @@ end
 weapon.thinker = weapon.hiddenthinker
 
 weapon.attack = function(item,p)
+	if (MM_N.dueling) then return end
 	if item.ammoleft == nil or item.ammoleft == 0 then return end
 	
 	item.ammoleft = $ - 1

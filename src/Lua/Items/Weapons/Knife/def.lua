@@ -111,17 +111,30 @@ weapon.attack = function(item,p)
 	local angle = p.cmd.angleturn << 16
 	local dist = 16*FU
 	local whiff = P_SpawnMobjFromMobj(me,
-		P_ReturnThrustX(nil,angle, dist),
-		P_ReturnThrustY(nil,angle, dist),
+		P_ReturnThrustX(nil,angle, dist) + me.momx,
+		P_ReturnThrustY(nil,angle, dist) + me.momy,
 		FixedDiv(me.height,me.scale)/2,
 		MT_THOK
 	)
 	whiff.state = S_MM_KNIFE_WHIFF
 	whiff.fuse = -1 --whiff.tics
 	whiff.angle = angle
-	whiff.renderflags = $|RF_NOSPLATBILLBOARD
+	whiff.renderflags = $|RF_NOSPLATBILLBOARD|RF_SLOPESPLAT
 	whiff.scale = $*5/2
 	whiff.height = 0
+	
+	local aiming = AngleFixed(p.aiming + ANGLE_90)
+	--clamp so it doesnt distort so much
+	aiming = max(50*FU,min(130*FU,$))
+	aiming = FixedAngle($) - ANGLE_90
+	
+	P_CreateFloorSpriteSlope(whiff)
+	local slope = whiff.floorspriteslope
+	slope.o = {
+		x = whiff.x, y = whiff.y, z = whiff.z
+	}
+	slope.zangle = aiming
+	slope.xydirection = angle
 	
 	me.whiff_fx = whiff
 end
@@ -137,11 +150,23 @@ MM:addPlayerScript(function(p)
 		local dist = 16*FU
 		
 		P_MoveOrigin(me.whiff_fx,
-			me.x + P_ReturnThrustX(nil,angle, dist),
-			me.y + P_ReturnThrustY(nil,angle, dist),
+			me.x + P_ReturnThrustX(nil,angle, dist) + me.momx,
+			me.y + P_ReturnThrustY(nil,angle, dist) + me.momy,
 			me.z + (me.height/2)
 		)
 		me.whiff_fx.angle = angle
+		
+		local aiming = AngleFixed(p.aiming + ANGLE_90)
+		--clamp so it doesnt distort so much
+		aiming = max(50*FU,min(130*FU,$))
+		aiming = FixedAngle($) - ANGLE_90
+		
+		local slope = me.whiff_fx.floorspriteslope
+		slope.o = {
+			x = me.whiff_fx.x, y = me.whiff_fx.y, z = me.whiff_fx.z
+		}
+		slope.zangle = aiming
+		slope.xydirection = angle
 	end
 end)
 

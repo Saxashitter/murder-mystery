@@ -154,6 +154,19 @@ weapon.attack = function(item,p)
 		whiff.scale = $*5/2
 		whiff.height = 0
 		
+		local aiming = AngleFixed(p.aiming + ANGLE_90)
+		--clamp so it doesnt distort so much
+		aiming = max(50*FU,min(130*FU,$))
+		aiming = FixedAngle($) - ANGLE_90
+		
+		P_CreateFloorSpriteSlope(whiff)
+		local slope = whiff.floorspriteslope
+		slope.o = {
+			x = whiff.x, y = whiff.y, z = whiff.z
+		}
+		slope.zangle = aiming
+		slope.xydirection = angle
+		
 		me.whiff_fx = whiff
 	end
 end

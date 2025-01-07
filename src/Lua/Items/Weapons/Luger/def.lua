@@ -36,7 +36,7 @@ weapon.pickupsfx = sfx_gnpick
 weapon.equipsfx = sfx_gequip
 weapon.attacksfx = sfx_lugrsh
 weapon.allowdropmobj = false
-weapon.maxshots = 3
+weapon.maxshots = 5
 
 function weapon:postpickup(p)
 	if (MM_N.dueling) then return end

@@ -166,9 +166,14 @@ MM:addPlayerScript(function(p)
 						reward = "luger"
 					else
 						if MM_N.clues_weaponsleft
-							reward = P_RandomChance(FU/2) and "gun" or "revolver"
-							if MM_N.clues_weaponsleft == 1
-								reward = "sword"
+							if P_RandomChance(FU/2) then
+								reward = P_RandomChance(FU/2) and "gun" or "revolver"
+							else
+								reward = P_RandomChance(FU/2) and "snowball" or "sword"
+								
+								if reward == "snowball" then
+									subtext = "Your clues gave you an item!"
+								end
 							end
 							
 							MM_N.clues_weaponsleft = $-1
@@ -179,7 +184,7 @@ MM:addPlayerScript(function(p)
 					end
 					
 					local item = MM:GiveItem(p, reward)
-					if p.mm.role ~= MMROLE_MURDERER
+					if p.mm.role ~= MMROLE_MURDERER -- Don't let other people pick up your hard work!
 						item.droppable = false
 						item.allowdropmobj = false
 					end

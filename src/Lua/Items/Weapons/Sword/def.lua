@@ -150,6 +150,7 @@ weapon.attack = function(item,p)
 		whiff.fuse = -1 --whiff.tics
 		whiff.angle = angle
 		whiff.renderflags = $|RF_NOSPLATBILLBOARD
+		whiff.frame = $|FF_TRANS50
 		whiff.scale = $*5/2
 		whiff.height = 0
 		

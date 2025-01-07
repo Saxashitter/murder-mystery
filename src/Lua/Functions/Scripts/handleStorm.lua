@@ -29,6 +29,10 @@ local ImportantStuff = {
 	"laser_eye",
 }
 
+--when the starting radius is bigger than this, the storm will take
+--longer to shrink to minimum radius
+local BigRadius = 6144*FU
+
 --Stores everything important stored in MM_N.storm_point
 local function Backup(point)
 	if MM_N.storm_backup == nil
@@ -66,7 +70,6 @@ local function SetDestRadius(point, time, dest)
 		point.storm_radius,
 		dest
 	)
-	
 end
 
 local function Init(point)
@@ -77,11 +80,32 @@ local function Init(point)
 	point.storm_ticker = 0
 	point.storm_timesmigrated = 0
 	
-	local totaltime = P_RandomRange(40,60)*TICRATE
-	if (MM_N.overtime and not MM_N.showdown)
-	or (MM_N.dueling)
-		totaltime = $/2
+	local totaltime = 0
+	
+	if mapheaderinfo[gamemap].mm_stormtimer ~= nil
+	and tonumber(mapheaderinfo[gamemap].mm_stormtimer) ~= nil
+		totaltime = abs(tonumber(mapheaderinfo[gamemap].mm_stormtimer))*TICRATE
+	else
+		totaltime = P_RandomRange(40,60)*TICRATE
+		if point.storm_radius > BigRadius
+			local percent = FixedDiv(point.storm_radius, BigRadius) * 18
+			local result = FixedMul(TICRATE*FU, percent)
+			--print(string.format("Added %f more seconds", FixedDiv(result,TICRATE*FU)))
+			
+			totaltime = $ + (result >> FRACBITS)
+		end
 	end
+	
+	if mapheaderinfo[gamemap].mm_stormtimer_overtime ~= nil
+	and tonumber(mapheaderinfo[gamemap].mm_stormtimer_overtime) ~= nil
+		totaltime = abs(tonumber(mapheaderinfo[gamemap].mm_stormtimer_overtime))*TICRATE
+	else
+		if (MM_N.overtime and not MM_N.showdown)
+		or (MM_N.dueling)
+			totaltime = $/2
+		end
+	end
+	
 	SetDestRadius(point, totaltime, point.storm_destradius)
 	
 	point.init = true
@@ -111,18 +135,18 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr)
 		laser.frame = A|FF_FULLBRIGHT
 		laser.scale = scale
 		laser.angle = ang + ANGLE_90
+		laser.flags = $|MF_NOTHINK
 	end
 	local laser = mastertable[i]
-	P_MoveOrigin(laser, x,y, point.z)
 	laser.angle = ang + ANGLE_90
 	laser.color = clr
 	laser.scale = scale
 	
-	local sec = R_PointInSubsector(laser.x,laser.y).sector --laser.subsector.sector
+	local sec = R_PointInSubsector(x,y).sector --laser.subsector.sector
 	
 	--P_GetZAt(sec.c_slope, laser.x,laser.y,sec.ceilingheight or laser.ceilingz)
-	local fz = sec and sec.floorheight or laser.z
-	local cz = sec and sec.ceilingheight or laser.ceilingz
+	local fz = sec and sec.floorheight --or laser.z
+	local cz = sec and sec.ceilingheight --or laser.ceilingz
 	
 	if (sec.f_slope and sec.f_slope.valid)
 		fz = P_GetZAt(sec.f_slope, laser.x,laser.y)
@@ -131,8 +155,7 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr)
 		cz = P_GetZAt(sec.c_slope, laser.x,laser.y)
 	end
 	
-	fz = $+FU
-	laser.z = fz
+	P_MoveOrigin(laser, x,y, fz)
 	
 	do
 		laser.spriteyscale = FixedDiv(cz - fz, 10*laser.scale)

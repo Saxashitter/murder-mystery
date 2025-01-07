@@ -180,7 +180,7 @@ mobjinfo[MT_MM_INTERACT_POINT] = {
 	
 	--$Arg4 Restrict
 	--$Arg4Default 0
-	--$Arg4Type 11
+	--$Arg4Type 12
 	--$Arg4Enum {1="Innocent"; 2="Sheriff"; 4="Murderer";}
 	--$Arg4Tooltip Which roles can't interact with this point?
 	

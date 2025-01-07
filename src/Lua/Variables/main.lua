@@ -26,3 +26,5 @@ local function addTheme(name)
 end
 
 addTheme "srb2"
+
+rawset(_G,"MM_PLAYER_STORMMAX",5*TICRATE)

@@ -178,6 +178,12 @@ mobjinfo[MT_MM_INTERACT_POINT] = {
 	--$Arg3Type 0
 	--$Arg3Tooltip How long the point will need to wait (in tics) in order for players to interact with it again.\n Set to -1 for one-time use.
 	
+	--$Arg4 Restrict
+	--$Arg4Default 0
+	--$Arg4Type 11
+	--$Arg4Enum {1="Innocent"; 2="Sheriff"; 4="Murderer";}
+	--$Arg4Tooltip Which roles can't interact with this point?
+	
 	flags = MF_NOGRAVITY|MF_NOSECTOR|MF_NOCLIP|MF_NOCLIPHEIGHT|MF_NOCLIPTHING,
 	radius = 16*FRACUNIT,
 	height = 32*FRACUNIT,
@@ -194,7 +200,14 @@ addHook("MapThingSpawn",function(mo,mt)
 	mo.calling_tag = mt.args[2]
 	mo.set_cooldown = mt.args[3]
 	mo.cooldown = 0
+	mo.restrict = mt.args[4]
 end,MT_MM_INTERACT_POINT)
+
+local rolebits = {
+	[MMROLE_INNOCENT] = 1 << 0,
+	[MMROLE_SHERIFF] = 1 << 1,
+	[MMROLE_MURDERER] = 1 << 2,
+}
 
 addHook("MobjThinker",function(point)
 	if point.cooldown ~= 0
@@ -208,6 +221,9 @@ addHook("MobjThinker",function(point)
 	end
 	
 	for p in players.iterate
+		if not p.mm then continue end
+		if point.restrict & (rolebits[p.mm.role] or 0) then continue end
+		
 		MM.interactPoint(p, point,
 			point.name,
 			point.desc,

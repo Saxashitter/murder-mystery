@@ -45,7 +45,6 @@ MM.require = dofile "Libs/require"
 dofile "Libs/CustomHud.lua"
 
 dofile "events"
-dofile "Constants.lua"
 
 dofile "Variables/main"
 dofile "Functions/main"

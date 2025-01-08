@@ -47,6 +47,7 @@ local ITEM_DEF = {
 	rapidfire = false,			-- allows shooting by holding down
 	onlyhitone = false,			-- for melees, this weapon wont hit more than 1 person in succession
 	restrict = {},				-- restricts pickup from certain roles
+	damageamount = 25,
 	/* example:
 	{
 		[MMROLE_INNOCENT] = true
@@ -107,6 +108,7 @@ local ITEM_STRUCT = {
 	shootmobj = MT_THOK,
 	rapidfire = false,
 	onlyhitone = false,
+	damageamount = 25,
 
 	restrict = {},
 
@@ -339,7 +341,8 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		item.rapidfire = def.rapidfire
 		item.onlyhitone = def.onlyhitone
 		item.restrict = shallowCopy(def.restrict)
-
+		item.damageamount = def.damageamount
+		
 		item.pickupsfx = def.pickupsfx
 		item.equipsfx = def.equipsfx
 		item.attacksfx = def.attacksfx

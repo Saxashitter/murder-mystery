@@ -348,7 +348,11 @@ MM:addPlayerScript(function(p)
 			end
 
 			if item.damage then
-				P_KillMobj(p2.mo, item.mobj, p.mo, 999)
+				p2.mm.hp = $ - item.damageamount
+				if p2.mm.hp <= 0
+					P_KillMobj(p2.mo, item.mobj, p.mo, 999)
+					p2.mm.hp = 0
+				end
 			end
 			
 			if def.onhit then

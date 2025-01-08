@@ -2,7 +2,9 @@ return {
 	role = MMROLE_INNOCENT,
 	spectator = false,
 	got_weapon = false,
-
+	
+	hp = MM_PLAYER_HPMAX,
+	
 	clues = {},
 	clues_collected = 0,
 

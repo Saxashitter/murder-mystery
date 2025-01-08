@@ -138,7 +138,12 @@ MM.BulletHit = function(ring,pmo)
 		return
 	end
 	
-	P_DamageMobj(pmo, ring, (ring.target and ring.target.valid) and ring.target or ring, 999, DMG_INSTAKILL)
+	pmo.player.mm.hp = $ - ring.origin.damageamount
+	if pmo.player.mm.hp <= 0
+		P_DamageMobj(pmo, ring, (ring.target and ring.target.valid) and ring.target or ring, 999, DMG_INSTAKILL)
+		pmo.player.mm.hp = 0
+	end
+	
 	BulletDies(ring)
 	P_RemoveMobj(ring)
 end

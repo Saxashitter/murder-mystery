@@ -14,7 +14,7 @@ return function(p)
 	p.normalspeed = MM_N.speed_cap
 	
 	p.thrustfactor = sonic.thrustfactor
-	p.accelstart = sonic.accelstart
+	p.accelstart = (sonic.accelstart*3)/2 -- Buff start acceleration
 	p.acceleration = sonic.acceleration
 	
 	p.runspeed = 9999*FU

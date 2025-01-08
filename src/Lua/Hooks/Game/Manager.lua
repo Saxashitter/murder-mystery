@@ -60,7 +60,9 @@ addHook("PlayerSpawn", function(player)
 	if not MM:isMM() then return end
 
 	if player.mm
-	and player.mm.spectator then
+	and player.mm.spectator
+	--force the duel to finish first
+	or (MM_N.dueling) then
 		player.spectator = true
 	end
 

@@ -57,6 +57,12 @@ return function(p)
 						local oldpos = {mo.x,mo.y,mo.z}
 						MM.interactFunction(p,mo,inter.func_id)
 						
+						if inter.itemdrop_id then
+							print(inter.itemdrop_id)
+							
+							MM:SpawnItemDrop(inter.itemdrop_id, mo.x, mo.y, mo.z, mo.angle, 0)
+						end
+						
 						--for hud
 						if not (mo and mo.valid)
 							inter.backup = P_SpawnMobj(oldpos[1],oldpos[2],oldpos[3],MT_THOK)

@@ -7,20 +7,23 @@ MM.FireBullet = function(p,def,item, angle, aiming, callhooks)
 
 	if item.shootable then
 		--THIS IS GLORPSHIT
+		/*
 		local offset = FixedDiv(p.mo.height, p.mo.scale) - mobjinfo[MT_PLAYER].height
-		local start = FixedDiv(p.mo.height,p.mo.scale)/2
+		local start = p.mo.height/2 --FixedDiv(p.mo.height,p.mo.scale)/2
 		local flipped = P_MobjFlip(p.mo) == -1
 		offset = max($,0)
 		if flipped
 			start = 10*FU
 			offset = 0
 		end
+		offset = FixedMul($,p.mo.scale)
+		*/
 		
 		local bullet = P_SpawnMobjFromMobj(p.mo,
 			--dont spawn in the wall
 			P_ReturnThrustX(nil,angle, 2*FU),
 			P_ReturnThrustY(nil,angle, 2*FU),
-			start + (offset),
+			41*FixedDiv(p.mo.height,p.mo.scale)/48,
 			item.shootmobj
 		)
 		bullet.angle = angle
@@ -36,7 +39,7 @@ MM.FireBullet = function(p,def,item, angle, aiming, callhooks)
 		P_SetOrigin(bullet, 
 			p.mo.x + P_ReturnThrustX(nil,p.mo.angle, 2*FU),
 			p.mo.y + P_ReturnThrustY(nil,p.mo.angle, 2*FU),
-			p.mo.z + start + (offset)
+			p.mo.z + (41*p.mo.height/48)
 		)
 		table.insert(item.bullets, bullet)
 	end

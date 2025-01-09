@@ -36,6 +36,7 @@ SaveGame = true
 SkyboxScale = 64
 NoVisitNeeded = true
 Selectheading = Murder Mystery
+Lua.MM_ClueAmount = 7
 
 # @pyrodiac
 level P1

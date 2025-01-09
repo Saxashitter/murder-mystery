@@ -51,9 +51,9 @@ dofile "Functions/main"
 dofile "Console/main"
 dofile "Interactions/main"
 dofile "Hooks/main"
+dofile "Cameras/run"
 dofile "Clues/main"
 dofile "Items/main"
-dofile "Cameras/run"
 dofile "Maps/exec"
 
 -- fool-proofing

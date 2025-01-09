@@ -136,27 +136,4 @@ return function(v, p)
 		)
 	end
 	
-	v.drawString(
-		x,y,
-		"[C1] - "..(inv.hidden and "Equip" or "Unequip").." Items",
-		V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
-		"thin-fixed"
-	)
-	y = $+8*FU
-	
-	if curitem and curitem.droppable then
-		v.drawString(x,y,
-			"[C2] - Drop weapon",
-			V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
-			"thin-fixed"
-		)
-		y = $+8*FU
-	end
-	
-	v.drawString(x,y,
-		"[FIRE] - Use weapon",
-		V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
-		"thin-fixed"
-	)
-	
 end

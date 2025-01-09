@@ -353,6 +353,7 @@ MM:addPlayerScript(function(p)
 					P_KillMobj(p2.mo, item.mobj, p.mo, 999)
 					p2.mm.hp = 0
 				end
+				MM.damageVFX(p2.mo, item.mobj)
 			end
 			
 			if def.onhit then

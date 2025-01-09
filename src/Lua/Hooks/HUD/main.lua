@@ -65,11 +65,12 @@ rawset(_G, "MMHUD", MMHUD)
 
 local hudwasmm = false
 local modname = "SAXAMM"
+MMHUD.modname = modname
 
 local function addHud(name)
-	local func,hudtype = dofile("Hooks/HUD/Drawers/"..name)
+	local func,hudtype,layer = dofile("Hooks/HUD/Drawers/"..name)
 
-	table.insert(huds, {name, func or "None", hudtype or "game"})
+	table.insert(huds, {name, func or "None", hudtype or "game", layer})
 end
 
 addHook("MapLoad",do
@@ -89,7 +90,7 @@ addHook("HUD", function(v,p,c)
 				if (is_hud_modded(data[1])
 				and not customhud.ItemExists(data[1]))
 				or not is_hud_modded(data[1]) then
-					customhud.SetupItem(data[1], modname, drawFunc, data[3], i)
+					customhud.SetupItem(data[1], modname, drawFunc, data[3], data[4] or i)
 					continue
 				end
 
@@ -164,7 +165,10 @@ addHud "seenplayer"
 addHud "results"
 addHud "intermissiontally"
 addHud "rankings"
+addHud "real_rankings"
 addHud "intermissionhud"
 addHud "showdownanim"
 addHud "foundplayer"
 addHud "debug"
+addHud "controls"
+addHud "hp"

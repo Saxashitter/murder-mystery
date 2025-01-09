@@ -22,4 +22,10 @@ return function(p)
 	p.powers[pw_shield] = 0
 	p.powers[pw_underwater] = 0
 	p.powers[pw_spacetime] = 0
+	
+	if (p.mo.eflags & (MFE_UNDERWATER|MFE_GOOWATER))
+		p.accelstart = 3*$/2
+		p.acceleration = 3*$/2
+		p.normalspeed = $*2
+	end
 end

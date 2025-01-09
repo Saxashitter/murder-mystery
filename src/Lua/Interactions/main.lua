@@ -97,7 +97,8 @@ MM.canInteract = function(p,mobj) --Point of interest
 	return true
 end
 
-MM.interactPoint = function(p,mobj,name,intertext,button,time,funcid)
+-- TODO: Make arguments into a single table.
+MM.interactPoint = function(p,mobj,name,intertext,itemdrop,button,time,funcid)
 	if not MM.canInteract(p,mobj) then return end
 	if (p.mm.interact.interacted) then return end
 	
@@ -124,6 +125,8 @@ MM.interactPoint = function(p,mobj,name,intertext,button,time,funcid)
 		--would be to have a lookup id to a LUT of funcs that another function
 		--can add functions to
 		func_id = funcid or 0,
+		
+		itemdrop_id = itemdrop,
 		
 		--idk what this is for
 		hud = {
@@ -195,6 +198,20 @@ addHook("MapThingSpawn",function(mo,mt)
 	mo.name = mt.stringargs[0]
 	mo.desc = mt.stringargs[1]
 	
+	-- Item drop, only looks at the end of the description.
+	if mo.desc ~= nil then
+		local a1 = select(1, string.find(mo.desc, "item>>"))
+		local a2 = select(2, string.find(mo.desc, "item>>"))
+		
+		if a1 ~= nil and a2 ~= nil then
+			local item = string.sub(mo.desc, a2+1)
+			mo.itemdrop = item
+			print(mo.itemdrop)
+			
+			mo.desc = $:sub(1, a1-1) -- Cut off item command.
+		end
+	end
+	
 	mo.duration = mt.args[0]
 	mo.button = mt.args[1]
 	mo.calling_tag = mt.args[2]
@@ -227,6 +244,7 @@ addHook("MobjThinker",function(point)
 		MM.interactPoint(p, point,
 			point.name,
 			point.desc,
+			point.itemdrop,
 			point.button,
 			point.duration,
 			MT_Interaction

@@ -29,6 +29,50 @@ local Pickup_Interaction = MM.addInteraction(function(p,mobj)
 	end
 end,"Pickup_Interaction")
 
+function MM:SpawnItemDrop(item_id, x, y, z, angle, flip)
+	local item;
+	if not self.Items[item_id] then
+		error("invalid item")
+		return
+	else
+		item = self.Items[item_id]
+	end
+	
+	if flip then
+		flip = -1
+	end
+	
+	local mobj = P_SpawnMobj(x,y,z, MT_THOK)
+	mobj.state = item.state
+	mobj.tics = -1
+	mobj.fuse = -1
+	
+	if angle == nil then
+		mobj.angle = FixedAngle(P_RandomRange(0, 360)*FU)
+	else
+		mobj.angle = angle
+	end
+
+	P_InstaThrust(mobj, mobj.angle, 5*FU)
+	mobj.momz = (3*FU)*flip
+
+	mobj.pickupid = item.id
+	mobj.pickupsfx = item.pickupsfx
+	mobj.restrict = shallowCopy(item.restrict)
+	
+	mobj.pickupwait = TICRATE
+	mobj.sourcep = p
+	
+	mobj.magtime = 0
+	
+	mobj.flags = 0
+	mobj.dropid = #MM.DroppedMobjs + 1
+	
+	table.insert(MM.DroppedMobjs, mobj)
+	
+	return mobj
+end
+
 function MM:DropItem(p, slot, randomize, dont_notify, forced)
 	--TODO: weird bug where you cant drop an item even if its in your inventory
 	if not (p and p.mm and #p.mm.inventory.items) then
@@ -172,7 +216,7 @@ local function manage_unpicked_weapon(mobj)
 		end
 		*/
 
-		MM.interactPoint(p,mobj,def.display_name or "Item","Pick up",BT_CUSTOM3,TICRATE/7,Pickup_Interaction)
+		MM.interactPoint(p,mobj,def.display_name or "Item","Pick up", nil, BT_CUSTOM3,TICRATE/7,Pickup_Interaction)
 	end
 	
 	mobj.pickupwait = max(0,$-1)

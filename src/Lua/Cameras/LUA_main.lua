@@ -398,6 +398,7 @@ addHook("MobjThinker",function(cam)
 			MM.interactPoint(p, cam,
 				"Cameras",
 				"View",
+				nil,
 				BT_CUSTOM3,
 				TR/2,
 				CamInteraction

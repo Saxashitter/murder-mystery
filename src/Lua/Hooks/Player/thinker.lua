@@ -122,12 +122,22 @@ addHook("PlayerThink", function(p)
 			end
 		end
 		
+		/*
 		if p.mm.oob_ticker == MM_PLAYER_STORMMAX
 		and p.mo.health
-			p.mo.color = SKINCOLOR_GALAXY
-			p.mo.colorized = true
-			p.mo.stormkilledme = true
-			P_KillMobj(p.mo)
+		end
+		*/
+		
+		if (leveltime % TICRATE) == 0
+			p.mm.hp = $ - 6
+			
+			if (p.mm.hp <= 0)
+				p.mo.color = SKINCOLOR_GALAXY
+				p.mo.colorized = true
+				p.mo.stormkilledme = true
+				P_KillMobj(p.mo)
+				p.mm.hp = 0
+			end
 		end
 	else
 		p.mm.oob_ticker = max($ - 4, 0)

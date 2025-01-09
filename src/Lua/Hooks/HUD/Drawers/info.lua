@@ -55,4 +55,4 @@ local function HUD_InfoDrawer(v)
 
 end
 
-return HUD_InfoDrawer,"game"
+return HUD_InfoDrawer,"gameandscores"

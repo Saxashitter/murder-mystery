@@ -258,6 +258,9 @@ local function HUD_DrawCamera(v,p)
 	if otherskullcounter <= 0 then otherskullcounter = 16 end
 end
 
-
+/*
 addHook("HUD",HUD_DrawCamera,"game")
 addHook("HUD",HUD_DrawCamera,"scores")
+*/
+customhud.SetupItem("cameras","SAXAMM",HUD_DrawCamera,"game")
+customhud.SetupItem("cameras_imgoodatcoding","SAXAMM",HUD_DrawCamera,"scores")

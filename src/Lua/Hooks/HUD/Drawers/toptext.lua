@@ -41,7 +41,7 @@ return function(v)
 		local total_height = 0
 
 		if str.tics >= 0 then
-			if not paused
+			if not (paused or MM:pregame())
 				str.tics = max(0, $-1)
 			end
 			

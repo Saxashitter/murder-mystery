@@ -105,17 +105,25 @@ addHook("HUD", function(v,p,c)
 		
 		if not MMHUD.dontslidein
 			if not MM.gameover
+				
+				--"Round starts in..."
 				if MMHUD.ticker >= TR*3/2
 					MMHUD.weaponslidein = ease.inquart(FU*9/10,$,0)
+					
 					if MM_N.waiting_for_players
 						MMHUD.xoffset = ease.inquart(FU*9/10,$,0)
 					end
 				end
+				
+				--slide in regular hud
 				if not MM:pregame()
 				and not MM_N.waiting_for_players
 					MMHUD.xoffset = ease.inquart(FU*9/10,$,0)
+					
 					MMHUD.weaponslidein = ease.inexpo(FU*7/10,$,HUD_BEGINNINGXOFF)
 				end
+			
+			--everything slides out
 			else
 				MMHUD.xoffset = ease.inexpo(FU*7/10,$,HUD_BEGINNINGXOFF)
 				MMHUD.weaponslidein = ease.inexpo(FU*7/10,$,HUD_BEGINNINGXOFF)

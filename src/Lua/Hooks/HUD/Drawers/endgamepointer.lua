@@ -52,16 +52,19 @@ local function HUD_EndGameDrawer(v,p,c)
 			if MM_N.end_killed
 			and MM_N.end_killed.valid
 			and MM_N.end_killed.player.mm.role == MMROLE_MURDERER
+				local name = MM_N.end_killed.player.mm.role == MMROLE_SHERIFF and roles[MMROLE_SHERIFF].name or "HERO"
+				local map = MM_N.end_killed.player.mm.role == MMROLE_SHERIFF and roles[MMROLE_SHERIFF].color or V_YELLOWMAP
+				
 				v.drawString(w2s.x,
 					w2s.y - 64*w2s.scale,
-					"HERO"..isme,
-					V_YELLOWMAP,
+					name..isme,
+					map,
 					"thin-fixed-center"
 				)
 				v.drawString(w2s.x,
 					w2s.y - 64*w2s.scale - 8*FU,
 					MM_N.end_killer.player.name,
-					V_YELLOWMAP|V_ALLOWLOWERCASE,
+					map|V_ALLOWLOWERCASE,
 					"thin-fixed-center"
 				)
 			--TODO: this block will execute now after a while, FIX!

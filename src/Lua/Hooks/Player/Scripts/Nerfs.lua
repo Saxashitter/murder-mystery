@@ -9,8 +9,10 @@ return function(p)
 	p.charability = CA_NONE
 	p.charability2 = CA2_NONE
 	p.jumpfactor = sonic.jumpfactor
-
-	speedCap(p.mo, FixedMul(MM_N.speed_cap,p.mo.scale))
+	
+	if p.powers[pw_carry] ~= CR_ZOOMTUBE
+		speedCap(p.mo, FixedMul(MM_N.speed_cap,p.mo.scale))
+	end
 	p.normalspeed = MM_N.speed_cap
 	
 	p.thrustfactor = sonic.thrustfactor

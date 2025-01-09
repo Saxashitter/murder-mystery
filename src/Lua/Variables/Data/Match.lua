@@ -24,7 +24,7 @@ return {
 	clues_weaponsleft = 0,
 	clues = {},
 
-	speed_cap = 28*FU,
+	speed_cap = 23*FU,
 
 	waiting_for_players = false,
 	found_player = false,

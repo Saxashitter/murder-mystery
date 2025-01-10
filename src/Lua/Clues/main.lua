@@ -166,7 +166,7 @@ MM:addPlayerScript(function(p)
 						reward = "luger"
 					else
 						if MM_N.clues_weaponsleft
-							if P_RandomChance(FU/2) then
+							if P_RandomChance(FU/4) then
 								reward = P_RandomChance(FU/2) and "gun" or "revolver"
 							else
 								reward = P_RandomChance(FU/2) and "snowball" or "sword"

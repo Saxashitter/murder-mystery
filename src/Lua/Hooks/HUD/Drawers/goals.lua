@@ -5,17 +5,20 @@ local function HUD_GoalDrawer(v,p)
 	
 	if MM_N.dueling then return end
 	
-	if MM_N.clues_amount ~= 0
-	and p.mm.role ~= MMROLE_SHERIFF
-		local complete = #p.mm.clues == 0 and V_YELLOWMAP or 0
-		v.drawString(x,
-			y,
-			(#p.mm.clues).."/"..MM_N.clues_amount.." Clues left",
-			V_SNAPTOTOP|V_SNAPTOLEFT|V_ALLOWLOWERCASE|complete,
-			"thin-fixed"
-		)
-		y = $+8*FU
+	if p.mm.clues.startamount ~= nil then
+		if p.mm.clues.startamount ~= 0
+		and p.mm.role ~= MMROLE_SHERIFF
+			local complete = #p.mm.clues == 0 and V_YELLOWMAP or 0
+			v.drawString(x,
+				y,
+				(#p.mm.clues).."/"..p.mm.clues.startamount.." Clues left",
+				V_SNAPTOTOP|V_SNAPTOLEFT|V_ALLOWLOWERCASE|complete,
+				"thin-fixed"
+			)
+			y = $+8*FU
+		end
 	end
+	
 	if p.mm.role == MMROLE_MURDERER
 	and MM_N.minimum_killed > 0
 		local complete = MM_N.peoplekilled >= MM_N.minimum_killed and V_YELLOWMAP or 0

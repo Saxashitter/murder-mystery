@@ -206,7 +206,6 @@ addHook("MapThingSpawn",function(mo,mt)
 		if a1 ~= nil and a2 ~= nil then
 			local item = string.sub(mo.desc, a2+1)
 			mo.itemdrop = item
-			print(mo.itemdrop)
 			
 			mo.desc = $:sub(1, a1-1) -- Cut off item command.
 		end

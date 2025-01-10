@@ -54,6 +54,7 @@ dofile "Hooks/main"
 dofile "Cameras/run"
 dofile "Clues/main"
 dofile "Items/main"
+dofile "ItemMapthings/main"
 dofile "Maps/exec"
 
 -- fool-proofing

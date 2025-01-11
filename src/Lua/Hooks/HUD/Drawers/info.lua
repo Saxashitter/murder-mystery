@@ -46,8 +46,8 @@ local function HUD_InfoDrawer(v)
 			V_SNAPTOLEFT|V_SNAPTOTOP
 		)
 		v.drawString(20*FU - slidein,
-			21*FU,
-			p.rings,
+			22*FU,
+			MM:GetPlayerRings(p),
 			V_SNAPTOLEFT|V_SNAPTOTOP,
 			"fixed"
 		)	

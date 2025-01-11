@@ -88,7 +88,7 @@ return function(v, p)
 
 	base_y = ease.outcubic(slideup, $+(sh*FU), $)
 
-	local rings = ease.linear(rings_tally, 0, p.rings)
+	local rings = ease.linear(rings_tally, 0, MM:GetPlayerRings(p))
 	local rings_x = 60*FU
 	local rings_y = base_y
 

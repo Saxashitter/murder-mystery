@@ -20,6 +20,8 @@ return function(p)
 	p.acceleration = sonic.acceleration
 	
 	p.runspeed = 9999*FU
+	
+	p.rings = 0
 
 	p.powers[pw_shield] = 0
 	p.powers[pw_underwater] = 0

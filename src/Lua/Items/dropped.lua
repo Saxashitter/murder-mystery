@@ -216,7 +216,13 @@ local function manage_unpicked_weapon(mobj)
 		end
 		*/
 
-		MM.interactPoint(p,mobj,def.display_name or "Item","Pick up", nil, BT_CUSTOM3,TICRATE/7,Pickup_Interaction)
+		MM.interactPoint(p,mobj, {
+			name = def.display_name or "Item",
+			intertext = "Pick up",
+			button = BT_CUSTOM3,
+			time = TICRATE/7,
+			funcid = Pickup_Interaction
+		})
 	end
 	
 	mobj.pickupwait = max(0,$-1)

@@ -428,14 +428,13 @@ addHook("MobjThinker",function(cam)
 	
 	if (args.viewpoint)
 		for p in players.iterate
-			MM.interactPoint(p, cam,
-				"Cameras",
-				"View",
-				nil,
-				BT_CUSTOM3,
-				TR/2,
-				CamInteraction
-			)
+			MM.interactPoint(p, cam, {
+				name = "Cameras",
+				intertext = "View",
+				button = BT_CUSTOM3,
+				time = TR/2,
+				funcid = CamInteraction
+			})
 		end
 		
 		if debug
@@ -631,14 +630,13 @@ addHook("MobjThinker",function(cam)
 		if not cam.health
 			args.repair.cooldown = 0
 			for p in players.iterate
-				MM.interactPoint(p, args.repair,
-					"Camera",
-					"Repair",
-					nil,
-					BT_CUSTOM3,
-					5*TICRATE,
-					MMCAM.interaction
-				)			
+				MM.interactPoint(p, args.repair, {
+					name = "Camera",
+					intertext = "Repair",
+					button = BT_CUSTOM3,
+					time = 5*TICRATE,
+					funcid = MMCAM.interaction
+				})			
 			end
 		else
 			args.repair.cooldown = 10

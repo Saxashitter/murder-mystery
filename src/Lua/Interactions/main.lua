@@ -97,10 +97,18 @@ MM.canInteract = function(p,mobj) --Point of interest
 	return true
 end
 
--- TODO: Make arguments into a single table.
-MM.interactPoint = function(p,mobj,name,intertext,itemdrop,button,time,funcid)
+/*@properties: a table that accepts multiple arguments, where the keys are the arguments
+	name:			the name of the interaction (ex. "Button")
+	intertext:		the description of the interaction (ex. "Press")
+	itemdrop:		the item ID this interaction drops (ex. "knife")
+	button:			the BT_* needed to activate (ex. BT_CUSTOM3)
+	time:			the amount of time needed to interact (ex. TICRATE/2)
+	funcid:			the ID of the interaction function
+*/
+MM.interactPoint = function(p,mobj,properties)
 	if not MM.canInteract(p,mobj) then return end
 	if (p.mm.interact.interacted) then return end
+	if properties == nil then return end
 	
 	for k,inter in ipairs(p.mm.interact.points)
 		--Dont add the same mobj multiple times
@@ -111,22 +119,22 @@ MM.interactPoint = function(p,mobj,name,intertext,itemdrop,button,time,funcid)
 	
 	table.insert(p.mm.interact.points,{
 		mo = mobj,
-		name = name or "Thing",
+		name = properties.name or "Thing",
 		
-		interacttext = intertext or "Interact",
-		interacttime = time or TICRATE/4,
+		interacttext = properties.intertext or "Interact",
+		interacttime = properties.time or TICRATE/4,
 		interacting = 0,
 		timesinteracted = 0,
 		
-		button = button or 0,
+		button = properties.button or 0,
 		timespan = 0,
 		
 		--the best way i can think of doing this without archiving a func
 		--would be to have a lookup id to a LUT of funcs that another function
 		--can add functions to
-		func_id = funcid or 0,
+		func_id = properties.funcid or 0,
 		
-		itemdrop_id = itemdrop,
+		itemdrop_id = properties.itemdrop,
 		
 		--idk what this is for
 		hud = {
@@ -240,13 +248,13 @@ addHook("MobjThinker",function(point)
 		if not p.mm then continue end
 		if point.restrict & (rolebits[p.mm.role] or 0) then continue end
 		
-		MM.interactPoint(p, point,
-			point.name,
-			point.desc,
-			point.itemdrop,
-			point.button,
-			point.duration,
-			MT_Interaction
-		)
+		MM.interactPoint(p, point, {
+			name = point.name,
+			intertext = point.desc,
+			itemdrop = point.itemdrop,
+			button = point.button,
+			time = point.duration,
+			funcid = MT_Interaction
+		})
 	end
 end,MT_MM_INTERACT_POINT)

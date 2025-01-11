@@ -22,7 +22,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	
 	if not (target and target.valid and target.player and target.player.mm) then return end
 
-	if not (MM_N.waiting_for_players or CV_MM.debug.value) then
+	if not (MM_N.waiting_for_players or CV_MM.debug.value or MM_N.allow_respawn) then
 		target.player.mm.spectator = true
 	end
 
@@ -183,31 +183,33 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		return
 	end
 
-	local corpse = P_SpawnMobjFromMobj(target, 0,0,0, MT_THOK)
+	if not MM_N.allow_respawn then
+		local corpse = P_SpawnMobjFromMobj(target, 0,0,0, MT_THOK)
 
-	target.flags2 = $|MF2_DONTDRAW
+		target.flags2 = $|MF2_DONTDRAW
 
-	corpse.skin = target.skin
-	corpse.color = target.color
-	corpse.state = S_PLAY_BODY
-	corpse.colorized = target.colorized
+		corpse.skin = target.skin
+		corpse.color = target.color
+		corpse.state = S_PLAY_BODY
+		corpse.colorized = target.colorized
 
-	corpse.angle = angle
-	corpse.flags = 0
-	corpse.flags2 = 0
-	corpse.tics = -1
-	corpse.fuse = -1
-	corpse.shadowscale = target.shadowscale
-	corpse.radius = target.radius
-	
-	P_InstaThrust(corpse, angle, -8*FU)
-	P_SetObjectMomZ(corpse,6*FU)
+		corpse.angle = angle
+		corpse.flags = 0
+		corpse.flags2 = 0
+		corpse.tics = -1
+		corpse.fuse = -1
+		corpse.shadowscale = target.shadowscale
+		corpse.radius = target.radius
+		
+		P_InstaThrust(corpse, angle, -8*FU)
+		P_SetObjectMomZ(corpse,6*FU)
 
-	MM_N.corpses[#MM_N.corpses+1] = corpse
-	corpse.playerid = #target.player
-	corpse.playername = target.player.name
+		MM_N.corpses[#MM_N.corpses+1] = corpse
+		corpse.playerid = #target.player
+		corpse.playername = target.player.name
 
-	MM.runHook("CorpseSpawn", target, corpse)
+		MM.runHook("CorpseSpawn", target, corpse)
+	end
 end, MT_PLAYER)
 
 --TODO: player mobjs arent hidden anymore

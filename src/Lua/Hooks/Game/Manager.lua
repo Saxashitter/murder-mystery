@@ -63,7 +63,9 @@ addHook("PlayerSpawn", function(player)
 	and player.mm.spectator
 	--force the duel to finish first
 	or (MM_N.dueling) then
-		player.spectator = true
+		if not MM_N.allow_respawn then
+			player.spectator = true
+		end
 	end
 
 	if player.mo and player.mo.valid then

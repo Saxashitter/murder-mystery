@@ -109,6 +109,7 @@ local function DropTripmine(p)
 	)
 	mine.angle = me.angle
 	mine.scale = me.scale
+	mine.tracer = me
 end
 
 local TAKIS_3D_FLAGS = MF_NOGRAVITY|MF_NOCLIPHEIGHT|MF_NOCLIP|MF_SCENERY

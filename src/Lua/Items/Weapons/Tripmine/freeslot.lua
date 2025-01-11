@@ -251,13 +251,27 @@ addHook("MobjThinker",function(mine)
 	
 	if mine.fade == 10
 		mine.aura_ticker = $+1
+		
+		local size = FU*3/2
+		local maxtime = 45*TR
+		if mine.aura_ticker > maxtime
+			if (mine.aura and mine.aura.valid)
+				P_RemoveFloorSpriteSlope(mine.aura)
+				P_RemoveMobj(mine.aura)
+				mine.aura = nil
+			end
+			return
+		else
+			size = ease.linear((FU/maxtime)*mine.aura_ticker, $, 1)
+		end
+		
 		if not (mine.aura and mine.aura.valid)
 			local aura = P_SpawnMobjFromMobj(mine,0,0,0,MT_THOK)
 			aura.tics = -1
 			aura.fuse = -1
 			aura.renderflags = $|RF_FLOORSPRITE|RF_NOCOLORMAPS|RF_SLOPESPLAT|RF_OBJECTSLOPESPLAT
 			aura.sprite = SPR_BGLS
-			aura.frame = B|FF_FULLBRIGHT|FF_ADD|FF_TRANS80
+			aura.frame = B|FF_FULLBRIGHT|FF_ADD|FF_TRANS60
 			aura.scale = $
 			aura.color = SKINCOLOR_GALAXY
 			
@@ -266,11 +280,10 @@ addHook("MobjThinker",function(mine)
 			local aura = mine.aura
 			local mysin = sin(FixedAngle(mine.aura_ticker*5*FU))
 			
-			aura.spritexscale = FU + mysin/5
+			aura.spritexscale = size + mysin/5
 			aura.spriteyscale = aura.spritexscale
 			aura.color = SKINCOLOR_GALAXY
 			aura.dispoffset = -5
-			aura.frame = ($ &~FF_TRANSMASK)|FF_TRANS80
 			P_MoveOrigin(aura,
 				mine.x,
 				mine.y,

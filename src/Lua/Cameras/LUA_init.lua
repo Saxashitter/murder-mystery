@@ -121,6 +121,8 @@ MMCAM.dist_values = {
 }
 
 MMCAM.CameraSay = function(player,cam,message)
+	if not cam.health then return end
+	
 	message = "<Camera> "..$
 
 	for p in players.iterate

@@ -34,7 +34,8 @@ addHook("SeenPlayer", function(player, seenplayer)
 end)
 
 return function(v,p,c)
-	if not MM:isMM() then
+	if not MM:isMM()
+	or (p.awayviewmobj) then
 		draw_name = ""
 		draw_tag = ""
 		tics = 0

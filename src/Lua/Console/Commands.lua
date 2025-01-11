@@ -118,6 +118,12 @@ COM_AddCommand("MM_MakeMeA", function(p, newrole)
 	
 	do
 		local todo = string.upper(newrole)
+		if todo == "SPECTATOR"
+			p.mm.spectator = true
+			p.spectator = true
+			return
+		end
+		
 		local realnum = _G["MMROLE_"..todo]
 		if realnum ~= nil
 			p.mm.got_weapon = false

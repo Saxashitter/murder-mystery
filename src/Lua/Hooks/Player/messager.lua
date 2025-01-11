@@ -74,21 +74,22 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	elseif #MMCAM.TOTALCAMS ~= nil
 		local me = src.mo
 		for k,cam in ipairs(MMCAM.TOTALCAMS)
-
+			
 			if not (me and me.valid) then break end
+			if not (cam.health) then continue end
 			if not P_CheckSight(me,cam) then continue end
-
+			
 			local dist = R_PointToDist2(me.x,me.y, cam.x,cam.y)
 			if dist > MMCAM.far_dist*cam.scale then continue end
-
+			
 			--send our message to the cameramen (skibidi)
 			for i = 0,#players - 1
 				local p = cam.args.players[i]
-
+				
 				if not (p and p.valid) then continue end
 				if not (p.mm) then continue end
 				if (p.spectator or p.mm.spectator) then continue end
-
+				
 				chatprintf(p,"\x86[CAM]<"..src.name..">\x80 "..msg,true)
 			end
 		end

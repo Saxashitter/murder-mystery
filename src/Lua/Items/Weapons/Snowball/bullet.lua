@@ -32,7 +32,7 @@ addHook("MobjMoveCollide", function(tmthing, thing)
 	if (tmthing.target and tmthing.target == thing) then return end
 	if (thing.type ~= MT_PLAYER) then return end
 	
-	local power = 40*FRACUNIT
+	local power = 65*FRACUNIT
 	local punchangle = R_PointToAngle2(tmthing.x, tmthing.y, thing.x, thing.y)
 	
 	if P_IsObjectOnGround(thing) then

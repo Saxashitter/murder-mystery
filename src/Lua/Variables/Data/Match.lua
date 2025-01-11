@@ -8,6 +8,8 @@ return {
 	pregame_time = pregame_time,
 	duel_time = duel_time,
 	dueling = false,
+	
+	gametype = "classic",
 
 	special_count = 0,
 
@@ -62,6 +64,10 @@ return {
 	minimum_killed = 0,
 	numbertokill = 0,
 	peoplekilled = 0,
+
+	-- General gamtype attributes.
+	allow_respawn = false,
+	ignore_missing_roles = false,
 
 	--round ended because all innocents/murderers left the game
 	disconnect_end = false,

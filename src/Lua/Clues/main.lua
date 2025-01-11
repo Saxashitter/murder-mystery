@@ -88,7 +88,17 @@ function MM:giveOutClues(amount)
 		if (p.mm.role == MMROLE_SHERIFF) then continue end
 		
 		clues.amount = amount
-		for i = 1, amount do
+		
+		-- Give murderer less clues.
+		if (p.mm.role == MMROLE_MURDERER) then
+			local newcluecount = amount
+			newcluecount = FixedMul($*FU, FixedDiv(3*FU, 4*FU));
+			newcluecount = FixedCeil($)/FU;
+			
+			clues.amount = newcluecount
+		end
+		
+		for i = 1, clues.amount do
 			local clue
 
 			while not clue do
@@ -106,6 +116,7 @@ function MM:giveOutClues(amount)
 		end
 	
 		p.mm.clues = clues
+		p.mm.clues.startamount = clues.amount -- the amount you need to find at the start of the game.
 	end
 end
 

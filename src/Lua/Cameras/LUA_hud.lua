@@ -57,23 +57,43 @@ local function HUD_DrawCamera(v,p)
 	MMHUD.weaponslidein = MMHUD.xoffset
 	MMHUD.dontslidein = true
 	
-	for k,scan in ipairs(mmc.cam.args.scanlines)
-		local _,sy = getabsolute(v, nil, scan.y, V_SNAPTOTOP)
-		local _,by = getabsolute(v, nil, 0, V_SNAPTOBOTTOM)
+	if mmc.cam.health
+		for k,scan in ipairs(mmc.cam.args.scanlines)
+			local _,sy = getabsolute(v, nil, scan.y, V_SNAPTOTOP)
+			local _,by = getabsolute(v, nil, 0, V_SNAPTOBOTTOM)
+			
+			if sy > by then continue end
+			
+			v.drawStretched(0,
+				scan.y,
+				((v.width() / v.dupx()) + 1)*FU,
+				scan.height,
+				v.cachePatch("1PIXEL"),
+				V_60TRANS|V_SNAPTOLEFT|V_SNAPTOTOP
+			)
+		end
+	else
+		v.drawFill()
+		v.drawString(160,100,
+			"CAMERA OFFLINE",
+			0,
+			"center"
+		)
 		
-		if sy > by then continue end
-		
-		v.drawStretched(0,
-			scan.y,
-			((v.width() / v.dupx()) + 1)*FU,
-			scan.height,
-			v.cachePatch("1PIXEL"),
-			V_60TRANS|V_SNAPTOLEFT|V_SNAPTOTOP
+		v.drawString(160,130,
+			"You might need to",
+			V_YELLOWMAP|V_ALLOWLOWERCASE,
+			"thin-center"
+		)
+		v.drawString(160,138,
+			"repair this camera.",
+			V_YELLOWMAP|V_ALLOWLOWERCASE,
+			"thin-center"
 		)
 	end
 	
 	local flicker = ((leveltime&1) and v.RandomChance(FU/6)) and -1 or 0
-	do
+	if mmc.cam.health
 		local soft = v.renderer() == "software"
 		local off = 16
 		local bright = R_PointInSubsector(mmc.cam.x,mmc.cam.y).sector.lightlevel
@@ -85,7 +105,7 @@ local function HUD_DrawCamera(v,p)
 		v.fadeScreen(0xFF00,off + flicker)
 	end
 	
-	do
+	if mmc.cam.health
 		flicker = ((leveltime&1) and v.RandomChance(FU/2)) and -3 or 0
 		local top = v.cachePatch("MMCAM_T0")
 		local bot = v.cachePatch("MMCAM_B0")
@@ -143,7 +163,7 @@ local function HUD_DrawCamera(v,p)
 		)
 	end
 	
-	do
+	if mmc.cam.health
 		if (((2*leveltime)/TICRATE) & 1)
 			v.draw(20,20,v.cachePatch("STCFN015"),0,v.getStringColormap(V_REDMAP))
 			v.drawString(30,20,"REC",V_REDMAP,"left")

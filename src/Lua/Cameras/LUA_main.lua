@@ -92,6 +92,37 @@ addHook("MapThingSpawn",function(cam,mt)
 			MMCAM.CAMS[cam.args.sequence] = {}
 		end
 		MMCAM.CAMS[cam.args.sequence][cam.args.order] = cam
+		
+		cam.args.hitbox = P_SpawnMobjFromMobj(cam,0,0,-15*FU,MT_THOK)
+		cam.args.hitbox.radius = 13*cam.scale
+		cam.args.hitbox.height = 30*cam.scale
+		cam.args.hitbox.flags2 = $|MF2_DONTDRAW
+		cam.args.hitbox.flags = MF_NOGRAVITY|MF_SHOOTABLE
+		cam.args.hitbox.health = 1
+		cam.args.hitbox.tracer = cam
+		cam.args.hitbox.camhitbox = true
+		cam.args.hitbox.tics = -1
+		cam.args.hitbox.fuse = -1
+		
+		cam.args.melee = P_SpawnMobjFromMobj(cam,0,0,-32*FU,MT_THOK)
+		cam.args.melee.radius = 32*cam.scale
+		cam.args.melee.height = 64*cam.scale
+		cam.args.melee.flags2 = $|MF2_DONTDRAW
+		cam.args.melee.flags = MF_NOGRAVITY|MF_SHOOTABLE
+		cam.args.melee.health = 1
+		cam.args.melee.tracer = cam
+		cam.args.melee.camhitbox = true
+		cam.args.melee.tics = -1
+		cam.args.melee.fuse = -1
+		
+		cam.args.repair = P_SpawnMobjFromMobj(cam,0,0,-25*FU,MT_THOK)
+		cam.args.repair.radius = 26*cam.scale
+		cam.args.repair.height = 30*cam.scale
+		cam.args.repair.flags2 = $|MF2_DONTDRAW
+		cam.args.repair.flags = MF_NOCLIPTHING|MF_NOGRAVITY
+		cam.args.repair.tracer = cam
+		cam.args.repair.tics = -1
+		cam.args.repair.fuse = -1
 	end
 	
 	table.insert(MMCAM.TOTALCAMS,cam)
@@ -151,7 +182,7 @@ local function Update3D(cam,args)
 			thok.dontdrawforviewmobj = args.viewport
 			args.wiretop = thok
 			
-			P_SetOrigin(thok,thok.x,thok.y, cam.ceilingz)
+			P_SetOrigin(thok,thok.x,thok.y, cam.ceilingz - FU)
 			dprint("spawned wiretop")
 		end
 		
@@ -189,6 +220,8 @@ local function Update3D(cam,args)
 		args.wireL.spriteyscale = FixedDiv(cz - fz, 12*cam.scale)
 		args.wireR.spriteyscale = args.wireL.spriteyscale
 	end
+	
+	if not cam.health then return end
 	
 	--camera body
 	do
@@ -310,7 +343,7 @@ local function Update3D(cam,args)
 			origin.x,origin.y = $1 + cam.x, $2 + cam.y
 			
 			if (args.wiretop and args.wiretop.valid)
-				P_SetOrigin(args.wiretop,cam.x,cam.y, cam.ceilingz)
+				P_SetOrigin(args.wiretop,cam.x,cam.y, cam.ceilingz - FU/2)
 			end
 			
 			P_MoveOrigin(args.body.top,
@@ -465,6 +498,7 @@ addHook("MobjThinker",function(cam)
 	end
 	
 	if (args.pan)
+	and cam.health
 		if not args.firstpan
 			args.startangle = cam.angle
 			args.firstpan = true
@@ -549,6 +583,7 @@ addHook("MobjThinker",function(cam)
 	
 	if P_RandomChance(FU/5)
 	and (leveltime/4) % 4 == 0
+	and cam.health
 		table.insert(args.scanlines,{
 			height = P_RandomRange(3,8)*FU,
 			tics = 8*TR,
@@ -592,6 +627,41 @@ addHook("MobjThinker",function(cam)
 		Update3D(cam,args)
 	end
 	
+	if (args.repair and args.repair.valid)
+		if not cam.health
+			args.repair.cooldown = 0
+			for p in players.iterate
+				MM.interactPoint(p, args.repair,
+					"Camera",
+					"Repair",
+					nil,
+					BT_CUSTOM3,
+					5*TICRATE,
+					MMCAM.interaction
+				)			
+			end
+		else
+			args.repair.cooldown = 10
+		end
+	end
+	
+end,MT_MM_CAMERA)
+
+addHook("MobjDeath",function(cam)
+	local args = cam.args
+	
+	local sfx = P_SpawnGhostMobj(cam)
+	sfx.flags2 = $|MF2_DONTDRAW
+	sfx.tics = 2*TICRATE
+	sfx.fuse = 2*TICRATE
+	S_StartSound(sfx,sfx_pop)
+	
+	P_SpawnGhostMobj(cam).state = S_XPLD1
+	
+	for k,part in pairs(args.body)
+		P_RemoveMobj(part)
+	end
+	args.body = nil
 end,MT_MM_CAMERA)
 
 addHook("PreThinkFrame",function(p)
@@ -610,16 +680,22 @@ for p in players.iterate
 		local args = cam.args
 		local cmd = p.cmd
 		
-		p.awayviewmobj = args.viewport
-		p.awayviewtics = TR
-		p.awayviewaiming = args.aiming
+		if cam.health
+			p.awayviewmobj = args.viewport
+			p.awayviewtics = TR
+			p.awayviewaiming = args.aiming
+		else
+			p.awayviewmobj = nil
+			p.awayviewaiming = 0
+		end
 		
 		p.pflags = $|PF_FULLSTASIS|PF_FORCESTRAFE
-		p.powers[pw_nocontrol] = 1
+		p.powers[pw_nocontrol] = 2
 		
 		if (p.cmd.buttons & BT_USE)
 		or not p.mo.health
 		or (MM_N.gameover)
+		or (p.speed > 7*p.mo.scale)
 			MMCAM.StopViewing(p,mmc.cam)
 			S_StartSound(nil,sfx_mmcam1,p)
 			return

@@ -39,6 +39,29 @@ weapon.equipsfx = sfx_kequip
 weapon.hitsfx = sfx_kffire
 weapon.allowdropmobj = false
 
+local function distchecks(item, p, target)
+	local dist = R_PointToDist2(p.mo.x, p.mo.y, target.x, target.y)
+	local maxdist = FixedMul(p.mo.radius + target.radius, item.range)
+
+	if dist > maxdist
+	or abs((p.mo.z + p.mo.height/2) - (target.z + target.height/2)) > FixedMul(max(p.mo.height, target.height), item.zrange or item.range)
+	or not P_CheckSight(p.mo, target) then
+		return false
+	end
+
+	local adiff = FixedAngle(
+		AngleFixed(R_PointToAngle2(p.mo.x, p.mo.y, target.x, target.y)) - AngleFixed(p.cmd.angleturn << 16)
+	)
+	if AngleFixed(adiff) > 180*FU
+		adiff = InvAngle($)
+	end
+	if (AngleFixed(adiff) > 115*FU)
+		return false
+	end
+	
+	return true
+end
+
 weapon.thinker = function(item, p)
 	if not (p and p.valid) then return end
 	
@@ -53,26 +76,12 @@ weapon.thinker = function(item, p)
 		local dist = R_PointToDist2(p.mo.x, p.mo.y, p2.mo.x, p2.mo.y)
 		local maxdist = FixedMul(p.mo.radius+p2.mo.radius, item.range)
 
-		if dist > maxdist
-		or abs((p.mo.z + p.mo.height/2) - (p2.mo.z + p2.mo.height/2)) > FixedMul(max(p.mo.height, p2.mo.height), item.zrange or item.range)
-		or not P_CheckSight(p.mo, p2.mo) then
-			continue
-		end
-
 		if roles[p.mm.role].team == roles[p2.mm.role].team
 		and not roles[p.mm.role].friendlyfire then
 			continue
 		end
 		
-		local adiff = FixedAngle(
-			AngleFixed(R_PointToAngle2(p.mo.x, p.mo.y, p2.mo.x, p2.mo.y)) - AngleFixed(p.cmd.angleturn << 16)
-		)
-		if AngleFixed(adiff) > 180*FU
-			adiff = InvAngle($)
-		end
-		if (AngleFixed(adiff) > 115*FU)
-			continue
-		end
+		if not distchecks(item,p,p2.mo) then continue end
 		
 		/*
 		if MM.runHook("AttackPlayer", p, p2) then
@@ -96,6 +105,21 @@ weapon.thinker = function(item, p)
 		
 		P_SpawnLockOn(p, p2.mo, S_LOCKON1)
 	end
+	
+	if MMCAM
+	and MMCAM.TOTALCAMS
+		for k,cam in pairs(MMCAM.TOTALCAMS)
+			if not (cam and cam.valid) then continue end
+			if not (cam.health) then continue end
+			if not (cam.args) then continue end
+			if (cam.args.viewpoint) then continue end
+			
+			if not distchecks(item,p, cam.args.melee) then continue end
+			
+			P_SpawnLockOn(p, cam, S_LOCKON1)
+		end
+	end
+	
 end
 
 --Whiff so people know youre bad at the game
@@ -137,6 +161,21 @@ weapon.attack = function(item,p)
 	slope.xydirection = angle
 	
 	me.whiff_fx = whiff
+	
+	if MMCAM
+	and MMCAM.TOTALCAMS
+		for k,cam in pairs(MMCAM.TOTALCAMS)
+			if not (cam and cam.valid) then continue end
+			if not (cam.health) then continue end
+			if not (cam.args) then continue end
+			if (cam.args.viewpoint) then continue end
+			
+			if not distchecks(item,p, cam.args.melee) then continue end
+			
+			P_KillMobj(cam,item.mobj,me)
+		end
+	end
+	
 end
 
 MM:addPlayerScript(function(p)

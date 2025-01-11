@@ -55,10 +55,12 @@ mobjinfo[MT_MM_CAMERA] = {
 	--$Arg7Tooltip If true, this camera will not draw a wire from the ceiling.\nThe camera wont draw a wire at all if it's invisible.
 	
 	doomednum = 10000,
-	flags = MF_NOGRAVITY|MF_NOCLIP|MF_NOCLIPTHING, --|MF_SPAWNCEILING,
+	spawnhealth = 1,
+	flags = MF_NOGRAVITY|MF_NOCLIP, --|MF_SPAWNCEILING,
 	radius = 8*FRACUNIT,
 	height = 12*FRACUNIT,
-	spawnstate = S_MM_CAMERA
+	spawnstate = S_MM_CAMERA,
+	deathstate = S_MM_CAMERA
 }
 
 states[S_MM_CAMERA] = {
@@ -86,9 +88,14 @@ end
 MMCAM.StartViewing = function(p,cam)
 	local mmc = p.mmcam
 	
-	p.awayviewmobj = cam.args.viewport
-	p.awayviewtics = TICRATE
-	p.awayviewaiming = cam.args.aiming
+	if cam.health
+		p.awayviewmobj = cam.args.viewport
+		p.awayviewtics = TICRATE
+		p.awayviewaiming = cam.args.aiming
+	else
+		p.awayviewmobj = nil
+		p.awayviewaiming = 0
+	end
 	
 	mmc.sequence = cam.args.sequence
 	mmc.cam = cam
@@ -152,3 +159,22 @@ end
 
 MMCAM.CAMS = {}
 MMCAM.TOTALCAMS = {}
+
+MMCAM.interaction = MM.addInteraction(function(p,mo)
+	local cam = mo.tracer
+	
+	cam.health = cam.info.spawnhealth
+	cam.state = cam.info.spawnstate
+	
+	cam.args.hitbox = P_SpawnMobjFromMobj(cam,0,0,-15*FU,MT_THOK)
+	cam.args.hitbox.radius = 13*cam.scale
+	cam.args.hitbox.height = 30*cam.scale
+	cam.args.hitbox.flags2 = $|MF2_DONTDRAW
+	cam.args.hitbox.flags = MF_NOGRAVITY|MF_SHOOTABLE
+	cam.args.hitbox.health = 1
+	cam.args.hitbox.tracer = cam
+	cam.args.hitbox.camhitbox = true
+	cam.args.hitbox.tics = -1
+	cam.args.hitbox.fuse = -1
+	
+end,"Cameras_RepairAThing")

@@ -1,4 +1,5 @@
 local zcollide = MM.require "Libs/zcollide"
+local ticsuntilnograv = 6
 
 states[freeslot("S_MM_SNOWBALL_B")] = {
 	sprite = SPR_SNB9,
@@ -6,8 +7,6 @@ states[freeslot("S_MM_SNOWBALL_B")] = {
 	
 	nextstate = S_MM_REVOLV_B
 }
-
-local ticsuntilnograv = 6
 
 mobjinfo[freeslot("MT_MM_SNOWBALL_BULLET")] = {
 	radius = 24*FU,
@@ -67,7 +66,7 @@ addHook("MobjMoveCollide", function(tmthing, thing)
 	if (tmthing.state ~= S_MM_SNOWBALL_B) then return end
 	
 	local power = 65*FRACUNIT
-	local punchangle = R_PointToAngle2(tmthing.x, tmthing.y, thing.x, thing.y)
+	local punchangle = tmthing.angle
 	
 	if P_IsObjectOnGround(thing) then
 		power = $ * 2

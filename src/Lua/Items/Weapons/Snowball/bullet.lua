@@ -69,7 +69,7 @@ addHook("MobjMoveCollide", function(tmthing, thing)
 	local punchangle = tmthing.angle
 	
 	if P_IsObjectOnGround(thing) then
-		power = $ * 2
+		power = $ * 3
 	end
 	
 	P_Thrust(thing, punchangle, power)

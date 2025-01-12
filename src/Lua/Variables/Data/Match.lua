@@ -1,4 +1,4 @@
-local match_time = 180*TICRATE
+local match_time = 240*TICRATE
 local duel_time = 60*TICRATE
 local pregame_time = 10*TICRATE
 

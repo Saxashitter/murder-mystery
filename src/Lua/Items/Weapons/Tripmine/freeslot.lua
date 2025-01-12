@@ -428,7 +428,12 @@ addHook("TouchSpecial",function(mine,me)
 	S_StartSound(sfx,mine.info.deathsound)
 	S_StartSound(sfx,mine.info.deathsound)
 	
-	P_KillMobj(me,mine,mine,DMG_INSTAKILL)
+	if mine.aura and mine.aura.valid
+		P_RemoveMobj(mine.aura)
+		return
+	end
+	
+	P_KillMobj(me,mine,mine.tracer,DMG_INSTAKILL)
 	me.color = SKINCOLOR_MAJESTY
 	me.colorized = true
 	S_StartSound(me,mine.info.deathsound)

@@ -223,8 +223,16 @@ weapon.attack = function(item,p)
 end
 
 weapon.drawer = function(v, p,item, x,y,scale,flags, selected, active)
-	if not selected then return end
 	if item.ammoleft == nil then return end
+	if not selected
+		v.drawString(x, (y + 32*scale) - 8*FU,
+			item.ammoleft.."/"..weapon.maxshots,
+			(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE,
+			"thin-fixed"
+		)
+		
+		return
+	end
 	
 	v.drawString(160*FU,y - 20*FU,
 		"Ammo: "..item.ammoleft.." / "..weapon.maxshots,

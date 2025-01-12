@@ -348,6 +348,8 @@ local function SetPurplePlanes(mo)
 		end
 		
 		if line.frontsector
+			P_SpawnLightningFlash(line.frontsector)
+			
 			if line.frontsector.floorpic ~= "F_SKY1"
 				line.frontsector.floorpic = "VIOWALL"
 			end
@@ -378,6 +380,8 @@ local function SetPurplePlanes(mo)
 			
 		end
 		if line.backsector
+			P_SpawnLightningFlash(line.backsector)
+			
 			if line.backsector.floorpic ~= "F_SKY1"
 				line.backsector.floorpic = "VIOWALL"
 			end

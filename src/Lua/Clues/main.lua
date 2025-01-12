@@ -195,6 +195,10 @@ MM:addPlayerScript(function(p)
 						end
 					end
 					
+					if isdedicatedserver then
+						print(string.format('%s [%s] got item "%s" from a clue!', p.name, #p, reward))
+					end
+					
 					local item = MM:GiveItem(p, reward)
 					if p.mm.role ~= MMROLE_MURDERER -- Don't let other people pick up your hard work!
 						item.droppable = false

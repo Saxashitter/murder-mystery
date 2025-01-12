@@ -70,7 +70,7 @@ end
 
 local function HUD_TimeForWeapon(v,p)
 	if not MM:isMM() then return end
-	if not (p.mo and p.mo.health and p.mm) then return end
+	--if not (p.mo and p.mo.health and p.mm) then return end
 	
 	if MM_N.waiting_for_players then
 		v.drawString(160*FU,
@@ -89,7 +89,7 @@ local function HUD_TimeForWeapon(v,p)
 		teammates = nil
 	end
 
-	do
+	if not (p.spectator)
 		local color = roles[p.mm.role].colorcode
 		local name = roles[p.mm.role].name
 		local grammar = ''
@@ -164,6 +164,7 @@ local function HUD_TimeForWeapon(v,p)
 		"thin-fixed-center"
 	)
 	if p == consoleplayer
+	and not (p.spectator)
 		local mchance = p.mm_save.cons_murderer_chance
 		--local schance = p.mm_save.cons_sheriff_chance
 		local y = 158*FU + MMHUD.weaponslidein

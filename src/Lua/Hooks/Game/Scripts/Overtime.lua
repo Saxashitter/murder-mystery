@@ -32,6 +32,10 @@ return function()
 	
 	--people might've joined or left, so recalc minimum kills
 	if leveltime == MM_N.pregame_time
+		if isserver then
+			CV_Set(CV_FindVar("restrictskinchange"),1)
+		end
+		
 		MM_N.minimum_killed = max(1,innocents/3)
 		
 		--we're for SURE dueling

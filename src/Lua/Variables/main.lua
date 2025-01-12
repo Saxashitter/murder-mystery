@@ -18,6 +18,11 @@ MC("role", "innocent")
 MC("role", "sheriff")
 MC("role", "murderer")
 
+-- perks
+MC("perk", "footsteps")
+MC("perk", "ninja")
+MC("perk", "ghost")
+
 MM.sniper_theme_offset = 13
 MM.themes = {} -- intermission themes
 

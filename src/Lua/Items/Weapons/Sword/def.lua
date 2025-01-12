@@ -14,8 +14,8 @@ weapon.display_icon = "MM_ROBLOX_SWORD"
 weapon.state = dofile "Items/Weapons/Sword/freeslot"
 weapon.timeleft = -1
 weapon.hit_time = 2
-weapon.animation_time = TICRATE
-weapon.cooldown_time = TICRATE + TICRATE/2
+weapon.animation_time = TICRATE + TICRATE/2
+weapon.cooldown_time = TICRATE + 3*(TICRATE/4)
 weapon.range = FU*5
 --you should be able to jump over and juke the murderer
 weapon.zrange = FU
@@ -126,7 +126,11 @@ weapon.attack = function(item,p)
 	item.frameanimation = TICRATE
 	item.mobj.frame = B
 	
-	local lunge = P_RandomChance(FU/2)
+	local lunge = false
+	if p.mo and p.mo.valid then
+		lunge = not P_IsObjectOnGround(p.mo) 
+	end
+	
 	S_StartSound(p.mo, lunge and sfx_slunge or sfx_sslash)
 	
 	if lunge

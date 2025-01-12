@@ -153,12 +153,14 @@ return function(self, maploaded)
 		
 		if not (p and p.valid and p.mm and p.mm_save) then continue end
 		
-		if (p.mm.role ~= MMROLE_MURDERER) then 
-			p.mm_save.murderer_chance_multi = $ + 1
-		end 
+		if not p.mm_save.afkmode then
+			if (p.mm.role ~= MMROLE_MURDERER) then 
+				p.mm_save.murderer_chance_multi = $ + 1
+			end 
 
-		if (p.mm.role ~= MMROLE_SHERIFF) then 
-			p.mm_save.sheriff_chance_multi = $ + 1
+			if (p.mm.role ~= MMROLE_SHERIFF) then 
+				p.mm_save.sheriff_chance_multi = $ + 1
+			end
 		end
 		
 		local m_chancecount = 0

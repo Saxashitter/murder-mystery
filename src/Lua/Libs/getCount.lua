@@ -6,6 +6,7 @@ return function()
 	for p in players.iterate do
 		if not (p and p.mo and p.mm) then continue end
 		if p.mm.joinedmidgame then continue end
+		if p.mm_save.afkmode then continue end
 
 		count = $+1
 

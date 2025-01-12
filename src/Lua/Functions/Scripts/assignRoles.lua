@@ -35,6 +35,8 @@ return function(self, count)
 		if not (p and p.valid and p.mm) 
 		and not can_be_role(p, pcount) then continue end
 		
+		if p.mm_save.afkmode then continue end
+		
 		for i=1,p.mm_save.murderer_chance_multi do
 			table.insert(murderer_chance_table, p)
 		end

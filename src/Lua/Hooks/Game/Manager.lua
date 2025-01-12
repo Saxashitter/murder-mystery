@@ -78,17 +78,6 @@ addHook("PlayerSpawn", function(player)
 	end
 end)
 
-addHook("TouchSpecial", function(special, toucher)
-	if special and special.valid and toucher and toucher.valid then
-		local player = toucher.player
-		
-		if player and player.valid then
-			player.rings = 0
-			player.mm_save.rings = $ + 1
-		end
-	end
-end, MT_RING)
-
 addScript "Waiting"
 addScript "Game Over"
 addScript "Theme Transition"
@@ -98,3 +87,4 @@ addScript "Showdown"
 addScript "Game End"
 // addScript "Restrict"
 addScript "Gun Manager"
+addScript "Ring Override"

@@ -430,7 +430,6 @@ addHook("TouchSpecial",function(mine,me)
 	
 	if mine.aura and mine.aura.valid
 		P_RemoveMobj(mine.aura)
-		return
 	end
 	
 	P_KillMobj(me,mine,mine.tracer,DMG_INSTAKILL)

@@ -179,9 +179,9 @@ MM:addPlayerScript(function(p)
 					else
 						if MM_N.clues_weaponsleft
 							if P_RandomChance(FU/4) then
-								reward = P_RandomChance(FU/2) and "gun" or "revolver"
+								reward = P_RandomChance(FU/3) and "revolver" or "gun" 
 							else
-								reward = P_RandomChance(FU/2) and "snowball" or "sword"
+								reward = P_RandomChance(FU/3) and "sword" or "snowball"
 								
 								if reward == "snowball" then
 									subtext = "Your clues gave you an item!"

@@ -128,7 +128,7 @@ MM:addPlayerScript(function(p)
 
 	for i,clue in ipairs(p.mm.clues) do
 		local pos = clue.ref
-		pos.color = p.skincolor
+		clue.mobj.color = p.skincolor
 		
 		--TODO: this and dropped item sparkles dont sustain fullbrite
 		if P_RandomChance(FU/2)

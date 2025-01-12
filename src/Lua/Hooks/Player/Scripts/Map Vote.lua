@@ -2,7 +2,8 @@ local MOVE_DEADZONE = 10
 
 return function(p)
 	if not MM_N.voting then return end
-
+	if (p.mm_save.afkmode) then return end
+	
 	if (p and p.mo) then
 		p.mo.momx = 0
 		p.mo.momy = 0

@@ -16,6 +16,7 @@ local function isDead(p)
 	--those who should ALWAYS know
 	if consoleplayer.mm.role == MMROLE_MURDERER
 	or consoleplayer.mm.spectator
+	or (MM_N.showdown)
 		if (not (p and p.mo and p.mo.valid))
 		or p.spectator
 		or p.mo.health <= 0
@@ -76,6 +77,13 @@ local ROLESTYLES = {
 		subtitle = "\x84Sheriff",
 		secrecy = SECRECY_SHERIFFALLOWED,
 		standardRole = true
+	},
+	AFKMode = {
+		overlay = "MM_PLAYERLIST_OVERLAY_DEAD",
+		overlayFlags = 0,
+		overlayScale = FU/2,
+		subtitle = "\x86".."AFK",
+		secrecy = SECRECY_NOTSECRET
 	}
 }
 
@@ -83,6 +91,9 @@ local function getViewedPlayerRole(player, viewer)
 	local role = "Unknown"
 
 	if not player.mm then return "Unknown" end
+	if player.mm.afkmodelast and player.spectator
+		return "AFKMode"
+	end
 	if player.mm.joinedmidgame then
 		role = "MidgameJoin"
 	elseif isDead(player) then
@@ -139,9 +150,15 @@ end
 local function HUD_TabScoresDrawer(v)
 	local playerlist = {}
 	local deadplayerlist = {}
+	local afkplayerlist = {}
 	-- while #playerlist < 32 do
 	for p in players.iterate do
 		if p and p.valid then
+			if (p.mm_save and p.mm_save.afkmode)
+				table.insert(afkplayerlist, p)
+				continue
+			end
+			
 			if isDead(p) then
 				table.insert(deadplayerlist, p)
 			else
@@ -150,6 +167,9 @@ local function HUD_TabScoresDrawer(v)
 		end
 	end
 	for _, p in ipairs(deadplayerlist) do
+		table.insert(playerlist, p)
+	end
+	for _, p in ipairs(afkplayerlist) do
 		table.insert(playerlist, p)
 	end
 	-- end

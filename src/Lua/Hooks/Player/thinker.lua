@@ -141,6 +141,19 @@ addHook("PlayerThink", function(p)
 	
 end)
 
+--when should we be forced into spectating?
+MM.addHook("PlayerInit",function(p)
+	if (p.mm_save and p.mm_save.afkmode)
+	--force the duel to finish first
+	or (MM_N.dueling)
+		p.mm.joinedmidgame = true
+		p.mm.spectator = true
+		p.spectator = true
+	end
+
+	p.mm.afkmodelast = p.mm_save.afkmode
+end)
+
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/Role Handler"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/Nerfs"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/Map Vote"), true)

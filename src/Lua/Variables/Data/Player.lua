@@ -32,6 +32,7 @@ return {
 		lastaiming = 0,
 		keepalive = false,
 	},
+	afkmodelast = false,
 	
 	interact = {
 		--the actual points of interests

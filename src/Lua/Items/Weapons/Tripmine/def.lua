@@ -28,6 +28,7 @@ weapon.animation_position = {
 weapon.stick = true
 weapon.animation = true
 weapon.weaponize = true
+weapon.damage = false
 weapon.droppable = false
 weapon.shootable = false
 weapon.shootmobj = MT_THOK

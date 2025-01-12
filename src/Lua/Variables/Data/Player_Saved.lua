@@ -2,6 +2,9 @@ return {
 	rings = 0,
 	perk = 0,
 	
+	afkmode = false,
+	timesafk = 0,
+	
 	murderer_chance_multi = 1,
 	sheriff_chance_multi = 1,
 	

@@ -2,7 +2,6 @@ local activebuttons = BT_JUMP|BT_WEAPONNEXT|BT_WEAPONPREV|BT_ATTACK|BT_CUSTOM1|B
 --lol
 rawset(_G,"AFK_TIMEOUT", 45*TICRATE)
 
---TODO: this STILL isnt kicking people
 local function handleTimeout(p)
 	if CV_MM.afkkickmode.value == 0 then return end
 	
@@ -16,6 +15,11 @@ local function handleTimeout(p)
 		p.mm.whokilledme = "Killed by an AFK heart attack."
 		p.mm.afkhelpers.timeuntilreset = 0
 		p.mm.afktimer = 0
+		
+		p.mm_save.timesafk = $ + 1
+		if p.mm_save.timesafk == 3
+			p.mm_save.afkmode = true
+		end
 		
 		--TODO: add corpse immediately
 		

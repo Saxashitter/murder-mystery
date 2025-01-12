@@ -8,6 +8,7 @@ return function()
 	
 	local playersIn = 0
 	for p in players.iterate do
+		if (p.mm_save and p.mm_save.afkmode) then continue end
 		playersIn = $+1
 	end
 

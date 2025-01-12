@@ -132,6 +132,7 @@ return function(self, maploaded)
 	local count = 0
 	for p in players.iterate do
 		self:playerInit(p, true)
+		if (p.mm_save and p.mm_save.afkmode) then continue end
 		count = $+1
 	end
 

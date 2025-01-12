@@ -147,3 +147,29 @@ COM_AddCommand("MM_MakeMeA", function(p, newrole)
 	
 end, COM_ADMIN)
 
+COM_AddCommand("MM_SpectatorMode", function(p)
+	if not MM:isMM() then return end
+	if not (p.mm) then return end
+	
+	/*
+	if not (p.spectator)
+		CONS_Printf(p,"You can't use this right now.")
+		return
+	end
+	*/
+	
+	p.mm_save.afkmode = not $
+	
+	local msg = ""
+	if p.mm_save.afkmode
+		msg = "You'll start as a spectator every round now."
+	else
+		msg = "You'll spawn regularly next round."
+		
+		if (MM_N.waiting_for_players)
+			p.mm.spectator = false
+			p.playerstate = PST_REBORN
+		end
+	end
+	CONS_Printf(p,msg)
+end)

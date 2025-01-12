@@ -10,7 +10,7 @@ function MM:spawnClueMobj(p, pos)
 	mobj.tics = -1
 	mobj.fuse = -1
 	mobj.drawonlyforplayer = p
-	mobj.color = p.mo.color
+	mobj.color = p.skincolor
 
 	if pos.flip then
 		mobj.flags2 = $|MF2_OBJECTFLIP

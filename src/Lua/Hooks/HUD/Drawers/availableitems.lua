@@ -76,6 +76,7 @@ end
 
 return function(v, p)
 	if not (p.mm and not p.mm.spectator) then return end
+	if (p.spectator) then return end
 
 	local inv = p.mm.inventory
 	local items = inv.items

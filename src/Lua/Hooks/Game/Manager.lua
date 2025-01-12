@@ -87,7 +87,6 @@ addHook("TouchSpecial", function(special, toucher)
 		if player and player.valid then
 			player.rings = 0
 			player.mm_save.rings = $ + 1
-			print(player.mm_save.rings)
 		end
 	end
 end, MT_RING)

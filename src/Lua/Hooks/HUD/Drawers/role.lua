@@ -9,7 +9,8 @@ local roles = MM.require "Variables/Data/Roles"
 
 --cant think of a good way to draw & get the length using just 1 loop
 local function HUD_RoleDrawer(v,p)
-	local p = consoleplayer
+	if not (p and p.valid) then p = consoleplayer end
+	
 	if not (p.mm and roles[p.mm.role]) then return end
 	
 	local patch = v.cachePatch("MMROLE")
@@ -34,7 +35,11 @@ local function HUD_RoleDrawer(v,p)
 				killerstring = $..killername
 			end
 		else
-			killerstring = "Joined midgame."
+			if (p.mm_save.afkmode)
+				killerstring = "You're in spectator mode."
+			else
+				killerstring = "Joined midgame."
+			end
 		end
 	end
 	----
@@ -125,4 +130,5 @@ local function HUD_RoleDrawer(v,p)
 	end
 end
 
+MMHUD.HUD_RoleDrawer = HUD_RoleDrawer
 return HUD_RoleDrawer,"scores"

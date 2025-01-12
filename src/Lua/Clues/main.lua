@@ -86,6 +86,7 @@ function MM:giveOutClues(amount)
 		local found = {}
 		
 		if (p.mm.role == MMROLE_SHERIFF) then continue end
+		if (p.mm_save and p.mm_save.afkmode) then continue end
 		
 		clues.amount = amount
 		

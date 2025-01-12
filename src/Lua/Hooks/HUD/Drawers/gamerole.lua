@@ -4,7 +4,15 @@ local roles = MM.require "Variables/Data/Roles"
 --press tab to see the old role drawer
 local function HUD_RoleDrawer(v,p)
 	if not (p.mm and roles[p.mm.role]) then return end
+	if (p.mm_save.afkmode) then return end
+	
 	local off = MMHUD.xoffset
+	
+	--we have enough screen space
+	if v.width() >= 800
+		MMHUD.HUD_RoleDrawer(v,p)
+		return
+	end
 	
 	----Draw "Killed by"
 	if p.spectator 

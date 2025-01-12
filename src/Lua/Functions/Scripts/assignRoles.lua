@@ -59,7 +59,7 @@ return function(self, count)
 			mp.mm_save.murderer_chance_multi = 1
 
 			sp.mm.role = MMROLE_SHERIFF
-			sp.mm_save.murderer_chance_multi = 1
+			sp.mm_save.sheriff_chance_multi = 1
 
 			murderers[mp] = true
 			sheriffs[sp] = true

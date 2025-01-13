@@ -424,6 +424,17 @@ addHook("TouchSpecial",function(mine,me)
 	
 	local p = me.player
 	
+	--dont kill our teammates lol
+	if (p.mm.role == MMROLE_MURDERER
+	and mine.tracer.player.mm.role == MMROLE_MURDERER)
+		mine.health = mine.info.spawnhealth
+		mine.flags = $|MF_SPECIAL|MF_SOLID
+		
+		mine.activatein = 1
+		mine.fade = 0
+		return true
+	end
+	
 	local sfx = P_SpawnGhostMobj(mine)
 	sfx.flags2 = $|MF2_DONTDRAW
 	sfx.fuse = 12*TR

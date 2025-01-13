@@ -52,8 +52,14 @@ local function HUD_EndGameDrawer(v,p,c)
 			if MM_N.end_killed
 			and MM_N.end_killed.valid
 			and MM_N.end_killed.player.mm.role == MMROLE_MURDERER
-				local name = MM_N.end_killed.player.mm.role == MMROLE_SHERIFF and roles[MMROLE_SHERIFF].name or "HERO"
-				local map = MM_N.end_killed.player.mm.role == MMROLE_SHERIFF and roles[MMROLE_SHERIFF].color or V_YELLOWMAP
+				local name = MM_N.end_killer.player.mm.role == MMROLE_SHERIFF and roles[MMROLE_SHERIFF].name or "HERO"
+				local map = MM_N.end_killer.player.mm.role == MMROLE_SHERIFF and roles[MMROLE_SHERIFF].color or V_YELLOWMAP
+				
+				--amazing!
+				if MM_N.end_killer.player.mm.role == MMROLE_MURDERER
+					name = roles[MMROLE_MURDERER].name
+					map = roles[MMROLE_MURDERER].color
+				end
 				
 				v.drawString(w2s.x,
 					w2s.y - 64*w2s.scale,
@@ -67,7 +73,6 @@ local function HUD_EndGameDrawer(v,p,c)
 					map|V_ALLOWLOWERCASE,
 					"thin-fixed-center"
 				)
-			--TODO: this block will execute now after a while, FIX!
 			--Innocents kill each other
 			else
 				v.drawString(w2s.x,

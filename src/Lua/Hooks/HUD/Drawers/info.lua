@@ -15,7 +15,7 @@ local function HUD_InfoDrawer(v)
 		if minutes < 10 then minutes = "0"..$ end
 		if seconds < 10 then seconds = "0"..$ end
 		
-		flash = timetic <= 30*TICRATE or MM_N.showdown
+		flash = timetic <= 31*TICRATE or MM_N.showdown
 		flash = (flash and ((leveltime%(2*TICRATE)) < 30*TICRATE) and (leveltime/5 & 1))
 		
 		local finalstring = minutes..":"..seconds

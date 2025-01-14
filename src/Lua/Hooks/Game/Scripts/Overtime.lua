@@ -1,3 +1,5 @@
+--handles everything related to round times
+
 local possibleItems = {
 	"gun",
 	"revolver",
@@ -50,9 +52,12 @@ return function()
 	end
 	
 	-- time management
-	MM_N.time = max(0, $-1)
+	--we dont need to tic this down during showdown
+	if not (MM_N.overtime or MM_N.showdown)
+		MM_N.time = max(0, $-1)
+	end
 	if not (MM_N.time)
-	and not MM_N.overtime then
+	and not (MM_N.overtime or MM_N.showdown) then
 		if not MM_N.dueling
 			if MM_N.peoplekilled >= MM_N.minimum_killed
 			or MM_N.showdown
@@ -94,7 +99,7 @@ return function()
 		end
 	end
 
-	if MM_N.overtime then
+	if (MM_N.overtime or MM_N.time <= 30*TICRATE) then
 		if not MM_N.showdown
 		and mapmusname ~= "MMOVRT" then
 			mapmusname = "MMOVRT"

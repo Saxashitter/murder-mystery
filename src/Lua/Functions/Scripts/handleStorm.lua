@@ -321,6 +321,7 @@ local function FXHandle(point,dist)
 		garg.color = SKINCOLOR_GALAXY
 		garg.scale = $*2
 		garg.angle = point.angle
+		garg.frame = $|FF_FULLBRIGHT
 		point.garg = garg
 	end
 

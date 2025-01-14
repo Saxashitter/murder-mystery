@@ -247,7 +247,7 @@ local function draw_hud(v)
 	end
 end
 
-return function(v)
+MMHUD.themedrawer = function(v)
 	if not MM_N.voting
 	and not MM_N.transition then return end
 
@@ -264,4 +264,6 @@ return function(v)
 		// DRAW TRANSITION OVER EVERYTHING
 		theme.transitiondraw(VWarp(v, settings), MM_N.transition_time)
 	end
-end,"gameandscores"
+end
+
+return MMHUD.themedrawer,"game", FU --HIGH priority

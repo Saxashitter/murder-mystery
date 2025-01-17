@@ -68,6 +68,7 @@ local function HUD_TFW_DrawTeammates(v,p)
 	
 end
 
+local lastp
 local function HUD_TimeForWeapon(v,p)
 	if not MM:isMM() then return end
 	--if not (p.mo and p.mo.health and p.mm) then return end
@@ -86,9 +87,11 @@ local function HUD_TimeForWeapon(v,p)
 	
 	local time = (MM_N.pregame_time)-leveltime
 	if (leveltime < TR)
+	or (displayplayer ~= lastp)
 		teammates = nil
 	end
-
+	lastp = displayplayer
+	
 	if not (p.spectator)
 		local color = roles[p.mm.role].colorcode
 		local name = roles[p.mm.role].name
@@ -96,10 +99,11 @@ local function HUD_TimeForWeapon(v,p)
 		if vowels[string.sub(string.lower(name),1,1)] == true
 			grammar = "n"
 		end
+		local text = (MM_N.dueling and "You're dueling!" or "You're a"..grammar..' '..color..name.."\x80!")
 		
 		v.drawString(160*FU,
 			32*FU - MMHUD.weaponslidein,
-			"You're a"..grammar..' '..color..name.."\x80!",
+			text,
 			V_SNAPTOTOP|V_ALLOWLOWERCASE,
 			"thin-fixed-center"
 		)

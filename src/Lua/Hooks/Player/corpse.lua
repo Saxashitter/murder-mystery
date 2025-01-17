@@ -257,6 +257,8 @@ addHook("ThinkFrame", function()
 
 					P_InstaThrust(corpse, p.mo.deathangle, -8*FU)
 					P_SetObjectMomZ(corpse,6*FU)
+					
+					MM.runHook("CorpseSpawn", p.mo, corpse)
 				end
 				
 				p.mo.flags2 = $|MF2_DONTDRAW

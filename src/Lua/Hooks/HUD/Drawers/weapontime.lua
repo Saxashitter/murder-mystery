@@ -10,6 +10,7 @@ local vowels = {
 }
 
 local teammates
+local waitingfade = 0
 
 local function HUD_TFW_DrawTeammates(v,p)
 	if (p.mm.role == MMROLE_INNOCENT) then return end
@@ -74,14 +75,29 @@ local function HUD_TimeForWeapon(v,p)
 	--if not (p.mo and p.mo.health and p.mm) then return end
 	
 	if MM_N.waiting_for_players then
+		if MMHUD.ticker < waitingfade
+			waitingfade = MMHUD.ticker
+		end
+		
+		local fade = 0
+		if (waitingfade >= 5*TICRATE)
+			local adjust = waitingfade - 5*TICRATE
+			adjust = min($, 8)
+			
+			fade = adjust << V_ALPHASHIFT
+		end
+		
 		v.drawString(160*FU,
 			40*FU - MMHUD.weaponslidein,
 			"Waiting for players...",
-			V_SNAPTOTOP|V_ALLOWLOWERCASE,
+			V_SNAPTOTOP|V_ALLOWLOWERCASE|fade,
 			"fixed-center"
 		)
+		
+		waitingfade = $ + 1
 		return
 	end
+	waitingfade = 0
 	
 	if leveltime >= MM_N.pregame_time + 5 then return end
 	

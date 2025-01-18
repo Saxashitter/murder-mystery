@@ -33,7 +33,7 @@ return {
 	waiting_start_time = 7*TICRATE,
 
 	showdown = false,
-	showdown_song = "MMOVRT",
+	showdown_song = "_PINCH",
 	showdown_ticker = 0,
 	showdown_left = {},
 	showdown_right = {},

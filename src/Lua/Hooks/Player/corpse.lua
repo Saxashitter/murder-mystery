@@ -41,6 +41,9 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		end
 	end
 	
+	--numbers for hacky hud stuff
+	target.player.mm.whokilledme = source or 123123
+	
 	if (source
 	and source.player
 	and source.player.mm
@@ -91,9 +94,6 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		end
 	end
 
-	--numbers for hacky hud stuff
-	target.player.mm.whokilledme = source or 123123
-	
 	local angle = (inflictor and inflictor.valid) and R_PointToAngle2(target.x, target.y, inflictor.x, inflictor.y) or target.angle
 	target.deathangle = angle
 	

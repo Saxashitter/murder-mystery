@@ -100,9 +100,10 @@ return function()
 	end
 
 	if (MM_N.overtime or MM_N.time <= 30*TICRATE) then
+		local songname = (not MM_N.overtime) and "_PINCH" or "_OVRTM"
 		if not MM_N.showdown
-		and mapmusname ~= "MMOVRT" then
-			mapmusname = "MMOVRT"
+		and mapmusname ~= songname then
+			mapmusname = songname
 			S_ChangeMusic(mapmusname, true)
 		end
 

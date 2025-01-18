@@ -34,6 +34,11 @@ local CamInteraction = MM.addInteraction(function(p,cam)
 	
 	local camlist = MMCAM.CAMS[cam.args.sequence]
 	
+	if (camlist == nil)
+		print("\x82WARNING\x80: Camera sequence "..cam.args.sequence.." is missing cameras")
+		return
+	end
+	
 	dprint("camera sequence "..cam.args.sequence)
 	dprint("number of camrs "..(#camlist)+1)
 	
@@ -465,7 +470,7 @@ addHook("MobjThinker",function(cam)
 			)
 			arrow.tics = -1
 			arrow.fuse = -1
-			arrow.sprite = SPR_THND
+			arrow.sprite = (SPR_THND and SPR_THND or SPR_THOK)
 			arrow.angle = cam.angle
 			arrow.frame = FF_PAPERSPRITE
 			cam.arrow = arrow

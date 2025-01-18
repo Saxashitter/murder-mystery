@@ -1,16 +1,3 @@
-local numtotrans = {
-	[9] = FF_TRANS90,
-	[8] = FF_TRANS80,
-	[7] = FF_TRANS70,
-	[6] = FF_TRANS60,
-	[5] = FF_TRANS50,
-	[4] = FF_TRANS40,
-	[3] = FF_TRANS30,
-	[2] = FF_TRANS20,
-	[1] = FF_TRANS10,
-	[0] = 0,
-}
-
 local ImportantStuff = {
 	"storm_radius",
 	"storm_destradius",
@@ -269,7 +256,8 @@ local function FXHandle(point,dist)
 	
 	--people like to hide behind these so dont let em do that
 	local mysin = sin(FixedAngle(MM_N.storm_ticker*5*FU))
-	local fade = numtotrans[mysin*6 / FU] or 0
+	local fade = max(FixedDiv(mysin + FU, 2*FU), FU/4)
+	
 	do
 		local laser = point.laser_eye
 		do
@@ -280,7 +268,7 @@ local function FXHandle(point,dist)
 		laser.spritexscale = FU + mysin/5
 		laser.color = SKINCOLOR_GALAXY
 		laser.dispoffset = -4
-		laser.frame = ($ &~FF_TRANSMASK)|fade
+		laser.alpha = fade
 		P_MoveOrigin(laser,
 			point.x,
 			point.y,
@@ -293,7 +281,7 @@ local function FXHandle(point,dist)
 		laser.spriteyscale = laser.spritexscale
 		laser.color = SKINCOLOR_GALAXY
 		laser.dispoffset = -5
-		laser.frame = ($ &~FF_TRANSMASK)|fade
+		laser.alpha = fade
 		P_MoveOrigin(laser,
 			point.x,
 			point.y,

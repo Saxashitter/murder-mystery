@@ -70,3 +70,15 @@ SubTitle = By: GLide KS
 NoZone = true
 NoVisitNeeded = true
 Selectheading = Murder Mystery
+
+#@jisk
+
+Level V0
+Levelname = Frozen Creek
+NoZone = true
+Music = MP_WT3
+Typeoflevel = SaxaMM
+Skynum = 30
+Weather = PRECIP_SNOW
+Selectheading = Murder Mystery
+Lua.MM_ClueAmount = 7

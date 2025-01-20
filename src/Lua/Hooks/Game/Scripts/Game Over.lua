@@ -113,7 +113,8 @@ return function()
 		MM_N.results_ticker = $+1
 	end*/
 
-	if MM_N.end_ticker >= 5*TICRATE then
+	-- an extra half second for the new killcam sequence
+	if MM_N.end_ticker >= 5*TICRATE + (TICRATE) then
 		MM_N.end_ticker = 1
 		MM:startTransition()
 	end

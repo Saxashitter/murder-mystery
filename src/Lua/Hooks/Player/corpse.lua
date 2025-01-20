@@ -105,13 +105,13 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 				R_PointToDist2(target.x, target.y, source.x, source.y), target.z,
 				0, source.z
 			)
-			local required_dist = FU*4500
-			local required_speed = FU*20
+			local required_dist = FU*960
+			--local required_speed = FU*20
 			if not P_IsObjectOnGround(target) then
-				required_dist = FU*2500
-				required_speed = FU*12
+				required_dist = FU*700
+				--required_speed = FU*12
 			end
-			if dist > required_dist and target.player.speed > required_speed then
+			if dist > required_dist then --and target.player.speed > required_speed then
 				MM_N.sniped_end = true
 				S_ChangeMusic("mmtf2o", false, nil)
 			end
@@ -140,9 +140,11 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 			source.momx,source.momy = 0,0
 		end
 		
-		if target.player.mm.role == 2
+		--Sheriff Kills Murderer
+		if target.player.mm.role == MMROLE_MURDERER
 			MM_N.end_killed = target
 			MM_N.end_killer = source
+		--Someone kills non-murderer
 		else
 			MM_N.end_killed = source
 			MM_N.end_killer = target

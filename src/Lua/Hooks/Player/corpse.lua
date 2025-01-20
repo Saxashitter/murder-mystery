@@ -106,17 +106,15 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 				0, source.z
 			)
 			local required_dist = FU*960
-			--local required_speed = FU*20
+			local required_speed = FU*20
 			if not P_IsObjectOnGround(target) then
-				required_dist = FU*700
-				--required_speed = FU*12
+				required_dist = FU*800
+				required_speed = FU*12
 			end
-			if dist > required_dist then --and target.player.speed > required_speed then
+			if dist > required_dist and target.player.speed > required_speed then
 				MM_N.sniped_end = true
 				S_ChangeMusic("mmtf2o", false, nil)
 			end
-			-- print("dist " .. dist/FU)
-			-- print("speed " .. target.player.speed/FU)
 		end
 
 		S_StartSound(nil,sfx_buzz3)

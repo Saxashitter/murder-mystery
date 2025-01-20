@@ -173,6 +173,7 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 				local vdist = ease.outquad(swirl, MM_N.end_camera.startz, sheriff.z + sheriff.height)
 				MM_N.end_camera.lerpradius = hdist
 				MM_N.end_camera.startz = vdist
+				MM_N.end_camera.free_noclip = MM_N.end_camera.ticker <= MM_N.end_camera.swirldur/4
 
 				MM_N.end_camera.ticker = $+1
 			end

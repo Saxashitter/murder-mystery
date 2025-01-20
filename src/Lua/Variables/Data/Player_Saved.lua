@@ -1,6 +1,9 @@
 return {
 	rings = 0,
-	perk = 0,
+	
+	--primary and secondary perks
+	pri_perk = 0,
+	sec_perk = 0,
 	
 	afkmode = false,
 	timesafk = 0,

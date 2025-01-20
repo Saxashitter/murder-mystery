@@ -1,3 +1,5 @@
-MM_PERKS[MMPERK_GHOST] = function(p)
+MM_PERKS[MMPERK_GHOST].primary = function(p)
 	
 end
+
+MM_PERKS[MMPERK_GHOST].secondary = MM_PERKS[MMPERK_GHOST].primary

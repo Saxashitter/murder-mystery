@@ -73,6 +73,9 @@ addHook("MobjMoveCollide", function(tmthing, thing)
 	end
 	
 	P_Thrust(thing, punchangle, power)
+	if (thing.player)
+		P_MovePlayer(thing.player)
+	end
 	
 	P_ExplodeMissile(tmthing)
 end, MT_MM_SNOWBALL_BULLET)

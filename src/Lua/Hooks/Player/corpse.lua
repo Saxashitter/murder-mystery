@@ -111,6 +111,8 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 				required_dist = FU*800
 				required_speed = FU*12
 			end
+			required_speed = FixedMul($, target.scale)
+
 			if dist > required_dist and target.player.speed > required_speed then
 				MM_N.sniped_end = true
 				S_ChangeMusic("mmtf2o", false, nil)

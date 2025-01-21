@@ -173,3 +173,44 @@ COM_AddCommand("MM_SpectatorMode", function(p)
 	end
 	CONS_Printf(p,msg)
 end)
+
+COM_AddCommand("MM_SetPerk", function(p, slot, newperk)
+	if not MM:isMM() then return end
+	if not (p.mm) then return end
+	if slot == nil then return end
+	if newperk == nil then return end
+	slot = string.lower($)
+	
+	do
+		local todo = string.upper(newperk)
+		if todo == "SPECTATOR"
+			p.mm.spectator = true
+			p.spectator = true
+			return
+		end
+		
+		local realnum = _G["MMPERK_"..todo]
+		if realnum ~= nil
+			local chosen = 0
+			if slot == "1"
+			or string.sub(slot,1,3) == "pri"
+				p.mm_save.pri_perk = realnum
+				chosen = 1
+			elseif slot == "2"
+			or string.sub(slot,1,3) == "sec"
+				p.mm_save.sec_perk = realnum
+				chosen = 2
+			end
+			
+			if chosen
+				CONS_Printf(p,"Set "..todo.." as "..(chosen == 1 and "primary" or "secondary").." perk.")
+			else
+				CONS_Printf(p,"Didn't set perk. Argument 1 must be 1, 2, pri..., sec...")
+			end
+			
+		else
+			CONS_Printf(p,todo.." is not a perk.")
+		end
+	end
+	
+end, COM_ADMIN)

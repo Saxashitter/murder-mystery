@@ -1,4 +1,4 @@
-local path = "Perks/Scripts"
+local path = "Perks/Scripts/"
 
 /*
 the way that these are set up is:
@@ -13,4 +13,5 @@ the way that these are set up is:
 
 rawset(_G, "MM_PERKS",{})
 
-dofile(patch.."Ghost")
+dofile(path.."Ghost")
+dofile(path.."Ninja")

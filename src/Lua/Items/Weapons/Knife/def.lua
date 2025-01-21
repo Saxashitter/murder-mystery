@@ -37,6 +37,7 @@ weapon.shootable = false
 weapon.shootmobj = MT_THOK
 weapon.equipsfx = sfx_kequip
 weapon.hitsfx = sfx_kffire
+weapon.misssfx = sfx_kwhiff
 weapon.allowdropmobj = false
 
 local function distchecks(item, p, target)
@@ -124,7 +125,8 @@ end
 
 --Whiff so people know youre bad at the game
 weapon.onmiss = function(item,p)
-	S_StartSound(p.mo,sfx_kwhiff)
+	if not item.misssfxt then return end
+	S_StartSound(p.mo,item.misssfx)
 end
 
 weapon.attack = function(item,p)

@@ -112,6 +112,11 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 			)
 			and MM_N.end_killed
 			or MM_N.end_killer
+		
+		--death by suicide
+		if not (sheriff and sheriff.valid and sheriff.health)
+			sheriff = nil
+		end
 
 		if time <= MM_N.end_camera.swirldur
 			if (MM_N.end_camera.swirl_stage == STAGE_SWIRL)

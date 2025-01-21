@@ -21,7 +21,10 @@ MC("role", "murderer")
 -- perks
 MC("perk", "footsteps")
 MC("perk", "ninja")
+MC("perk", "haste")
 MC("perk", "ghost")
+MC("perk", "swap")
+MC("perk", "fakegun")
 
 MM.sniper_theme_offset = 13
 MM.themes = {} -- intermission themes

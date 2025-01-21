@@ -661,6 +661,9 @@ addHook("MobjDeath",function(cam)
 	
 	P_SpawnGhostMobj(cam).state = S_XPLD1
 	
+	--already did it for us?
+	if not args.body then return end
+	
 	for k,part in pairs(args.body)
 		P_RemoveMobj(part)
 	end

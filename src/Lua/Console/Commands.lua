@@ -183,22 +183,28 @@ COM_AddCommand("MM_SetPerk", function(p, slot, newperk)
 	
 	do
 		local todo = string.upper(newperk)
-		if todo == "SPECTATOR"
-			p.mm.spectator = true
-			p.spectator = true
-			return
+		local realnum = _G["MMPERK_"..todo]
+		if todo == "NONE"
+			realnum = 0
 		end
 		
-		local realnum = _G["MMPERK_"..todo]
 		if realnum ~= nil
 			local chosen = 0
 			if slot == "1"
 			or string.sub(slot,1,3) == "pri"
 				p.mm_save.pri_perk = realnum
+				
+				if p.mm_save.sec_perk == p.mm_save.pri_perk
+					p.mm_save.sec_perk = 0
+				end
 				chosen = 1
 			elseif slot == "2"
 			or string.sub(slot,1,3) == "sec"
 				p.mm_save.sec_perk = realnum
+				
+				if p.mm_save.pri_perk == p.mm_save.sec_perk
+					p.mm_save.pri_perk = 0
+				end
 				chosen = 2
 			end
 			

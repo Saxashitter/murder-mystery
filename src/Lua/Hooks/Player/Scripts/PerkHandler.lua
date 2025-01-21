@@ -1,5 +1,5 @@
 return function(p)
-	if p.mm.role ~= MMROLE_MURDERER then return end
+	--if p.mm.role ~= MMROLE_MURDERER then return end
 	
 	if p.mm_save.pri_perk ~= 0
 		if MM_PERKS[p.mm_save.pri_perk] ~= nil

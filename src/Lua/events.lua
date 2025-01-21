@@ -65,9 +65,22 @@
 
 -- Simple lua to run hooks for the mod.
 -- Adds easy modding support and more!
-
 local events = {}
-events[""] = {}
+events["PostMapLoad"] = {}
+events["Init"] = {}
+events["PlayerInit"] = {}
+events["PlayerThink"] = {}
+events["DeadPlayerThink"] = {}
+events["CorpseSpawn"] = {}
+events["CorpseThink"] = {}
+events["CorpseFound"] = {}
+events["GiveStartWeapon"] = {}
+events["InventorySwitch"] = {}
+events["ItemDrop"] = {}
+events["ItemUse"] = {}
+events["AttackPlayer"] = {}
+events["CreateAlias"] = {}
+events["ApplyAlias"] = {}
 
 local handler_snaptrue = {
 	func = function(current, result)

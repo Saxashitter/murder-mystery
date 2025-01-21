@@ -1,4 +1,9 @@
 local roles = MM.require "Variables/Data/Roles"
+local function shittyfunction(newvalue, maximum)
+	if newvalue < 1 then newvalue = maximum end
+	if newvalue > maximum then newvalue = 1 end
+	return newvalue
+end
 
 MM.FireBullet = function(p,def,item, angle, aiming, callhooks)
 	item.hit = item.max_hit
@@ -210,7 +215,9 @@ MM:addPlayerScript(function(p)
 	end
 
 	if abs(sel)
-	and not MM.runHook("InventorySwitch", p) then
+	and not MM.runHook("InventorySwitch", p, inv.cur_sel, 
+		shittyfunction(inv.cur_sel+sel, inv.count)
+	) then
 		S_StartSound(nil,sfx_menu1,p)
 		
 		local olditem = inv.items[inv.cur_sel]
@@ -283,9 +290,9 @@ MM:addPlayerScript(function(p)
 
 	if p.cmd.buttons & BT_CUSTOM2
 	and not (p.lastbuttons & BT_CUSTOM2)
-	and not MM.runHook("ItemDrop", p)
 	--wtf are you doing???
-	and not MM:pregame() then
+	and not MM:pregame()
+	and not MM.runHook("ItemDrop", p) then
 		MM:DropItem(p)
 		return
 	end

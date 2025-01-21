@@ -84,26 +84,6 @@ weapon.thinker = function(item, p)
 		
 		if not distchecks(item,p,p2.mo) then continue end
 		
-		/*
-		if MM.runHook("AttackPlayer", p, p2) then
-			continue
-		end
-
-		if item.damage then
-			P_DamageMobj(p2.mo, item.mobj, p.mo, 999, DMG_INSTAKILL)
-		end
-		
-		if def.onhit then
-			def.onhit(item,p,p2)
-		end
-		
-		item.anim = min(item.max_anim/3, $)
-		if item.hitsfx then
-			S_StartSound(p.mo, item.hitsfx)
-		end
-		continue
-		*/
-		
 		P_SpawnLockOn(p, p2.mo, S_LOCKON1)
 	end
 	

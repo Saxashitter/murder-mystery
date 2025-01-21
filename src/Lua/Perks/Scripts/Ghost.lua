@@ -58,8 +58,8 @@ MM_PERKS[MMPERK_GHOST] = {
 				end
 			end
 		end
-		
 	end,
+	
 	secondary = function(p)
 		local me = p.mo
 		local item = p.mm.inventory.items[p.mm.inventory.cur_sel]
@@ -73,6 +73,5 @@ MM_PERKS[MMPERK_GHOST] = {
 		else
 			me.alpha = FixedFloor(ease.linear(FU/2, $, FU/2) * 100)/100
 		end
-		
 	end
 }

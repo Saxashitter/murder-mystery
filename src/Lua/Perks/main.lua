@@ -15,3 +15,5 @@ rawset(_G, "MM_PERKS",{})
 
 dofile(path.."Ghost")
 dofile(path.."Ninja")
+dofile(path.."Swap")
+dofile(path.."Trap")

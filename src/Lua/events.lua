@@ -65,22 +65,6 @@
 
 -- Simple lua to run hooks for the mod.
 -- Adds easy modding support and more!
-local events = {}
-events["PostMapLoad"] = {}
-events["Init"] = {}
-events["PlayerInit"] = {}
-events["PlayerThink"] = {}
-events["DeadPlayerThink"] = {}
-events["CorpseSpawn"] = {}
-events["CorpseThink"] = {}
-events["CorpseFound"] = {}
-events["GiveStartWeapon"] = {}
-events["InventorySwitch"] = {}
-events["ItemDrop"] = {}
-events["ItemUse"] = {}
-events["AttackPlayer"] = {}
-events["CreateAlias"] = {}
-events["ApplyAlias"] = {}
 
 local handler_snaptrue = {
 	func = function(current, result)
@@ -100,6 +84,23 @@ local handler_snapany = {
 	initial = nil
 }
 local handler_default = handler_snaptrue
+
+local events = {}
+events["PostMapLoad"] = {}
+events["Init"] = {}
+events["PlayerInit"] = {}
+events["PlayerThink"] = {}
+events["DeadPlayerThink"] = {}
+events["CorpseSpawn"] = {}
+events["CorpseThink"] = {}
+events["CorpseFound"] = {}
+events["GiveStartWeapon"] = {handler = handler_snapany}
+events["InventorySwitch"] = {}
+events["ItemDrop"] = {}
+events["ItemUse"] = {}
+events["AttackPlayer"] = {}
+events["CreateAlias"] = {}
+events["ApplyAlias"] = {}
 
 MM.addHook = function(hooktype, func)
 	if events[hooktype] then

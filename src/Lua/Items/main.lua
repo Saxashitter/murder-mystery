@@ -345,9 +345,12 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		item.attacksfx = def.attacksfx
 		item.hitsfx = def.hitsfx
 		item.finalkillsfx = def.finalkillsfx
+		item.misssfx = def.misssfx
 		
 		item.hiddenforothers = def.hiddenforothers
 		item.cantouch = def.cantouch
+
+		item.onmiss = def.onmiss
 
 		if overrides
 		and type(overrides) == "table" then

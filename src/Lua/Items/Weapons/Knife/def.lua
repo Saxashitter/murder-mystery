@@ -105,7 +105,7 @@ end
 
 --Whiff so people know youre bad at the game
 weapon.onmiss = function(item,p)
-	if not item.misssfxt then return end
+	if not item.misssfx then return end
 	S_StartSound(p.mo,item.misssfx)
 end
 

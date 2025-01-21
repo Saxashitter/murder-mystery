@@ -1,8 +1,6 @@
 -- Simple lua to run hooks for the mod.
 -- Adds easy modding support and more!
 
-local events = {}
-
 /*
 	HOOK LIST:
 
@@ -65,23 +63,60 @@ local events = {}
 
 */
 
-MM.addHook = function(name, func)
-	if not events[name] then
-		-- TODO: make list of valid events and print as an error if its not valid
-		events[name] = {}
-	end
+-- Simple lua to run hooks for the mod.
+-- Adds easy modding support and more!
 
-	table.insert(events[name], func)
+local events = {}
+events[""] = {}
+
+local handler_snaptrue = {
+	func = function(current, result)
+		return result or current
+	end,
+	initial = false
+}
+
+local handler_snapany = {
+	func = function(current, result)
+		if result ~= nil then
+			return result
+		else
+			return current
+		end
+	end,
+	initial = nil
+}
+local handler_default = handler_snaptrue
+
+MM.addHook = function(hooktype, func)
+	if events[hooktype] then
+		table.insert(events[hooktype], {
+			func = func,
+			errored = false
+		})
+	else
+		error("Invalid HookType")
+	end
 end
 
-MM.runHook = function(name, ...)
-	if not events[name] then return end
-
-	local return_value
-
-	for _,call in pairs(events[name]) do
-		return_value = call(...) or $
+MM.runHook = function(hooktype, ...)
+	if not events[hooktype] then
+		error("Invalid HookType")
 	end
 
-	return return_value
+	local handler = events[hooktype].handler or handler_default
+	local override = handler.initial
+
+    for i,v in ipairs(events[hooktype]) do
+		local status, result = pcall(v.func, ...)
+		if status then
+			override = handler.func(override, result)
+		elseif not v.errored then
+			v.errored = true
+			print("WARNING: Error in Murder Mystery " .. hooktype .. " hook handler #" .. i .. ":")
+			print(result)
+		end
+    end
+
+    return override
 end

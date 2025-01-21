@@ -4,7 +4,7 @@ local roles = MM.require "Variables/Data/Roles"
 --press tab to see the old role drawer
 local function HUD_RoleDrawer(v,p)
 	if not (p.mm and roles[p.mm.role]) then return end
-	if (p.mm_save.afkmode) then return end
+	if (p.mm_save.afkmode and p.spectator) then return end
 	
 	local off = MMHUD.xoffset
 	

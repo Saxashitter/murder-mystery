@@ -150,8 +150,10 @@ function MM:GetCertainDroppedItems(id)
 	local wpns = {}
 
 	for i,item in pairs(MM.DroppedMobjs) do
-		if item.pickupid == id then
-			table.insert(wpns, item)
+		if item and item.valid then
+			if item.pickupid == id then
+				table.insert(wpns, item)
+			end
 		end
 	end
 

@@ -52,10 +52,22 @@ return function(p)
 					if inter.interacting == inter.interacttime
 					and old_int ~= inter.interacttime
 						mminter.interacted = true
+						local caninteract = true
+						if (inter.price ~= 0)
+							caninteract = p.mm_save.rings >= inter.price
+							if caninteract
+								p.mm_save.rings = $ - inter.price
+								S_StartSound(nil,sfx_chchng,p)
+							else
+								S_StartSound(nil,sfx_adderr,p)
+							end
+						end
 						
 						inter.timesinteracted = $+1
 						local oldpos = {mo.x,mo.y,mo.z}
-						MM.interactFunction(p,mo,inter.func_id)
+						if caninteract
+							MM.interactFunction(p,mo,inter.func_id)
+						end
 						
 						if inter.itemdrop_id then
 							MM:SpawnItemDrop(inter.itemdrop_id, mo.x, mo.y, mo.z, mo.angle, 0)

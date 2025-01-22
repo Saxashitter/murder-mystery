@@ -104,6 +104,7 @@ end
 	button:			the BT_* needed to activate (ex. BT_CUSTOM3)
 	time:			the amount of time needed to interact (ex. TICRATE/2)
 	funcid:			the ID of the interaction function
+	price:			the ammount of rings needed to interact with this
 */
 MM.interactPoint = function(p,mobj,properties)
 	if not MM.canInteract(p,mobj) then return end
@@ -128,6 +129,7 @@ MM.interactPoint = function(p,mobj,properties)
 		
 		button = properties.button or 0,
 		timespan = 0,
+		price = properties.price or 0,
 		
 		--the best way i can think of doing this without archiving a func
 		--would be to have a lookup id to a LUT of funcs that another function
@@ -195,6 +197,11 @@ mobjinfo[MT_MM_INTERACT_POINT] = {
 	--$Arg4Enum {1="Innocent"; 2="Sheriff"; 4="Murderer";}
 	--$Arg4Tooltip Which roles can't interact with this point?
 	
+	--$Arg5 Price
+	--$Arg5Default 0
+	--$Arg5Type 0
+	--$Arg5Tooltip How many rings does this interaction cost?\nIf the player doesn't have enough rings, the interaction will fail. 
+	
 	flags = MF_NOGRAVITY|MF_NOSECTOR|MF_NOCLIP|MF_NOCLIPHEIGHT|MF_NOCLIPTHING,
 	radius = 16*FRACUNIT,
 	height = 32*FRACUNIT,
@@ -225,6 +232,7 @@ addHook("MapThingSpawn",function(mo,mt)
 	mo.set_cooldown = mt.args[3]
 	mo.cooldown = 0
 	mo.restrict = mt.args[4]
+	mo.price = mt.args[5]
 end,MT_MM_INTERACT_POINT)
 
 local rolebits = {
@@ -254,6 +262,7 @@ addHook("MobjThinker",function(point)
 			itemdrop = point.itemdrop,
 			button = point.button,
 			time = point.duration,
+			price = point.price,
 			funcid = MT_Interaction
 		})
 	end

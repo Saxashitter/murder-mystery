@@ -83,6 +83,20 @@ local function HUD_InteractDrawer(v,p,cam)
 						V_ALLOWLOWERCASE|V_GRAYMAP|trans,
 						"thin-fixed"
 					)
+					if inter.price ~= 0
+						v.drawScaled(x + 30*FU,
+							y + 22*FU,
+							FU/2,
+							v.cachePatch("NRNG1"),
+							trans
+						)
+						v.drawString(x + 40*FU,
+							y + 23*FU,
+							inter.price,
+							V_ALLOWLOWERCASE|V_YELLOWMAP|trans,
+							"thin-fixed"
+						)
+					end
 				end
 				
 				v.drawScaled(x + (timetic == 0 and 15*FU or 0),

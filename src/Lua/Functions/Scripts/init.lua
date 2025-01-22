@@ -149,6 +149,7 @@ return function(self, maploaded)
 	local innocents = 0
 	for p in players.iterate do
 		if (p.mm and p.mm.role ~= MMROLE_MURDERER)
+		and not (p.mm_save and p.mm_save.afkmode and p.spectator)
 			innocents = $+1
 		end
 		

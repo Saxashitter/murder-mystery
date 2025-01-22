@@ -2,7 +2,7 @@ return {
 	rings = 0,
 	
 	--primary and secondary perks
-	pri_perk = 0,
+	pri_perk = MMPERK_FOOTSTEPS,
 	sec_perk = 0,
 	
 	afkmode = false,

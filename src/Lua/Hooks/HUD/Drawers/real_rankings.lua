@@ -125,6 +125,13 @@ local function getViewedPlayerRole(player, viewer)
 		return role
 	end
 	
+	--wwwait, we should always know dead murderers, the chat does
+	--announce them after all
+	if role == "Dead"
+	and player.mm.role == MMROLE_MURDERER
+		return role
+	end
+	
 	local secrecyLevel = (ROLESTYLES[role] and ROLESTYLES[role].secrecy) or 0
 	local privilegeLevel = SECRECY_NOTSECRET
 	if isDead(viewer) or MM_N.gameover or MM_N.showdown /*DEBUG!* / or (viewer.cmd.buttons & BT_CUSTOM3)/**/  then

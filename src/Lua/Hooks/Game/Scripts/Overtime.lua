@@ -39,6 +39,7 @@ return function()
 		end
 		
 		MM_N.minimum_killed = max(1,innocents/3)
+		MM_N.numbertokill = innocents
 		
 		--we're for SURE dueling
 		if MM_N.dueling

@@ -2,8 +2,10 @@ return {
 	role = MMROLE_INNOCENT,
 	spectator = false,
 	got_weapon = false,
-	timesurvived = 0,
 
+	timesurvived = 0,
+	ringspaid = 0,
+	
 	clues = {},
 	clues_collected = 0,
 

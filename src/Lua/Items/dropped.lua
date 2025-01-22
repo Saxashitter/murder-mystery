@@ -32,7 +32,7 @@ end,"Pickup_Interaction")
 function MM:SpawnItemDrop(item_id, x, y, z, angle, flip, extra)
 	local item;
 	if not self.Items[item_id] then
-		error("invalid item")
+		error("invalid item = "..(item_id or "NO INPUT"))
 		return
 	else
 		item = self.Items[item_id]

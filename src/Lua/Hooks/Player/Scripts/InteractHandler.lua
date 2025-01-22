@@ -74,10 +74,10 @@ return function(p)
 						local oldpos = {mo.x,mo.y,mo.z}
 						if caninteract
 							MM.interactFunction(p,mo,inter.func_id)
-						end
-						
-						if inter.itemdrop_id then
-							MM:SpawnItemDrop(inter.itemdrop_id, mo.x, mo.y, mo.z, mo.angle, 0)
+							
+							if inter.itemdrop_id then
+								MM:SpawnItemDrop(inter.itemdrop_id, mo.x, mo.y, mo.z, mo.angle, 0)
+							end
 						end
 						
 						--for hud

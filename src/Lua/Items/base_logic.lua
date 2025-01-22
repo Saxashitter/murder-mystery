@@ -265,6 +265,54 @@ MM:addPlayerScript(function(p)
 			end
 		end
 	end
+	
+	if sel == 0
+	and ((p.cmd.buttons & BT_WEAPONMASK ~= p.lastbuttons & BT_WEAPONMASK)
+	and (p.cmd.buttons & BT_WEAPONMASK))
+	--not if we reselect our current slot
+	and (min(p.cmd.buttons & BT_WEAPONMASK, inv.count) ~= inv.cur_sel)
+	and not MM.runHook("InventorySwitch", p, inv.cur_sel, 
+		min(p.cmd.buttons & BT_WEAPONMASK, inv.count)
+	) then
+		S_StartSound(nil,sfx_menu1,p)
+		
+		local olditem = inv.items[inv.cur_sel]
+		local olddef = (olditem) and MM.Items[olditem.id] or nil
+		
+		inv.cur_sel = min(p.cmd.buttons & BT_WEAPONMASK, inv.count)
+		
+		if not inv.hidden then
+			local newitem = inv.items[inv.cur_sel]
+			local newdef = MM.Items[newitem and newitem.id or ""]
+
+			--saxa might be stupid because none of these were defined before
+			--or whoever added this i shouldnt be blaming everything on saxas
+			--good code lol
+			if olditem
+			and olddef
+			and olddef.unequip then
+				olddef.unequip(olditem, p)
+			end
+	
+			if newitem
+			and newdef
+			and newdef.equip then
+				newdef.equip(newitem, p)
+			end
+	
+			if newitem
+			and newitem.equipsfx then
+				S_StartSound(p.mo, newitem.equipsfx)
+			end
+	
+			if newitem then
+				newitem.anim = 0
+				newitem.hit = 0
+				newitem.cooldown = max(newitem.cooldown, 12)
+				manage_position(p, newitem, true)
+			end
+		end	
+	end
 
 	local item = inv.items[inv.cur_sel]
 

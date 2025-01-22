@@ -84,8 +84,8 @@ return function(v, p)
 	local curitem = items[inv.cur_sel]
 	
 	local x = 160*FU
-	local y = 175*FU + MMHUD.xoffset
-	local scale = FU*2/count
+	local y = 172*FU + MMHUD.xoffset
+	local scale = FU*3/4 --*2/count
 	x = $ - (count*17*scale)
 	
 	if curitem ~= itemname.oldid

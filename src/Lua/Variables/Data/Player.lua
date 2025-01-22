@@ -48,6 +48,6 @@ return {
 		items = {},
 		hidden = true,
 		cur_sel = 1,
-		count = 3
+		count = 4
 	}
 }

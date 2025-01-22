@@ -7,6 +7,34 @@ spr2defaults[SPR2_OOF_] = SPR2_DEAD
 
 local roles = MM.require "Variables/Data/Roles"
 
+local function nodamage(me, i,s)
+	local p = me.player
+	
+	P_DoPlayerPain(p,s,i)
+end
+
+addHook("ShouldDamage", function(me, inf, sor, d, dmgt)
+	if not MM:isMM() then return end
+	if (dmgt & DMG_DEATHMASK) then return end
+	
+	local p = me.player
+	if (p.powers[pw_flashing]) then return end
+	
+	--sector damage?
+	if not (sor and sor.valid)
+	and not (inf and inf.valid)
+		nodamage(me,sor,inf)
+		return false
+	end
+	
+	--damaging mobj?
+	if not (sor and sor.valid and sor.player and sor.player.valid)
+	and not (inf and inf.valid and inf.player and inf.player.valid)
+		nodamage(me,sor,inf)
+		return false
+	end	
+end,MT_PLAYER)
+
 addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	if not MM:isMM() then return end
 	

@@ -155,7 +155,7 @@ MM.addHook("PlayerInit",function(p)
 end)
 
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/Role Handler"))
-MM:addPlayerScript(dofile("Hooks/Player/Scripts/Nerfs"))
+MM:addPlayerScript(dofile("Hooks/Player/Scripts/PlayerRework"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/Map Vote"), true)
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/AFKHandle"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/Alias"))

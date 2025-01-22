@@ -49,5 +49,7 @@ return {
 		hidden = true,
 		cur_sel = 1,
 		count = 4
-	}
+	},
+	
+	effects = {},
 }

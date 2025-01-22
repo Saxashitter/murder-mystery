@@ -22,8 +22,7 @@ local function HUD_GoalDrawer(v,p)
 	if p.mm.role == MMROLE_MURDERER
 	and MM_N.minimum_killed > 0
 		local complete = MM_N.peoplekilled >= MM_N.minimum_killed and V_YELLOWMAP or 0
-		local count = MM:countPlayers()
-		local needed = count.regulars + count.inactive
+		local needed = MM_N.numbertokill
 		v.drawString(x,
 			y,
 			MM_N.peoplekilled.."/"..needed.." People killed",

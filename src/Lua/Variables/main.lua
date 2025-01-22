@@ -32,6 +32,7 @@ MC("perk", "xray", 1)
 
 MM.sniper_theme_offset = 13
 MM.themes = {} -- intermission themes
+MM.player_effects = {}
 
 local function addTheme(name)
 	MM.themes[name] = dofile("Themes/"..name)

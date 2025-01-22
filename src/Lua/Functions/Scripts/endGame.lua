@@ -48,4 +48,27 @@ return function(self, endType)
 		S_StopSound(mo)
 	end
 	
+	--pay people rings
+	for p in players.iterate
+		if not (p.mm) then continue end
+		if not (p.mm_save) then continue end
+		if (p.mm.lastafkmode and p.spectator) then continue end
+		
+		local payout = 0
+		local reason = ""
+		
+		if (p.mm.role == MMROLE_INNOCENT)
+			local percent = FixedDiv(
+				min(p.mm.timesurvived, MM_N.maxtime)*FU, MM_N.maxtime*FU
+			)
+			reason = "surviving "..G_TicsToSeconds(p.mm.timesurvived).." seconds"
+			payout = FixedFloor(FixedMul(50*FU, percent)) >> FRACBITS
+		end
+		
+		if payout ~= 0
+			p.mm_save.rings = $ + payout
+			CONS_Printf(p,"\x82Got "..payout.." rings that round for "..reason.."!")
+		end
+	end
+	
 end

@@ -29,7 +29,7 @@ local Pickup_Interaction = MM.addInteraction(function(p,mobj)
 	end
 end,"Pickup_Interaction")
 
-function MM:SpawnItemDrop(item_id, x, y, z, angle, flip)
+function MM:SpawnItemDrop(item_id, x, y, z, angle, flip, extra)
 	local item;
 	if not self.Items[item_id] then
 		error("invalid item")
@@ -64,6 +64,12 @@ function MM:SpawnItemDrop(item_id, x, y, z, angle, flip)
 	mobj.sourcep = p
 	
 	mobj.magtime = 0
+	
+	if extra then
+		if extra.price then
+			mobj.pickupprice = extra.price
+		end
+	end
 	
 	mobj.flags = 0
 	mobj.dropid = #MM.DroppedMobjs + 1
@@ -226,7 +232,8 @@ local function manage_unpicked_weapon(mobj)
 			intertext = "Pick up",
 			button = BT_CUSTOM3,
 			time = TICRATE/7,
-			funcid = Pickup_Interaction
+			funcid = Pickup_Interaction,
+			price = mobj.pickupprice,
 		})
 	end
 	

@@ -28,6 +28,7 @@ MC("perk", "ghost", 1)
 MC("perk", "swap", 1)
 MC("perk", "fakegun", 1)
 MC("perk", "trap", 1)
+MC("perk", "xray", 1)
 
 MM.sniper_theme_offset = 13
 MM.themes = {} -- intermission themes

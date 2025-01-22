@@ -4,9 +4,8 @@ rawset(_G,"INTER_RANGE",64*FU)
 local function onPoint(point1,point2)
 	local x1,y1 = FixedFloor(point1.x),FixedFloor(point1.y)
 	local x2,y2 = FixedFloor(point2.x),FixedFloor(point2.y)
-	return (x1 >= x2 - FU and x1 <= x2 + FU) and (y1 >= y2 - FU and y1 <= y2 + FU)
+	return (x1 == x2) and (y1 == y2)
 end
-
 
 --adds a function to the LUT and returns its ID
 --use this funcion as an include, at the top and in whitespace (dont use during runtime)
@@ -66,8 +65,9 @@ MM.sortInteracts = function(p,a,b)
 	
 	--Bruh
 	if (a.mo.dropip ~= nil and b.mo.dropid ~= nil)
-	and (#p.mm.interact.points == 2)
-		return b.mo.dropid < a.mo.dropid
+	and (onPoint(a.mo, b.mo)
+	or (#p.mm.interact.points == 2))
+		return a.mo.dropid < b.mo.dropid
 	end
 	
 	local aDist = R_PointToDist2(p.mo.x,p.mo.y, a.mo.x,a.mo.y)

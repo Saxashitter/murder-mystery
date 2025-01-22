@@ -1,4 +1,9 @@
 --Handle Roblox Interact Hud
+local function onPoint(point1,point2)
+	local x1,y1 = FixedFloor(point1.x),FixedFloor(point1.y)
+	local x2,y2 = FixedFloor(point2.x),FixedFloor(point2.y)
+	return (x1 == x2) and (y1 == y2) --(x1 >= x2 - FU and x1 <= x2 + FU) and (y1 >= y2 - FU and y1 <= y2 + FU)
+end
 
 local INTER_RANGE = 64*FU
 local TWEENTIME = TICRATE/2
@@ -16,6 +21,7 @@ return function(p)
 	
 	local mminter = p.mm.interact
 	local interacting = false
+	local lastInteraction
 	for k,inter in ipairs(mminter.points)
 		local mo = inter.mo
 		
@@ -25,6 +31,7 @@ return function(p)
 		
 		inter.hud.goingaway = false
 		if not MM.canInteract(p,mo)
+		or (lastInteraction and onPoint(mo, lastInteraction.mo))
 			inter.hud.goingaway = true
 			if inter.timesinteracted then inter.hud.xscale = 0 end
 			
@@ -93,6 +100,7 @@ return function(p)
 		else
 			inter.interacting = $*3/4
 		end
+		lastInteraction = inter
 	end
-	if #mminter.points == nil then mminter.interacted = false end
+	if #mminter.points == nil or #mminter.points == 0 then mminter.interacted = false end
 end

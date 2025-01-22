@@ -1,6 +1,7 @@
 local TR = TICRATE
 
 local sglib = MM.require("Libs/sglib")
+local shallowCopy = MM.require "Libs/shallowCopy"
 
 local function interpolate(v,set)
 	if v.interpolate ~= nil then v.interpolate(set) end
@@ -23,7 +24,7 @@ local function HUD_InteractDrawer(v,p,cam)
 	if (MM.gameover) then return end -- If the game is over, we dont care about seeing interaction.
 	
 	--Re-sort so inactive widgets dont overlap the active one
-	local placehold_inter = p.mm.interact.points
+	local placehold_inter = shallowCopy(p.mm.interact.points)
 	table.sort(placehold_inter,function(a,b)
 		return not MM.sortInteracts(p,a,b)
 	end)

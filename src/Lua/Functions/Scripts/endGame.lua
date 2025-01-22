@@ -79,7 +79,7 @@ return function(self, endType)
 			local percent = FixedDiv(
 				(MM_N.numbertokill - min(MM_N.peoplekilled, MM_N.numbertokill))*FU, MM_N.numbertokill*FU
 			)
-			reason = "saving "..MM_N.peoplekilled.." out of "..MM_N.numbertokill.." innocents"
+			reason = "saving "..(MM_N.numbertokill - min(MM_N.peoplekilled, MM_N.numbertokill)).." out of "..MM_N.numbertokill.." innocents"
 			payout = FixedFloor(FixedMul(65*FU, percent)) >> FRACBITS
 		end
 		

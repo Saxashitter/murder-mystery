@@ -74,15 +74,18 @@ function MM:SpawnItemDrop(item_id, x, y, z, angle, flip)
 end
 
 function MM:DropItem(p, slot, randomize, dont_notify, forced)
-	--TODO: weird bug where you cant drop an item even if its in your inventory
-	if not (p and p.mm and #p.mm.inventory.items) then
+	if not (p and p.mm)
+		return
+	end
+	
+	slot = $ or p.mm.inventory.cur_sel
+	if (p.mm.inventory.items[slot] == nil) then
 		if not dont_notify then
 			chatprintf(p, "\x82*There's nothing to drop.")
 		end
 		return
 	end
 
-	slot = $ or p.mm.inventory.cur_sel
 	local item = p.mm.inventory.items[slot]
 
 	if not (item) then

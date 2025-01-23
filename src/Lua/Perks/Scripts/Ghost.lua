@@ -8,8 +8,8 @@ MM_PERKS[MMPERK_GHOST] = {
 		if (p.cmd.buttons & BT_TOSSFLAG)
 		and not (p.lastbuttons & BT_TOSSFLAG)
 		and (p.mm.perk_ghost_cooldown == 0)
-			p.mm.perk_ghost_time = 10*TICRATE
-			p.mm.perk_ghost_cooldown = 60*TICRATE
+			p.mm.perk_ghost_time = 8*TICRATE
+			p.mm.perk_ghost_cooldown = 30*TICRATE
 		end
 		
 		if p.mm.perk_ghost_cooldown

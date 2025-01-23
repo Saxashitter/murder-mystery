@@ -350,8 +350,6 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		item.hiddenforothers = def.hiddenforothers
 		item.cantouch = def.cantouch
 
-		item.onmiss = def.onmiss
-
 		if overrides
 		and type(overrides) == "table" then
 			for k,v in pairs(overrides) do

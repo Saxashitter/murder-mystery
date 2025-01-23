@@ -1,12 +1,12 @@
 MM:RegisterEffect("perk.primary.haste", {
 	modifiers = {
-		normalspeed_multi = tofixed("1.12") -- no luigi, i hate srb2 division
+		normalspeed_multi = tofixed("1.20") -- no luigi, i hate srb2 division
 	},
 })
 
 MM:RegisterEffect("perk.secondary.haste", {
 	modifiers = {
-		normalspeed_multi = tofixed("1.06")
+		normalspeed_multi = tofixed("1.10")
 	},
 })
 

@@ -5,6 +5,8 @@ return {
 
 	timesurvived = 0,
 	ringspaid = 0,
+	--rings collected during the match
+	rings = 0,
 	
 	clues = {},
 	clues_collected = 0,

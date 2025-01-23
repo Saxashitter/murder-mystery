@@ -13,6 +13,11 @@ states[S_MM_FOOTSTEP] = {
 			step.init = true
 		end
 		
+		if (MM_N.gameover)
+			P_RemoveMobj(step)
+			return
+		end
+		
 		if not (displayplayer and displayplayer.valid) then return end
 		local p = displayplayer
 		

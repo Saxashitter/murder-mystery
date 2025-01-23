@@ -8,6 +8,7 @@ local strings = {
 	"storm.canmigrate",
 	"#storm.otherpoints",
 	"interact.interacted",
+	"mm.timesurvived",
 }
 
 return function(v,p)
@@ -34,6 +35,7 @@ return function(v,p)
 		[7] = not (MM_N.storm_point.otherpoints == nil or #MM_N.storm_point.otherpoints < 2),
 		[8] = (MM_N.storm_point.otherpoints == nil) and -1 or #MM_N.storm_point.otherpoints,
 		[9] = p.mm.interact.interacted,
+		[10] = p.mm.timesurvived,
 	}
 	
 	for k,str in ipairs(strings)

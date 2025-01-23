@@ -35,7 +35,7 @@ weapon.allowdropmobj = false
 weapon.shootmobj = MT_THOK
 weapon.equipsfx = sfx_None
 weapon.attacksfx = freeslot "sfx_mcthrw"
-weapon.maxshots = 16
+weapon.maxshots = 8
 
 -- Copied lugger code. This should really be implemented in a cleaner way.
 weapon.hiddenthinker = function(item,p)

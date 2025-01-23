@@ -34,7 +34,7 @@ weapon.shootable = false
 weapon.shootmobj = MT_THOK
 weapon.minemobj = MT_MM_TRIPMINE
 weapon.allowdropmobj = false
-weapon.maxshots = 5
+weapon.maxshots = 3
 
 local function GetActorZ(actor,targ,type)
 	if type == nil then type = 1 end

@@ -16,6 +16,10 @@ MM_PERKS[MMPERK_GHOST] = {
 			p.mm.perk_ghost_cooldown = max($-1,0)
 		end
 		
+		if MM_N.gameover
+			p.mm.perk_ghost_time = 0
+		end
+		
 		if p.mm.perk_ghost_time
 			me.alpha = FixedFloor(ease.linear(FU/2, $, 0) * 100)/100
 			p.mm.perk_ghost_time = max($-1,0)

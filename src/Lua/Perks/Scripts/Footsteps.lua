@@ -16,6 +16,11 @@ states[S_MM_FOOTSTEP] = {
 		if not (displayplayer and displayplayer.valid) then return end
 		local p = displayplayer
 		
+		if (p.realmo == step.tracer)
+			step.flags2 = $|MF2_DONTDRAW
+			return
+		end
+		
 		if (p.mm.role ~= MMROLE_MURDERER) then
 			step.flags2 = $|MF2_DONTDRAW
 			return
@@ -84,7 +89,7 @@ MM.addHook("PlayerThink",function(player)
 	if not (player.mo and player.mo.valid) then return end
 	if not (player.mo.health) then return end
 	if not (player.mm) then return end
-	--if player.mm.role == MMROLE_MURDERER then return end
+	if player.mm.role == MMROLE_MURDERER then return end
 	
 	local spawnit = shouldspawnstep(player, player.mo)
 	player.mo.mm_lastframe = (player.mo.frame & FF_FRAMEMASK)
@@ -98,6 +103,7 @@ MM.addHook("PlayerThink",function(player)
 	step.spritexscale,step.spriteyscale = size,size
 	step.renderflags = $|RF_NOSPLATBILLBOARD|RF_SLOPESPLAT|RF_OBJECTSLOPESPLAT|RF_NOSPLATROLLANGLE
 	step.angle = R_PointToAngle2(0,0, player.mo.momx, player.mo.momy)
+	step.tracer = player.mo
 	
 	if (player.mo.standingslope)
 		P_CreateFloorSpriteSlope(step)

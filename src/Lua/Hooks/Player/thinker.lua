@@ -48,6 +48,11 @@ addHook("PlayerThink", function(p)
 
 	MM.runHook("PlayerThink", p)
 	
+	if not (MM_N.gameover
+	or MM:pregame())
+		p.mm.timesurvived = $+1
+	end
+	
 	if p.mm.outofbounds
 		if not MM_N.gameover
 			p.mm.oob_ticker = min($+1,MM_PLAYER_STORMMAX)

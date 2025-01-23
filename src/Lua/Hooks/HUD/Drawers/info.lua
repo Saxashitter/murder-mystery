@@ -1,3 +1,5 @@
+local TR = TICRATE
+
 local function HUD_InfoDrawer(v)
 	local p = displayplayer
 	local slidein = MMHUD.xoffset
@@ -39,15 +41,40 @@ local function HUD_InfoDrawer(v)
 	
 	--rings
 	do
+		local yoff = 0
+		local rings = MM:GetPlayerRings(p)
+		if (MMHUD.info_slideout)
+			local ticker = MMHUD.info_ticker
+			
+			yoff = -12*FU
+			if ticker <= 16
+				yoff = ease.outback((FU/16)*ticker, 0, $)
+			end
+			
+			slidein = 0
+			if ticker >= 5*TR
+				slidein = ease.inquad((FU/TR)*(ticker - 5*TR), $, 60*FU)
+			end
+			
+			rings = $ + MMHUD.info_count
+			
+			v.drawString(20*FU - slidein + (v.stringWidth(tostring(rings),0,"normal")*FU),
+				32*FU + yoff,
+				"+"..(p.mm.ringspaid - MMHUD.info_count),
+				V_SNAPTOLEFT|V_SNAPTOTOP|V_GREENMAP,
+				"fixed-right"
+			)	
+		end
+		
 		v.drawScaled(6*FU - slidein,
-			21*FU,
+			21*FU + yoff,
 			FU*3/4,
 			v.cachePatch("NRNG1"),
 			V_SNAPTOLEFT|V_SNAPTOTOP
 		)
 		v.drawString(20*FU - slidein,
-			22*FU,
-			MM:GetPlayerRings(p),
+			22*FU + yoff,
+			rings,
 			V_SNAPTOLEFT|V_SNAPTOTOP,
 			"fixed"
 		)	

@@ -3,6 +3,9 @@ return {
 	spectator = false,
 	got_weapon = false,
 
+	timesurvived = 0,
+	ringspaid = 0,
+	
 	clues = {},
 	clues_collected = 0,
 

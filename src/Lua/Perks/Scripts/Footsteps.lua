@@ -1,5 +1,5 @@
-local fuse_max = 30*TICRATE
-local fuse_min = 15*TICRATE
+local fuse_max = 20*TICRATE
+local fuse_min = 10*TICRATE
 
 freeslot("MT_MM_FOOTSTEP","S_MM_FOOTSTEP")
 states[S_MM_FOOTSTEP] = {
@@ -58,6 +58,9 @@ local function shouldspawnstep(p,me)
 	*/
 	local halfframe = (skins[p.skin].sprites[me.sprite2].numframes)
 	halfframe = min($,8)
+	if halfframe == 1
+		return (leveltime % 8) == 0
+	end
 	
 	halfframe = $/2
 	local myframe = (me.frame & FF_FRAMEMASK)
@@ -76,6 +79,7 @@ local function shouldspawnstep(p,me)
 end
 
 MM.addHook("PlayerThink",function(player)
+	if not MM_N.spawnfootsteps then return end
 	if player.spectator then return end
 	if not (player.mo and player.mo.valid) then return end
 	if not (player.mo.health) then return end
@@ -107,6 +111,25 @@ MM.addHook("PlayerThink",function(player)
 		slope.xydirection = sslope.xydirection
 		slope.zdelta = sslope.zdelta
 		slope.zangle = sslope.zangle
+	end
+end)
+
+addHook("ThinkFrame",do
+	MM_N.spawnfootsteps = false
+	
+	for p in players.iterate
+		if p.spectator then continue end
+		if not (p.mo and p.mo.valid) then continue end
+		if not (p.mo.health) then continue end
+		if not (p.mm) then continue end
+		if (p.mm.role ~= MMROLE_MURDERER) then continue end
+		
+		if not (p.mm_save.pri_perk == MMPERK_FOOTSTEPS
+		or (p.mm_save.sec_perk ~= MMPERK_FOOTSTEPS))
+			continue
+		end
+		
+		MM_N.spawnfootsteps = true
 	end
 end)
 

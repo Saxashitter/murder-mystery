@@ -100,6 +100,7 @@ addHook("HUD", function(v,p,cam)
 		end
 	end
 	
+	local drawwork = {}
 	for play in players.iterate()
 		if not (play.mm) then continue end
 		if not (play.mm_save) then continue end
@@ -109,7 +110,8 @@ addHook("HUD", function(v,p,cam)
 		if (play.mm.role == MMROLE_MURDERER) then continue end
 		
 		if (P_CheckSight(me, play.mo)) then continue end
-		if (R_PointToDist(play.mo.x,play.mo.y) > maxdist) then continue end
+		local dist = R_PointToDist(play.mo.x,play.mo.y)
+		if (dist > maxdist) then continue end
 		
 		do
 			local adiff = FixedAngle(
@@ -123,6 +125,18 @@ addHook("HUD", function(v,p,cam)
 			end
 		end
 		
+		table.insert(drawwork, {
+			dist = dist,
+			player = play
+		})
+	end
+	
+	table.sort(drawwork,function(a,b)
+		return a.dist > b.dist
+	end)
+	
+	for k,item in pairs(drawwork)
+		local play = item.player
 		local x, y, scale, nodraw
 		local flip = 1
 		
@@ -163,5 +177,4 @@ addHook("HUD", function(v,p,cam)
 		
 	end
 	interpolate(v,false)
-	
 end,"game")

@@ -4,11 +4,11 @@ local MAX_COOLDOWN = TICRATE
 local MAX_ANIM = MAX_COOLDOWN
 local MAX_HIT = MAX_COOLDOWN/3
 
-weapon.id = "uno_reverse"
-weapon.category = "Test"
-weapon.display_name = "Uno Reverse"
-weapon.display_icon = "MM_UNO_REVERSE"
-weapon.state = dofile "Items/Weapons/Uno_Reverse/freeslot"
+weapon.id = "swap_gear"
+weapon.category = "perkitem"
+weapon.display_name = "Body Swap Potion"
+weapon.display_icon = "MM_SWAP_GEAR"
+weapon.state = dofile "Items/Weapons/Swap_Gear/freeslot"
 weapon.timeleft = -1
 weapon.hit_time = TICRATE/3
 weapon.animation_time = TICRATE

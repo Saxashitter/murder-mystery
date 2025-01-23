@@ -7,7 +7,7 @@ local MAX_ANIM = MAX_COOLDOWN
 local MAX_HIT = MAX_COOLDOWN/5
 
 weapon.id = "tripmine"
-weapon.category = "Weapon"
+weapon.category = "perkitem"
 weapon.display_name = "\x89Subspace Tripmine"
 weapon.display_icon = "MM_TRIPMINE"
 weapon.state = dofile "Items/Weapons/Tripmine/freeslot"

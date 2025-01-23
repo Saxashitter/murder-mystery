@@ -28,7 +28,7 @@ return function(p) -- Role handler
 	
 	MM:GiveItem(p, givenweapon)
 	if p.mm.role == MMROLE_MURDERER then
-		local giveitem = P_RandomChance(FRACUNIT/2) and "uno_reverse" or "tripmine"
+		local giveitem = P_RandomChance(FRACUNIT/2) and "swap_gear" or "tripmine"
 		
 		MM:GiveItem(p, giveitem)
 	end

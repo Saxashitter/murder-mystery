@@ -56,7 +56,7 @@ local function HUD_InfoDrawer(v)
 				slidein = ease.inquad((FU/TR)*(ticker - 5*TR), $, 60*FU)
 			end
 			
-			rings = $ + MMHUD.info_count
+			rings = ($ - p.mm.ringspaid) + MMHUD.info_count
 			
 			v.drawString(20*FU - slidein + (v.stringWidth(tostring(rings),0,"normal")*FU),
 				32*FU + yoff,

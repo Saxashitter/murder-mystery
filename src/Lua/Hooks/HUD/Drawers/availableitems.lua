@@ -54,14 +54,10 @@ local function V_DrawBox(props)
 	end
 
 	if timeleft >= 0 then
-		customhud.CustomFontString(v,
-			x, y,
+		v.drawString(x, y,
 			tostring(timeleft/TICRATE),
-			"STCFG",
 			flags|trans,
-			"left",
-			scale*3/2,
-			SKINCOLOR_WHITE
+			"fixed"
 		)
 	end
 	

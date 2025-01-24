@@ -1,6 +1,6 @@
 dofile "Hooks/Player/main"
 
-customhud.SetupFont("STCFG")
+--customhud.SetupFont("STCFG")
 
 dofile "Hooks/Game/Load"
 dofile "Hooks/Game/Manager"

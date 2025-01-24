@@ -3,9 +3,9 @@ MM.addHook("GiveStartWeapon",function(p)
 	if (MM_N.dueling) then return end
 	
 	if (p.mm_save.pri_perk == MMPERK_TRAP)
-		MM:giveItem(p, "tripmine")
+		MM:GiveItem(p, "tripmine")
 	elseif (p.mm_save.sec_perk == MMPERK_TRAP)
-		MM:giveItem(p, "beartrap")
+		MM:GiveItem(p, "beartrap")
 	end
 end)
 

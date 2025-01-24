@@ -36,12 +36,6 @@ return function(p) -- Role handler
 	end
 	
 	MM:GiveItem(p, givenweapon) -- Main item
-	
-	if p.mm.role == MMROLE_MURDERER then
-		local giveitem = P_RandomChance(FRACUNIT/2) and "swap_gear" or "tripmine"
-		
-		MM:GiveItem(p, giveitem)
-	end
 
 	if allstring and queuedweapons then
 		for i,weapon_id in ipairs(queuedweapons) do

@@ -8,6 +8,7 @@ MM_PERKS[MMPERK_NINJA] = {
 		item.equipsfx = nil
 		item.hitsfx = nil
 		item.misssfx = nil
+		item.silencedkill = true
 	end,
 	
 	secondary = function(p)

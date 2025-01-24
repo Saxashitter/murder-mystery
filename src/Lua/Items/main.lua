@@ -347,6 +347,8 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		item.finalkillsfx = def.finalkillsfx
 		item.misssfx = def.misssfx
 		
+		item.silencedkill = def.silencedkill
+		
 		item.hiddenforothers = def.hiddenforothers
 		item.cantouch = def.cantouch
 

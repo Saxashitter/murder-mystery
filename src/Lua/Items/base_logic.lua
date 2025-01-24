@@ -407,6 +407,10 @@ MM:addPlayerScript(function(p)
 
 			if item.damage then
 				P_KillMobj(p2.mo, item.mobj, p.mo, 999)
+				
+				if item.silencedkill then
+					S_StopSound(p2.mo)
+				end
 			end
 			
 			if def.onhit then

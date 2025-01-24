@@ -54,7 +54,7 @@ return function(self, endType)
 	if (MM_N.disconnect_end) then return end
 	if (MM_N.dueling) then return end
 	if (MM_N.waiting_for_players) then return end
-	
+
 	--pay people rings
 	for p in players.iterate
 		if not (p.mm) then continue end
@@ -78,7 +78,6 @@ return function(self, endType)
 				)
 				local amount = FixedMul(MM_N.numbertokill*4*FU, 3*FU/4)
 				amount = ease.outsine(FU/3, $, 50*FU)
-				print(string.format("%f", amount))
 
 				reason = "killing "..MM_N.peoplekilled.." out of "..MM_N.numbertokill.." innocents"
 				payout = FixedFloor(FixedMul(amount, percent)) >> FRACBITS

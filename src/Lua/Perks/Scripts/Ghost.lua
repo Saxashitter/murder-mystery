@@ -10,6 +10,11 @@ sfxinfo[sfx_cloak2] = {
 	caption = "\x86".."Murderer uncloaks\x80"
 }
 
+local hud_tween_start = -55*FU
+local hud_tween = hud_tween_start
+local icon_name = "MM_PI_GHOST"
+local TR = TICRATE
+
 MM_PERKS[MMPERK_GHOST] = {
 	primary = function(p)
 		p.mm.perk_ghost_time = $ or 0
@@ -17,20 +22,24 @@ MM_PERKS[MMPERK_GHOST] = {
 		
 		local me = p.mo
 		
+		local last_ghosting = p.mm.perk_ghost_time
+
 		if (p.cmd.buttons & BT_TOSSFLAG)
 		and not (p.lastbuttons & BT_TOSSFLAG)
-		and (p.mm.perk_ghost_cooldown == 0)
-			p.mm.perk_ghost_time = 8*TICRATE
-			p.mm.perk_ghost_cooldown = 30*TICRATE
-			
-			S_StartSound(me, sfx_cloak1)
+			if (p.mm.perk_ghost_cooldown == 0)
+				p.mm.perk_ghost_time = 8*TICRATE
+				p.mm.perk_ghost_cooldown = 30*TICRATE
+				
+				S_StartSound(me, sfx_cloak1)
+			elseif p.mm.perk_ghost_time
+				p.mm.perk_ghost_time = 0
+			end
 		end
 		
 		if p.mm.perk_ghost_cooldown
 			p.mm.perk_ghost_cooldown = max($-1,0)
 		end
 		
-		local last_ghosting = p.mm.perk_ghost_time
 		if MM_N.gameover
 			p.mm.perk_ghost_time = 0
 		end
@@ -97,5 +106,49 @@ MM_PERKS[MMPERK_GHOST] = {
 		else
 			me.alpha = FixedFloor(ease.linear(FU/2, $, FU/2) * 100)/100
 		end
-	end
+	end,
+
+	drawer = function(v,p,c, order)
+		local x = 5*FU
+		local y = 100*FU
+		local scale = FU/2
+		local flags = V_SNAPTOLEFT|V_SNAPTOBOTTOM
+		local timer = 0
+		if order == "sec" then y = $ + 18*FU end
+		if p.mm.perk_ghost_time == nil then return end
+
+		if p.mm.perk_ghost_time == 0
+		and p.mm.perk_ghost_cooldown == 0
+		and FixedFloor(hud_tween) == hud_tween_start
+			return
+		end
+
+		if (p.mm.perk_ghost_time > 0)
+			hud_tween = ease.inquad(FU/2, $, 0)
+			timer = p.mm.perk_ghost_time/TR
+		else
+			if p.mm.perk_ghost_cooldown == 0
+				hud_tween = ease.inquad(FU/4, $, hud_tween_start)
+			end
+			timer = p.mm.perk_ghost_cooldown/TR
+			flags = $|V_50TRANS
+		end
+		x = $ + hud_tween
+
+		v.drawScaled(x,
+			y,
+			scale,
+			v.cachePatch(icon_name),
+			flags
+		)
+		v.drawString(x,
+			y + (31*scale) - 8*FU,
+			timer,
+			flags,
+			"thin-fixed"
+		)
+	end,
+	
+	icon = icon_name,
+	name = "Ghost"
 }

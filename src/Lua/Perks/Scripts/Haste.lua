@@ -15,7 +15,7 @@ MM_PERKS[MMPERK_HASTE] = {
 		local item = p.mm.inventory.items[p.mm.inventory.cur_sel]
 		if not (item and item.id == "knife") then return end
 		if p.mm.inventory.hidden then return end
-
+		
 		MM:ApplyPlayerEffect(p, "perk.primary.haste")
 	end,
 	
@@ -23,7 +23,10 @@ MM_PERKS[MMPERK_HASTE] = {
 		local item = p.mm.inventory.items[p.mm.inventory.cur_sel]
 		if not (item and item.id == "knife") then return end
 		if p.mm.inventory.hidden then return end
-
+		
 		MM:ApplyPlayerEffect(p, "perk.secondary.haste")
-	end
+	end,
+	
+	icon = "MM_PI_HASTE",
+	name = "Haste"
 }

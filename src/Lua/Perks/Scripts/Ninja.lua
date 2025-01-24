@@ -20,5 +20,8 @@ MM_PERKS[MMPERK_NINJA] = {
 		item.equipsfx = nil
 		item.hitsfx = nil
 		item.misssfx = nil
-	end
+	end,
+	
+	icon = "MM_PI_NINJA",
+	name = "Ninja"
 }

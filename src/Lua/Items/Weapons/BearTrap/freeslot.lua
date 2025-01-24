@@ -49,7 +49,7 @@ mobjinfo[SafeFreeslot("MT_MM_BEARTRAP")] = {
 
 MM:RegisterEffect("perk.beartrap.slow", {
 	modifiers = {
-		normalspeed_multi = FU/2
+		normalspeed_multi = FU/3
 	},
 })
 
@@ -57,6 +57,13 @@ addHook("MobjThinker",function(trap)
 	if not (trap and trap.valid) then return end
 	if P_IsObjectOnGround(trap)
 		trap.flags = $|MF_SPECIAL
+	end
+	
+	if trap.tracer and trap.tracer.valid
+	and trap.tracer.player and trap.tracer.player.valid then
+		if not trap.target then
+			trap.drawonlyforplayer = trap.tracer.player
+		end
 	end
 	
 	local me = trap.target
@@ -74,6 +81,7 @@ addHook("MobjThinker",function(trap)
 		trap.flags = $ &~MF_NOGRAVITY
 		trap.momx,trap.momy = $1 + me.momx, $2 + me.momy
 		trap.momz = $ + me.momz
+		trap.fuse = 5*TICRATE
 		P_SetObjectMomZ(trap,4*FU,true)
 		trap.target = nil
 	end
@@ -87,9 +95,11 @@ addHook("TouchSpecial",function(mine,me)
 	local p = me.player
 	
 	--dont kill our teammates lol
-	if (p.mm.role == MMROLE_MURDERER
+	local isTeamMate = (p.mm.role == MMROLE_MURDERER
 	and mine.tracer.player.mm.role == MMROLE_MURDERER)
 	and (me ~= mine.tracer)
+	
+	if isTeamMate or (me == mine.tracer) then
 		mine.health = mine.info.spawnhealth
 		mine.flags = $|MF_SPECIAL
 		return true
@@ -103,6 +113,7 @@ addHook("TouchSpecial",function(mine,me)
 	
 	--caught
 	mine.target = me
+	mine.drawonlyforplayer = nil
 	MM:ApplyPlayerEffect(p, "perk.beartrap.slow", 4*TR)
 	S_StartSound(me,mine.info.activesound)
 end,MT_MM_BEARTRAP)

@@ -37,9 +37,9 @@ weapon.shootmobj = MT_THOK
 weapon.equipsfx = sfx_None
 weapon.attacksfx = sfx_None
 weapon.minemobj = MT_MM_BEARTRAP
-weapon.maxshots = 8
+weapon.maxshots = 20
 
-local function DropTripmine(p)
+local function DropBearTrap(p)
 	local me = p.mo
 	local mine = P_SpawnMobjFromMobj(me,
 		P_ReturnThrustX(nil,me.angle,64*FU),
@@ -61,7 +61,7 @@ weapon.thinker = weapon.hiddenthinker
 weapon.attack = function(item,p)
 	if item.ammoleft == nil or item.ammoleft == 0 then return end
 	
-	DropTripmine(p)
+	DropBearTrap(p)
 	item.ammoleft = $ - 1
 	
 	if item.ammoleft == 0

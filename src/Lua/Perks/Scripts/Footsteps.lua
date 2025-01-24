@@ -2,6 +2,7 @@ local fuse_max = 20*TICRATE
 local fuse_min = 10*TICRATE
 MM_PERKS[MMPERK_FOOTSTEPS] = {
 	icon = "MM_PI_FOOTSTEP",
+	icon_scale = FU/2,
 	name = "Footsteps"
 }
 

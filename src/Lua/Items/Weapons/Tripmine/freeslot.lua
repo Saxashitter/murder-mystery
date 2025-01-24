@@ -449,7 +449,8 @@ addHook("TouchSpecial",function(mine,me)
 	end
 	
 	P_KillMobj(me,mine,mine.tracer,DMG_INSTAKILL)
-	me.color = SKINCOLOR_MAJESTY
+	me.color = SKINCOLOR_GALAXY
+	me.stormkilledme = true
 	me.colorized = true
 	S_StartSound(me,mine.info.deathsound)
 	

@@ -16,6 +16,7 @@ weapon.cooldown_time = TICRATE/2
 weapon.range = FU
 weapon.zrange = FU
 weapon.position = {
+	--(FU*3/2) yw jisk
 	x = tofixed("1.5"),
 	y = 0,
 	z = 0
@@ -35,7 +36,21 @@ weapon.allowdropmobj = false
 weapon.shootmobj = MT_THOK
 weapon.equipsfx = sfx_None
 weapon.attacksfx = sfx_None
+weapon.minemobj = MT_MM_BEARTRAP
 weapon.maxshots = 8
+
+local function DropTripmine(p)
+	local me = p.mo
+	local mine = P_SpawnMobjFromMobj(me,
+		P_ReturnThrustX(nil,me.angle,64*FU),
+		P_ReturnThrustY(nil,me.angle,64*FU),
+		FixedDiv(me.height,me.scale)/2,
+		weapon.minemobj
+	)
+	mine.angle = me.angle
+	mine.scale = me.scale
+	mine.tracer = me
+end
 
 -- Copied lugger code. This should really be implemented in a cleaner way.
 weapon.hiddenthinker = function(item,p)
@@ -46,6 +61,7 @@ weapon.thinker = weapon.hiddenthinker
 weapon.attack = function(item,p)
 	if item.ammoleft == nil or item.ammoleft == 0 then return end
 	
+	DropTripmine(p)
 	item.ammoleft = $ - 1
 	
 	if item.ammoleft == 0

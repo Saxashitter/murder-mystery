@@ -150,5 +150,6 @@ MM_PERKS[MMPERK_GHOST] = {
 	end,
 	
 	icon = icon_name,
+	icon_scale = FU/2,
 	name = "Ghost"
 }

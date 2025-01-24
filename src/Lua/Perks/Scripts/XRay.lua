@@ -78,5 +78,6 @@ MM_PERKS[MMPERK_XRAY] = {
 	end,
 
 	icon = "MM_PI_XRAY",
+	icon_scale = FU/2,
 	name = "X-Ray"
 }

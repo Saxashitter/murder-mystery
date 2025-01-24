@@ -11,5 +11,6 @@ end)
 
 MM_PERKS[MMPERK_TRAP] = {
 	icon = "MM_PI_TRAP",
+	icon_scale = FU/2,
 	name = "Trap"
 }

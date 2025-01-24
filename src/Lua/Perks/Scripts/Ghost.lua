@@ -1,3 +1,15 @@
+local ghost_min_alpha = FU/2
+freeslot("sfx_cloak1")
+sfxinfo[sfx_cloak1] = {
+	flags = SF_X2AWAYSOUND,
+	caption = "\x86".."Murderer cloaks\x80"
+}
+freeslot("sfx_cloak2")
+sfxinfo[sfx_cloak2] = {
+	flags = SF_X2AWAYSOUND,
+	caption = "\x86".."Murderer uncloaks\x80"
+}
+
 MM_PERKS[MMPERK_GHOST] = {
 	primary = function(p)
 		p.mm.perk_ghost_time = $ or 0
@@ -10,12 +22,15 @@ MM_PERKS[MMPERK_GHOST] = {
 		and (p.mm.perk_ghost_cooldown == 0)
 			p.mm.perk_ghost_time = 8*TICRATE
 			p.mm.perk_ghost_cooldown = 30*TICRATE
+			
+			S_StartSound(me, sfx_cloak1)
 		end
 		
 		if p.mm.perk_ghost_cooldown
 			p.mm.perk_ghost_cooldown = max($-1,0)
 		end
 		
+		local last_ghosting = p.mm.perk_ghost_time
 		if MM_N.gameover
 			p.mm.perk_ghost_time = 0
 		end
@@ -44,7 +59,7 @@ MM_PERKS[MMPERK_GHOST] = {
 			me.mm_overlay.anim_duration = me.anim_duration
 			me.mm_overlay.frame = me.frame
 			me.mm_overlay.color = me.color
-			me.mm_overlay.alpha = max(me.alpha, FU/5)
+			me.mm_overlay.alpha = max(me.alpha, ghost_min_alpha)
 		else
 			me.alpha = FixedCeil(ease.linear(FU/3, $, FU) * 100)/100
 			
@@ -61,6 +76,11 @@ MM_PERKS[MMPERK_GHOST] = {
 					me.mm_overlay = nil
 				end
 			end
+		end
+		
+		if last_ghosting > 0
+		and p.mm.perk_ghost_time == 0
+			S_StartSound(me, sfx_cloak2)
 		end
 	end,
 	

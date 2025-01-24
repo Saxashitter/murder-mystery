@@ -8,15 +8,6 @@ return function(v,p,c)
 
 	if MM_N.dueling then return end
 	
-	/*
-	v.drawString(6*FU - MMHUD.xoffset,
-		35*FU,
-		"SHOWDOWN!",
-		V_SNAPTOTOP|V_SNAPTOLEFT|V_REDMAP,
-		"thin-fixed"
-	)
-	*/
-	
 	if not (p and p.mm and p.mm.role) then return end
 	if not (p.mo and p.mo.valid) then return end
 	if (MM_N.gameover) then return end

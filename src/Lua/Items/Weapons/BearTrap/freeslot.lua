@@ -81,7 +81,6 @@ addHook("MobjThinker",function(trap)
 		trap.flags = $ &~MF_NOGRAVITY
 		trap.momx,trap.momy = $1 + me.momx, $2 + me.momy
 		trap.momz = $ + me.momz
-		trap.fuse = 5*TICRATE
 		P_SetObjectMomZ(trap,4*FU,true)
 		trap.target = nil
 	end

@@ -1,5 +1,9 @@
 local fuse_max = 20*TICRATE
 local fuse_min = 10*TICRATE
+MM_PERKS[MMPERK_FOOTSTEPS] = {
+	icon = "MM_PI_FOOTSTEP",
+	name = "Footsteps"
+}
 
 freeslot("MT_MM_FOOTSTEP","S_MM_FOOTSTEP")
 states[S_MM_FOOTSTEP] = {

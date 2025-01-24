@@ -8,3 +8,8 @@ MM.addHook("GiveStartWeapon",function(p)
 		--TODO: bear traps
 	end
 end)
+
+MM_PERKS[MMPERK_TRAP] = {
+	icon = "MM_PI_TRAP",
+	name = "Trap"
+}

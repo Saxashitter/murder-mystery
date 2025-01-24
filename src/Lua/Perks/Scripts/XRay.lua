@@ -4,79 +4,79 @@ end
 local cv_fov = CV_FindVar("fov")
 local sglib = MM.require "Libs/sglib"
 
-addHook("HUD", function(v,p,cam)
-	if not (MM:isMM()) then return end
-	if not (p.mm) then return end
-	if not (p.mm_save) then return end
-	if (p.spectator) then return end
-	if (MM_N.gameover) then return end
-	if (MM_N.showdown) then return end
-	
-	if (p.mm.role ~= MMROLE_MURDERER) then return end
-	
-	if (p.mm_save.pri_perk ~= MMPERK_XRAY
-	and p.mm_save.sec_perk ~= MMPERK_XRAY)
-		return
-	end
-	
-	local me = p.mo
-	local maxdist = 10240*me.scale
-	if p.mm_save.sec_perk == MMPERK_XRAY
-		maxdist = $/3
-	end
-	
-	local drawwork = {}
-	for play in players.iterate()
-		if not (play.mm) then continue end
-		if not (play.mm_save) then continue end
-		if (play.spectator) then continue end
-		if not (play.mo and play.mo.valid) then continue end
-		if not (play.mo.health) then continue end
-		if (play.mm.role == MMROLE_MURDERER) then continue end
+MM_PERKS[MMPERK_XRAY] = {
+	drawer = function(v,p,cam, order)
+		if not (MM:isMM()) then return end
+		if not (p.mm) then return end
+		if not (p.mm_save) then return end
+		if (p.spectator) then return end
+		if (MM_N.gameover) then return end
+		if (MM_N.showdown) then return end
 		
-		if (P_CheckSight(me, play.mo)) then continue end
-		local dist = R_PointToDist(play.mo.x,play.mo.y)
-		if (dist > maxdist) then continue end
+		if (p.mm.role ~= MMROLE_MURDERER) then return end
 		
-		do
-			local adiff = FixedAngle(
-				AngleFixed(R_PointToAngle(play.mo.x, play.mo.y) - cam.angle)
-			)
-			if AngleFixed(adiff) > 180*FU
-				adiff = InvAngle($)
-			end
-			if (AngleFixed(adiff) > cv_fov.value)
-				continue
-			end
+		local me = p.mo
+		local maxdist = 10240*me.scale
+		if order == "sec"
+			maxdist = $/3
 		end
 		
-		table.insert(drawwork, {
-			dist = dist,
-			player = play
-		})
-	end
-	
-	table.sort(drawwork,function(a,b)
-		return a.dist > b.dist
-	end)
-	
-	for k,item in pairs(drawwork)
-		local play = item.player
-
-		local patch = v.cachePatch("MM_SHOWDOWNMARK")
-		local w2s = sglib.ObjectTracking(v, p, cam, play.mo)
-
-		interpolate(v,#play)
-		v.drawScaled(
-			w2s.x,
-			w2s.y,
-			w2s.scale,
-			patch,
-			0,
-			v.getColormap(nil, play.skincolor)
-		)
-		interpolate(v,false)
+		local drawwork = {}
+		for play in players.iterate()
+			if not (play.mm) then continue end
+			if not (play.mm_save) then continue end
+			if (play.spectator) then continue end
+			if not (play.mo and play.mo.valid) then continue end
+			if not (play.mo.health) then continue end
+			if (play.mm.role == MMROLE_MURDERER) then continue end
+			
+			if (P_CheckSight(me, play.mo)) then continue end
+			local dist = R_PointToDist(play.mo.x,play.mo.y)
+			if (dist > maxdist) then continue end
+			
+			do
+				local adiff = FixedAngle(
+					AngleFixed(R_PointToAngle(play.mo.x, play.mo.y) - cam.angle)
+				)
+				if AngleFixed(adiff) > 180*FU
+					adiff = InvAngle($)
+				end
+				if (AngleFixed(adiff) > cv_fov.value)
+					continue
+				end
+			end
+			
+			table.insert(drawwork, {
+				dist = dist,
+				player = play
+			})
+		end
 		
-	end
-	interpolate(v,false)
-end,"game")
+		table.sort(drawwork,function(a,b)
+			return a.dist > b.dist
+		end)
+		
+		for k,item in pairs(drawwork)
+			local play = item.player
+
+			local patch = v.cachePatch("MM_SHOWDOWNMARK")
+			local w2s = sglib.ObjectTracking(v, p, cam, play.mo)
+
+			interpolate(v,#play)
+			v.drawScaled(
+				w2s.x,
+				w2s.y,
+				w2s.scale,
+				patch,
+				0,
+				v.getColormap(nil, play.skincolor)
+			)
+			interpolate(v,false)
+			
+		end
+		interpolate(v,false)
+	end,
+
+	icon = "MM_PI_XRAY",
+	name = "X-Ray"
+}

@@ -8,3 +8,8 @@ MM.addHook("GiveStartWeapon",function(p)
 		--TODO: swap gun
 	end
 end)
+
+MM_PERKS[MMPERK_SWAP] = {
+	icon = "MM_PI_SWAP",
+	name = "Swap"
+}

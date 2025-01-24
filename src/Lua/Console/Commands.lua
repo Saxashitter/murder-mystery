@@ -234,7 +234,6 @@ local perk_list = {
 COM_AddCommand("MM_EquipPerk", function(p, slot, newperk)
 	if not MM:isMM() then return end
 	if not (p.mm) then return end
-	if ((p.mm.role == MMROLE_MURDERER and not MM:pregame()) and not p.spectator) then return end
 	if slot == nil
 	or newperk == nil
 		CONS_Printf(p, "MM_EquipPerk <1/2, primary/secondary>, <perk name>")
@@ -244,6 +243,12 @@ COM_AddCommand("MM_EquipPerk", function(p, slot, newperk)
 		end
 		return
 	end
+	
+	if ((p.mm.role == MMROLE_MURDERER and not MM:pregame()) and not p.spectator) then 
+		CONS_Printf(p, "Unable to change perks at this time.")
+		return 
+	end
+	
 	
 	slot = string.lower($)
 	

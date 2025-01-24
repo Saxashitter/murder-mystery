@@ -13,6 +13,7 @@ sfxinfo[sfx_cloak2] = {
 local hud_tween_start = -55*FU
 local hud_tween = hud_tween_start
 local icon_name = "MM_PI_GHOST"
+local icon_scale = FU/2
 local TR = TICRATE
 
 MM_PERKS[MMPERK_GHOST] = {
@@ -137,7 +138,7 @@ MM_PERKS[MMPERK_GHOST] = {
 
 		v.drawScaled(x,
 			y,
-			scale,
+			FixedMul(scale, icon_scale),
 			v.cachePatch(icon_name),
 			flags
 		)
@@ -150,6 +151,6 @@ MM_PERKS[MMPERK_GHOST] = {
 	end,
 	
 	icon = icon_name,
-	icon_scale = FU/2,
+	icon_scale = icon_scale,
 	name = "Ghost"
 }

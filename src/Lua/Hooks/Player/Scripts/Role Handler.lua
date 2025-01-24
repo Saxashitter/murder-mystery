@@ -5,32 +5,49 @@ return function(p) -- Role handler
 	if p.mm.got_weapon then return end
 	
 	local givenweapon = roles[p.mm.role].weapon
-	if MM_N.dueling
+	if MM_N.dueling then
 		givenweapon = MM_N.duel_item
 	end
 	
-	local newweapon = MM.runHook("GiveStartWeapon", p, givenweapon)
-	
-	if newweapon ~= nil
-		--override
-		if newweapon == true
-			p.mm.got_weapon = true
-			return
+	local newweapon = MM.runHook("GiveStartWeapon", p)
+	local queuedweapons
+	local allstring = true
+
+	-- check if arguments are string
+	for i,v in ipairs({newweapon}) do
+		if type(v) ~= "string" then
+			allstring = false
 		end
-		
-		givenweapon = newweapon
 	end
 	
-	if not givenweapon
+	if newweapon ~= nil then
+		--override
+		if newweapon == true then
+			p.mm.got_weapon = true
+			return
+		elseif allstring then
+			queuedweapons = ({newweapon})
+		end
+	end
+	
+	if not givenweapon then
 		p.mm.got_weapon = true
 		return
 	end
 	
-	MM:GiveItem(p, givenweapon)
+	MM:GiveItem(p, givenweapon) -- Main item
+	
 	if p.mm.role == MMROLE_MURDERER then
 		local giveitem = P_RandomChance(FRACUNIT/2) and "swap_gear" or "tripmine"
 		
 		MM:GiveItem(p, giveitem)
 	end
+
+	if allstring and queuedweapons then
+		for i,weapon_id in ipairs(queuedweapons) do
+			MM:GiveItem(p, weapon_id)
+		end
+	end
+	
 	p.mm.got_weapon = true
 end

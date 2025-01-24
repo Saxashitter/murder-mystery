@@ -220,3 +220,69 @@ COM_AddCommand("MM_SetPerk", function(p, slot, newperk)
 	end
 	
 end, COM_ADMIN)
+
+local perk_list = {
+	"Footsteps",
+	"Ninja",
+	"Haste",
+	"Ghost",
+	"Swap",
+	"Trap",
+	"XRay",
+	"None"
+}
+COM_AddCommand("MM_EquipPerk", function(p, slot, newperk)
+	if not MM:isMM() then return end
+	if not (p.mm) then return end
+	if ((p.mm.role == MMROLE_MURDERER and not MM:pregame()) and not p.spectator) then return end
+	if slot == nil
+	or newperk == nil
+		CONS_Printf(p, "MM_EquipPerk <1/2, primary/secondary>, <perk name>")
+		CONS_Printf(p, "Availiable perks:")
+		for k,name in ipairs(perk_list)
+			CONS_Printf(p, "	"..name)
+		end
+		return
+	end
+	
+	slot = string.lower($)
+	
+	do
+		local todo = string.upper(newperk)
+		local realnum = _G["MMPERK_"..todo]
+		if todo == "NONE"
+			realnum = 0
+		end
+		
+		if realnum ~= nil
+			local chosen = 0
+			if slot == "1"
+			or string.sub(slot,1,3) == "pri"
+				p.mm_save.pri_perk = realnum
+				
+				if p.mm_save.sec_perk == p.mm_save.pri_perk
+					p.mm_save.sec_perk = 0
+				end
+				chosen = 1
+			elseif slot == "2"
+			or string.sub(slot,1,3) == "sec"
+				p.mm_save.sec_perk = realnum
+				
+				if p.mm_save.pri_perk == p.mm_save.sec_perk
+					p.mm_save.pri_perk = 0
+				end
+				chosen = 2
+			end
+			
+			if chosen
+				CONS_Printf(p,"Set "..todo.." as "..(chosen == 1 and "primary" or "secondary").." perk.")
+			else
+				CONS_Printf(p,"Didn't set perk. Argument 1 must be 1, 2, pri..., sec...")
+			end
+			
+		else
+			CONS_Printf(p,todo.." is not a perk.")
+		end
+	end
+	
+end)

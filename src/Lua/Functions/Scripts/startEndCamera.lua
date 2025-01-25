@@ -175,7 +175,9 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 				local swirl = intervalhelper(time, MM_N.end_camera.swirldur)
 				
 				local hdist = ease.outquad(swirl, MM_N.end_camera.startradius[1], MM_N.end_camera.endradius[1])
-				local vdist = ease.outquad(swirl, MM_N.end_camera.startz, sheriff.z + sheriff.height)
+				local vdist = ease.outquad(swirl, MM_N.end_camera.startz,
+					(sheriff and sheriff.valid) and sheriff.z + sheriff.height or MM_N.end_camera.startz
+				)
 				MM_N.end_camera.lerpradius = hdist
 				MM_N.end_camera.startz = vdist
 				MM_N.end_camera.free_noclip = MM_N.end_camera.ticker <= MM_N.end_camera.swirldur/4

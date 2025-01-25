@@ -4,7 +4,7 @@ local norespawn_mobjs = {
 }
 
 -- Make the game use a completely different ring variable.
-addHook("TouchSpecial", function(special, toucher)
+local function special_override(special, toucher)
 	if special and special.valid and toucher and toucher.valid then
 		local player = toucher.player
 		
@@ -14,7 +14,10 @@ addHook("TouchSpecial", function(special, toucher)
 			player.mm.rings = $ + 1
 		end
 	end
-end, MT_RING)
+end
+
+addHook("TouchSpecial", special_override, MT_RING)
+addHook("TouchSpecial", special_override, MT_COIN)
 
 -- Disable respawning for rings.
 addHook("MapLoad", function()

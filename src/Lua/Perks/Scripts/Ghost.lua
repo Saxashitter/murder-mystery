@@ -210,7 +210,7 @@ MM_PERKS[MMPERK_GHOST] = {
 		v.drawString(x,
 			y + (31*scale) - 8*FU,
 			timer,
-			flags,
+			flags &~V_ALPHAMASK,
 			"thin-fixed"
 		)
 	end,

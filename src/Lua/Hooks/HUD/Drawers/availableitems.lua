@@ -150,10 +150,12 @@ return function(v, p)
 		y = $+8*FU
 	end
 	
-	v.drawString(x,y,
-		"[FIRE] - Use weapon",
-		V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
-		"thin-fixed"
-	)
-	
+	if (curitem)
+		v.drawString(x,y,
+			"[FIRE] - Use weapon",
+			V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
+			"thin-fixed"
+		)
+		y = $+8*FU
+	end
 end

@@ -37,25 +37,34 @@ return function(v)
 	local flags = V_SNAPTOLEFT|V_SNAPTOBOTTOM
 	local scale = FU/2
 	
-	v.drawFill(x - 2,
-		y - 11,
-		43,
-		9,
-		31|flags|V_20TRANS
-	)
+	if (p.spectator)
+	and (displayplayer ~= p)
+	and (displayplayer.mm.role == MMROLE_MURDERER)
+		p = displayplayer
+	end
+	
 	v.drawFill(x - 2,
 		y - 2,
 		100,
 		38,
 		31|flags|V_50TRANS
 	)
-	v.drawString(x*FU,
-		(y - 11)*FU,
-		"Perks",
-		flags|V_ALLOWLOWERCASE|V_YELLOWMAP,
-		"fixed"
-	)
-
+	
+	if p == consoleplayer
+		v.drawFill(x - 2,
+			y - 11,
+			43,
+			9,
+			31|flags|V_20TRANS
+		)
+		v.drawString(x*FU,
+			(y - 11)*FU,
+			"Perks",
+			flags|V_ALLOWLOWERCASE|V_YELLOWMAP,
+			"fixed"
+		)
+	end
+	
 	v.drawScaled(x*FU,y*FU,
 		FixedMul(scale,getscale(p.mm_save.pri_perk)),
 		v.cachePatch(getpatch(p.mm_save.pri_perk)),
@@ -81,4 +90,4 @@ return function(v)
 	)
 	
 	
-end, "scores"
+end, "scores", 101

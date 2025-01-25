@@ -59,6 +59,7 @@ return function(p)
 					if inter.interacting == inter.interacttime
 					and old_int ~= inter.interacttime
 						mminter.interacted = true
+						
 						local caninteract = true
 						if (inter.price ~= 0)
 							caninteract = p.mm_save.rings >= inter.price

@@ -229,6 +229,7 @@ local perk_list = {
 	"Swap",
 	"Trap",
 	"XRay",
+	"FakeGun",
 	"None"
 }
 COM_AddCommand("MM_EquipPerk", function(p, slot, newperk)

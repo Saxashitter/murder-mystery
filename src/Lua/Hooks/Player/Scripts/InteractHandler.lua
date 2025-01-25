@@ -21,7 +21,7 @@ return function(p)
 	
 	local mminter = p.mm.interact
 	local interacting = false
-	local lastInteraction
+	--local lastInteraction
 	for k,inter in ipairs(mminter.points)
 		local mo = inter.mo
 		
@@ -31,7 +31,7 @@ return function(p)
 		
 		inter.hud.goingaway = false
 		if not MM.canInteract(p,mo)
-		or (lastInteraction and onPoint(mo, lastInteraction.mo))
+		--or (lastInteraction and onPoint(mo, lastInteraction.mo))
 			inter.hud.goingaway = true
 			if inter.timesinteracted then inter.hud.xscale = 0 end
 			
@@ -100,7 +100,7 @@ return function(p)
 		else
 			inter.interacting = $*3/4
 		end
-		lastInteraction = inter
+		--lastInteraction = inter
 	end
 	if #mminter.points == nil or #mminter.points == 0 then mminter.interacted = false end
 end

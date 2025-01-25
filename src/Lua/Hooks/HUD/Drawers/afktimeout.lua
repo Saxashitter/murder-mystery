@@ -5,6 +5,7 @@ local function HUD_AFKDrawer(v,p,c)
 	if not (p.mm) then return end
 	if not CV_MM.afkkickmode.value then return end
 	if (MM_N.gameover) then return end
+	if (p.spectator) then return end
 	
 	if p.mm.afktimer < AFK_TIMEOUT - (10*TR)+1 then return end
 	--if p.mm.afkhelpers.timeuntilreset ~= 2*TR then return end

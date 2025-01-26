@@ -131,7 +131,6 @@ MM.BulletHit = function(ring,pmo)
 				P_DamageMobj(pmo, ring, (ring.target and ring.target.valid) and ring.target or ring, 2)
 			elseif (ring.target.player.mm.role == MMROLE_MURDERER)
 				P_KillMobj(pmo.tracer, ring, (ring.target and ring.target.valid) and ring.target or ring, 2)
-				P_RemoveMobj(pmo)
 			end
 			
 			BulletDies(ring)

@@ -41,7 +41,7 @@ mobjinfo[SafeFreeslot("MT_MM_TRIPMINE")] = {
 	spawnhealth = 1,
 	height = 32*FRACUNIT,
 	radius = 16*FRACUNIT,
-	flags = MF_SOLID|MF_RUNSPAWNFUNC
+	flags = MF_SOLID|MF_RUNSPAWNFUNC|MF_SHOOTABLE
 }
 
 local function GetActorZ(actor,targ,type)
@@ -458,7 +458,49 @@ addHook("TouchSpecial",function(mine,me)
 	SpawnSparks(me)
 	SetPurplePlanes(mine)
 	
+	mine.steppedon = true
 	delete3d(mine)
+end,MT_MM_TRIPMINE)
+
+addHook("MobjDeath",function(mine)
+	if (mine.steppedon) then return end
+
+	local sfx = P_SpawnGhostMobj(mine)
+	sfx.flags2 = $|MF2_DONTDRAW
+	sfx.fuse = 12*TR
+	
+	S_StartSound(sfx,mine.info.deathsound)
+	S_StartSound(sfx,mine.info.deathsound)
+	S_StartSound(sfx,mine.info.deathsound)
+	
+	if mine.aura and mine.aura.valid
+		P_RemoveMobj(mine.aura)
+	end
+	SpawnSparks(mine)
+	SetPurplePlanes(mine)
+	delete3d(mine)
+	
+	local radius = 550*mine.scale
+	for p in players.iterate
+		if (p.spectator) then continue end
+		if not (p.mo and p.mo.valid) then continue end
+		local me = p.mo
+		if not (me.health) then continue end
+		
+		if abs(mine.x - me.x) > radius
+		or abs(mine.y - me.y) > radius
+		or abs(mine.z - me.z) > radius
+			continue
+		end
+		
+		SpawnSparks(me)
+		P_KillMobj(me,mine,mine.tracer,DMG_INSTAKILL)
+		me.color = SKINCOLOR_GALAXY
+		me.stormkilledme = true
+		me.colorized = true
+		S_StartSound(me,mine.info.deathsound)
+	end
+	
 end,MT_MM_TRIPMINE)
 
 addHook("MobjRemoved",delete3d,MT_MM_TRIPMINE)

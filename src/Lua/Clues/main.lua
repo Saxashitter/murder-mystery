@@ -1,6 +1,8 @@
 dofile "Clues/freeslot"
 
 local GetMobjSpawnHeight, GetMapThingSpawnHeight = MM.require "Libs/MapThingLib"
+local choosething = MM.require "Libs/choosething"
+local shallowCopy = MM.require "Libs/shallowCopy"
 
 function MM:spawnClueMobj(p, pos)
 	local mobj = P_SpawnMobj(pos.x, pos.y, pos.z, MT_MM_CLUESPAWN)
@@ -32,6 +34,11 @@ local fallbackNums = {
 function MM:giveOutClues(amount)
 	local cluePositions = {}
 	local fallbackThings = {}
+	local useNewClues = true
+	if (mapheaderinfo[gamemap]
+	and mapheaderinfo[gamemap].mm_oldclues ~= nil)
+		useNewClues = false
+	end
 
 	for thing in mapthings.iterate do
 		if thing.type ~= 3001 then
@@ -84,6 +91,8 @@ function MM:giveOutClues(amount)
 	for p in players.iterate do
 		local clues = {}
 		local found = {}
+		--the ACTUAL table of clues, saxa's implemtation of this is weird
+		local real_clues = {}
 		
 		if (p.mm.role == MMROLE_SHERIFF) then continue end
 		if (p.mm_save and p.mm_save.afkmode) then continue end
@@ -110,13 +119,18 @@ function MM:giveOutClues(amount)
 				end
 			end
 
-			clues[#clues+1] = {
+			table.insert(real_clues, {
 				ref = clue,
 				mobj = MM:spawnClueMobj(p, clue)
-			}
+			})
 		end
-	
-		p.mm.clues = clues
+
+		p.mm.clues = {}
+		p.mm.clues.list = shallowCopy(real_clues)
+		if useNewClues
+			p.mm.clues.current = choosething(unpack(p.mm.clues.list))
+		end
+		p.mm.clues.amount = clues.amount
 		p.mm.clues.startamount = clues.amount -- the amount you need to find at the start of the game.
 	end
 end
@@ -125,12 +139,20 @@ end
 MM:addPlayerScript(function(p)
 	local removalList = {}
 
-	if not (#p.mm.clues) then return end
+	if (leveltime <= 1) then return end
+	if (p.mm.clues == nil) then return end
 
-	for i,clue in ipairs(p.mm.clues) do
+	for i,clue in ipairs(p.mm.clues.list) do
 		local pos = clue.ref
 		clue.mobj.color = p.skincolor
 		
+		if p.mm.clues.current ~= nil
+		and clue ~= p.mm.clues.current
+			clue.mobj.flags2 = $|MF2_DONTDRAW
+			continue
+		end
+		clue.mobj.flags2 = $ &~MF2_DONTDRAW
+
 		--TODO: this and dropped item sparkles dont sustain fullbrite
 		if P_RandomChance(FU/2)
 			local wind = P_SpawnMobj(
@@ -158,7 +180,7 @@ MM:addPlayerScript(function(p)
 	end
 
 	for _,remove in pairs(removalList) do
-		for i,clue in pairs(p.mm.clues) do
+		for i,clue in pairs(p.mm.clues.list) do
 			if clue == remove then
 				local text = "CLUE FOUND!"
 
@@ -167,10 +189,14 @@ MM:addPlayerScript(function(p)
 					P_RemoveMobj(clue.mobj)
 				end
 
-				table.remove(p.mm.clues, i)
-				local subtext = tostring(#p.mm.clues).."/"..tostring(p.mm.clues.amount).." remaining..."
+				table.remove(p.mm.clues.list, i)
+				if p.mm.clues.current ~= nil
+					p.mm.clues.current = choosething(unpack(p.mm.clues.list))
+				end
 
-				if not (#p.mm.clues) then
+				local subtext = tostring(#p.mm.clues.list).."/"..tostring(p.mm.clues.amount).." remaining..."
+
+				if not (#p.mm.clues.list) then
 					text = "YOU FOUND THEM ALL!"
 					subtext = "Your clues gave you a weapon!"
 					

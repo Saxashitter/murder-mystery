@@ -126,7 +126,7 @@ function MM:giveOutClues(amount)
 		end
 
 		p.mm.clues = {}
-		p.mm.clues.list = shallowCopy(real_clues)
+		p.mm.clues.list = shallowCopy(real_clues) or {}
 		if useNewClues
 			p.mm.clues.current = choosething(unpack(p.mm.clues.list))
 		end
@@ -141,7 +141,9 @@ MM:addPlayerScript(function(p)
 
 	if (leveltime <= 1) then return end
 	if (p.mm.clues == nil) then return end
-
+	
+	--we shouldnt have to do this
+	p.mm.clues.list = $ or {}
 	for i,clue in ipairs(p.mm.clues.list) do
 		local pos = clue.ref
 		clue.mobj.color = p.skincolor

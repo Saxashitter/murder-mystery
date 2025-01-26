@@ -8,7 +8,7 @@ local function HUD_GoalDrawer(v,p)
 	if p.mm.clues.startamount ~= nil then
 		if p.mm.clues.startamount ~= 0
 		and p.mm.role ~= MMROLE_SHERIFF
-			local complete = #p.mm.clues == 0 and V_YELLOWMAP or 0
+			local complete = #p.mm.clues.list == 0 and V_YELLOWMAP or 0
 			v.drawString(x,
 				y,
 				(#p.mm.clues).."/"..p.mm.clues.startamount.." Clues left",

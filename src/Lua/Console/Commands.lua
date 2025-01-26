@@ -27,6 +27,18 @@ COM_AddCommand("MM_TimeTo0", function(p)
 	MM_N.time = 0
 end, COM_ADMIN)
 
+COM_AddCommand("MM_MapClueCount", function(p)
+	local count = 0
+	
+	for thing in mapthings.iterate do
+		if thing.type == 3001 then
+			count = $ + 1
+		end
+	end
+	
+	CONS_Printf(p, string.format("Total clues in map data: %s", count))
+end, COM_LOCAL)
+
 COM_AddCommand("suicide", function(p)
 	if MM:isMM() and not CV_MM.debug.value
 		CONS_Printf(p,"You can't use this in Murder Mystery.")

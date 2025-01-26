@@ -13,6 +13,8 @@ return function(self, p, mapchange)
 		midgame = false
 	end
 
+	MM:InitPlayerClues(p)
+
 	if midgame then
 		p.mm.joinedmidgame = true
 		p.mm.spectator = true

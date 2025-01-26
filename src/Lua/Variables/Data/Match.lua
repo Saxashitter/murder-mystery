@@ -25,6 +25,7 @@ return {
 	clues_in_map = false,
 	clues_weaponsleft = 0,
 	clues_singlemode = false,
+	clues_positions = {},
 	clues = {},
 
 	speed_cap = 23*FU,

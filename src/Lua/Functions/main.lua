@@ -1,9 +1,10 @@
-local function doAndInsert(file)
-	MM[file] = dofile("Functions/Scripts/"..file)
+local function doAndInsert(file, realname)
+	MM[realname or file] = dofile("Functions/Scripts/"..file)
 end
 
 doAndInsert("isMM")
 doAndInsert("init")
+doAndInsert("Clues/InitPlayerClues", "InitPlayerClues")
 doAndInsert("playerInit")
 doAndInsert("assignRoles")
 doAndInsert("canGameEnd")

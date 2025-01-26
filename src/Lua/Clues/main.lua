@@ -21,52 +21,6 @@ function MM:spawnClueMobj(p, pos)
 	return mobj
 end
 
-function MM:InitPlayerClues(p)
-	local clues = {}
-	local found = {}
-	--the ACTUAL table of clues, saxa's implemtation of this is weird
-	local real_clues = {}
-	
-	if (p.mm.role == MMROLE_SHERIFF) then continue end
-	if (p.mm_save and p.mm_save.afkmode) then continue end
-	
-	clues.amount = amount
-	
-	-- Give murderer less clues.
-	if (p.mm.role == MMROLE_MURDERER) then
-		local newcluecount = amount
-		newcluecount = FixedMul($*FU, FixedDiv(3*FU, 4*FU));
-		newcluecount = FixedCeil($)/FU;
-		
-		clues.amount = newcluecount
-	end
-	
-	for i = 1, clues.amount do
-		local clue
-
-		while not clue do
-			local key = P_RandomRange(1, #cluePositions)
-			if not found[key] then
-				found[key] = true
-				clue = cluePositions[key]
-			end
-		end
-
-		table.insert(real_clues, {
-			ref = clue,
-			mobj = MM:spawnClueMobj(p, clue)
-		})
-	end
-
-	p.mm.clues = {}
-	p.mm.clues.list = shallowCopy(real_clues) or {}
-	if self.clues_singlemode then
-		p.mm.clues.current = choosething(unpack(p.mm.clues.list))
-	end
-	p.mm.clues.amount = clues.amount
-	p.mm.clues.startamount = clues.amount -- the amount you need to find at the start of the game.
-end
-
 local fallbackNums = {
 	[303] = true,
 	[330] = true,
@@ -78,7 +32,7 @@ local fallbackNums = {
 }
 
 function MM:giveOutClues(amount)
-	local cluePositions = {}
+	MM.clues_positions = {}
 	local fallbackThings = {}
 	--local useNewClues = false
 	
@@ -106,10 +60,10 @@ function MM:giveOutClues(amount)
 
 		newPos.flip = (thing.options & MTF_OBJECTFLIP)
 
-		table.insert(cluePositions, newPos)
+		table.insert(MM.clues_positions, newPos)
 	end
 	
-	if not #cluePositions
+	if not #MM.clues_positions
 	and #fallbackThings then
 		for _, thing in ipairs(fallbackThings) do
 			-- i love copying code!!
@@ -123,14 +77,14 @@ function MM:giveOutClues(amount)
 
 			newPos.flip = (thing.options & MTF_OBJECTFLIP)
 
-			table.insert(cluePositions, newPos)
+			table.insert(MM.clues_positions, newPos)
 		end
 	end
 	
-	if not (#cluePositions) then return end
+	if not (#MM.clues_positions) then return end
 	
 	--weird issue where it would default to 5 even if theres more clue amounts?
-	amount = min(#cluePositions, amount)
+	amount = min(#MM.clues_positions, amount)
 	MM_N.clues_amount = amount
 	
 	--Bruh

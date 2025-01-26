@@ -194,6 +194,7 @@ local function manage_unpicked_weapon(mobj)
 			mobj.z + (mobj.height/2) + P_RandomRange(-20,20)*mobj.scale,
 			MT_BOXSPARKLE
 		)
+		wind.renderflags = $|RF_FULLBRIGHT
 		P_SetObjectMomZ(wind,P_RandomRange(1,3)*FU)
 	end
 	

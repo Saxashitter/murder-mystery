@@ -115,7 +115,6 @@ MM:addPlayerScript(function(p)
 		end
 		clue.mobj.flags2 = $ &~MF2_DONTDRAW
 
-		--TODO: this and dropped item sparkles dont sustain fullbrite
 		if P_RandomChance(FU/2)
 			local wind = P_SpawnMobj(
 				pos.x + P_RandomRange(-18,18)*p.mo.scale,
@@ -125,6 +124,7 @@ MM:addPlayerScript(function(p)
 			)
 			wind.frame = $|FF_FULLBRIGHT
 			wind.drawonlyforplayer = p
+			wind.renderflags = $|RF_FULLBRIGHT
 			P_SetObjectMomZ(wind,P_RandomRange(1,3)*FU)
 		end
 		

@@ -34,10 +34,10 @@ local fallbackNums = {
 function MM:giveOutClues(amount)
 	local cluePositions = {}
 	local fallbackThings = {}
-	local useNewClues = true
+	local useNewClues = false
 	if (mapheaderinfo[gamemap]
-	and mapheaderinfo[gamemap].mm_oldclues ~= nil)
-		useNewClues = false
+	and mapheaderinfo[gamemap].mm_singleclues ~= nil)
+		useNewClues = true
 	end
 
 	for thing in mapthings.iterate do

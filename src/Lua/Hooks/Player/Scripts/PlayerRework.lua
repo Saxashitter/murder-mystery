@@ -1,4 +1,38 @@
 local speedCap = MM.require "Libs/speedCap"
+local stopfriction = tofixed("0.823")
+local jumpfactormulti = tofixed("1.15")
+
+local function ApplyMovementBalance(player)
+    local pmo = player.mo
+
+    if pmo and pmo.valid then
+        local pta = R_PointToAngle2(0, 0, pmo.momx, pmo.momy)
+
+        if pmo.lastpta ~= nil then
+            local adiff = AngleFixed(pta)-AngleFixed(pmo.lastpta)
+
+            if AngleFixed(adiff) > 180*FU
+                adiff = InvAngle($)
+            end
+            
+            if adiff > 10*FU and player.speed > 18*FU 
+            and P_IsObjectOnGround(pmo) then
+                pmo.skidscore = 3
+            end
+
+            if pmo.skidscore then
+                pmo.friction = stopfriction
+                pmo.skidscore = $ - 1
+            end
+        end
+		
+		if P_IsObjectOnGround(pmo) then
+			pmo.playergroundcap = FixedHypot(pmo.momx, pmo.momy) + 10*FU
+		end
+
+        pmo.lastpta = pta
+    end
+end
 
 return function(p)
 	if CV_MM.debug.value then return end
@@ -10,7 +44,7 @@ return function(p)
 	p.charflags = $ &~(SF_DASHMODE|SF_RUNONWATER|SF_CANBUSTWALLS|SF_MACHINE)
 	p.charability = CA_NONE
 	p.charability2 = CA2_NONE
-	p.jumpfactor = sonic.jumpfactor
+	p.jumpfactor = FixedMul(sonic.jumpfactor, jumpfactormulti)
 	
 	local effects = p.mm.effects
 	
@@ -45,8 +79,14 @@ return function(p)
 	speedcap = FixedMul($, basespeedmulti)
 	
 	if p.powers[pw_carry] ~= CR_ZOOMTUBE
+		if not P_IsObjectOnGround(p.mo) then
+			speedcap = min(p.mo.playergroundcap, $) or $
+		end
+		
 		speedCap(p.mo, FixedMul(speedcap,p.mo.scale))
 	end
+	
+	ApplyMovementBalance(p)
 	
 	p.normalspeed = speedcap
 	

@@ -79,8 +79,10 @@ return function(p)
 	speedcap = FixedMul($, basespeedmulti)
 	
 	if p.powers[pw_carry] ~= CR_ZOOMTUBE
-		if not P_IsObjectOnGround(p.mo) then
-			speedcap = min(p.mo.playergroundcap, $) or $
+		if p.mo.playergroundcap ~= nil then
+			if not P_IsObjectOnGround(p.mo) then
+				speedcap = min(p.mo.playergroundcap, $) or $
+			end
 		end
 		
 		speedCap(p.mo, FixedMul(speedcap,p.mo.scale))

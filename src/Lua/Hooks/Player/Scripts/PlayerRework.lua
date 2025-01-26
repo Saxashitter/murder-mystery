@@ -1,9 +1,8 @@
 local speedCap = MM.require "Libs/speedCap"
-local stopfriction = 0 --tofixed("0.823")
-local jumpfactormulti = 0 --tofixed("1.15")
+local stopfriction = tofixed("0.823")
+local jumpfactormulti = tofixed("1.15")
 
 local function ApplyMovementBalance(player)
-/*
     local pmo = player.mo
 
     if pmo and pmo.valid then
@@ -33,7 +32,6 @@ local function ApplyMovementBalance(player)
 
         pmo.lastpta = pta
     end
-	*/
 end
 
 return function(p)
@@ -83,14 +81,14 @@ return function(p)
 	if p.powers[pw_carry] ~= CR_ZOOMTUBE
 		if p.mo.playergroundcap ~= nil then
 			if not P_IsObjectOnGround(p.mo) then
-				--speedcap = min(p.mo.playergroundcap, $) or $
+				speedcap = min(p.mo.playergroundcap, $) or $
 			end
 		end
 		
 		speedCap(p.mo, FixedMul(speedcap,p.mo.scale))
 	end
 	
-	--ApplyMovementBalance(p)
+	ApplyMovementBalance(p)
 	
 	p.normalspeed = speedcap
 	

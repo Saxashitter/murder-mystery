@@ -11,7 +11,7 @@ local function HUD_GoalDrawer(v,p)
 			local complete = #p.mm.clues.list == 0 and V_YELLOWMAP or 0
 			v.drawString(x,
 				y,
-				(#p.mm.clues).."/"..p.mm.clues.startamount.." Clues left",
+				(#p.mm.clues.list).."/"..p.mm.clues.startamount.." Clues left",
 				V_SNAPTOTOP|V_SNAPTOLEFT|V_ALLOWLOWERCASE|complete,
 				"thin-fixed"
 			)

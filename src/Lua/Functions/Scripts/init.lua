@@ -111,11 +111,11 @@ return function(self, maploaded)
 			clue_amm = abs(tonumber(mapheaderinfo[gamemap].mm_clueamount))
 		end
 		
-		set_overtime_point()
 		if clue_amm ~= 0
 			MM:giveOutClues(clue_amm)
 		end
 		
+		set_overtime_point()
 		MM_N.map_weather = mapheaderinfo[gamemap].weather
 		MM_N.lastmap = gamemap
 		MM.runHook("PostMapLoad")

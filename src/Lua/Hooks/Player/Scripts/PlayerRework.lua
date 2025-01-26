@@ -3,6 +3,7 @@ local stopfriction = 0 --tofixed("0.823")
 local jumpfactormulti = 0 --tofixed("1.15")
 
 local function ApplyMovementBalance(player)
+/*
     local pmo = player.mo
 
     if pmo and pmo.valid then
@@ -32,6 +33,7 @@ local function ApplyMovementBalance(player)
 
         pmo.lastpta = pta
     end
+	*/
 end
 
 return function(p)
@@ -88,7 +90,7 @@ return function(p)
 		speedCap(p.mo, FixedMul(speedcap,p.mo.scale))
 	end
 	
-	ApplyMovementBalance(p)
+	--ApplyMovementBalance(p)
 	
 	p.normalspeed = speedcap
 	

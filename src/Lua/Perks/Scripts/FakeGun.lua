@@ -94,8 +94,7 @@ MM_PERKS[MMPERK_FAKEGUN] = {
 			local x = 5*FU - MMHUD.xoffset
 			local y = 162*FU
 			
-			if (p.mm.perk_fake_cooldown == 0
-			or p.mm.perk_fake_time > 0)
+			if (p.mm.perk_fake_cooldown == 0)
 				local action = "Fake gun"
 				v.drawString(x,y,
 					"[TOSSFLAG] - "..action,
@@ -132,7 +131,7 @@ MM_PERKS[MMPERK_FAKEGUN] = {
 		v.drawString(x,
 			y + (31*scale) - 8*FU,
 			timer,
-			flags,
+			flags &~V_ALPHAMASK,
 			"thin-fixed"
 		)
 	end,

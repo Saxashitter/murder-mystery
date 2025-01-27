@@ -54,7 +54,8 @@ return function(self, endType)
 	if (MM_N.disconnect_end) then return end
 	if (MM_N.dueling) then return end
 	if (MM_N.waiting_for_players) then return end
-
+	if (MM:pregame()) then return end
+	
 	--pay people rings
 	for p in players.iterate
 		if not (p.mm) then continue end

@@ -7,7 +7,7 @@ Music = MANS2M
 TypeOfLevel = SaxaMM
 NoVisitNeeded = true
 Selectheading = Murder Mystery
-Lua.MM_ClueAmount = 7
+Lua.MM_ClueAmount = 5
 Lua.MM_StormTimer = 25
 Lua.MM_StormTimer_Overtime = 15
 Lua.MM_SingleClues = true
@@ -37,7 +37,7 @@ SaveGame = true
 SkyboxScale = 64
 NoVisitNeeded = true
 Selectheading = Murder Mystery
-Lua.MM_ClueAmount = 10
+Lua.MM_ClueAmount = 6
 Lua.MM_StormTimer_Overtime = 20
 Lua.MM_SingleClues = true
 

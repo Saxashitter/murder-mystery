@@ -48,8 +48,9 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	if gamestate ~= GS_LEVEL then return end
 	if MM.gameover then return end
 	if t == 3 then return end
+	
 	--allow dedicated server chats?
-	if (src == server and isdedicatedserver) then return end
+	if (src == server and not players[0]) then return end
 
 	if not (consoleplayer
 		and consoleplayer.mo

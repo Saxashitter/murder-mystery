@@ -187,6 +187,8 @@ MM_PERKS[MMPERK_GHOST] = {
 			else
 				if p.mm.perk_ghost_cooldown == 0
 					hud_tween = ease.inquad(FU/4, $, hud_tween_start)
+				else
+					hud_tween = ease.inquad(FU/2, $, 0)
 				end
 				timer = p.mm.perk_ghost_cooldown/TR
 				flags = $|V_50TRANS

@@ -104,9 +104,18 @@ return function(p)
 	p.powers[pw_underwater] = 0
 	p.powers[pw_spacetime] = 0
 	
+	--reverse water effects
 	if (p.mo.eflags & (MFE_UNDERWATER|MFE_GOOWATER))
 		p.accelstart = 3*$/2
 		p.acceleration = 3*$/2
 		p.normalspeed = $*2
+		p.jumpfactor = FixedDiv($, FixedDiv(117*FU, 200*FU))
+		
+		if not P_IsObjectOnGround(p.mo)
+		--probably used a spring
+		and (p.mo.state ~= S_PLAY_SPRING)
+			local grav = P_GetMobjGravity(p.mo)
+			p.mo.momz = $ + FixedMul(grav, 3*FU) - grav/3
+		end
 	end
 end

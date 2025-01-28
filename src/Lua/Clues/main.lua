@@ -4,6 +4,20 @@ local GetMobjSpawnHeight, GetMapThingSpawnHeight = MM.require "Libs/MapThingLib"
 local choosething = MM.require "Libs/choosething"
 local shallowCopy = MM.require "Libs/shallowCopy"
 
+local clueitemtiers = {
+	[1] = {
+		"gun",
+		"revolver"
+	},
+	[2] = {
+		"sword",
+		"snowball",
+	},
+	[3] = {
+		"burger"
+	}
+}
+
 function MM:spawnClueMobj(p, pos)
 	local mobj = P_SpawnMobj(pos.x, pos.y, pos.z, MT_MM_CLUESPAWN)
 
@@ -163,26 +177,22 @@ MM:addPlayerScript(function(p)
 
 				if not (#p.mm.clues.list) then
 					text = "YOU FOUND THEM ALL!"
-					subtext = "Your clues gave you a weapon!"
+					subtext = "Your clues gave you a useful item!"
 					
 					local reward = ''
 					if p.mm.role == MMROLE_MURDERER
 						reward = "luger"
 					else
 						if MM_N.clues_weaponsleft
-							if P_RandomChance(FU/6) then
-								reward = P_RandomChance(FU/3) and "revolver" or "gun" 
+							if P_RandomChance(FU/8) then
+								reward = clueitemtiers[1][P_RandomRange(1, #clueitemtiers[1])]
 							else
-								reward = P_RandomChance(FU/4) and "sword" or "snowball"
-								
-								if reward == "snowball" then
-									subtext = "Your clues gave you an item!"
-								end
+								reward = clueitemtiers[2][P_RandomRange(1, #clueitemtiers[2])]
 							end
 							
 							MM_N.clues_weaponsleft = $-1
 						else
-							reward = "burger"
+							reward = clueitemtiers[3][P_RandomRange(1, #clueitemtiers[3])]
 							subtext = "Your clues gave you an item!"
 						end
 					end

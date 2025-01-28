@@ -101,6 +101,7 @@ events["ItemUse"] = {}
 events["AttackPlayer"] = {}
 events["CreateAlias"] = {}
 events["ApplyAlias"] = {}
+events["OnRawChat"] = {}
 
 MM.addHook = function(hooktype, func)
 	if events[hooktype] then

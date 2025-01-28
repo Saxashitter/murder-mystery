@@ -68,6 +68,10 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 			return true
 	end
 	
+	if MM.runHook("OnRawChat", src, t, trgt, msg) then
+		return true
+	end
+	
 	--talk from cameras
 	if (src.mmcam and src.mmcam.cam and src.mmcam.cam.valid)
 		MMCAM.CameraSay(src,src.mmcam.cam,msg)

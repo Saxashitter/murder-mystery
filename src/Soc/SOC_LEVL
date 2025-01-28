@@ -1,7 +1,6 @@
 # luigibudd
 Level I2
 Levelname = Mansion
-Act = 2
 NoZone = true
 Music = MANS2M
 TypeOfLevel = SaxaMM
@@ -27,7 +26,6 @@ Lua.MM_StormTimer_Overtime = 30
 Level H2
 Levelname = House
 TypeOfLevel = SaxaMM
-Act = 2
 Nozone = true
 Keywords = HS2
 SkyNum = 69

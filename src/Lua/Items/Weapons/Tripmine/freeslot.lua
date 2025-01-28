@@ -7,6 +7,7 @@ local function SafeFreeslot(...)
 	end
 end
 
+SafeFreeslot("SPR_TRIPMINEEXPLOSION")
 SafeFreeslot("SPR_SBSM")
 sfxinfo[SafeFreeslot("sfx_subsma")].caption = "Mine activate"
 sfxinfo[SafeFreeslot("sfx_subsme")] = {
@@ -43,6 +44,10 @@ mobjinfo[SafeFreeslot("MT_MM_TRIPMINE")] = {
 	radius = 16*FRACUNIT,
 	flags = MF_SOLID|MF_RUNSPAWNFUNC|MF_SHOOTABLE
 }
+
+local function SpawnExplosion(source, count, dist)
+	
+end
 
 local function GetActorZ(actor,targ,type)
 	if type == nil then type = 1 end

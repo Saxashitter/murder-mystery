@@ -107,6 +107,9 @@ MM:addPlayerScript(function(p)
 	for i,clue in ipairs(p.mm.clues.list) do
 		local pos = clue.ref
 		clue.mobj.color = p.skincolor
+		if (p.realmo and p.realmo.valid)
+			clue.mobj.scale = p.realmo.scale
+		end
 		
 		if p.mm.clues.current ~= nil
 		and clue ~= p.mm.clues.current

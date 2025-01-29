@@ -161,7 +161,12 @@ local function HUD_TabScoresDrawer(v)
 	-- while #playerlist < 32 do
 	for p in players.iterate do
 		if p and p.valid then
-			if (p.mm_save and p.mm_save.afkmode)
+			local isafk = false
+			if (p.mm_save and p.mm_save.afkmode and p.spectator)
+				isfake = true
+			end
+			
+			if isafk
 				table.insert(afkplayerlist, p)
 				continue
 			end

@@ -7,10 +7,11 @@ local shallowCopy = MM.require "Libs/shallowCopy"
 local clueitemtiers = {
 	[1] = {
 		"gun",
-		"revolver"
+		"revolver",
+		"sword",
 	},
 	[2] = {
-		"sword",
+		"loudspeaker",
 		"snowball",
 	},
 	[3] = {

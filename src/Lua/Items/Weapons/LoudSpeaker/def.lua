@@ -35,4 +35,17 @@ weapon.shootmobj = MT_THOK
 weapon.equipsfx = sfx_None
 weapon.attacksfx = sfx_None
 
+MM.addHook("OnRawChat", function(p, chat_type, target, msg)
+	if not (p and p.valid) then return end
+	
+	local item = p.mm.inventory.items[p.mm.inventory.cur_sel]
+	if not (item and item.id == "loudspeaker") then return end
+	if p.mm.inventory.hidden then return end
+	
+	MM:ClearInventorySlot(p)
+	chatprint("\x80<\x87LoudSpeaker\x80> "..msg)
+	S_StartSound(nil, sfx_nxitem)
+	return true
+end)
+
 return weapon

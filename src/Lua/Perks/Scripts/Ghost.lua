@@ -19,6 +19,7 @@ local icon_scale = FU/2
 
 local perk_maxtime = 8*TR
 local perk_cooldown = 30*TR
+local perk_volume = (255*3)/4
 
 MM_PERKS[MMPERK_GHOST] = {
 	primary = function(p)
@@ -35,7 +36,7 @@ MM_PERKS[MMPERK_GHOST] = {
 				p.mm.perk_ghost_time = perk_maxtime
 				p.mm.perk_ghost_cooldown = perk_cooldown + perk_maxtime
 				
-				S_StartSound(me, sfx_cloak1)
+				S_StartSoundAtVolume(me, sfx_cloak1, perk_volume)
 			elseif p.mm.perk_ghost_time
 				p.mm.perk_ghost_time = 0
 				p.mm.perk_ghost_cooldown = perk_cooldown
@@ -124,7 +125,7 @@ MM_PERKS[MMPERK_GHOST] = {
 		
 		if last_ghosting > 0
 		and p.mm.perk_ghost_time == 0
-			S_StartSound(me, sfx_cloak2)
+			S_StartSoundAtVolume(me, sfx_cloak2, perk_volume)
 		end
 	end,
 	

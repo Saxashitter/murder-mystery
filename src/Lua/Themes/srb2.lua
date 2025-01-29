@@ -9,6 +9,8 @@ theme.music = "_INTER"
 theme.stretch = false
 
 local function draw_parallax(v, x, y, scale, patch, flags)
+	if not (patch and patch.valid) then return end
+	
 	local width = patch.width
 	local height = patch.height
 

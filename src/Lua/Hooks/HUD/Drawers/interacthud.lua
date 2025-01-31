@@ -85,10 +85,13 @@ local function HUD_InteractDrawer(v,p,cam)
 						"thin-fixed"
 					)
 					if inter.price ~= 0
+						local origin_size = FixedDiv(16*FU, v.cachePatch("MMRING").width*FU) -- Scale to 16 pixels
+						local origin_scale = FU/2
+					
 						v.drawScaled(x + 30*FU,
 							y + 22*FU,
-							FU/2,
-							v.cachePatch("NRNG1"),
+							FixedMul(origin_size, origin_scale),
+							v.cachePatch("MMRING"),
 							trans
 						)
 						v.drawString(x + 40*FU,

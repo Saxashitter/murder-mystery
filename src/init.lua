@@ -57,6 +57,7 @@ dofile "Clues/main"
 dofile "Items/main"
 dofile "ItemMapthings/main"
 dofile "Maps/exec"
+dofile "Objects/NeoRings/define"
 
 -- fool-proofing
 -- basically if you reference a variable thats not in the local table

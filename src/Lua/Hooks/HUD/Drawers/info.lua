@@ -66,10 +66,13 @@ local function HUD_InfoDrawer(v)
 			)	
 		end
 		
+		local origin_size = FixedDiv(16*FU, v.cachePatch("MMRING").width*FU) -- Scale to 16 pixels
+		local origin_scale = FU*3/4
+		
 		v.drawScaled(6*FU - slidein,
 			21*FU + yoff,
-			FU*3/4,
-			v.cachePatch("NRNG1"),
+			FixedMul(origin_size, origin_scale),
+			v.cachePatch("MMRING"),
 			V_SNAPTOLEFT|V_SNAPTOTOP
 		)
 		v.drawString(20*FU - slidein,

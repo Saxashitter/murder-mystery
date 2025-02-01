@@ -117,5 +117,18 @@ return function(p)
 			local grav = P_GetMobjGravity(p.mo)
 			p.mo.momz = $ + FixedMul(grav, 3*FU) - grav/3
 		end
+	--probably jumped out of water
+	elseif p.mo.last_weflag
+		if (p.pflags & PF_JUMPED)
+			p.mo.momz = FixedMul(
+				--get the last (hopefully corrected to normal grav) momz...
+				FixedMul(p.mo.last_momz, FixedDiv(117*FU, 200*FU)),
+				--and reapply the extra thrust you get
+				FixedDiv(780*FU, 457*FU)
+			)
+		end
 	end
+	
+	p.mo.last_weflag = p.mo.eflags & (MFE_UNDERWATER|MFE_GOOWATER)
+	p.mo.last_momz = p.mo.momz
 end

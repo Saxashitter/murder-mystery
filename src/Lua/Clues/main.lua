@@ -30,6 +30,7 @@ function MM:spawnClueMobj(p, pos)
 	mobj.fuse = -1
 	mobj.drawonlyforplayer = p
 	mobj.color = p.skincolor
+	mobj.flags = $|MF_NOCLIP|MF_NOCLIPHEIGHT
 	
 	local mul = FU*2
 	mobj.spritexscale = mul

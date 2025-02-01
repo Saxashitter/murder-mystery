@@ -27,13 +27,15 @@ local function HUD_OOBDrawer(v,p,c)
 			"thin-center"
 		)
 	end
-	v.drawScaled(160*FU - (v.cachePatch("STTNUM0").width*FU/2),
-		(y + 18)*FU,
-		FU,
-		v.cachePatch("STTNUM"..(MM_PLAYER_STORMMAX - p.mm.oob_ticker)/TR),
-		V_SNAPTOBOTTOM,
-		flash and v.getStringColormap(V_REDMAP) or nil
-	)	
+	if p.mm.oob_ticker ~= -1
+		v.drawScaled(160*FU - (v.cachePatch("STTNUM0").width*FU/2),
+			(y + 18)*FU,
+			FU,
+			v.cachePatch("STTNUM"..(MM_PLAYER_STORMMAX - p.mm.oob_ticker)/TR + 1),
+			V_SNAPTOBOTTOM,
+			flash and v.getStringColormap(V_REDMAP) or nil
+		)	
+	end
 	
 end
 

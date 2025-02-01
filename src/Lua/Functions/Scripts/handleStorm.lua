@@ -19,6 +19,7 @@ local ImportantStuff = {
 --when the starting radius is bigger than this, the storm will take
 --longer to shrink to minimum radius
 local BigRadius = 6144*FU
+local STORM_STARTINGTIME = 15*TICRATE
 
 --Stores everything important stored in MM_N.storm_point
 local function Backup(point)
@@ -145,20 +146,14 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr)
 	P_MoveOrigin(laser, x,y, fz)
 	
 	do
-		laser.spriteyscale = FixedDiv(cz - fz, 10*laser.scale)
+		local starting = MM_N.storm_ticker < STORM_STARTINGTIME and FixedDiv(MM_N.storm_ticker*FU, STORM_STARTINGTIME*FU) or FU
+		laser.alpha = FU/2 + starting/2
+		
+		laser.spriteyscale = FixedMul(
+			FixedDiv(cz - fz, 10*laser.scale),
+			starting
+		)
 	end
-	
-	/*
-	do
-		for i = -1,1
-			for j = -1,1
-				local x,y = laser.x + (laser.radius*i),laser.y + (laser.radius*j)
-				local sec = R_PointInSubsector(x,y)
-				sec.flags = $|(1<<6) --MSF_INVERTPRECIP
-			end
-		end
-	end
-	*/
 	
 	--okay ig... there could be a better way to do this
 	if not S_SoundPlaying(laser,sfx_laser)
@@ -219,7 +214,7 @@ local function SpawnAllLasers(point,dist)
 	
 	local color = P_RandomRange(SKINCOLOR_GALAXY,SKINCOLOR_NOBLE)
 	for i = 1,numlasers
-		local ang = FixedAngle((i-1)*angoff) + FixedAngle((leveltime*FU)/2)
+		local ang = FixedAngle((i-1)*angoff) + FixedAngle((MM_N.storm_ticker*FU)/2)
 		local x = point.x + P_ReturnThrustX(nil,ang, dist)
 		local y = point.y + P_ReturnThrustY(nil,ang, dist)
 		
@@ -394,6 +389,7 @@ return function(self)
 		
 		p.mm.lastoob = p.mm.outofbounds
 		p.mm.ouofbounds = false
+		p.mm.oob_lenient = MM_N.storm_ticker <= STORM_STARTINGTIME
 		
 		local me = p.mo
 		

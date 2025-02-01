@@ -23,7 +23,7 @@ local clueitemtiers = {
 function MM:spawnClueMobj(p, pos)
 	local mobj = P_SpawnMobj(pos.x, pos.y, pos.z, MT_MM_CLUESPAWN)
 
-	mobj.state = S_THOK
+	mobj.state = S_MM_CLUE_DEFAULT
 	mobj.frame = $|FF_FULLBRIGHT
 	mobj.tics = -1
 	mobj.fuse = -1

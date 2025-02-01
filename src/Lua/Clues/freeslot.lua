@@ -1,5 +1,8 @@
 freeslot "MT_MM_CLUESPAWN"
 
+freeslot("S_MM_CLUE_DEFAULT", "SPR_MM_CLUE_DEFAULT")
+states[S_MM_CLUE_DEFAULT] = {SPR_MM_CLUE_DEFAULT, A|FF_ANIMATE, -1, nil, 15, 2, S_MM_CLUE_DEFAULT}
+
 sfxinfo[freeslot "sfx_cluecl"].caption = "Collected clue!"
 mobjinfo[MT_MM_CLUESPAWN] = {
 	--$Name Clue Spawner

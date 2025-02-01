@@ -4,6 +4,7 @@ local GetMobjSpawnHeight, GetMapThingSpawnHeight = MM.require "Libs/MapThingLib"
 local choosething = MM.require "Libs/choosething"
 local shallowCopy = MM.require "Libs/shallowCopy"
 local ZCollide = MM.require "Libs/zcollide"
+local CLUE_MAXBOUNCE = 2*FU
 
 local clueitemtiers = {
 	[1] = {
@@ -30,9 +31,12 @@ function MM:spawnClueMobj(p, pos)
 	mobj.drawonlyforplayer = p
 	mobj.color = p.skincolor
 	
-	local mul = FU*3/2
+	local mul = FU*2
 	mobj.spritexscale = mul
 	mobj.spriteyscale = mul
+	
+	mobj.clue_bounce = 0
+	mobj.clue_momz = CLUE_MAXBOUNCE
 
 	if pos.flip then
 		mobj.flags2 = $|MF2_OBJECTFLIP
@@ -52,6 +56,9 @@ local fallbackNums = {
 }
 
 function MM:giveOutClues(amount)
+	--Bruh
+	if (MM_N.dueling) then return end
+	
 	MM.clues_positions = {}
 	local fallbackThings = {}
 	--local useNewClues = false
@@ -107,9 +114,6 @@ function MM:giveOutClues(amount)
 	amount = min(#MM.clues_positions, amount)
 	MM_N.clues_amount = amount
 	
-	--Bruh
-	if (MM_N.dueling) then return end
-	
 	for p in players.iterate do
 		MM:InitPlayerClues(p)
 	end
@@ -137,7 +141,18 @@ MM:addPlayerScript(function(p)
 			continue
 		end
 		clue.mobj.flags2 = $ &~MF2_DONTDRAW
-
+		
+		do
+			clue.mobj.clue_momz = $ - FU/4
+			
+			clue.mobj.clue_bounce = $ + clue.mobj.clue_momz
+			if clue.mobj.clue_bounce <= 0
+				clue.mobj.clue_bounce = 0
+				clue.mobj.clue_momz = CLUE_MAXBOUNCE
+			end
+		end
+		clue.mobj.spriteyoffset = clue.mobj.clue_bounce
+		
 		if P_RandomChance(FU/2)
 			local wind = P_SpawnMobj(
 				pos.x + P_RandomRange(-18,18)*p.mo.scale,
@@ -154,8 +169,8 @@ MM:addPlayerScript(function(p)
 		--debugging + actual purpose
 		clue.mobj.radius = p.mo.radius*3/2
 		clue.mobj.height = p.mo.height*3/2
-		if abs(p.mo.x-pos.x) > clue.mobj.radius
-		or abs(p.mo.y-pos.y) > clue.mobj.radius
+		if abs(p.mo.x-pos.x) > clue.mobj.radius + p.mo.radius
+		or abs(p.mo.y-pos.y) > clue.mobj.radius + p.mo.radius
 		or not ZCollide(p.mo, clue.mobj) then
 			continue
 		end

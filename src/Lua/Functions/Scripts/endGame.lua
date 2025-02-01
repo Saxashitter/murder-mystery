@@ -71,6 +71,7 @@ return function(self, endType)
 			)
 			reason = "surviving "..(p.mm.timesurvived/TICRATE).." seconds"
 			payout = FixedFloor(FixedMul(50*FU, percent)) >> FRACBITS
+
 		elseif (p.mm.role == MMROLE_MURDERER)
 			--dont get paid if you suck at the game
 			if (MM_N.peoplekilled >= MM_N.minimum_killed)
@@ -83,6 +84,7 @@ return function(self, endType)
 				reason = "killing "..MM_N.peoplekilled.." out of "..MM_N.numbertokill.." innocents"
 				payout = FixedFloor(FixedMul(amount, percent)) >> FRACBITS
 			end
+			
 		--TODO: heroes
 		elseif (p.mm.role == MMROLE_SHERIFF)
 			local percent = FixedDiv(

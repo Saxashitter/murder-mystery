@@ -3,6 +3,7 @@ dofile "Clues/freeslot"
 local GetMobjSpawnHeight, GetMapThingSpawnHeight = MM.require "Libs/MapThingLib"
 local choosething = MM.require "Libs/choosething"
 local shallowCopy = MM.require "Libs/shallowCopy"
+local ZCollide = MM.require "Libs/zcollide"
 
 local clueitemtiers = {
 	[1] = {
@@ -28,6 +29,10 @@ function MM:spawnClueMobj(p, pos)
 	mobj.fuse = -1
 	mobj.drawonlyforplayer = p
 	mobj.color = p.skincolor
+	
+	local mul = FU*3/2
+	mobj.spritexscale = mul
+	mobj.spriteyscale = mul
 
 	if pos.flip then
 		mobj.flags2 = $|MF2_OBJECTFLIP
@@ -146,9 +151,12 @@ MM:addPlayerScript(function(p)
 			P_SetObjectMomZ(wind,P_RandomRange(1,3)*FU)
 		end
 		
-		if abs(p.mo.x-pos.x) > p.mo.radius*3/2
-		or abs(p.mo.y-pos.y) > p.mo.radius*3/2
-		or abs(p.mo.z-pos.z) > p.mo.height*3/2 then
+		--debugging + actual purpose
+		clue.mobj.radius = p.mo.radius*3/2
+		clue.mobj.height = p.mo.height*3/2
+		if abs(p.mo.x-pos.x) > clue.mobj.radius
+		or abs(p.mo.y-pos.y) > clue.mobj.radius
+		or not ZCollide(p.mo, clue.mobj) then
 			continue
 		end
 

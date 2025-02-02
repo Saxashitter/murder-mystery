@@ -63,9 +63,6 @@
 
 */
 
--- Simple lua to run hooks for the mod.
--- Adds easy modding support and more!
-
 local handler_snaptrue = {
 	func = function(current, result)
 		return result or current

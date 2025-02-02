@@ -42,9 +42,9 @@ MM.FireBullet = function(p,def,item, angle, aiming, callhooks)
 		bullet.momz = 32*sin(aiming)
 		
 		P_SetOrigin(bullet, 
-			p.mo.x + P_ReturnThrustX(nil,p.mo.angle, 2*FU),
-			p.mo.y + P_ReturnThrustY(nil,p.mo.angle, 2*FU),
-			p.mo.z + (41*p.mo.height/48)
+			p.mo.x + P_ReturnThrustX(nil,p.mo.angle, 4*FU),
+			p.mo.y + P_ReturnThrustY(nil,p.mo.angle, 4*FU),
+			(p.mo.z + (41*p.mo.height/48))-8*FU
 		)
 		table.insert(item.bullets, bullet)
 	end

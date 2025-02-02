@@ -10,7 +10,7 @@ local perk_cooldown = 30*TR
 
 local clueItems = {
 	"revolver",
-	"gun",
+	"shotgun",
 	"sword",
 	"snowball",
 	"burger",

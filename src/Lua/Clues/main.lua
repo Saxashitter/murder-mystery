@@ -8,7 +8,7 @@ local CLUE_MAXBOUNCE = 2*FU
 
 local clueitemtiers = {
 	[1] = {
-		"gun",
+		"shotgun",
 		"revolver",
 		"sword",
 	},

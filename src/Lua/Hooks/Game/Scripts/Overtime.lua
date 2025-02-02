@@ -1,7 +1,7 @@
 --handles everything related to round times
 
 local possibleItems = {
-	"gun",
+	"shotgun",
 	"revolver",
 	"luger",
 	"knife",

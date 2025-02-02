@@ -110,7 +110,7 @@ return function(v, p)
 			selected = i == inv.cur_sel,
 			timeleft = items[i] and items[i].timeleft,
 			graphic = items[i] and items[i].display_icon,
-			flags = V_SNAPTOBOTTOM,
+			flags = V_SNAPTOBOTTOM|V_PERPLAYER,
 			inv = inv,
 			item = items[i],
 			p = p,

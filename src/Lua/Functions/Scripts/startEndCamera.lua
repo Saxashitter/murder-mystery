@@ -18,6 +18,8 @@ local function follow(mobj, mul)
 		mobj.z
 	)
 	*/
+
+	mobj.flags = $ &~MF_NOCLIPHEIGHT
 	P_MoveOrigin(mobj,
 		mobj.origin[1], --+ P_ReturnThrustX(nil,mobj.angle,-mobj.lerpradius),
 		mobj.origin[2], --+ P_ReturnThrustY(nil,mobj.angle,-mobj.lerpradius),
@@ -34,6 +36,8 @@ local function follow(mobj, mul)
 		end
 
 		local move = (i == maxmove) and -mobj.lerpradius or FixedDiv(-mobj.lerpradius,maxmove*FU)*i
+		move = FixedMul($, mobj.scale)
+
 		P_TryMove(mobj,
 			mobj.origin[1] + P_ReturnThrustX(nil,mobj.angle,move),
 			mobj.origin[2] + P_ReturnThrustY(nil,mobj.angle,move),
@@ -41,10 +45,12 @@ local function follow(mobj, mul)
 		)
 	end
 
+	mobj.flags = $|MF_NOCLIPHEIGHT
 	P_MoveOrigin(mobj,
 		mobj.x,
 		mobj.y,
-		mobj.startz
+		--SRB2 is a GREAT game
+		mobj.startz - 20*FU
 	)
 end
 
@@ -66,7 +72,7 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 		MM_N.end_camera.flags2 = $|MF2_DONTDRAW
 		MM_N.end_camera.flags = MF_NOCLIPTHING|MF_NOCLIPHEIGHT|MF_NOGRAVITY
 		MM_N.end_camera.radius = 8*FU
-		MM_N.end_camera.height = 2*FU
+		MM_N.end_camera.height = FU/2
 		P_TryMove(MM_N.end_camera,
 			origin.x + P_ReturnThrustX(nil,focusang,-1200*FU),
 			origin.y + P_ReturnThrustY(nil,focusang,-1200*FU),
@@ -78,6 +84,7 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 		MM_N.end_camera.endradius = {finalradius, finalradius/2}
 		MM_N.end_camera.lerpradius = MM_N.end_camera.startradius[1]
 		MM_N.end_camera.startz = origin.z + (origin.height)
+		MM_N.end_camera.scale = origin.scale
 		
 		MM_N.end_camera.swirldur = 3*TICRATE
 		if MM_N.sniped_end then
@@ -185,6 +192,7 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 				MM_N.end_camera.lerpradius = hdist
 				MM_N.end_camera.startz = vdist
 				MM_N.end_camera.free_noclip = MM_N.end_camera.ticker <= MM_N.end_camera.swirldur/4
+				MM_N.end_camera.scale = ease.outquad(swirl, $, sheriff.scale)
 
 				MM_N.end_camera.ticker = $+1
 			end

@@ -18,12 +18,12 @@ local function HUD_OOBDrawer(v,p,c)
 	if p.mm.outofbounds
 		v.drawString(160,y,
 			"! OUT OF BOUNDS !",
-			flash|V_SNAPTOBOTTOM,
+			flash|V_SNAPTOBOTTOM|V_PERPLAYER,
 			"center"
 		)
 		v.drawString(160,y+8,
 			"Return to play area",
-			flash|V_SNAPTOBOTTOM,
+			flash|V_SNAPTOBOTTOM|V_PERPLAYER,
 			"thin-center"
 		)
 	end
@@ -32,7 +32,7 @@ local function HUD_OOBDrawer(v,p,c)
 			(y + 18)*FU,
 			FU,
 			v.cachePatch("STTNUM"..(MM_PLAYER_STORMMAX - p.mm.oob_ticker)/TR + 1),
-			V_SNAPTOBOTTOM,
+			V_SNAPTOBOTTOM|V_PERPLAYER,
 			flash and v.getStringColormap(V_REDMAP) or nil
 		)	
 	end

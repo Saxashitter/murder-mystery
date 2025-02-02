@@ -1,12 +1,15 @@
 local TR = TICRATE
 
-local function HUD_InfoDrawer(v)
+local function HUD_InfoDrawer(v, stplyr)
 	local p = displayplayer
 	local slidein = MMHUD.xoffset
 	
 	--Timer
-	--TODO: align this to middle of screen when I get home
 	do
+		local x = 5*FU - slidein
+		local y = 10*FU
+		local flags = V_SNAPTOLEFT|V_SNAPTOTOP
+		
 		local flash = false
 		local timetic = MM_N.time
 		timetic = not (MM_N.overtime and not MM_N.showdown) and min(max($,0), MM_N.maxtime)+TICRATE or 0
@@ -26,18 +29,24 @@ local function HUD_InfoDrawer(v)
 			finalstring = "SHOWDOWN !!" -- ("..$..")"
 		end
 		
-		v.drawScaled(5*FU - slidein,
-			10*FU,
-			FU,
-			v.cachePatch("NGRTIMER"),
-			V_SNAPTOLEFT|V_SNAPTOTOP
-		)
-		v.drawString(20*FU - slidein,
-			10*FU,
-			finalstring, --.."."..tictrn,
-			V_SNAPTOLEFT|V_SNAPTOTOP|(flash and V_REDMAP or 0),
-			"fixed"
-		)
+		if splitscreen and (stplyr and stplyr.valid)
+			x = 160*FU - ((v.stringWidth(finalstring,0,"normal") + 15)/2)*FU
+			y = 100*FU
+			flags = MMHUD.hudtrans
+		end
+		
+		if flags ~= V_100TRANS
+			v.drawScaled(x, y,
+				FU,
+				v.cachePatch("NGRTIMER"),
+				flags
+			)
+			v.drawString(x + 15*FU, y,
+				finalstring, --.."."..tictrn,
+				flags|(flash and V_REDMAP or 0),
+				"fixed"
+			)
+		end
 	end
 	
 	--rings

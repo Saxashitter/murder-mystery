@@ -2,6 +2,7 @@
 local function HUD_GoalDrawer(v,p)
 	local x = 5*FU - MMHUD.xoffset
 	local y = 34*FU
+	local flags = V_SNAPTOTOP|V_SNAPTOLEFT|V_ALLOWLOWERCASE|V_PERPLAYER
 	
 	if MM_N.dueling then return end
 	
@@ -12,7 +13,7 @@ local function HUD_GoalDrawer(v,p)
 			v.drawString(x,
 				y,
 				(#p.mm.clues.list).."/"..p.mm.clues.startamount.." Clues left",
-				V_SNAPTOTOP|V_SNAPTOLEFT|V_ALLOWLOWERCASE|complete,
+				flags|complete,
 				"thin-fixed"
 			)
 			y = $+8*FU
@@ -26,7 +27,7 @@ local function HUD_GoalDrawer(v,p)
 		v.drawString(x,
 			y,
 			MM_N.peoplekilled.."/"..needed.." People killed",
-			V_SNAPTOTOP|V_SNAPTOLEFT|V_ALLOWLOWERCASE|complete,
+			flags|complete,
 			"thin-fixed"
 		)
 		y = $+8*FU

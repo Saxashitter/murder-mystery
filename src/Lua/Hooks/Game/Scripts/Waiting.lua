@@ -2,6 +2,7 @@ local MUSIC = false
 
 return function()
 	if CV_MM.debug.value 
+	or splitscreen
 		MM_N.waiting_for_players = false
 		return
 	end

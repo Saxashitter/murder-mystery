@@ -16,14 +16,16 @@ local function HUD_RoleDrawer(v,p)
 		return
 	end
 	
+	local y = (p == secondarydisplayplayer) and (v.height()/v.dupy() << (FRACBITS-1)) or 0
+	
 	----Draw "Killed by"
 	if p.spectator 
 	or not (p.mo and p.mo.valid)
 	or p.mo.health == 0 then
 		v.drawString(320*FU + off,
-			0,
+			y,
 			"Dead",
-			V_GRAYMAP|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE|V_PERPLAYER,
+			V_GRAYMAP|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
 			"fixed-right"
 		)
 		return
@@ -31,13 +33,14 @@ local function HUD_RoleDrawer(v,p)
 	----
 	
 	v.drawString(320*FU + off,
-		0,
+		y,
 		roles[p.mm.role].name,
-		roles[p.mm.role].color|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE|V_PERPLAYER,
+		roles[p.mm.role].color|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
 		"fixed-right"
 	)
 	
 	if leveltime <= MM_N.pregame_time*2
+	and not splitscreen
 		v.drawString(320*FU + off,
 			8*FU,
 			"Press TAB to view more",

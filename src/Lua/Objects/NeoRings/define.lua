@@ -10,7 +10,7 @@ addHook("MobjSpawn", function(mo)
 		if not mo.override
 			mobjinfo[MT_RING].spawnstate = S_MM_RING
 			mobjinfo[MT_RING].deathstate = S_MM_RING_SPARKLE
-			mobjinfo[MT_RING].deathsound = sfx_S3K33
+			mobjinfo[MT_RING].deathsound = sfx_s3k33
 			--mo.scale = $+(FU/3)
 			mo.override = true
 		end

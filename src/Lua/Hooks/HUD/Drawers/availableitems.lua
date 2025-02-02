@@ -1,8 +1,18 @@
 --it would make more sense to rename this file to "inventory.lua"
 local itemname = {
-	oldid = '',
-	id = '',
-	tics = 0,
+	--first disp. player
+	[1] = {
+		oldid = '',
+		id = '',
+		tics = 0,
+	},
+	
+	--second disp. player
+	[2] = {
+		oldid = '',
+		id = '',
+		tics = 0,
+	}
 }
 
 local function V_DrawBox(props)
@@ -78,24 +88,26 @@ return function(v, p)
 	local items = inv.items
 	local count = inv.count
 	local curitem = items[inv.cur_sel]
+	local myitemname = p == displayplayer and itemname[1] or itemname[2]
 	
 	local x = 160*FU
 	local y = 172*FU + MMHUD.xoffset
 	local scale = FU*3/4 --*2/count
 	x = $ - (count*17*scale)
 	
-	if curitem ~= itemname.oldid
-		itemname.tics = 3*TICRATE
+	
+	if curitem ~= myitemname.oldid
+		myitemname.tics = 3*TICRATE
 	end
 	
-	if itemname.tics
-		itemname.tics = $-1
+	if myitemname.tics
+		myitemname.tics = $-1
 		
 		if curitem and curitem.display_name
-			local trans = itemname.tics < 10 and (9 - itemname.tics)<<V_ALPHASHIFT or 0
+			local trans = myitemname.tics < 10 and (9 - myitemname.tics)<<V_ALPHASHIFT or 0
 			v.drawString(x, y - 12*FU,
 				curitem.display_name,
-				V_SNAPTOBOTTOM|trans|V_ALLOWLOWERCASE,
+				V_PERPLAYER|V_SNAPTOBOTTOM|trans|V_ALLOWLOWERCASE,
 				"thin-fixed"
 			)
 		end
@@ -115,20 +127,21 @@ return function(v, p)
 			item = items[i],
 			p = p,
 		}
-
+		
 		x = $+(36*scale)
 	end
-	itemname.oldid = curitem
+	myitemname.oldid = curitem
 	
 	--controls
 	x = 5*FU - MMHUD.xoffset
 	y = 170*FU
+	local flags = V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_PERPLAYER
 	
 	if (p.pflags & (PF_ANALOGMODE|PF_DIRECTIONCHAR) == (PF_ANALOGMODE|PF_DIRECTIONCHAR))
 		v.drawString(
 			x,y - 16*FU,
 			"Automatic mode\nis not recommended.",
-			V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_REDMAP|V_RETURN8,
+			flags|V_REDMAP|V_RETURN8,
 			"thin-fixed"
 		)
 	end
@@ -136,7 +149,7 @@ return function(v, p)
 	v.drawString(
 		x,y,
 		"[C1] - "..(inv.hidden and "Equip" or "Unequip").." Items",
-		V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
+		flags,
 		"thin-fixed"
 	)
 	y = $+8*FU
@@ -144,7 +157,7 @@ return function(v, p)
 	if curitem and curitem.droppable then
 		v.drawString(x,y,
 			"[C2] - Drop weapon",
-			V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
+			flags,
 			"thin-fixed"
 		)
 		y = $+8*FU
@@ -153,7 +166,7 @@ return function(v, p)
 	if (curitem)
 		v.drawString(x,y,
 			"[FIRE] - Use weapon",
-			V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
+			flags,
 			"thin-fixed"
 		)
 		y = $+8*FU

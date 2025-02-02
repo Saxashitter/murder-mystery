@@ -54,6 +54,22 @@ end
 local TR = TICRATE
 local HUD_BEGINNINGXOFF = 350*FU
 
+--dont draw if MMHUD.hudtrans == V_100TRANS
+rawset(_G, "V_100TRANS", 10 << V_ALPHASHIFT)
+local htranstable = {
+	[0] = 10,
+	[1] = 9,
+	[2] = 9,
+	[3] = 8,
+	[4] = 8,
+	[5] = 7,
+	[6] = 7,
+	[7] = 6,
+	[8] = 6,
+	[9] = 5,
+	[10] = 5,
+}
+
 --DO NOT SYNCH!!!!!!!!
 local MMHUD = {
 	ticker = 0,
@@ -61,12 +77,10 @@ local MMHUD = {
 	weaponslidein = HUD_BEGINNINGXOFF,
 	dontslidein = false,
 
-	hudtrans = 0,
-	hudtranshalf = 5 << V_ALPHASHIFT,
+	hudtrans = V_100TRANS,
+	hudtranshalf = V_100TRANS,
 }
 rawset(_G, "MMHUD", MMHUD)
---dont draw if MMHUD.hudtrans == V_100TRANS
-rawset(_G, "V_100TRANS", 10 << V_ALPHASHIFT)
 
 local hudwasmm = false
 local modname = "SAXAMM"
@@ -82,6 +96,8 @@ addHook("MapLoad",do
 	MMHUD.ticker = 0
 	MMHUD.xoffset = HUD_BEGINNINGXOFF
 	MMHUD.weaponslidein = HUD_BEGINNINGXOFF
+	
+	MMHUD.hudtrans = V_100TRANS
 end)
 
 addHook("HUD", function(v,p,c)
@@ -127,15 +143,31 @@ addHook("HUD", function(v,p,c)
 					
 					MMHUD.weaponslidein = ease.inexpo(FU*7/10,$,HUD_BEGINNINGXOFF)
 				end
+				
+				--fade in stuff if we've tweened for at least 2 tics
+				if MMHUD.xoffset <= FixedMul(HUD_BEGINNINGXOFF, FixedSqrt(FU*7/10))
+					if MMHUD.hudtrans >> V_ALPHASHIFT ~= 0
+						MMHUD.hudtrans = (($ >> V_ALPHASHIFT) - 1) << V_ALPHASHIFT
+					end
+				end
 			
 			--everything slides out
 			else
 				MMHUD.xoffset = ease.inexpo(FU*7/10,$,HUD_BEGINNINGXOFF)
 				MMHUD.weaponslidein = ease.inexpo(FU*7/10,$,HUD_BEGINNINGXOFF)
+				
+				if MMHUD.hudtrans >> V_ALPHASHIFT ~= 10
+					MMHUD.hudtrans = (($ >> V_ALPHASHIFT) + 1) << V_ALPHASHIFT
+				end
 			end
 		else
+			if MMHUD.hudtrans >> V_ALPHASHIFT ~= 10
+				MMHUD.hudtrans = (($ >> V_ALPHASHIFT) + 1) << V_ALPHASHIFT
+			end
+			
 			MMHUD.dontslidein = false
 		end
+		MMHUD.hudtranshalf = htranstable[10 - (MMHUD.hudtrans >> V_ALPHASHIFT)] << V_ALPHASHIFT
 		
 		hudwasmm = true
 		return

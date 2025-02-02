@@ -127,8 +127,8 @@ local function HUD_TimeForWeapon(v,p)
 	
 	v.drawString(160*FU,
 		40*FU - MMHUD.weaponslidein,
-		roles[p.mm.role].weapon and "You'll get your weapon in" or
-		"Round starts in",
+		(not splitscreen) and (roles[p.mm.role].weapon and "You'll get your weapon in" or
+		"Round starts in") or "Duel starts in",
 		V_SNAPTOTOP|V_ALLOWLOWERCASE,
 		roles[p.mm.role].weapon and "thin-fixed-center" or "fixed-center"
 	)
@@ -172,10 +172,12 @@ local function HUD_TimeForWeapon(v,p)
 				)
 				work = $ + v.cachePatch("STTNUM0").width*FU
 			end
-
+			
 		end
 		
 	end
+	
+	if splitscreen then return end
 	
 	v.drawString(160*FU,
 		150*FU + MMHUD.weaponslidein,

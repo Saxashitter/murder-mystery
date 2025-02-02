@@ -336,7 +336,7 @@ end
 
 hud.add(function(v, player, camera)
 	RunCustomHooks("game", v, player, camera);
-	RunCustomHooks("gameandscores", v);
+	RunCustomHooks("gameandscores", v, player);
 end, "game");
 
 hud.add(function(v)

@@ -35,6 +35,7 @@ return function(p)
 	if (MM_N.waiting_for_players)
 	or (MM_N.gameover)
 	or (p.mm.spectator)
+	or (splitscreen)
 		return
 	end
 	

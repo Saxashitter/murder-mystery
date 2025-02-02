@@ -153,7 +153,7 @@ MM.BulletHit = function(ring,pmo)
 end
 
 MM:CreateItem(dofile(path.."Revolver/def"))
-MM:CreateItem(dofile(path.."Gun/def"))
+MM:CreateItem(dofile(path.."Shotgun/def"))
 MM:CreateItem(dofile(path.."Luger/def"))
 MM:CreateItem(dofile(path.."Knife/def"))
 MM:CreateItem(dofile(path.."Burger/def"))

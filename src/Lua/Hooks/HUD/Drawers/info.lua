@@ -5,6 +5,7 @@ local function HUD_InfoDrawer(v)
 	local slidein = MMHUD.xoffset
 	
 	--Timer
+	--TODO: align this to middle of screen when I get home
 	do
 		local flash = false
 		local timetic = MM_N.time
@@ -41,6 +42,8 @@ local function HUD_InfoDrawer(v)
 	
 	--rings
 	do
+		local x = 6*FU - slidein
+		local y = (splitscreen and 10 or 21)*FU
 		local yoff = 0
 		local rings = MM:GetPlayerRings(p)
 		if (MMHUD.info_slideout)
@@ -58,10 +61,10 @@ local function HUD_InfoDrawer(v)
 			
 			rings = ($ - p.mm.ringspaid) + MMHUD.info_count
 			
-			v.drawString(20*FU - slidein + (v.stringWidth(tostring(rings),0,"normal")*FU),
-				32*FU + yoff,
+			v.drawString(x + 14*FU + (v.stringWidth(tostring(rings),0,"normal")*FU),
+				y + 11*FU + yoff,
 				"+"..(p.mm.ringspaid - MMHUD.info_count),
-				V_SNAPTOLEFT|V_SNAPTOTOP|V_GREENMAP,
+				V_SNAPTOLEFT|V_SNAPTOTOP|V_GREENMAP|V_PERPLAYER,
 				"fixed-right"
 			)	
 		end
@@ -70,15 +73,15 @@ local function HUD_InfoDrawer(v)
 		local origin_scale = FU*3/4
 		
 		v.drawScaled(6*FU - slidein,
-			21*FU + yoff,
+			y + yoff,
 			FixedMul(origin_size, origin_scale),
 			v.cachePatch("MMRING"),
-			V_SNAPTOLEFT|V_SNAPTOTOP
+			V_SNAPTOLEFT|V_SNAPTOTOP|V_PERPLAYER
 		)
-		v.drawString(20*FU - slidein,
-			22*FU + yoff,
+		v.drawString(x + 14*FU,
+			y + FU + yoff,
 			rings,
-			V_SNAPTOLEFT|V_SNAPTOTOP,
+			V_SNAPTOLEFT|V_SNAPTOTOP|V_PERPLAYER,
 			"fixed"
 		)	
 	end

@@ -10,6 +10,8 @@ local function HUD_RoleDrawer(v,p)
 	
 	--we have enough screen space
 	if v.width() >= 800
+	--the game would squish the text to illegibility
+	and not splitscreen
 		MMHUD.HUD_RoleDrawer(v,p)
 		return
 	end
@@ -21,7 +23,7 @@ local function HUD_RoleDrawer(v,p)
 		v.drawString(320*FU + off,
 			0,
 			"Dead",
-			V_GRAYMAP|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
+			V_GRAYMAP|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE|V_PERPLAYER,
 			"fixed-right"
 		)
 		return
@@ -31,7 +33,7 @@ local function HUD_RoleDrawer(v,p)
 	v.drawString(320*FU + off,
 		0,
 		roles[p.mm.role].name,
-		roles[p.mm.role].color|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
+		roles[p.mm.role].color|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE|V_PERPLAYER,
 		"fixed-right"
 	)
 	
@@ -39,7 +41,7 @@ local function HUD_RoleDrawer(v,p)
 		v.drawString(320*FU + off,
 			8*FU,
 			"Press TAB to view more",
-			V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
+			V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE|V_PERPLAYER,
 			"thin-fixed-right"
 		)	
 	end

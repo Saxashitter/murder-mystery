@@ -60,8 +60,13 @@ local MMHUD = {
 	xoffset = HUD_BEGINNINGXOFF,
 	weaponslidein = HUD_BEGINNINGXOFF,
 	dontslidein = false,
+
+	hudtrans = 0,
+	hudtranshalf = 5 << V_ALPHASHIFT,
 }
 rawset(_G, "MMHUD", MMHUD)
+--dont draw if MMHUD.hudtrans == V_100TRANS
+rawset(_G, "V_100TRANS", 10 << V_ALPHASHIFT)
 
 local hudwasmm = false
 local modname = "SAXAMM"

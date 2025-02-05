@@ -8,9 +8,10 @@ local function HUD_OOBDrawer(v,p,c)
 	
 	if not p.mm.outofbounds and not p.mm.oob_ticker then return end
 	
+	local fadeStrength = ( FixedMul(9*FU,FixedDiv(p.mm.oob_ticker,MM_PLAYER_STORMMAX)) / FU)
 	v.fadeScreen(
-		160 + ( FixedMul(9*FU,FixedDiv(p.mm.oob_ticker,MM_PLAYER_STORMMAX)) / FU),
-		( FixedMul(9*FU,FixedDiv(p.mm.oob_ticker,MM_PLAYER_STORMMAX)) / FU)
+		160 + fadeStrength,
+		fadeStrength
 	)
 	
 	local flash = ((leveltime%(2*TR)) < 30*TR) and (leveltime/5 & 1) and V_REDMAP or 0

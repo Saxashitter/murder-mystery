@@ -190,6 +190,7 @@ addHook("HUD", function(v,p,c)
 	hudwasmm = false
 end)
 
+addHud "deathflash"
 addHud "outofbounds"
 addHud "afktimeout"
 addHud "interacthud"

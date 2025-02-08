@@ -188,15 +188,28 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 				if (sheriff and sheriff.valid)
 					MM_N.end_camera.origin = {sheriff.x, sheriff.y, sheriff.z + sheriff.height}
 				end
-
+				
 				MM_N.end_camera.lerpradius = hdist
 				MM_N.end_camera.startz = vdist
 				MM_N.end_camera.free_noclip = MM_N.end_camera.ticker <= MM_N.end_camera.swirldur/4
 				MM_N.end_camera.scale = ease.outquad(swirl, $, sheriff.scale)
-
+				
 				MM_N.end_camera.ticker = $+1
 			end
-
+		
+		--keep updating our position to move to the sheriff's
+		elseif (MM_N.end_camera.swirl_stage == STAGE_TOSHERIFF)
+			local swirl = intervalhelper(time, MM_N.end_camera.swirldur)
+			local vdist = ease.outquad(swirl, MM_N.end_camera.startz,
+				(sheriff and sheriff.valid) and sheriff.z + sheriff.height or MM_N.end_camera.startz
+			)
+			if (sheriff and sheriff.valid)
+				MM_N.end_camera.origin = {sheriff.x, sheriff.y, sheriff.z + sheriff.height}
+			end
+			
+			MM_N.end_camera.startz = vdist
+			MM_N.end_camera.free_noclip = MM_N.end_camera.ticker <= MM_N.end_camera.swirldur/4
+			MM_N.end_camera.scale = ease.outquad(swirl, $, sheriff.scale)
 		end
 		follow(MM_N.end_camera, FixedMul(pan, MM_N.end_camera.panspeed))
 

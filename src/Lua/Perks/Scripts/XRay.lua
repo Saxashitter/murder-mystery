@@ -12,6 +12,7 @@ MM_PERKS[MMPERK_XRAY] = {
 		if (p.spectator) then return end
 		if (MM_N.gameover) then return end
 		if (MM_N.showdown) then return end
+		if (MM_N.dueling) then return end
 		
 		if (p.mm.role ~= MMROLE_MURDERER) then return end
 		

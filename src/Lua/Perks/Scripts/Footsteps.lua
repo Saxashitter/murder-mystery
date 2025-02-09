@@ -133,6 +133,8 @@ end)
 addHook("ThinkFrame",do
 	MM_N.spawnfootsteps = false
 	
+	if (MM_N.dueling) then return end
+	
 	for p in players.iterate
 		if p.spectator then continue end
 		if not (p.mo and p.mo.valid) then continue end

@@ -17,20 +17,21 @@ local SG_GetViewVars = function(v, p, c, allowspectator)
 		return
 	end
 	
+	-- الحد الأقصى لعدد الخواتم
+	if p.awayviewtics then
+		local mo = p.awayviewmobj
+		return mo.x, mo.y, mo.z, mo.angle, mo.pitch, roll
+	end
+	
 	--TODO: remove this when jisk's pr gets merged into srb2
 	if takis_custombuild
 		return c.x, c.y, c.z + c.height/2, c.angle, c.aiming, roll
 	end
 	
-	if p.awayviewtics then
-		local mo = p.awayviewmobj
-		return mo.x, mo.y, mo.z, mo.angle, mo.pitch, roll
-	elseif c.chase then
+	if c.chase then
 		return c.x, c.y, c.z + c.height/2, c.angle, c.aiming, roll
-	/*
 	elseif p.mo then
 		return p.mo.x, p.mo.y, p.viewz, p.mo.angle, p.aiming, roll
-	*/
 	else
 		return p.realmo.x, p.realmo.y, p.viewz, p.realmo.angle, p.aiming, roll
 	end

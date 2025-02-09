@@ -18,6 +18,9 @@ local ITEM_DEF = {
 	hit_time = 35,
 	animation_time = 35,
 	cooldown_time = 35,
+	max_ammo = 0,
+	--if TRUE, this weapon wont use ammo in duels
+	noammoinduels = false,
 
 	range = FU*2,
 	-- this is a multiplication of the targets range and the players range combined
@@ -84,10 +87,12 @@ local ITEM_STRUCT = {
 	max_hit = 0,
 	max_cooldown = 0,
 	max_anim = 0,
+	max_ammo = 0,
 
 	hit = 0,
 	anim = 0,
 	cooldown = 0,
+	ammo = 0,
 
 	range = FU*2,
 
@@ -305,25 +310,28 @@ function MM:GiveItem(p, item_input, slot, overrides)
 	elseif self:FetchInventory(p) then
 		local item = shallowCopy(ITEM_STRUCT)
 		local def = self.Items[item_input]
-
+		
 		item.id = def.id
-
+		
 		item.display_name = def.display_name
 		item.display_icon = def.display_icon
-
+		
 		item.mobj = self:MakeWeaponMobj(p, item)
-
+		
 		item.state = def.state
-
+		
 		item.timeleft = def.timeleft
-
+		
 		item.max_hit = def.hit_time
 		item.max_anim = def.animation_time
 		item.max_cooldown = def.cooldown_time
-
+		item.max_ammo = def.max_ammo
+		item.ammo = item.max_ammo
+		item.noammoinduels = item.noammoinduels
+		
 		item.range = def.range
 		item.zrange = def.zrange
-
+		
 		item.pos = shallowCopy(def.position)
 		item.default_pos = shallowCopy(def.position)
 		item.anim_pos = shallowCopy(def.animation_position)

@@ -65,7 +65,7 @@ local function SpawnExplosions(mine)
 	local minz = 10
 	local maxz = 30
 	
-	local count = 42
+	local count = 25
 	local anglecount = FixedDiv(360*FU,count*FU)
 	for i = 0,count
 		local fa = FixedAngle(anglecount*i) + P_RandomRange(-360, 360)*ANG1

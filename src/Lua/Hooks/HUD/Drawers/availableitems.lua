@@ -73,8 +73,26 @@ local function V_DrawBox(props)
 	
 	if item == nil then return end
 	
-	--def drawer draws over everything?
 	local def = MM.Items[item.id]
+	
+	if (item.max_ammo ~= 0)
+	and not (item.noammoinduels and MM_N.dueling)
+		if not selected
+			v.drawString(x, (y + 32*scale) - 8*FU,
+				item.ammo.."/"..item.max_ammo,
+				(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE,
+				"thin-fixed"
+			)
+		else
+			v.drawString(160*FU,y - 20*FU,
+				"Ammo: "..item.ammo.." / "..item.max_ammo,
+				(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE,
+				"thin-fixed-center"
+			)
+		end
+	end
+	
+	--def drawer draws over everything?
 	if (def.drawer)
 		def.drawer(v, props.p, item, x,y, scale, flags, selected, not inv.hidden)
 	end

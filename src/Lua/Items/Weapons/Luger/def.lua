@@ -36,7 +36,8 @@ weapon.pickupsfx = sfx_gnpick
 weapon.equipsfx = sfx_gequip
 weapon.attacksfx = sfx_lugrsh
 weapon.allowdropmobj = false
-weapon.maxshots = 5
+weapon.max_ammo = 5
+weapon.noammoinduels = true
 
 function weapon:postpickup(p)
 	if (MM_N.dueling) then return end
@@ -50,43 +51,6 @@ weapon.bulletthinker = function(mo, i)
 	if (i >= 192)
 		mo.momz = $ - (mo.scale/2)*P_MobjFlip(mo)
 	end
-end
-
-
---we dont need to do much here
-weapon.hiddenthinker = function(item,p)
-	item.ammoleft = $ or weapon.maxshots
-end
-weapon.thinker = weapon.hiddenthinker
-
-weapon.attack = function(item,p)
-	if (MM_N.dueling) then return end
-	if item.ammoleft == nil or item.ammoleft == 0 then return end
-	
-	item.ammoleft = $ - 1
-	
-	if item.ammoleft == 0
-		MM:DropItem(p,nil,false,true,true)
-	end
-end
-
-weapon.drawer = function(v, p,item, x,y,scale,flags, selected, active)
-	if item.ammoleft == nil then return end
-	if not selected
-		v.drawString(x, (y + 32*scale) - 8*FU,
-			item.ammoleft.."/"..weapon.maxshots,
-			(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE,
-			"thin-fixed"
-		)
-		
-		return
-	end
-	
-	v.drawString(160*FU,y - 20*FU,
-		"Ammo: "..item.ammoleft.." / "..weapon.maxshots,
-		(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE,
-		"thin-fixed-center"
-	)
 end
 
 return weapon

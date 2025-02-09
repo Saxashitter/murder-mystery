@@ -5,6 +5,7 @@ local function shittyfunction(newvalue, maximum)
 	return newvalue
 end
 
+--also kickstarts the melee function
 MM.FireBullet = function(p,def,item, angle, aiming, callhooks)
 	item.hit = item.max_hit
 	item.anim = item.max_anim
@@ -54,6 +55,17 @@ MM.FireBullet = function(p,def,item, angle, aiming, callhooks)
 		end
 		if item.attacksfx then
 			S_StartSound(p.mo, item.attacksfx)
+		end
+		
+		--This weapon doesnt use ammo
+		if item.max_ammo ~= 0
+		and not (item.noammoinduels and MM_N.dueling)
+			item.ammo = $ - 1
+			
+			--remove it
+			if item.ammo <= 0
+				MM:DropItem(p,nil,false,true,true)
+			end
 		end
 	end
 	return bullet
@@ -376,16 +388,16 @@ MM:addPlayerScript(function(p)
 			and p2.mo.health
 			and p2.mm
 			and not p2.mm.spectator) then continue end
-
+			
 			local dist = R_PointToDist2(p.mo.x, p.mo.y, p2.mo.x, p2.mo.y)
 			local maxdist = FixedMul(p.mo.radius+p2.mo.radius, item.range)
-
+			
 			if dist > maxdist
 			or abs((p.mo.z + p.mo.height/2) - (p2.mo.z + p2.mo.height/2)) > FixedMul(max(p.mo.height, p2.mo.height), item.zrange or item.range)
 			or not P_CheckSight(p.mo, p2.mo) then
 				continue
 			end
-
+			
 			if roles[p.mm.role].team == roles[p2.mm.role].team
 			and not roles[p.mm.role].friendlyfire then
 				continue
@@ -400,11 +412,11 @@ MM:addPlayerScript(function(p)
 			if (AngleFixed(adiff) > 115*FU)
 				continue
 			end
-
+			
 			if MM.runHook("AttackPlayer", p, p2) then
 				continue
 			end
-
+			
 			if item.damage then
 				P_KillMobj(p2.mo, item.mobj, p.mo, 999)
 				

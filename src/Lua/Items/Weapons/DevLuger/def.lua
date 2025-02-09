@@ -34,5 +34,6 @@ weapon.equipsfx = sfx_gequip
 weapon.attacksfx = sfx_revlsh
 weapon.allowdropmobj = true
 weapon.rapidfire = true
+weapon.max_ammo = 100
 
 return weapon

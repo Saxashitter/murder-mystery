@@ -34,7 +34,7 @@ weapon.shootable = false
 weapon.shootmobj = MT_THOK
 weapon.minemobj = MT_MM_TRIPMINE
 weapon.allowdropmobj = false
-weapon.maxshots = 3
+weapon.max_ammo = 3
 
 local function GetActorZ(actor,targ,type)
 	if type == nil then type = 1 end
@@ -197,7 +197,6 @@ local function ThreeDThinker(door, me)
 end
 
 weapon.hiddenthinker = function(item,p)
-	item.ammoleft = $ or weapon.maxshots
 	item.mobj.height = 32 * p.mo.scale
 	
 	if (p.mm.inventory.hidden)
@@ -211,35 +210,8 @@ end
 weapon.thinker = weapon.hiddenthinker
 
 weapon.attack = function(item,p)
-	if item.ammoleft == nil or item.ammoleft == 0 then return end
-	
 	DropTripmine(p)
 	delete3d(item.mobj)
-	
-	item.ammoleft = $ - 1
-	
-	if item.ammoleft == 0
-		MM:DropItem(p,nil,false,true,true)
-	end
-end
-
-weapon.drawer = function(v, p,item, x,y,scale,flags, selected, active)
-	if item.ammoleft == nil then return end
-	if not selected
-		v.drawString(x, (y + 32*scale) - 8*FU,
-			item.ammoleft.."/"..weapon.maxshots,
-			(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE,
-			"thin-fixed"
-		)
-		
-		return
-	end
-	
-	v.drawString(160*FU,y - 20*FU,
-		"Ammo: "..item.ammoleft.." / "..weapon.maxshots,
-		(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE,
-		"thin-fixed-center"
-	)
 end
 
 weapon.unequip = function(item,p)

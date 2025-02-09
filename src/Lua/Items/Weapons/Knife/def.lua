@@ -142,6 +142,10 @@ weapon.attack = function(item,p)
 	slope.zangle = aiming
 	slope.xydirection = angle
 	
+	--wumbo steve
+	whiff.spritexscale = whiff.scale
+	whiff.spriteyscale = FixedMul(cos(slope.zangle), whiff.scale + (slope.zangle == ANGLE_90 - 1 and 1024 or 0))
+	
 	me.whiff_fx = whiff
 	
 	if MMCAM
@@ -182,12 +186,17 @@ MM:addPlayerScript(function(p)
 		aiming = max(50*FU,min(130*FU,$))
 		aiming = FixedAngle($) - ANGLE_90
 		
-		local slope = me.whiff_fx.floorspriteslope
+		local whiff = me.whiff_fx
+		local slope = whiff.floorspriteslope
 		slope.o = {
-			x = me.whiff_fx.x, y = me.whiff_fx.y, z = me.whiff_fx.z
+			x = whiff.x, y = whiff.y, z = whiff.z
 		}
 		slope.zangle = aiming
 		slope.xydirection = angle
+
+		--wumbo steve
+		whiff.spritexscale = whiff.scale
+		whiff.spriteyscale = FixedMul(cos(slope.zangle), whiff.scale + (slope.zangle == ANGLE_90 - 1 and 1024 or 0))
 	end
 end)
 

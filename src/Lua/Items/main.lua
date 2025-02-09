@@ -19,20 +19,21 @@ local ITEM_DEF = {
 	animation_time = 35,
 	cooldown_time = 35,
 	max_ammo = 0,
+	
 	--if TRUE, this weapon wont use ammo in duels
 	noammoinduels = false,
 
-	range = FU*2,
 	-- this is a multiplication of the targets range and the players range combined
 	-- putting this to FU will make the attack only hit if the target is directly in the players hitbox
 	-- theres another variable called "zrange" thatll only modify the range of the weapon on the z axis
 	-- use this if you got a big range but might be too big for the players height
+	range = FU*2,
 
-	position = {x = 0, y = 0, z = 0},
-	animation_position = {x = 0, y = 0, z = 0},
 	-- these actually scale based on the players radius
 	-- so, what these values would be if you want the default to be on the upper right of the player is...
 	-- {x = FU, y = FU, z = 0}
+	position = {x = 0, y = 0, z = 0},
+	animation_position = {x = 0, y = 0, z = 0},
 
 	stick = true,				-- disable if you wanna manually handle weapon sticking
 									-- useful for cooldowns after throwing a weapon, or if you just want to do a fake-drop or something

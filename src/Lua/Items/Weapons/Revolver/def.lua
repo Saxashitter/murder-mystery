@@ -45,6 +45,11 @@ weapon.bulletthinker = function(mo, i)
 	end
 end
 
+weapon.thinker = function(item, p)
+	if (p.cmd.buttons & BT_FIRENORMAL)
+		MM.GenericAiming(p, item)
+	end
+end
 function weapon:postpickup(p)
 	if (MM_N.dueling) then return end
 	if roles[p.mm.role].team == true then

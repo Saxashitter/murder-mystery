@@ -114,6 +114,51 @@ MM.GenericHitscan = function(mo)
 	end
 end
 
+MM.GenericAiming = function(p, item)
+	local def = MM.Items[item.id]
+	
+	local bullet
+	do
+		local angle = p.mo.angle
+		local aiming = p.aiming
+		
+		bullet = P_SpawnMobjFromMobj(p.mo,
+			--dont spawn in the wall
+			P_ReturnThrustX(nil,angle, 2*FU),
+			P_ReturnThrustY(nil,angle, 2*FU),
+			41*FixedDiv(p.mo.height,p.mo.scale)/48,
+			MT_RAY
+		)
+		local b_def = mobjinfo[item.shootmobj]
+		bullet.radius = FixedMul(b_def.radius, bullet.scale)
+		bullet.height = FixedMul(b_def.height, bullet.scale)
+		
+		bullet.angle = angle
+		bullet.aiming = aiming
+		bullet.color = p.mo.color
+		bullet.target = p.mo
+		bullet.origin = item
+		bullet.eflags = $|(p.mo.eflags & MFE_VERTICALFLIP)
+		
+		P_InstaThrust(bullet, bullet.angle, 32*cos(aiming))
+		bullet.momz = 32*sin(aiming)
+		
+		P_SetOrigin(bullet, 
+			p.mo.x + P_ReturnThrustX(nil,p.mo.angle, 4*FU),
+			p.mo.y + P_ReturnThrustY(nil,p.mo.angle, 4*FU),
+			(p.mo.z + (41*p.mo.height/48))-8*FU
+		)
+	end
+	
+	if bullet and bullet.valid
+		MM.GenericHitscan(bullet)
+	end
+	
+	if bullet and bullet.valid
+		P_RemoveMobj(bullet)
+	end
+end
+
 MM.BulletHit = function(ring,pmo)
 	if not (ring and ring.valid) then return end
 	if not (pmo and pmo.valid) then return end

@@ -15,9 +15,13 @@ return function(self, p)
 	
 	-- Give murderer less clues.
 	if (p.mm.role == MMROLE_MURDERER) then
-		local newcluecount = amount
+		local newcluecount = (amount*3) / 4
+		
+		/*
+		--this is weird and doesnt lower the clue count most of the time
 		newcluecount = FixedMul($*FU, FixedDiv(3*FU, 4*FU));
 		newcluecount = FixedCeil($)/FU;
+		*/
 		
 		clues.amount = newcluecount
 	end

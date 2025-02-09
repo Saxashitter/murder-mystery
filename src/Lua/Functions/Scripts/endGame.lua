@@ -49,7 +49,10 @@ return function(self, endType)
 	end
 	
 	--stop spectating
-	displayplayer = consoleplayer
+	if (displayplayer and displayplayer.valid)
+	and (consoleplayer and consoleplayer.valid)
+		displayplayer = consoleplayer
+	end
 
 	if (MM_N.disconnect_end) then return end
 	if (MM_N.dueling) then return end

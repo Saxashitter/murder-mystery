@@ -8,6 +8,92 @@ local function SafeFreeslot(...)
 end
 
 SafeFreeslot("SPR_TRIPMINEEXPLOSION")
+SafeFreeslot("S_MM_TRIPMINE_EXPLODE")
+states[S_MM_TRIPMINE_EXPLODE] = {
+	sprite = SPR_TRIPMINEEXPLOSION,
+	frame = A|FF_ANIMATE|FF_FULLBRIGHT,
+	action = function(mo)
+		if (mo.ticker == nil) then mo.ticker = 0 end
+		
+		if not mo.set
+			mo.radius,mo.height = 6*mo.scale,6*mo.scale
+			mo.flags = MF_NOGRAVITY|MF_NOCLIP|MF_NOCLIPTHING|MF_RUNSPAWNFUNC|MF_NOBLOCKMAP|MF_NOCLIPHEIGHT
+			mo.anim_duration = 2
+			mo.fuse = 22
+			mo.set = true
+			mo.flags2 = $ &~MF2_DONTDRAW
+			mo.shadowscale = 0
+			mo.mirrored = P_RandomChance(FU/2)
+		else
+			local oldframe = mo.frame &~FF_FRAMEMASK
+			mo.frame = (mo.ticker/2)|oldframe
+		end
+		
+		if mo.oldfx
+			mo.flags = $ &~(MF_NOGRAVITY|MF_NOCLIP|MF_NOCLIPHEIGHT)
+			mo.momz = $ + P_GetMobjGravity(mo)*3/2
+			mo.frame = A|($ &~(FF_ANIMATE|FF_FRAMEMASK))
+		end
+		mo.ticker = $+1
+		
+		if leveltime % 3 == 0
+		and mo.thought
+		and mo.oldfx
+			local new = P_SpawnMobjFromMobj(mo,0,0,0,MT_THOK)
+			new.flags = MF_NOGRAVITY|MF_NOCLIP|MF_NOCLIPTHING|MF_RUNSPAWNFUNC
+			new.state = S_MM_TRIPMINE_EXPLODE
+			new.momz = 0
+			new.flags2 = $ &~MF2_DONTDRAW
+		else
+		
+		end
+		mo.thought = true
+	end,
+	var1 = 13,
+	var2 = 2,
+	tics = 1,
+	nextstate = S_MM_TRIPMINE_EXPLODE,
+}
+
+local function SpawnExplosions(mine)
+	P_StartQuake(30*FU, TICRATE*2,
+		{mine.x, mine.y, mine.z},
+		550*mine.scale
+	)
+	
+	local radius = 32*FU
+	local minz = 10
+	local maxz = 30
+	
+	local count = 42
+	local anglecount = FixedDiv(360*FU,count*FU)
+	for i = 0,count
+		local fa = FixedAngle(anglecount*i) + P_RandomRange(-360, 360)*ANG1
+		local mobj = P_SpawnMobjFromMobj(mine,
+			FixedMul(cos(fa),radius + P_RandomRange(0,10)*FU),
+			FixedMul(sin(fa),radius + P_RandomRange(0,10)*FU),
+			0, --FU - FixedMul(mobjinfo[type].height,tracer.scale)/2,
+			MT_THOK
+		)
+		mobj.flags = MF_NOGRAVITY|MF_NOCLIP|MF_NOCLIPTHING|MF_RUNSPAWNFUNC
+		mobj.state = S_MM_TRIPMINE_EXPLODE
+		mobj.momz = 0
+		--mobj.spritexscale,mobj.spriteyscale = FU*2,FU*2
+		mobj.flags2 = $ &~MF2_DONTDRAW
+		
+		mobj.angle = R_PointToAngle2(mobj.x,mobj.y, mine.x,mine.y)
+		mobj.scale = $+(P_RandomFixed()*((P_RandomChance(FU/2)) and 1 or -1))
+		
+		P_Thrust(mobj, mobj.angle,
+			-6*mobj.scale
+		)
+		P_SetObjectMomZ(mobj,P_RandomRange(minz,maxz)*FU)
+		mobj.oldfx = true
+		
+	end
+
+end
+
 SafeFreeslot("SPR_SBSM")
 sfxinfo[SafeFreeslot("sfx_subsma")].caption = "Mine activate"
 sfxinfo[SafeFreeslot("sfx_subsme")] = {
@@ -462,6 +548,7 @@ addHook("TouchSpecial",function(mine,me)
 	SpawnSparks(mine)
 	SpawnSparks(me)
 	SetPurplePlanes(mine)
+	SpawnExplosions(mine)
 	
 	mine.steppedon = true
 	delete3d(mine)
@@ -483,6 +570,7 @@ addHook("MobjDeath",function(mine)
 	end
 	SpawnSparks(mine)
 	SetPurplePlanes(mine)
+	SpawnExplosions(mine)
 	delete3d(mine)
 	
 	local radius = 550*mine.scale

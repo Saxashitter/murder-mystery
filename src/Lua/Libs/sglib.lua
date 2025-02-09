@@ -17,6 +17,11 @@ local SG_GetViewVars = function(v, p, c, allowspectator)
 		return
 	end
 	
+	--TODO: remove this when jisk's pr gets merged into srb2
+	if takis_custombuild
+		return c.x, c.y, c.z + c.height/2, c.angle, c.aiming, roll
+	end
+	
 	if p.awayviewtics then
 		local mo = p.awayviewmobj
 		return mo.x, mo.y, mo.z, mo.angle, mo.pitch, roll

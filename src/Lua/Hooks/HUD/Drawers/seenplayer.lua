@@ -5,6 +5,10 @@ local draw_tag = ""
 local g_seenplayer
 local tics = 0
 
+local function interpolate(v,set)
+	if v.interpolate ~= nil then v.interpolate(set) end
+end
+
 addHook("SeenPlayer", function(player, seenplayer)
 	if not MM:isMM() then return end
 
@@ -33,7 +37,7 @@ addHook("SeenPlayer", function(player, seenplayer)
 	end
 end)
 
-return function(v,p,c)
+local function DrawSeeName(v,p,c)
 	if not MM:isMM()
 	or (p.awayviewmobj) then
 		draw_name = ""
@@ -44,6 +48,16 @@ return function(v,p,c)
 
 	if g_seenplayer and g_seenplayer.valid 
 	and g_seenplayer.mo and g_seenplayer.mo.valid then
+		if (not g_seenplayer.mo.health)
+		--invisible to us
+		or (g_seenplayer.mo.flags2 & MF2_DONTDRAW
+		or g_seenplayer.mo.alpha < FU/2)
+			draw_name = ""
+			draw_tag = ""
+			tics = 0
+			return
+		end
+		
 		local g_mo = g_seenplayer.mo
 		local flip = 1 
 		
@@ -65,4 +79,10 @@ return function(v,p,c)
 		draw_name = ""
 		g_seenplayer = nil
 	end
+end
+
+return function(v,p,c)
+	interpolate(v,true)
+	DrawSeeName(v,p,c)
+	interpolate(v,false)
 end

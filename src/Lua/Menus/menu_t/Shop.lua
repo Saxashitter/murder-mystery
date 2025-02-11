@@ -68,11 +68,11 @@ for i = 1, MM_PERKS.num_perks
 	MenuLib.addMenu({
 		stringId = "Shop_Popup_"..(perk_t.name),
 		
-		x = 180,
-		y = 30,
+		x = 181,
+		y = 29,
 		
-		width = 108,
-		height = 138,
+		width = 114,
+		height = 156,
 		color = 27,
 		
 		title = perk_t.name,

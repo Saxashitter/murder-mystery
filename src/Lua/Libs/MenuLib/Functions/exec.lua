@@ -1,4 +1,4 @@
-local path = "Libs/MenuLib/Functions/Libs/"
+local path = MenuLib.root .. "Functions/Libs/"
 
 local tree = {
 	"clamp",
@@ -6,6 +6,7 @@ local tree = {
 	"addMenu",
 	"initMenu",
 	"findMenu",
+	"initPopup",
 }
 
 for k, name in ipairs(tree)

@@ -11,7 +11,8 @@ rawset(_G, "BASEVIDWIDTH", BASEVIDWIDTH or 320)
 rawset(_G, "BASEVIDHEIGHT", BASEVIDHEIGHT or 200)
 
 MenuLib.VERSION = 000
-MenuLib.SUBVERSION = 1
+MenuLib.SUBVERSION = 2
+MenuLib.root = "Libs/MenuLib/"
 
 MenuLib.client = {
 	
@@ -27,8 +28,9 @@ MenuLib.client = {
 	--menu ID
 	currentMenu = {
 		id = -1,
-		prevId = -1,
+		layers = {}
 	},
+	popup_id = -1,
 	
 	--use this when detecting mouse presses
 	doMousePress = false,
@@ -37,12 +39,12 @@ MenuLib.client = {
 
 
 local tree = {
-	"Libs/MenuLib/main",
+	"main",
 	
-	"Libs/MenuLib/Functions/exec",
-	"Libs/MenuLib/HUD/exec",
+	"Functions/exec",
+	"HUD/exec",
 }
 
 for k,file in ipairs(tree)
-	dofile(file)
+	dofile(MenuLib.root .. file)
 end

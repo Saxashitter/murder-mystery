@@ -51,9 +51,12 @@ return function(v, props)
 			ML.client.hovering = props.id
 		end
 		
+		--pressed
 		if (ML.client.doMousePress)
-		and (props.pressFunc ~= nil)
-			props.pressFunc()
+			if (props.pressFunc ~= nil)
+				props.pressFunc()
+			end
+			S_StartSound(nil, sfx_menu1)
 		end
 	end
 	
@@ -64,10 +67,12 @@ return function(v, props)
 		)
 	end
 	
-	v.drawFill(props.x, props.y,
-		props.width, props.height,
-		getSelectedAttrib(over, props, "color")
-	)
+	if getSelectedAttrib(over, props, "color") ~= -1
+		v.drawFill(props.x, props.y,
+			props.width, props.height,
+			getSelectedAttrib(over, props, "color")
+		)
+	end
 	
 	if (props.name)
 		v.drawString(

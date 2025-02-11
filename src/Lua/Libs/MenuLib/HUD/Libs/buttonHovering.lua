@@ -1,6 +1,11 @@
 local ML = MenuLib
 
 return function(v, props)
+	if ML.HUD.stage_item.name == "drawMenus"
+	and (ML.client.popup_id ~= -1)
+		return false
+	end
+	
 	local m_x = ML.client.mouse_x / FU
 	local m_y = ML.client.mouse_y / FU
 	

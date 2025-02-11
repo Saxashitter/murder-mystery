@@ -8,10 +8,18 @@ return function(v,ML)
 	local corner_x = (BASEVIDWIDTH/2) - (menu.width/2)
 	local corner_y = (BASEVIDHEIGHT/2) - (menu.height/2)
 	
+	if (menu.outline ~= nil)
+		v.drawFill(
+			corner_x - 1, corner_y - 1,
+			menu.width + 2, menu.height + 2,
+			menu.outline
+		)
+	end
+	
 	v.drawFill(
 		corner_x, corner_y,
 		menu.width, menu.height,
-		27
+		menu.color
 	)
 	
 	v.drawString(corner_x + 2,
@@ -28,11 +36,11 @@ return function(v,ML)
 			width = 25,
 			height = 13,
 			
-			name = ML.client.currentMenu.prevId ~= -1 and "Back" or "Exit",
+			name = ML.client.currentMenu.layers[#ML.client.currentMenu.layers - 1] ~= nil and "Back" or "Exit",
 			color = 27,
 			
 			pressFunc = function()
-				ML.initMenu(ML.client.currentMenu.prevId)
+				ML.initMenu(-1)
 			end
 		})
 	end

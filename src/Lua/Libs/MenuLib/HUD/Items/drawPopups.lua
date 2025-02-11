@@ -1,5 +1,23 @@
 local ML = MenuLib
 
+ML.addMenu({
+	stringId = "BoobPopup",
+	title = "Pop Up",
+	
+	x = 10,
+	y = 50,
+	width = 100,
+	height = 100,
+	
+	color = 155,
+	outline = 159,
+	
+	drawer = function(v, ML, props)
+		local x,y = props.corner_x, props.corner_y
+		v.drawString(x + 2, y + 2, "Popup", V_ALLOWLOWERCASE, "thin")
+	end
+})
+
 local function drawIt(v, ML, y_off)
 	if ML.client.popup_id == -1 then return end
 	
@@ -15,6 +33,13 @@ local function drawIt(v, ML, y_off)
 			menu.outline
 		)
 	end
+	if (menu.color ~= -1)
+		v.drawFill(
+			corner_x, corner_y,
+			menu.width, menu.height,
+			menu.color
+		)
+	end
 	
 	do
 		ML.addButton(v, {
@@ -24,7 +49,7 @@ local function drawIt(v, ML, y_off)
 			height = 13,
 			
 			name = "x",
-			color = -1,
+			color = menu.color,
 			
 			pressFunc = function()
 				ML.initPopup(-1)

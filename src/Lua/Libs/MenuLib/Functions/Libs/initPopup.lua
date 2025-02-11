@@ -6,7 +6,5 @@ return function(id)
 	if (isdedicatedserver) then return end
 	if (ML.client.popup_id ~= -1 and id ~= -1) then return end
 	
-	input.ignoregameinputs = true
-	
 	ML.client.popup_id = id
 end

@@ -18,7 +18,9 @@ end
 return function(v, props)
 	--highlight
 	local over = false
+	
 	if ML.buttonHovering(v,props)
+	and (props.pressFunc ~= nil)
 		local this = {
 			x = getSelectedAttrib(true, props, "x"),
 			y = getSelectedAttrib(true, props, "y"),
@@ -53,9 +55,7 @@ return function(v, props)
 		
 		--pressed
 		if (ML.client.doMousePress)
-			if (props.pressFunc ~= nil)
-				props.pressFunc()
-			end
+			props.pressFunc()
 			S_StartSound(nil, sfx_menu1)
 		end
 	end

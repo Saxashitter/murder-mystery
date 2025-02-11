@@ -17,6 +17,10 @@ end
 
 return function(id)
 	if (isdedicatedserver) then return end
+	if ML.client.currentMenu.id == -1
+		ML.client.doMousePress = false
+		ML.client.mouseTime = -1
+	end
 	
 	input.ignoregameinputs = true
 	local layers = ML.client.currentMenu.layers

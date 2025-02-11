@@ -9,10 +9,10 @@ local function MC(type, name, val_add)
 	if constvalues[type] == nil then
 		constvalues[type] = -1
 	end
-	constvalues[type] = $+1 + val_add
-	rawset(_G, "MM"..type.."_"..name, constvalues[type])
+	constvalues[type] = $+1
+	rawset(_G, "MM"..type.."_"..name, constvalues[type] + val_add)
 
-	print("MM // Made constant: MM"..type.."_"..name)
+	print("MM // Made constant: MM"..type.."_"..name .. " ("..(constvalues[type] + val_add)..")")
 end
 
 -- roles

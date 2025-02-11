@@ -1,6 +1,8 @@
 local ML = MenuLib
 
 return function(id)
+	if (isdedicatedserver) then return end
+	
 	input.ignoregameinputs = true
 	if id ~= -1
 		if (ML.client.currentMenu.prevId == id)

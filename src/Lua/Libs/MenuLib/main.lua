@@ -22,6 +22,7 @@ addHook("PreThinkFrame", do
 end)
 
 addHook("KeyDown", function(key)
+	if isdedicatedserver then return end
 	if key.repeated then return end
 	
 	if key.name == "mouse1"

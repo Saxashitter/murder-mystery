@@ -176,6 +176,7 @@ MM:addPlayerScript(dofile("Hooks/Player/Scripts/PerkHandler"))
 
 addHook("KeyDown",function(key)
 	if isdedicatedserver then return end
+	if (chatactive) then return end
 	if (key.repeated) then return end
 	if MenuLib.client.currentMenu.id ~= -1 then return end
 	

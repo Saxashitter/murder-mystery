@@ -24,6 +24,12 @@ end
 
 MMHUD.menus.drawPerkItem = function(v, x,y, perk, nofunc)
 	local perk_t = MM_PERKS[perk]
+	if perk_t == nil
+		perk_t = {
+			name = "None",
+			icon = "MM_NOITEM",
+		}
+	end
 	
 	local pressfunc = (not nofunc) and function()
 		MenuLib.initPopup(MenuLib.findMenu("Shop_Popup_"..(perk_t.name)))
@@ -61,6 +67,19 @@ MMHUD.menus.drawPerkItem = function(v, x,y, perk, nofunc)
 	)
 end
 
+MMHUD.menus.tryPerkEquip = function(perk_id, slot, mm_slot)
+	if MMHUD.menus.tryingEquip then return end
+	
+	if (consoleplayer and consoleplayer.valid)
+	and (consoleplayer.mm_save and consoleplayer.mm_save[mm_slot] == perk_id)
+		MMHUD.menus.tryEquippingThis = "mm_equipperk "..slot.." none"
+	else
+		MMHUD.menus.tryEquippingThis = "mm_equipperk "..slot.." "..perk_id
+	end
+	
+	MMHUD.menus.tryingEquip = TICRATE
+end
+
 --TODO: put these in the perk's definitions?
 for i = 1, MM_PERKS.num_perks
 	local perk_t = MM_PERKS[i]
@@ -79,6 +98,7 @@ for i = 1, MM_PERKS.num_perks
 		
 		drawer = function(v, ML, menu, props)
 			local x,y = props.corner_x, props.corner_y
+			local p = consoleplayer
 			
 			v.drawString(x + 2, y + 2, perk_t.name, V_ALLOWLOWERCASE, "thin")
 			
@@ -89,9 +109,29 @@ for i = 1, MM_PERKS.num_perks
 				true
 			)
 			
+			MenuLib.interpolate(v, false)
+			
+			--no buying yet...
 			v.drawString(x + 54,
-				y + 65, "Buy?", V_ALLOWLOWERCASE, "thin-center"
+				y + 65, "Equip?", V_ALLOWLOWERCASE, "thin-center"
 			)
+			
+			if MMHUD.menus.tryingEquip
+				MenuLib.addButton(v, {
+					x = (x + 54) - 20,
+					y = y + 75,
+					
+					width = 40,
+					height = 20,
+					
+					name = "Wait...",
+					color = 7,
+					outline = 15,
+					
+				})
+				
+				return
+			end
 			
 			MenuLib.addButton(v, {
 				x = (x + 54) - (27 + 16),
@@ -100,11 +140,14 @@ for i = 1, MM_PERKS.num_perks
 				width = 32,
 				height = 20,
 				
-				name = "Yes",
-				color = 99,
-				outline = 105,
+				name = (p.mm_save and p.mm_save.pri_perk == i) and "Unequip" or "Primary",
+				color = 7,
+				outline = 15,
 				
-				--pressFunc = pressfunc
+				pressFunc = function()
+					if MMHUD.menus.tryingEquip then return end
+					MMHUD.menus.tryPerkEquip(i, "primary", "pri_perk")
+				end
 				
 			})
 			
@@ -115,13 +158,22 @@ for i = 1, MM_PERKS.num_perks
 				width = 32,
 				height = 20,
 				
-				name = "No",
-				color = 35,
-				outline = 41,
+				name = (p.mm_save and p.mm_save.sec_perk == i) and "Unequip" or "Secondary",
+				color = 7,
+				outline = 15,
 				
-				--pressFunc = pressfunc
+				pressFunc = function()
+					if MMHUD.menus.tryingEquip then return end
+					MMHUD.menus.tryPerkEquip(i, "secondary", "sec_perk")
+				end
 				
 			})
+			
+			--auto-close
+			if MMHUD.menus.last_tryingEquip
+			and not MMHUD.menus.tryingEquip
+				MenuLib.initPopup(-1)
+			end
 		end
 	})
 end
@@ -133,6 +185,7 @@ MenuLib.addMenu({
 	width = 270,
 	
 	drawer = function(v, ML, menu, props)
+		MenuLib.interpolate(v, false)
 		local x,y = props.corner_x, props.corner_y
 		
 		MMHUD.menus.drawRings(v,
@@ -160,6 +213,7 @@ MenuLib.addMenu({
 		v.drawFill(180, props.corner_y + 14,
 			1, 156, 0
 		)
+		
 		if MenuLib.client.hovering ~= -1
 			local perk_t = MM_PERKS[MenuLib.client.hovering]
 			
@@ -198,7 +252,54 @@ MenuLib.addMenu({
 					"thin"
 				)
 			end
+		
+		--draw our equipped perks
+		else
+			local center_x = ((BASEVIDWIDTH/2) + menu.width/4) - 5
+			y = props.corner_y + 27
 			
+			v.drawString(center_x - 34,
+				y - 10,
+				"Primary",
+				V_ALLOWLOWERCASE|V_YELLOWMAP,
+				"thin"
+			)
+			MMHUD.menus.drawPerkItem(v,
+				center_x - 34,
+				y,
+				consoleplayer.mm_save.pri_perk,
+				true
+			)
+			
+			v.drawString(center_x + (34*2),
+				y + 43,
+				"Secondary",
+				V_ALLOWLOWERCASE|V_YELLOWMAP,
+				"thin-right"
+			)
+			MMHUD.menus.drawPerkItem(v,
+				center_x + 34,
+				y,
+				consoleplayer.mm_save.sec_perk,
+				true
+			)
+		
 		end
 	end
 })
+
+addHook("ThinkFrame", do
+	if not MMHUD.menus then return end
+	
+	if MMHUD.menus.tryEquippingThis
+		COM_BufInsertText(consoleplayer, MMHUD.menus.tryEquippingThis)
+		MMHUD.menus.tryEquippingThis = nil
+	end
+	
+	if MMHUD.menus.tryingEquip
+		MMHUD.menus.last_tryingEquip = MMHUD.menus.tryingEquip
+		MMHUD.menus.tryingEquip = $ - 1
+	elseif MMHUD.menus.last_tryingEquip
+		MMHUD.menus.last_tryingEquip = max($-1, 0)
+	end
+end)

@@ -68,6 +68,8 @@ return function(v,ML)
 			corner_y = corner_y,
 		})
 	end
+	--re-interp incase the drawer disabled it
+	MenuLib.interpolate(v, true)
 	
 	ML.HUD.stage_id = $ + 1
 	ML.client.menuLayer = $ + 1

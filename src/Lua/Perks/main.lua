@@ -21,3 +21,5 @@ dofile(path.."Footsteps")
 dofile(path.."XRay")
 dofile(path.."Haste")
 dofile(path.."FakeGun")
+
+MM_PERKS.num_perks = 8

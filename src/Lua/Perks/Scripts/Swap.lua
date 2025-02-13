@@ -10,5 +10,11 @@ end)
 
 MM_PERKS[MMPERK_SWAP] = {
 	icon = "MM_PI_SWAP",
-	name = "Swap"
+	name = "Swap",
+
+	description = {
+		"\x82When equipped:\x80 Earn a Body Swap Potion!",
+		"Use it near someone to swap bodies with them!",
+	},
+	cost = FU*10,
 }

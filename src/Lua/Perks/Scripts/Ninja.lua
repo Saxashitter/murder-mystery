@@ -23,5 +23,17 @@ MM_PERKS[MMPERK_NINJA] = {
 	end,
 	
 	icon = "MM_PI_NINJA",
-	name = "Ninja"
+	name = "Ninja",
+
+	description = {
+		"\x82Primary:\x80 Your knife is 50% invisible.",
+		"Equiping, swinging, and kills will be 100%",
+		"silent.",
+		
+		"",
+		
+		"\x82Secondary:\x80 Everything about your knife",
+		"is 100% silent. Still fully visible, though."
+	},
+	cost = FU*10,
 }

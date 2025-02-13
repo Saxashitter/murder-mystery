@@ -43,6 +43,7 @@ states[S_MM_TEAMMATE2] = {
 
 MM.require = dofile "Libs/require"
 dofile "Libs/CustomHud.lua"
+dofile "Libs/MenuLib/init.lua"
 
 dofile "events"
 
@@ -58,6 +59,7 @@ dofile "Items/main"
 dofile "ItemMapthings/main"
 dofile "Maps/exec"
 dofile "Objects/NeoRings/define"
+dofile "Menus/exec"
 
 -- fool-proofing
 -- basically if you reference a variable thats not in the local table

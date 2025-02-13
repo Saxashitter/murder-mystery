@@ -253,6 +253,16 @@ COM_AddCommand("MM_EquipPerk", function(p, slot, newperk)
 			realnum = 0
 		end
 		
+		--try numerical ID's
+		if (realnum == nil)
+		and tonumber(newperk) ~= nil
+			realnum = tonumber(newperk)
+			
+			if MM_PERKS[realnum] == nil
+				return
+			end
+		end
+		
 		if realnum ~= nil
 			local chosen = 0
 			if slot == "1"

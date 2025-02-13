@@ -80,5 +80,15 @@ MM_PERKS[MMPERK_XRAY] = {
 
 	icon = "MM_PI_XRAY",
 	icon_scale = FU/2,
-	name = "X-Ray"
+	name = "X-Ray",
+
+	description = {
+		"\x82Primary:\x80 See everyone through walls!",
+		
+		"",
+		
+		"\x82Secondary:\x80 See everyone through walls,",
+		"for a short distance."
+	},
+	cost = FU*10,
 }

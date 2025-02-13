@@ -138,5 +138,17 @@ MM_PERKS[MMPERK_FAKEGUN] = {
 	
 	icon = icon_name,
 	icon_scale = icon_scale,
-	name = "Fake Gun"
+	name = "Fake Gun",
+
+	description = {
+		"\x82When equipped:\x80 Pressing [TOSSFLAG] will",
+		"change your knife's appearance to a random gun,",
+		"fooling Innocents and Sherrifs. You can still",
+		"kill with it!",
+		
+		"",
+		
+		"Lasts 10 seconds with a 30 second cooldown."
+	},
+	cost = 10*FU
 }

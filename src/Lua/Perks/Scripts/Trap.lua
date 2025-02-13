@@ -12,5 +12,18 @@ end)
 MM_PERKS[MMPERK_TRAP] = {
 	icon = "MM_PI_TRAP",
 	icon_scale = FU/2,
-	name = "Trap"
+	name = "Trap",
+
+	description = {
+		"\x82Primary:\x80 Get a Subspace Tripmine on spawn.",
+		"Once laid, it will turn invisible and explode on",
+		"touch. Shooting it will explode it!",
+		
+		"",
+		
+		"\x82Secondary:\x80 Get a Beartrap on spawn.",
+		"Once laid, it'll only be visible to you, and will",
+		"slow down anyone who touches it."
+	},
+	cost = 10*FU
 }

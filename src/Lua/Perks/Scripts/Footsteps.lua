@@ -3,7 +3,18 @@ local fuse_min = 10*TICRATE
 MM_PERKS[MMPERK_FOOTSTEPS] = {
 	icon = "MM_PI_FOOTSTEP",
 	icon_scale = FU/2,
-	name = "Footsteps"
+	name = "Footsteps",
+
+	description = {
+		"\x82Primary:\x80 See everyone's footsteps!",
+		"Footsteps last 20 seconds before disappearing.",
+		
+		"",
+		
+		"\x82Secondary:\x80 See everyone's footsteps!",
+		"Footsteps last 10 seconds before disappearing.",
+	},
+	cost = "Free!",
 }
 
 freeslot("MT_MM_FOOTSTEP","S_MM_FOOTSTEP")
@@ -150,14 +161,3 @@ addHook("ThinkFrame",do
 		MM_N.spawnfootsteps = true
 	end
 end)
-
-/*
-MM_PERKS[MMPERK_FOOTSTEPS] = {
-	primary = function(p)
-		FootstepsSpawner(p, false)
-	end,
-	secondary = function(p)
-		FootstepsSpawner(p, true)
-	end,
-}
-*/

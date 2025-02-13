@@ -77,7 +77,7 @@ for i = 1, MM_PERKS.num_perks
 		
 		title = perk_t.name,
 		
-		drawer = function(v, ML, props)
+		drawer = function(v, ML, menu, props)
 			local x,y = props.corner_x, props.corner_y
 			
 			v.drawString(x + 2, y + 2, perk_t.name, V_ALLOWLOWERCASE, "thin")
@@ -132,7 +132,7 @@ MenuLib.addMenu({
 	
 	width = 270,
 	
-	drawer = function(v, ML, props)
+	drawer = function(v, ML, menu, props)
 		local x,y = props.corner_x, props.corner_y
 		
 		MMHUD.menus.drawRings(v,
@@ -141,7 +141,7 @@ MenuLib.addMenu({
 		)
 		
 		do
-			x = $ + 4
+			x = $ + 6
 			y = $ + 17
 			
 			for i = 1, MM_PERKS.num_perks
@@ -150,7 +150,7 @@ MenuLib.addMenu({
 				x = $ + 37
 				
 				if (i == 4)
-					x = props.corner_x + 4
+					x = props.corner_x + 6
 					y = $ + 46
 				end
 			end
@@ -161,11 +161,44 @@ MenuLib.addMenu({
 			1, 156, 0
 		)
 		if MenuLib.client.hovering ~= -1
-			v.drawString(183, 30,
-				"TODO: perk descriptions",
-				V_ALLOWLOWERCASE,
-				"thin"
+			local perk_t = MM_PERKS[MenuLib.client.hovering]
+			
+			local workx = (BASEVIDWIDTH/2) + 23
+			local worky = 40
+			
+			v.drawString(workx, worky - 10,
+				perk_t.name,
+				V_ALLOWLOWERCASE|V_YELLOWMAP,
+				"left"
 			)
+			
+			if (perk_t and perk_t.description ~= nil)
+				for k,str in ipairs(perk_t.description)
+					v.drawString(workx, worky,
+						str,
+						V_ALLOWLOWERCASE,
+						"small-thin"
+					)
+					worky = $ + 4
+				end
+				
+			end
+			
+			if (perk_t and perk_t.cost ~= nil)
+				local cost = "???"
+				if type(perk_t.cost) == "number"
+					cost = "$"..(perk_t.cost)
+				elseif type(perk_t.cost) == "string"
+					cost = perk_t.cost
+				end
+				
+				v.drawString(workx, worky + 6,
+					"Cost: \x83"..cost,
+					V_ALLOWLOWERCASE,
+					"thin"
+				)
+			end
+			
 		end
 	end
 })

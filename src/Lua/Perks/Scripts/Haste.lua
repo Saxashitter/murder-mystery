@@ -63,5 +63,16 @@ MM_PERKS[MMPERK_HASTE] = {
 	--its placeholder for a reason bruh
 	icon = icon_name,
 	icon_scale = icon_scale,
-	name = "Haste"
+	name = "Haste",
+
+	description = {
+		"\x82Primary:\x80 Speed up 20% when holding",
+		"your knife out!",
+		
+		"",
+		
+		"\x82Secondary:\x80 Speed up 10% when holding",
+		"your knife out!",
+	},
+	cost = FU*10,
 }

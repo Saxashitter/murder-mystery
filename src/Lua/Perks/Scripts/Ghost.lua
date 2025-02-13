@@ -220,5 +220,17 @@ MM_PERKS[MMPERK_GHOST] = {
 	
 	icon = icon_name,
 	icon_scale = icon_scale,
-	name = "Ghost"
+	name = "Ghost",
+	
+	description = {
+		"\x82Primary:\x80 Become fully invisible to",
+		"non-murderers for 8 seconds! Cooldowns for",
+		"30 seconds. \x82([TOSSFLAG] to activate)",
+		
+		"",
+		
+		"\x82Secondary:\x80 Become 50% transparent",
+		"when holding your knife!",
+	},
+	cost = FU*10,
 }

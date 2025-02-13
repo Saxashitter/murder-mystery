@@ -19,8 +19,8 @@ addHook("PreThinkFrame", do
 	ML.client.menuactive = true
 	ML.client.menuTime = $ + 1
 	
-	ML.client.mouse_x = $ + mouse.dx * 3000
-	ML.client.mouse_y = $ + mouse.dy * 3000
+	ML.client.mouse_x = $ + mouse.dx * 3700
+	ML.client.mouse_y = $ + mouse.dy * 3700
 	
 	ML.client.mouse_x = ML.clamp(0, $, BASEVIDWIDTH*FU)
 	ML.client.mouse_y = ML.clamp(0, $, BASEVIDHEIGHT*FU)

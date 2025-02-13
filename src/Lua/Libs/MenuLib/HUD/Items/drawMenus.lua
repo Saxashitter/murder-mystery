@@ -71,4 +71,4 @@ return function(v,ML)
 	
 	ML.HUD.stage_id = $ + 1
 	ML.client.menuLayer = $ + 1
-end
+end, nil, true

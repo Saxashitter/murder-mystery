@@ -76,11 +76,18 @@ MMHUD.menus.tryPerkEquip = function(perk_id, slot, mm_slot)
 	else
 		MMHUD.menus.tryEquippingThis = "mm_equipperk "..slot.." "..perk_id
 	end
+	MMHUD.menus.tryEquippingSlot = mm_slot
+	MMHUD.menus.iWantThisSlot = perk_id
 	
 	MMHUD.menus.tryingEquip = TICRATE
 	
 	MenuLib.initPopup(MenuLib.findMenu("Shop_Equipping"))
 end
+
+MMHUD.menus.equippop = {
+	timer = 0,
+	last = 0,
+}
 
 MenuLib.addMenu({
 	stringId = "Shop_Equipping",
@@ -94,7 +101,7 @@ MenuLib.addMenu({
 	outline = 30,
 	
 	title = "",
-	ps_flags = PS_NOXBUTTON,
+	ps_flags = PS_NOXBUTTON|PS_NOSLIDEIN,
 	
 	drawer = function(v, ML, menu, props)
 		local x,y = props.corner_x, props.corner_y
@@ -106,10 +113,17 @@ MenuLib.addMenu({
 			"thin-center"
 		)
 		
+		MMHUD.menus.equippop.last = MMHUD.menus.equippop.timer
+		MMHUD.menus.equippop.timer = $ + 1
+		
 		--auto-close
 		if MMHUD.menus.last_tryingEquip
 		and not MMHUD.menus.tryingEquip
 			MenuLib.initPopup(-1)
+			
+			--close the other one too
+			MenuLib.initPopup(-1)
+			MMHUD.menus.equippop.timer = $ - 1
 		end
 	end
 })
@@ -205,9 +219,13 @@ for i = 1, MM_PERKS.num_perks
 			})
 			
 			--auto-close
-			if MMHUD.menus.last_tryingEquip
-			and not MMHUD.menus.tryingEquip
+			if MMHUD.menus.equippop.last == MMHUD.menus.equippop.timer
+			and MMHUD.menus.equippop.timer
 				MenuLib.initPopup(-1)
+				
+				--yeah....
+				MMHUD.menus.equippop.timer = 0
+				MMHUD.menus.equippop.last = 0
 			end
 		end
 	})
@@ -336,6 +354,10 @@ addHook("ThinkFrame", do
 	if MMHUD.menus.tryingEquip
 		MMHUD.menus.last_tryingEquip = MMHUD.menus.tryingEquip
 		MMHUD.menus.tryingEquip = $ - 1
+		
+		if consoleplayer.mm_save[MMHUD.menus.tryEquippingSlot] == MMHUD.menus.iWantThisSlot
+			MMHUD.menus.tryingEquip = 0
+		end
 	elseif MMHUD.menus.last_tryingEquip
 		MMHUD.menus.last_tryingEquip = max($-1, 0)
 	end

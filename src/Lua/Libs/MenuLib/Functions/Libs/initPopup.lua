@@ -7,8 +7,13 @@ return function(id)
 	
 	--close this popup
 	if (id == -1)
-		ML.client.menuLayer = $ - 1
-		table.remove(ML.client.popups)
+		if ML.menus[#ML.client.popups].ps_flags & PS_NOSLIDEIN
+			table.remove(ML.client.popups)
+		else
+			local popupitem_t = ML.client.popups[#ML.client.popups]
+			popupitem_t.goingdown = true
+			popupitem_t.lifespan = min($, 7)
+		end
 		return
 	end
 	
@@ -19,8 +24,9 @@ return function(id)
 		order = #ML.client.popups,
 		lifespan = 0,
 		
+		--animation
+		goingdown = false,
 		y_off = 700,
 	})
 	
-	ML.client.menuLayer = $ + 1
 end

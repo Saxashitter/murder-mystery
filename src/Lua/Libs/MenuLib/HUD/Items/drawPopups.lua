@@ -5,6 +5,7 @@ local function drawIt(v, ML)
 	for key, popupitem_t in ipairs(ML.client.popups)
 		local menu = ML.menus[popupitem_t.id]
 		if (menu.ps_flags & PS_IRRELEVANT)
+		or (popupitem_t.goingdown)
 			irrelevant_popups = $ + 1
 			continue
 		end
@@ -22,13 +23,25 @@ local function drawIt(v, ML)
 			ML.HUD.stage_id = $ + #ML.client.popups - irrelevant_popups
 		end
 		
-		popupitem_t.y_off = (ease.linear(FU/2, $*FU, 0)) / FU
+		local target = (popupitem_t.goingdown) and 700*FU or 0 
+		popupitem_t.y_off = (ease.linear(FU/2, $*FU, target)) / FU
+		
 		local y_off = popupitem_t.y_off
 		if (menu.ps_flags & PS_NOSLIDEIN)
 			y_off = 0
 		end
 		
-		popupitem_t.lifespan = $ + 1
+		if (popupitem_t.y_off >= (target/FU) - 10)
+		and (popupitem_t.goingdown)
+			table.remove(ML.client.popups, key)
+			continue
+		end
+		
+		if not (popupitem_t.goingdown)
+			popupitem_t.lifespan = $ + 1
+		else
+			popupitem_t.lifespan = $ - 1
+		end
 		if not (menu.ps_flags & PS_NOFADE)
 			v.drawFill(0,0,
 				(v.width()/v.dupx())+1,

@@ -10,6 +10,36 @@ rawset(_G, "MenuLib", {})
 rawset(_G, "BASEVIDWIDTH", BASEVIDWIDTH or 320)
 rawset(_G, "BASEVIDHEIGHT", BASEVIDHEIGHT or 200)
 
+local function enumflags(prefix, ...)
+	local work = {...}
+	
+	for k,enum in ipairs(work)
+		local val = 1<<(k-1)
+		assert(val ~= -1,"\x85Ran out of bits for "..prefix.."! (k="..k..")\x80")
+		
+		rawset(_G,prefix..enum,val)
+		print("Enummed "..prefix..""..enum.." ("..val..")")
+	end
+end
+
+--Popup-Style flags
+enumflags("PS_",
+	--this popup will automatically draw the title and separating line
+	"DRAWTITLE",
+	
+	--this popup wont have an "X" button, youd better have it close itself!
+	"NOXBUTTON",
+	
+	--this popup wont fade the other menus behind it
+	"NOFADE",
+	
+	--this popup is purely visual, and will not be interactable
+	"IRRELEVANT",
+	
+	--this popup will not slide in from the bottom
+	"NOSLIDEIN"
+)
+
 MenuLib.VERSION = 000
 MenuLib.SUBVERSION = 3
 --dont forget the ending "/"

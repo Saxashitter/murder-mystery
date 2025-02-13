@@ -1,7 +1,17 @@
 local ML = MenuLib
 
-local function drawIt(v, ML)	
-	ML.client.menuLayer = $ + #ML.client.popups
+local function drawIt(v, ML)
+	local irrelevant_popups = 0
+	for key, popupitem_t in ipairs(ML.client.popups)
+		local menu = ML.menus[popupitem_t.id]
+		if (menu.ps_flags & PS_IRRELEVANT)
+			irrelevant_popups = $ + 1
+			continue
+		end
+		continue
+	end
+	
+	ML.client.menuLayer = $ + #ML.client.popups - irrelevant_popups
 	
 	for key, popupitem_t in ipairs(ML.client.popups)
 		ML.interpolate(v, key)
@@ -9,18 +19,23 @@ local function drawIt(v, ML)
 		
 		--set the stage_id to the topmost pop-up
 		if key == #ML.client.popups
-			ML.HUD.stage_id = $ + #ML.client.popups
+			ML.HUD.stage_id = $ + #ML.client.popups - irrelevant_popups
 		end
 		
 		popupitem_t.y_off = (ease.linear(FU/2, $*FU, 0)) / FU
 		local y_off = popupitem_t.y_off
+		if (menu.ps_flags & PS_NOSLIDEIN)
+			y_off = 0
+		end
 		
 		popupitem_t.lifespan = $ + 1
-		v.drawFill(0,0,
-			(v.width()/v.dupx())+1,
-			(v.height()/v.dupy())+1,
-			31|(max(3, 10 - popupitem_t.lifespan)<<V_ALPHASHIFT)|V_SNAPTOLEFT|V_SNAPTOTOP
-		)
+		if not (menu.ps_flags & PS_NOFADE)
+			v.drawFill(0,0,
+				(v.width()/v.dupx())+1,
+				(v.height()/v.dupy())+1,
+				31|(max(3, 10 - popupitem_t.lifespan)<<V_ALPHASHIFT)|V_SNAPTOLEFT|V_SNAPTOTOP
+			)
+		end
 		
 		local corner_x = menu.x
 		local corner_y = menu.y + y_off
@@ -40,7 +55,22 @@ local function drawIt(v, ML)
 			)
 		end
 		
-		do
+		if (menu.ps_flags & PS_DRAWTITLE)
+			v.drawString(corner_x + 2,
+				corner_y + 2,
+				menu.title,
+				V_ALLOWLOWERCASE,
+				"left"
+			)
+			
+			v.drawFill(corner_x, corner_y + 13,
+				menu.width, 1,
+				0
+			)
+			
+		end
+		
+		if not (menu.ps_flags & PS_NOXBUTTON)
 			ML.addButton(v, {
 				x = corner_x + (menu.width) - 10,
 				y = corner_y,
@@ -55,11 +85,6 @@ local function drawIt(v, ML)
 				end
 			})
 		end
-		
-		v.drawFill(corner_x, corner_y + 13,
-			menu.width, 1,
-			0
-		)
 		
 		if (menu.drawer ~= nil)
 			menu.drawer(v, ML, menu, {

@@ -78,9 +78,42 @@ MMHUD.menus.tryPerkEquip = function(perk_id, slot, mm_slot)
 	end
 	
 	MMHUD.menus.tryingEquip = TICRATE
+	
+	MenuLib.initPopup(MenuLib.findMenu("Shop_Equipping"))
 end
 
---TODO: put these in the perk's definitions?
+MenuLib.addMenu({
+	stringId = "Shop_Equipping",
+	
+	x = 160 - 35,
+	y = 100 - 20,
+	
+	width = 70,
+	height = 40,
+	color = 27,
+	outline = 30,
+	
+	title = "",
+	ps_flags = PS_NOXBUTTON,
+	
+	drawer = function(v, ML, menu, props)
+		local x,y = props.corner_x, props.corner_y
+		
+		v.drawString(x + menu.width/2,
+			y + menu.height/2 - 3,
+			"Equipping...",
+			V_ALLOWLOWERCASE,
+			"thin-center"
+		)
+		
+		--auto-close
+		if MMHUD.menus.last_tryingEquip
+		and not MMHUD.menus.tryingEquip
+			MenuLib.initPopup(-1)
+		end
+	end
+})
+
 for i = 1, MM_PERKS.num_perks
 	local perk_t = MM_PERKS[i]
 	
@@ -95,12 +128,11 @@ for i = 1, MM_PERKS.num_perks
 		color = 27,
 		
 		title = perk_t.name,
+		ps_flags = PS_NOXBUTTON|PS_NOFADE|PS_DRAWTITLE|PS_NOSLIDEIN,
 		
 		drawer = function(v, ML, menu, props)
 			local x,y = props.corner_x, props.corner_y
 			local p = consoleplayer
-			
-			v.drawString(x + 2, y + 2, perk_t.name, V_ALLOWLOWERCASE, "thin")
 			
 			MMHUD.menus.drawPerkItem(v,
 				x + 38,
@@ -111,27 +143,30 @@ for i = 1, MM_PERKS.num_perks
 			
 			MenuLib.interpolate(v, false)
 			
+			if MMHUD.menus.tryingEquip
+				return
+			end
+			
 			--no buying yet...
 			v.drawString(x + 54,
 				y + 65, "Equip?", V_ALLOWLOWERCASE, "thin-center"
 			)
 			
-			if MMHUD.menus.tryingEquip
-				MenuLib.addButton(v, {
-					x = (x + 54) - 20,
-					y = y + 75,
-					
-					width = 40,
-					height = 20,
-					
-					name = "Wait...",
-					color = 7,
-					outline = 15,
-					
-				})
+			MenuLib.addButton(v, {
+				x = (x + 54) - 20,
+				y = y + 100,
 				
-				return
-			end
+				width = 40,
+				height = 20,
+				
+				name = "Cancel",
+				color = 7,
+				outline = 15,
+				
+				pressFunc = function()
+					MenuLib.initPopup(-1)
+				end
+			})
 			
 			MenuLib.addButton(v, {
 				x = (x + 54) - (27 + 16),
@@ -141,8 +176,8 @@ for i = 1, MM_PERKS.num_perks
 				height = 20,
 				
 				name = (p.mm_save and p.mm_save.pri_perk == i) and "Unequip" or "Primary",
-				color = 7,
-				outline = 15,
+				color = (p.mm_save and p.mm_save.pri_perk == i) and 39 or 7,
+				outline = (p.mm_save and p.mm_save.pri_perk == i) and 47 or 15,
 				
 				pressFunc = function()
 					if MMHUD.menus.tryingEquip then return end
@@ -159,8 +194,8 @@ for i = 1, MM_PERKS.num_perks
 				height = 20,
 				
 				name = (p.mm_save and p.mm_save.sec_perk == i) and "Unequip" or "Secondary",
-				color = 7,
-				outline = 15,
+				color = (p.mm_save and p.mm_save.sec_perk == i) and 39 or 7,
+				outline = (p.mm_save and p.mm_save.sec_perk == i) and 47 or 15,
 				
 				pressFunc = function()
 					if MMHUD.menus.tryingEquip then return end

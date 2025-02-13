@@ -47,9 +47,13 @@ end)
 
 addHook("HUD",function(v)
 	ML.client.hovering = -1
+	ML.client.canPressSomething = false
 	ML.HUD.stage_item = nil
+	ML.HUD.stage_id = -1
 	
 	if ML.client.currentMenu.id == -1 then return end
+	ML.client.menuLayer = 0
+	ML.HUD.stage_id = 0
 	
 	for key, item in ipairs(ML.HUD.items)
 		if item.interpolate

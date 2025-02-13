@@ -1,4 +1,4 @@
---MenuLib v0.0.2 written by luigi budd
+--MenuLib v0.0.1 written by luigi budd
 
 if rawget(_G,"MenuLib")
 	print("\x85MenuLib already loaded, aborting...")
@@ -12,13 +12,12 @@ rawset(_G, "BASEVIDHEIGHT", BASEVIDHEIGHT or 200)
 
 MenuLib.VERSION = 000
 MenuLib.SUBVERSION = 2
-MenuLib.root = "Libs/MenuLib/"
+MenuLib.root = "Libs/MenuLib"
 
 MenuLib.client = {
 	
 	--Self explanatory
 	menuactive = false,
-	menuTime = 0,
 	
 	mouse_x = (BASEVIDWIDTH*FU) / 2,
 	mouse_y = (BASEVIDHEIGHT*FU) / 2,

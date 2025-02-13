@@ -273,6 +273,7 @@ MenuLib.addMenu({
 				
 			end
 			
+			/*
 			if (perk_t and perk_t.cost ~= nil)
 				local cost = "???"
 				if type(perk_t.cost) == "number"
@@ -287,7 +288,8 @@ MenuLib.addMenu({
 					"thin"
 				)
 			end
-		
+			*/
+			
 		--draw our equipped perks
 		else
 			local center_x = ((BASEVIDWIDTH/2) + menu.width/4) - 5

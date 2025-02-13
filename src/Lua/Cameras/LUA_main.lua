@@ -141,6 +141,9 @@ addHook("MapLoad",do
 	}
 	
 	for k,cam in ipairs(MMCAM.TOTALCAMS)
+		--!!!
+		if not (cam and cam.valid) then continue end
+		
 		local args = cam.args
 		
 		if totals.seq[args.sequence] == nil

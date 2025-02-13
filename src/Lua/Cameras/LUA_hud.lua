@@ -51,6 +51,7 @@ local function HUD_DrawCamera(v,p)
 	local p = displayplayer
 	local mmc = p.mmcam
 	
+	if not (mmc) then return end
 	if not (mmc.cam and mmc.cam.valid) then return end
 	
 	MMHUD.xoffset = ease.inexpo(FU*6/10,$,1000*FU)

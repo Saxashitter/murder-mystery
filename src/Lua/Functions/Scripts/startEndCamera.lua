@@ -192,7 +192,7 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 				MM_N.end_camera.lerpradius = hdist
 				MM_N.end_camera.startz = vdist
 				MM_N.end_camera.free_noclip = MM_N.end_camera.ticker <= MM_N.end_camera.swirldur/4
-				MM_N.end_camera.scale = ease.outquad(swirl, $, sheriff.scale)
+				MM_N.end_camera.scale = ease.outquad(swirl, $, (sheriff and sheriff.valid) and sheriff.scale or $)
 				
 				MM_N.end_camera.ticker = $+1
 			end
@@ -209,7 +209,7 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 			
 			MM_N.end_camera.startz = vdist
 			MM_N.end_camera.free_noclip = MM_N.end_camera.ticker <= MM_N.end_camera.swirldur/4
-			MM_N.end_camera.scale = ease.outquad(swirl, $, sheriff.scale)
+			MM_N.end_camera.scale = ease.outquad(swirl, $, (sheriff and sheriff.valid) and sheriff.scale or $)
 		end
 		follow(MM_N.end_camera, FixedMul(pan, MM_N.end_camera.panspeed))
 

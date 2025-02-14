@@ -51,6 +51,10 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	
 	--allow dedicated server chats?
 	if (src == server and not players[0]) then return end
+	
+	if MM.runHook("OnRawChat", src, t, trgt, msg) then
+		return true
+	end
 
 	if not (consoleplayer
 		and consoleplayer.mo
@@ -66,10 +70,6 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 		and src.mm
 		and not src.mm.spectator) then
 			return true
-	end
-	
-	if MM.runHook("OnRawChat", src, t, trgt, msg) then
-		return true
 	end
 	
 	--talk from cameras

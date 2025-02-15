@@ -105,6 +105,10 @@ MenuLib.addMenu({
 	
 	drawer = function(v, ML, menu, props)
 		local x,y = props.corner_x, props.corner_y
+		if (menu.lifetime == nil)
+			menu.lifetime = 0
+		end
+		menu.lifetime = $ + 1
 		
 		v.drawString(x + menu.width/2,
 			y + menu.height/2 - 3,
@@ -117,8 +121,11 @@ MenuLib.addMenu({
 		MMHUD.menus.equippop.timer = $ + 1
 		
 		--auto-close
-		if MMHUD.menus.last_tryingEquip
-		and not MMHUD.menus.tryingEquip
+		if (MMHUD.menus.last_tryingEquip
+		and not MMHUD.menus.tryingEquip)
+		--something has gone horribly wrong
+		or (menu.lifetime >= TICRATE)
+		
 			MenuLib.initPopup(-1)
 			
 			--close the other one too

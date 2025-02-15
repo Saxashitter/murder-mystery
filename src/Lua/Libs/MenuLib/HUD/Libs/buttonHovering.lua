@@ -1,4 +1,16 @@
 local ML = MenuLib
+local function noPopUpInteract()
+	local nointer = false
+	if (#ML.client.popups > 0)
+		nointer = true
+	end
+	
+	if (#ML.client.popups == 1)
+	and (ML.menus[ML.client.popups[1].id].ps_flags & PS_IRRELEVANT)
+		nointer = false
+	end
+	return nointer
+end
 
 return function(v, props)
 	if ML.client.menuTime < 3 then return false; end
@@ -7,7 +19,7 @@ return function(v, props)
 	
 	--shitty ik
 	if ML.HUD.stage_item.name == "drawMenus"
-	and (#ML.client.popups > 0)
+	and noPopUpInteract()
 		return false
 	end
 	

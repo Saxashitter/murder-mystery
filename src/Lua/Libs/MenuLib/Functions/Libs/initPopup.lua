@@ -2,12 +2,13 @@ local ML = MenuLib
 
 --this functions just the same as initMenu(), this just allows
 --another menu to draw as if it was a popup
-return function(id)
+return function(id,instant)
 	if (isdedicatedserver) then return end
 	
 	--close this popup
 	if (id == -1)
 		if ML.menus[#ML.client.popups].ps_flags & PS_NOSLIDEIN
+		or instant
 			table.remove(ML.client.popups)
 		else
 			local popupitem_t = ML.client.popups[#ML.client.popups]

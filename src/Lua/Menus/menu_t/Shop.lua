@@ -32,6 +32,9 @@ MMHUD.menus.drawPerkItem = function(v, x,y, perk, nofunc)
 	end
 	
 	local pressfunc = (not nofunc) and function()
+		if (#MenuLib.client.popups)
+			MenuLib.initPopup(-1, true)
+		end
 		MenuLib.initPopup(MenuLib.findMenu("Shop_Popup_"..(perk_t.name)))
 	end or nil
 	
@@ -126,10 +129,10 @@ MenuLib.addMenu({
 		--something has gone horribly wrong
 		or (menu.lifetime >= TICRATE)
 		
-			MenuLib.initPopup(-1)
+			MenuLib.initPopup(-1,true)
 			
 			--close the other one too
-			MenuLib.initPopup(-1)
+			MenuLib.initPopup(-1,true)
 			MMHUD.menus.equippop.timer = $ - 1
 		end
 	end
@@ -149,7 +152,7 @@ for i = 1, MM_PERKS.num_perks
 		color = 27,
 		
 		title = perk_t.name,
-		ps_flags = PS_NOXBUTTON|PS_NOFADE|PS_DRAWTITLE|PS_NOSLIDEIN,
+		ps_flags = PS_NOXBUTTON|PS_NOFADE|PS_DRAWTITLE|PS_NOSLIDEIN|PS_IRRELEVANT,
 		
 		drawer = function(v, ML, menu, props)
 			local x,y = props.corner_x, props.corner_y
@@ -226,6 +229,7 @@ for i = 1, MM_PERKS.num_perks
 			})
 			
 			--auto-close
+			/*
 			if MMHUD.menus.equippop.last == MMHUD.menus.equippop.timer
 			and MMHUD.menus.equippop.timer
 				MenuLib.initPopup(-1)
@@ -234,6 +238,7 @@ for i = 1, MM_PERKS.num_perks
 				MMHUD.menus.equippop.timer = 0
 				MMHUD.menus.equippop.last = 0
 			end
+			*/
 		end
 	})
 end

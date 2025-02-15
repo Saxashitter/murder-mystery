@@ -56,6 +56,11 @@ return function(id)
 			ML.client.currentMenu.layers = {}
 			ML.client.menuLayer = 0
 			
+			for k,_ in ipairs(ML.client.popups)
+				ML.initPopup(-1, true)
+				continue
+			end
+			
 		else
 			id = layers[#layers]
 			layers[#layers] = nil

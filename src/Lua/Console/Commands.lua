@@ -238,7 +238,8 @@ COM_AddCommand("MM_EquipPerk", function(p, slot, newperk)
 		return
 	end
 	
-	if ((p.mm.role == MMROLE_MURDERER and not MM:pregame()) and not p.spectator) then 
+	if ((p.mm.role == MMROLE_MURDERER and not MM:pregame()) and not p.spectator) 
+	and not CV_MM.debug.value then
 		CONS_Printf(p, "Unable to change perks at this time.")
 		return 
 	end

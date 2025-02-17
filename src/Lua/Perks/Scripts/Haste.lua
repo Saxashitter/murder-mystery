@@ -1,5 +1,6 @@
 MM:RegisterEffect("perk.primary.haste", {
 	modifiers = {
+		--FU*6/5 yw
 		normalspeed_multi = tofixed("1.20") -- no luigi, i hate srb2 division
 	},
 })
@@ -15,21 +16,80 @@ local hud_tween = hud_tween_start
 local icon_name = "MM_PI_HASTE"
 local icon_scale = FU/2
 
-MM_PERKS[MMPERK_HASTE] = {
-	primary = function(p)
+local function windeffect(p)
+	if p.speed < 20*p.mo.scale then return end
+	if (leveltime & 1) then return end
+	
+	local me = p.mo
+	local rad = FixedDiv(me.radius,me.scale)/FU
+	local hei = FixedDiv(me.height,me.scale)/FU
+	
+	local wind = P_SpawnMobjFromMobj(me,
+		P_RandomRange(-rad,rad)*FU,
+		P_RandomRange(-rad,rad)*FU,
+		P_RandomRange(0,hei)*FU,
+		MT_THOK
+	)
+	wind.sprite = SPR_RAIN
+	wind.fuse = TICRATE/2
+	wind.tics = wind.fuse
+	wind.frame = $|FF_PAPERSPRITE|FF_SEMIBRIGHT|FF_ADD
+	
+	local momz = me.momz
+	if (me.lastz ~= nil)
+		momz = me.z - me.lastz 
+	end
+	
+	wind.angle = R_PointToAngle2(0,0, me.momx, me.momy)
+	wind.rollangle = R_PointToAngle2(0, 0, R_PointToDist2(0,0,me.momx,me.momy), momz) + ANGLE_90
+	
+	wind.momx = me.momx/3
+	wind.momy = me.momy/3
+	wind.momz = momz/3
+	
+	wind.spriteyoffset = -16*FU
+	
+	wind.height = wind.scale
+	wind.radius = 5*wind.scale
+	wind.dontdrawforviewmobj = me
+end
+
+local thinkers = {
+	[1] = function(p)
 		local item = p.mm.inventory.items[p.mm.inventory.cur_sel]
 		if not (item and item.id == "knife") then return end
 		if p.mm.inventory.hidden then return end
 		
 		MM:ApplyPlayerEffect(p, "perk.primary.haste")
+		p.runspeed = FixedMul(MM_N.speed_cap, tofixed("1.20")) - 4*FU
+		windeffect(p)
 	end,
-	
-	secondary = function(p)
+	[2] = function(p)
 		local item = p.mm.inventory.items[p.mm.inventory.cur_sel]
 		if not (item and item.id == "knife") then return end
 		if p.mm.inventory.hidden then return end
 		
 		MM:ApplyPlayerEffect(p, "perk.secondary.haste")
+		p.runspeed = FixedMul(MM_N.speed_cap, tofixed("1.10")) - 4*FU
+		windeffect(p)
+	end,
+}
+
+--i know this is bad, kill me later
+MM_PERKS[MMPERK_HASTE] = {
+	primary = function(p)
+		thinkers[1](p)
+		
+		if p.mo and p.mo.valid
+			p.mo.lastz = p.mo.z
+		end
+	end,
+	secondary = function(p)
+		thinkers[2](p)
+		
+		if p.mo and p.mo.valid
+			p.mo.lastz = p.mo.z
+		end
 	end,
 	
 	drawer = function(v,p,c, order)

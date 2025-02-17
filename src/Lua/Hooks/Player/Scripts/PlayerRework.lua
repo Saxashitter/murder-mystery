@@ -45,6 +45,7 @@ return function(p)
 	p.charability = CA_NONE
 	p.charability2 = CA2_NONE
 	p.jumpfactor = FixedMul(sonic.jumpfactor, jumpfactormulti)
+	p.runspeed = 9999*FU
 	
 	local effects = p.mm.effects
 	
@@ -95,8 +96,6 @@ return function(p)
 	p.thrustfactor = sonic.thrustfactor
 	p.accelstart = (sonic.accelstart*3)/2 -- Buff start acceleration
 	p.acceleration = sonic.acceleration
-	
-	p.runspeed = 9999*FU
 	
 	p.rings = 0
 

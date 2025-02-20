@@ -94,6 +94,7 @@ weapon.thinker = function(item, p)
 			if not (cam.health) then continue end
 			if not (cam.args) then continue end
 			if (cam.args.viewpoint) then continue end
+			if not (cam.args.melee and cam.args.melee.valid) then continue end
 			
 			if not distchecks(item,p, cam.args.melee) then continue end
 			
@@ -155,6 +156,7 @@ weapon.attack = function(item,p)
 			if not (cam.health) then continue end
 			if not (cam.args) then continue end
 			if (cam.args.viewpoint) then continue end
+			if not (cam.args.melee and cam.args.melee.valid) then continue end
 			
 			if not distchecks(item,p, cam.args.melee) then continue end
 			

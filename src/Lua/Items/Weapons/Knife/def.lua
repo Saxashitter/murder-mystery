@@ -50,14 +50,17 @@ local function distchecks(item, p, target)
 		return false
 	end
 
-	local adiff = FixedAngle(
-		AngleFixed(R_PointToAngle2(p.mo.x, p.mo.y, target.x, target.y)) - AngleFixed(p.cmd.angleturn << 16)
-	)
-	if AngleFixed(adiff) > 180*FU
-		adiff = InvAngle($)
-	end
-	if (AngleFixed(adiff) > 115*FU)
-		return false
+	--no need to check for angles if we're touchin the guy
+	if dist > p.mo.radius + target.radius
+		local adiff = FixedAngle(
+			AngleFixed(R_PointToAngle2(p.mo.x, p.mo.y, target.x, target.y)) - AngleFixed(p.cmd.angleturn << 16)
+		)
+		if AngleFixed(adiff) > 180*FU
+			adiff = InvAngle($)
+		end
+		if (AngleFixed(adiff) > 115*FU)
+			return false
+		end
 	end
 	
 	return true

@@ -106,14 +106,17 @@ weapon.thinker = function(item, p)
 			continue
 		end
 		
-		local adiff = FixedAngle(
-			AngleFixed(R_PointToAngle2(p.mo.x, p.mo.y, p2.mo.x, p2.mo.y)) - AngleFixed(p.cmd.angleturn << 16)
-		)
-		if AngleFixed(adiff) > 180*FU
-			adiff = InvAngle($)
-		end
-		if (AngleFixed(adiff) > 115*FU)
-			continue
+		--no need to check for angles if we're touchin the guy
+		if dist > p.mo.radius + p2.mo.radius
+			local adiff = FixedAngle(
+				AngleFixed(R_PointToAngle2(p.mo.x, p.mo.y, p2.mo.x, p2.mo.y)) - AngleFixed(p.cmd.angleturn << 16)
+			)
+			if AngleFixed(adiff) > 180*FU
+				adiff = InvAngle($)
+			end
+			if (AngleFixed(adiff) > 115*FU)
+				continue
+			end
 		end
 		
 		P_SpawnLockOn(p, p2.mo, S_LOCKON1)

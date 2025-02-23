@@ -554,7 +554,7 @@ addHook("TouchSpecial",function(mine,me)
 	delete3d(mine)
 end,MT_MM_TRIPMINE)
 
-addHook("MobjDeath",function(mine)
+addHook("MobjDeath",function(mine,_,src)
 	if (mine.steppedon) then return end
 
 	local sfx = P_SpawnGhostMobj(mine)
@@ -573,6 +573,7 @@ addHook("MobjDeath",function(mine)
 	SpawnExplosions(mine)
 	delete3d(mine)
 	
+	local killing_player = (src and src.valid and src.player and src.player.valid) and src
 	local radius = 550*mine.scale
 	for p in players.iterate
 		if (p.spectator) then continue end
@@ -586,8 +587,14 @@ addHook("MobjDeath",function(mine)
 			continue
 		end
 		
+		--credit the sheriff if they killed the murderer
+		local killer = mine.tracer
+		if (p.mm.role == MMROLE_MURDERER)
+			killer = killing_player
+		end
+		
 		SpawnSparks(me)
-		P_KillMobj(me,mine,mine.tracer,DMG_INSTAKILL)
+		P_KillMobj(me,mine, kiler, DMG_INSTAKILL)
 		me.color = SKINCOLOR_GALAXY
 		me.stormkilledme = true
 		me.colorized = true

@@ -14,7 +14,7 @@ the way that these are set up is:
 rawset(_G, "MM_PERKS",{})
 
 MM_PERKS.perkActiveDown = function(p, inSecondSlot)
-	local has2Perks = false
+	local has2Perks = inSecondSlot
 	if inSecondSlot
 		if p.mm_save.pri_perk
 		

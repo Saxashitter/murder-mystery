@@ -14,10 +14,17 @@ the way that these are set up is:
 rawset(_G, "MM_PERKS",{})
 
 MM_PERKS.perkActiveDown = function(p, inSecondSlot)
+	local has2Perks = false
+	if inSecondSlot
+		if p.mm_save.pri_perk
+		
+		end
+	end
+	
 	if ((p.cmd.buttons & BT_TOSSFLAG)
 	and not (p.lastbuttons & BT_TOSSFLAG))
 	--nothing uses c3
-	and (inSecondSlot and (p.cmd.buttons & BT_CUSTOM3) or true)
+	and (has2Perks and (p.cmd.buttons & BT_CUSTOM3) or true)
 		return true
 	end
 	return false

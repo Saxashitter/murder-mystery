@@ -58,7 +58,8 @@ local ITEM_DEF = {
 	
 	this would restrict innocents from picking the item up, but allow for murderers and sheriffs to pick it up
 	*/
-	// not required, for scripters
+	
+	-- not required, for scripters
 	--TODO: document these
 	pickup = func,
 	postpickup = func,

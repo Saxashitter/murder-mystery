@@ -127,8 +127,13 @@ MM.BulletHit = function(ring,pmo)
 	if not (pmo.player and pmo.player.valid)
 		if (pmo.flags & MF_SHOOTABLE)
 		or pmo.camhitbox
+			
+			--if this is a generic shootable (monitors, enemies, etc...),
+			--damage it with the ring's target (the player) or the ring itself as the source
 			if not pmo.camhitbox
 				P_DamageMobj(pmo, ring, (ring.target and ring.target.valid) and ring.target or ring, 2)
+			
+			--otherwise, we're shooting a camera, so kill it and make it offline
 			elseif (ring.target.player.mm.role == MMROLE_MURDERER)
 				P_KillMobj(pmo.tracer, ring, (ring.target and ring.target.valid) and ring.target or ring, 2)
 			end

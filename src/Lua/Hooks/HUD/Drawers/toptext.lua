@@ -14,7 +14,7 @@ end
 function MMHUD:PushToTop(tics, text, ...)
 	if #MMHUD.texts > 8 then
 		local amount = #MMHUD.texts - 8
-
+		
 		for i = 1,amount do
 			table.remove(MMHUD.texts, 1)
 		end
@@ -39,7 +39,7 @@ return function(v)
 		local i = #MMHUD.texts-i
 		local trans = 0
 		local total_height = 0
-
+		
 		if str.tics >= 0 then
 			if not (paused or MM:pregame())
 				str.tics = max(0, $-1)
@@ -49,28 +49,32 @@ return function(v)
 				listForRemoval[#listForRemoval+1] = str
 				continue
 			end
-
+			
 			if str.tics <= 9 then
 				local tics = 9-str.tics
-
+				
 				trans = V_10TRANS*tics
 			end
 		end
-
+		
 		str.y = lerp($, target_y, FU/7)
 		total_height = text_height
-
+		
 		v.drawString(160*FU, str.y - slidein, str.text, V_SNAPTOTOP|trans, "fixed-center")
-
+		
 		for i,subt in ipairs(str.subtexts) do
+			if subt == nil
+				table.remove(str.subtexts, i)
+				continue
+			end
 			local y = str.y+text_height
-
+			
 			y = $+(subtext_height*(i-1))
-
+			
 			v.drawString(160*FU, y - slidein, subt, V_SNAPTOTOP|trans, "thin-fixed-center")
 			total_height = $ + subtext_height
 		end
-
+		
 		target_y = $ + total_height
 	end
 

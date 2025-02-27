@@ -203,6 +203,7 @@ MM:addPlayerScript(function(p)
 				if not (#p.mm.clues.list) then
 					text = "YOU FOUND THEM ALL!"
 					subtext = "Your clues gave you a useful item!"
+					local sub2 = nil
 					
 					local reward = ''
 					if p.mm.role == MMROLE_MURDERER
@@ -219,6 +220,7 @@ MM:addPlayerScript(function(p)
 						else
 							reward = clueitemtiers[3][P_RandomRange(1, #clueitemtiers[3])]
 							subtext = "Your clues gave you an item!"
+							sub2 = "Try being faster next time!"
 						end
 					end
 					
@@ -234,7 +236,7 @@ MM:addPlayerScript(function(p)
 				end
 
 				if p == displayplayer then
-					MMHUD:PushToTop(3*TICRATE, text, subtext)
+					MMHUD:PushToTop(3*TICRATE, text, subtext, sub2)
 				end
 				break
 			end

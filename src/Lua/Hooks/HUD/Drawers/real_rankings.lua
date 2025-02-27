@@ -127,7 +127,7 @@ local function getViewedPlayerRole(player, viewer)
 	
 	--wwwait, we should always know dead murderers, the chat does
 	--announce them after all
-	if role == "Dead"
+	if isDead(player)
 	and player.mm.role == MMROLE_MURDERER
 		return role
 	end

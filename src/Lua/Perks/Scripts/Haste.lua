@@ -60,6 +60,7 @@ local thinkers = {
 		if not (item and item.id == "knife") then return end
 		if p.mm.inventory.hidden then return end
 		if not P_IsObjectOnGround(p.mo) then return end
+		if p.speed < 17*p.mo.scale then return end
 		
 		MM:ApplyPlayerEffect(p, "perk.primary.haste")
 		p.runspeed = FixedMul(MM_N.speed_cap, tofixed("1.20")) - 4*FU
@@ -70,6 +71,7 @@ local thinkers = {
 		if not (item and item.id == "knife") then return end
 		if p.mm.inventory.hidden then return end
 		if not P_IsObjectOnGround(p.mo) then return end
+		if p.speed < 17*p.mo.scale then return end
 		
 		MM:ApplyPlayerEffect(p, "perk.secondary.haste")
 		p.runspeed = FixedMul(MM_N.speed_cap, tofixed("1.10")) - 4*FU

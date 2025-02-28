@@ -56,5 +56,20 @@ return {
 		count = 4
 	},
 	
+	attract = {
+		x = 0,
+		y = 0,
+		z = 0,
+		tics = 0,
+		name = nil,
+		/*
+		x = fixed_t,
+		y = fixed_t,
+		z = fixed_t,
+		tics = tic_t,
+		name = string
+		*/
+	},
+	
 	effects = {},
 }

@@ -20,7 +20,7 @@ MM_PERKS[MMPERK_FOOTSTEPS] = {
 freeslot("MT_MM_FOOTSTEP","S_MM_FOOTSTEP")
 states[S_MM_FOOTSTEP] = {
 	sprite = SPR_BGLS,
-	frame = H|FF_SEMIBRIGHT|FF_FLOORSPRITE,
+	frame = I|FF_SEMIBRIGHT|FF_FLOORSPRITE,
 	tics = 1,
 	nextstate = S_MM_FOOTSTEP,
 	action = function(step)

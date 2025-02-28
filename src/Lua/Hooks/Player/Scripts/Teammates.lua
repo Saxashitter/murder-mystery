@@ -6,6 +6,10 @@ local stateLUT = {
 return function(p)
 	if MM:pregame() then return end
 	if (p.mm.role == MMROLE_INNOCENT) then return end
+	
+	--this is TECHNICALLY for teammates, so tic it here
+	p.mm.attract.tics = max($-1, 0)
+	
 	--endgame cutscene
 	if (p.mo.flags & MF_NOTHINK) then return end
 	

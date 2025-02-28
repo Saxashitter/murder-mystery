@@ -197,6 +197,7 @@ addHud "interacthud"
 addHud "endgamepointer"
 addHud "murdererping"
 addHud "stormgohere"
+addHud "attraction"
 addHud "showdownicon"
 addHud "role"
 --good coding practices

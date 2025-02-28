@@ -5,6 +5,11 @@ states[freeslot "S_PLAY_BODY"] = {
 }
 spr2defaults[SPR2_OOF_] = SPR2_DEAD
 
+sfxinfo[freeslot("sfx_dedbdy")] = {
+	flags = SF_TOTALLYSINGLE,
+	caption = "Body found"
+}
+
 local roles = MM.require "Variables/Data/Roles"
 
 local function nodamage(me, i,s)
@@ -112,11 +117,20 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 				if (p.mm.spectator) then continue end
 				
 				if (p.mm.role == target.player.mm.role)
-				and (p == consoleplayer)
-					MMHUD:PushToTop(5*TICRATE,
-						"TEAMMATE DEAD",
-						"Your teammate, "..color..target.player.name.."\x80 died!"
-					)
+					if (p == consoleplayer)
+						MMHUD:PushToTop(5*TICRATE,
+							"TEAMMATE DEAD",
+							"Your teammate, "..color..target.player.name.."\x80 died!"
+						)
+						S_StartSound(nil,sfx_alart, consoleplayer)
+					end
+					p.mm.attract = {
+						x = target.x,
+						y = target.y,
+						z = target.z,
+						tics = 10*TICRATE,
+						name = target.player.name
+					}
 				end
 			end
 		end
@@ -284,7 +298,7 @@ addHook("ThinkFrame", function()
 					corpse.flags2 = 0
 					corpse.tics = -1
 					corpse.fuse = -1
-
+					
 					P_InstaThrust(corpse, p.mo.deathangle, -8*FU)
 					P_SetObjectMomZ(corpse,6*FU)
 					
@@ -296,6 +310,8 @@ addHook("ThinkFrame", function()
 			end
 		end
 	end
+	
+	local body_found = false
 	
 	for _,corpse in pairs(MM_N.corpses) do
 		if not (corpse and corpse.valid) then
@@ -313,19 +329,35 @@ addHook("ThinkFrame", function()
 		end
 		
 		MM.runHook("CorpseThink", corpse)
-
+		
 		for p in players.iterate do
 			if not (p and p.mo and p.mo.health and p.mm and p.mm.role ~= MMROLE_MURDERER and not p.mm.spectator) then
 				continue
 			end
-
+			
 			if P_CheckSight(corpse, p.mo)
-			and R_PointToDist(corpse.x, corpse.y, p.mo.x, p.mo.y) < 2000*FU
+			and R_PointToDist(corpse.x, corpse.y, p.mo.x, p.mo.y) < 512*FU
 			and not (MM_N.knownDeadPlayers[corpse.playerid]) then
 				chatprint("\x82*The corpse of "..corpse.playername.." has been found!")
 				MM_N.knownDeadPlayers[corpse.playerid] = true
+				body_found = true
+				
+				local marker = P_SpawnMobjFromMobj(corpse, 0,0,
+					FixedDiv(corpse.height, corpse.scale),
+					MT_THOK
+				)
+				marker.sprite = SPR_BGLS
+				marker.frame = H|FF_FULLBRIGHT
+				marker.tics = 10 * TICRATE
+				marker.fuse = marker.tics
+				
 				MM.runHook("CorpseFound", corpse, p.mo)
 			end
 		end
+	end
+	
+	--only play ONCE
+	if body_found
+		S_StartSound(nil,sfx_dedbdy)
 	end
 end)

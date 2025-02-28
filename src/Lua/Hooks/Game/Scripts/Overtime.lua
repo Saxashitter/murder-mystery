@@ -1,5 +1,13 @@
 --handles everything related to round times
 
+addHook("MusicChange",function(oldname, newname, mflags,looping,pos,prefade,fade)
+	if /*string.lower(newname or "") == mapmusname
+	and */leveltime < TICRATE
+	and (gamestate == GS_LEVEL)
+		return "POSTN"
+	end
+end)
+
 local possibleItems = {
 	"shotgun",
 	"revolver",
@@ -13,6 +21,10 @@ return function()
 	if (leveltime >= (MM_N.pregame_time - 4*TICRATE - 1) and leveltime <= MM_N.pregame_time - TICRATE)
 	and (leveltime % TICRATE == 0)
 		S_StartSound(nil,leveltime == MM_N.pregame_time - TICRATE and sfx_s3kad or sfx_s3ka7)
+	end
+	
+	if leveltime == MM_N.pregame_time - 2*TICRATE
+		S_ChangeMusic(mapmusname,true, nil, nil,nil, 2*MUSICRATE)
 	end
 	
 	local numplay = 0

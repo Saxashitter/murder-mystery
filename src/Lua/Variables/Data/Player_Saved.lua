@@ -16,4 +16,10 @@ return {
 	cons_sheriff_chance = 0,
 	
 	lastRole = nil,
+	
+	purchased = {
+		/*
+		[item_id] = true
+		*/
+	}
 }

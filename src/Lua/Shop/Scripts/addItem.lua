@@ -7,7 +7,7 @@ return function(props)
 	
 	table.insert(MM.Shop.items, MM.Shop.libcre, {
 		name = props.name or "Item"..MM.Shop.libcre,
-		price = props.price or 10,
+		price = props.price or 0,
 		category = props.category or 0,
 		
 		purchase = props.purchase,

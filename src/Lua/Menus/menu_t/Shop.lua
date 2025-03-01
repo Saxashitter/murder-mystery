@@ -151,6 +151,19 @@ MenuLib.addMenu({
 	end
 })
 
+local itemid_to_perkid = {}
+local perkit_to_itemid = {}
+do
+	local cate = MM_PERKS.category_ptr
+	
+	for i = 1, #cate.items
+		local item = MM.Shop.items[cate.items[i]]
+		
+		itemid_to_perkid[i] = item.perk_id
+		perkit_to_itemid[item.perk_id] = i
+	end
+end
+
 for i = 1, MM_PERKS.num_perks
 	local perk_t = MM_PERKS[i]
 	
@@ -184,7 +197,49 @@ for i = 1, MM_PERKS.num_perks
 				return
 			end
 			
-			--no buying yet...
+			local this_itemid = perkit_to_itemid[i]
+			if not (consoleplayer.mm_save.purchased[this_itemid])
+				v.drawString(x + 54,
+					y + 65, "Buy?", V_ALLOWLOWERCASE, "thin-center"
+				)
+				
+				MenuLib.addButton(v, {
+					x = (x + 54) - (27 + 16),
+					y = y + 75,
+					
+					width = 32,
+					height = 20,
+					
+					name = "Purchase",
+					color = 103,
+					outline = 111,
+					
+					pressFunc = function()
+						if MMHUD.menus.tryingEquip then return end
+						MMHUD.menus.tryPerkEquip(i, "primary", "pri_perk")
+					end
+					
+				})
+				
+				MenuLib.addButton(v, {
+					x = (x + 54) + (27) - 16,
+					y = y + 75,
+					
+					width = 32,
+					height = 20,
+					
+					name = "Cancel",
+					color = 7,
+					outline = 15,
+					
+					pressFunc = function()
+						MenuLib.initPopup(-1)
+					end
+					
+				})
+				return
+			end
+			
 			v.drawString(x + 54,
 				y + 65, "Equip?", V_ALLOWLOWERCASE, "thin-center"
 			)

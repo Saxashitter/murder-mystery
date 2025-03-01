@@ -30,12 +30,6 @@ MM.Shop.items = {
 	*/
 }
 
-COM_AddCommand("MM_BuyItem", function(p, name)
-	if not MM:isMM() then return end
-
-	MM:GiveItem(p, name)
-end)
-
 local function doAndInsert(file, realname)
 	MM.Shop[realname or file] = dofile("Shop/Scripts/"..file)
 end
@@ -43,3 +37,10 @@ end
 doAndInsert("addCategory")
 doAndInsert("addItem")
 doAndInsert("buyItem")
+
+COM_AddCommand("MM_TryBuyItem", function(p, sig, id)
+	if not MM:isMM() then return end
+	if sig ~= MM_N.luaSignature then return end
+	
+	MM.Shop.buyItem(p, tonumber(id))
+end)

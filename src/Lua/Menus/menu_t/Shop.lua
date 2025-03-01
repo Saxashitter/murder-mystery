@@ -16,7 +16,7 @@ end
 MMHUD.menus.drawRings = function(v, x,y)
 	x = $*FU
 	y = $*FU
-	local rings = MM:GetPlayerRings(consoleplayer)
+	local rings = format_int(MM:GetPlayerRings(consoleplayer))
 	
 	local origin_size = FixedDiv(16*FU, v.cachePatch("MMRING").width*FU) -- Scale to 16 pixels
 	local origin_scale = FU*3/4

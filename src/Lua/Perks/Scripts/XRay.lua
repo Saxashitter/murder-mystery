@@ -1,3 +1,6 @@
+local perk_name = "X-Ray"
+local perk_price = 1500
+
 local function interpolate(v,set)
 	if v.interpolate ~= nil then v.interpolate(set) end
 end
@@ -80,7 +83,7 @@ MM_PERKS[MMPERK_XRAY] = {
 
 	icon = "MM_PI_XRAY",
 	icon_scale = FU/2,
-	name = "X-Ray",
+	name = perk_name,
 
 	description = {
 		"\x82Primary:\x80 See everyone through walls!",
@@ -90,5 +93,12 @@ MM_PERKS[MMPERK_XRAY] = {
 		"\x82Secondary:\x80 See everyone through walls,",
 		"for a short distance."
 	},
-	cost = FU*10,
+	cost = perk_price,
 }
+
+local id = MM.Shop.addItem({
+	name = perk_name,
+	price = perk_price,
+	category = MM_PERKS.category_id
+})
+MM.Shop.items[id].perk_id = MMPERK_XRAY

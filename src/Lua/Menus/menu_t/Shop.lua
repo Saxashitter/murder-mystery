@@ -1,5 +1,18 @@
 MMHUD.menus = {}
 
+-- https://stackoverflow.com/questions/10989788/format-integer-in-lua
+local function format_int(number)
+
+  local i, j, minus, int, fraction = tostring(number):find('([-]?)(%d+)([.]?%d*)')
+
+  -- reverse the int-string and append a comma to all blocks of 3 digits
+  int = int:reverse():gsub("(%d%d%d)", "%1,")
+
+  -- reverse the int-string back remove an optional comma and put the 
+  -- optional minus and fractional part back
+  return minus .. int:reverse():gsub("^,", "") .. fraction
+end
+
 MMHUD.menus.drawRings = function(v, x,y)
 	x = $*FU
 	y = $*FU
@@ -262,8 +275,12 @@ MenuLib.addMenu({
 			x = $ + 6
 			y = $ + 17
 			
-			for i = 1, MM_PERKS.num_perks
-				MMHUD.menus.drawPerkItem(v, x,y, i)
+			local cate = MM_PERKS.category_ptr
+			
+			for i = 1, #cate.items
+				local item = MM.Shop.items[cate.items[i]]
+				
+				MMHUD.menus.drawPerkItem(v, x,y, item.perk_id)
 				
 				x = $ + 37
 				
@@ -303,11 +320,14 @@ MenuLib.addMenu({
 				
 			end
 			
-			/*
 			if (perk_t and perk_t.cost ~= nil)
 				local cost = "???"
 				if type(perk_t.cost) == "number"
-					cost = "$"..(perk_t.cost)
+					if perk_t.cost == 0
+						cost = "Free!"
+					else
+						cost = "$" .. format_int(perk_t.cost)
+					end
 				elseif type(perk_t.cost) == "string"
 					cost = perk_t.cost
 				end
@@ -318,7 +338,6 @@ MenuLib.addMenu({
 					"thin"
 				)
 			end
-			*/
 			
 		--draw our equipped perks
 		else

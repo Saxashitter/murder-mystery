@@ -21,5 +21,5 @@ return {
 		/*
 		[item_id] = true
 		*/
-	}
+	},
 }

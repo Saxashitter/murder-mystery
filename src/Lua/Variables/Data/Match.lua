@@ -77,5 +77,7 @@ return {
 	sniped_end = false,
 	
 	--list of sectors safe to spawn coins in
-	safe_sectors = {}
+	safe_sectors = {},
+	--"UserData"
+	safe_sectors_ud = {},
 }

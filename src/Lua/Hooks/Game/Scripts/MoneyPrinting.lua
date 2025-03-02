@@ -1,5 +1,5 @@
 local TR = TICRATE
-local SPAWN_RATE = TR/2
+local SPAWN_RATE = TR --*3/2
 
 return function()
 	if (leveltime % SPAWN_RATE) then return end

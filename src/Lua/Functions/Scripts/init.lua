@@ -124,6 +124,9 @@ return function(self, maploaded)
 		return
 	end
 	
+	MM_N.safe_sectors = {}
+	MM_N.safe_sectors_UD = {}
+	
 	MM_N.map_weather = PRECIP_BLANK
 	MM_N = shallowCopy(matchVars)
 	if (MM_N.end_camera and MM_N.end_camera.valid) then

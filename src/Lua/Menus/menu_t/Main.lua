@@ -62,8 +62,8 @@ MenuLib.addMenu({
 			outline = 19,
 			
 			pressFunc = function()
-				if (consoleplayer ~= server)
-				or (not IsPlayerAdmin(consoleplayer))
+				if not (consoleplayer == server
+				or IsPlayerAdmin(consoleplayer))
 					S_StartSound(nil,sfx_lose, consoleplayer)
 					return
 				end

@@ -1,19 +1,10 @@
 return function()
 	MM_N.safe_sectors = {}
+	MM_N.safe_sectors_ud = {}
 	
 	for sector in sectors.iterate
 		if not (sector.specialflags & SSF_RETURNFLAG) then continue end
 		
-		/*
-		print(
-			sector.lines,
-			sector.lines[0],
-			#sector.lines,
-			sector.lines[#sector.lines - 1]
-		)
-		*/
-		
-		local first = getTimeMicros()
 		local leftmost
 		local rightmost
 		local bottommost
@@ -47,7 +38,6 @@ return function()
 				topmost = max($, topest_v)
 			end
 		end
-		print(getTimeMicros() - first)
 		
 		table.insert(MM_N.safe_sectors, {
 			sector = sector,
@@ -56,6 +46,6 @@ return function()
 			top_bound = topmost,
 			bottom_bound = bottommost
 		})
-		print("safe sector")
+		MM_N.safe_sectors_ud[sector] = true
 	end
 end

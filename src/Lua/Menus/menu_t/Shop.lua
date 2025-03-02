@@ -83,6 +83,16 @@ MMHUD.menus.drawPerkItem = function(v, x,y, perk, nofunc)
 	)
 end
 
+MMHUD.menus.trybuy = {}
+
+MMHUD.menus.tryBuyItem = function(item_id)
+	MMHUD.menus.trybuy.id = item_id
+	MMHUD.menus.trybuy.wantthis = item_id
+	MMHUD.menus.trybuy.tics = TICRATE
+	
+	MenuLib.initPopup(MenuLib.findMenu("Shop_Equipping"))
+end
+
 MMHUD.menus.tryPerkEquip = function(perk_id, slot, mm_slot)
 	if MMHUD.menus.tryingEquip then return end
 	
@@ -128,7 +138,7 @@ MenuLib.addMenu({
 		
 		v.drawString(x + menu.width/2,
 			y + menu.height/2 - 3,
-			"Equipping...",
+			"One moment...",
 			V_ALLOWLOWERCASE,
 			"thin-center"
 		)
@@ -138,14 +148,16 @@ MenuLib.addMenu({
 		
 		--auto-close
 		if (MMHUD.menus.last_tryingEquip
-		and not MMHUD.menus.tryingEquip)
+		and not (MMHUD.menus.tryingEquip or MMHUD.menus.trybuy.tics))
 		--something has gone horribly wrong
 		or (menu.lifetime >= TICRATE)
-		
+			
 			MenuLib.initPopup(-1,true)
 			
-			--close the other one too
-			MenuLib.initPopup(-1,true)
+			if not MMHUD.menus.last_trybuy
+				--close the other one too
+				MenuLib.initPopup(-1,true)
+			end
 			MMHUD.menus.equippop.timer = $ - 1
 		end
 	end
@@ -163,6 +175,8 @@ do
 		perkit_to_itemid[item.perk_id] = i
 	end
 end
+
+local cant_buy = 0
 
 for i = 1, MM_PERKS.num_perks
 	local perk_t = MM_PERKS[i]
@@ -194,13 +208,16 @@ for i = 1, MM_PERKS.num_perks
 			MenuLib.interpolate(v, false)
 			
 			if MMHUD.menus.tryingEquip
+			or MMHUD.menus.trybuy.tics
 				return
 			end
 			
 			local this_itemid = perkit_to_itemid[i]
-			if not (consoleplayer.mm_save.purchased[this_itemid])
+			if (consoleplayer.mm_save.purchased[this_itemid] ~= true)
+			and MM.Shop.items[this_itemid].price
+				local cost = "$"..format_int(MM.Shop.items[this_itemid].price)
 				v.drawString(x + 54,
-					y + 65, "Buy?", V_ALLOWLOWERCASE, "thin-center"
+					y + 65, "Buy?  -  \x83"..cost, V_ALLOWLOWERCASE, "thin-center"
 				)
 				
 				MenuLib.addButton(v, {
@@ -210,13 +227,19 @@ for i = 1, MM_PERKS.num_perks
 					width = 32,
 					height = 20,
 					
-					name = "Purchase",
-					color = 103,
-					outline = 111,
+					name = cant_buy and "Poor!" or "Purchase",
+					color = cant_buy and 39 or 103,
+					outline = cant_buy and 44 or 108,
 					
 					pressFunc = function()
-						if MMHUD.menus.tryingEquip then return end
-						MMHUD.menus.tryPerkEquip(i, "primary", "pri_perk")
+						if MMHUD.menus.trybuy.tics then return end
+						if (consoleplayer.mm_save.rings < MM.Shop.items[this_itemid].price)
+							S_StartSound(nil, sfx_lose, consoleplayer)
+							cant_buy = TICRATE
+							return
+						end
+						
+						MMHUD.menus.tryBuyItem(this_itemid)
 					end
 					
 				})
@@ -429,8 +452,14 @@ MenuLib.addMenu({
 	end
 })
 
+--i know this is shitty
 addHook("ThinkFrame", do
 	if not MMHUD.menus then return end
+	
+	if MMHUD.menus.trybuy.id 
+		COM_BufInsertText(consoleplayer, "mm_trybuyitem "..MM_luaSignature.." "..MMHUD.menus.trybuy.id.." yes")
+		MMHUD.menus.trybuy.id = nil
+	end
 	
 	if MMHUD.menus.tryEquippingThis
 		COM_BufInsertText(consoleplayer, MMHUD.menus.tryEquippingThis)
@@ -438,13 +467,35 @@ addHook("ThinkFrame", do
 	end
 	
 	if MMHUD.menus.tryingEquip
-		MMHUD.menus.last_tryingEquip = MMHUD.menus.tryingEquip
-		MMHUD.menus.tryingEquip = $ - 1
+	or MMHUD.menus.trybuy.tics
 		
-		if consoleplayer.mm_save[MMHUD.menus.tryEquippingSlot] == MMHUD.menus.iWantThisSlot
-			MMHUD.menus.tryingEquip = 0
+		local this_tic = MMHUD.menus.tryingEquip
+		if MMHUD.menus.trybuy.tics ~= nil
+			this_tic = MMHUD.menus.trybuy.tics
 		end
+		MMHUD.menus.last_tryingEquip = this_tic
+		MMHUD.menus.last_trybuy = MMHUD.menus.trybuy.tics
+		
+		if MMHUD.menus.trybuy.tics ~= nil
+			MMHUD.menus.trybuy.tics = $ - 1
+		else
+			MMHUD.menus.tryingEquip = $ - 1
+		end
+		
+		if not MMHUD.menus.trybuy.tics
+			if consoleplayer.mm_save[MMHUD.menus.tryEquippingSlot] == MMHUD.menus.iWantThisSlot
+				MMHUD.menus.tryingEquip = 0
+			end
+		else
+			if consoleplayer.mm_save.purchased[MMHUD.menus.trybuy.wantthis] == true
+				MMHUD.menus.trybuy.tics = 0
+			end
+		end
+		
 	elseif MMHUD.menus.last_tryingEquip
+		MMHUD.menus.trybuy = {}
 		MMHUD.menus.last_tryingEquip = max($-1, 0)
 	end
+	
+	cant_buy = max($-1, 0)
 end)

@@ -38,9 +38,12 @@ doAndInsert("addCategory")
 doAndInsert("addItem")
 doAndInsert("buyItem")
 
-COM_AddCommand("MM_TryBuyItem", function(p, sig, id)
+COM_AddCommand("MM_TryBuyItem", function(p, sig, id, sound)
 	if not MM:isMM() then return end
-	if sig ~= MM_N.luaSignature then return end
+	if sig ~= MM_luaSignature
+		CONS_Printf(p, "Can't use MM_TryBuyItem manually.")
+		return
+	end
 	
-	MM.Shop.buyItem(p, tonumber(id))
+	MM.Shop.buyItem(p, tonumber(id), (sound ~= nil))
 end)

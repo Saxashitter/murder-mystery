@@ -88,4 +88,5 @@ setmetatable(MM, {
 })
 
 --generate random string for security purposes
-MM_N.luaSignature = "iAmLua"..P_RandomFixed()
+rawset(_G, "MM_luaSignature", "iAmLua"..P_RandomFixed())
+addHook("NetVars",function(n) MM_luaSignature = n($); end)

@@ -132,12 +132,12 @@ MM_PERKS[MMPERK_HASTE] = {
 	name = perk_name,
 
 	description = {
-		"\x82Primary:\x80 Speed up 20% when holding",
+		"\x82Primary:\x80 Speed up 11% when holding",
 		"your knife out!",
 		
 		"",
 		
-		"\x82Secondary:\x80 Speed up 10% when holding",
+		"\x82Secondary:\x80 Speed up 8% when holding",
 		"your knife out!",
 	},
 	cost = perk_price,

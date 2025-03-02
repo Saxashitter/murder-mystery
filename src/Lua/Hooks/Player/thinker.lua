@@ -173,6 +173,7 @@ MM:addPlayerScript(dofile("Hooks/Player/Scripts/InteractHandler"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/Teammates"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/AntiSpin"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/PerkHandler"))
+MM:addPlayerScript(dofile("Hooks/Player/Scripts/NoAuto"))
 
 addHook("KeyDown",function(key)
 	if isdedicatedserver then return end

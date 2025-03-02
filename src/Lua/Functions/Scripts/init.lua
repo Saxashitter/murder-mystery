@@ -120,6 +120,7 @@ return function(self, maploaded)
 		MM_N.lastmap = gamemap
 		MM.runHook("PostMapLoad")
 		
+		MM.scanMoneySectors()
 		return
 	end
 	

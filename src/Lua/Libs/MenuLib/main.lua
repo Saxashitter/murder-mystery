@@ -38,5 +38,16 @@ addHook("KeyDown", function(key)
 	
 	if key.name == "mouse1"
 		ML.client.doMousePress = true
+	elseif key.name == "escape"
+		if #ML.client.popups
+			if ML.menus[ML.client.popups[#ML.client.popups].id].ps_flags & PS_NOESCAPE --holy SHIT
+				--do nothing
+			else
+				ML.initPopup(-1)
+			end
+		else
+			ML.initMenu(-1)
+		end
+		return true
 	end
 end)

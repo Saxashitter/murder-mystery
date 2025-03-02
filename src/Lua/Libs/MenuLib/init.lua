@@ -37,7 +37,11 @@ enumflags("PS_",
 	"IRRELEVANT",
 	
 	--this popup will not slide in from the bottom
-	"NOSLIDEIN"
+	"NOSLIDEIN",
+	
+	--HOLY SHIT
+	--this popup cannot be closed with the escape key
+	"NOESCAPE"
 )
 
 MenuLib.VERSION = 000

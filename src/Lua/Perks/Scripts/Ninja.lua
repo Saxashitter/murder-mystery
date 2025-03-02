@@ -1,3 +1,6 @@
+local perk_name = "Ninja"
+local perk_price = 250
+
 MM_PERKS[MMPERK_NINJA] = {
 	primary = function(p)
 		local item = p.mm.inventory.items[p.mm.inventory.cur_sel]
@@ -23,7 +26,7 @@ MM_PERKS[MMPERK_NINJA] = {
 	end,
 	
 	icon = "MM_PI_NINJA",
-	name = "Ninja",
+	name = perk_name,
 
 	description = {
 		"\x82Primary:\x80 Your knife is 50% invisible.",
@@ -35,5 +38,12 @@ MM_PERKS[MMPERK_NINJA] = {
 		"\x82Secondary:\x80 Everything about your knife",
 		"is 100% silent. Still fully visible, though."
 	},
-	cost = FU*10,
+	cost = perk_price,
 }
+
+local id = MM.Shop.addItem({
+	name = perk_name,
+	price = perk_price,
+	category = MM_PERKS.category_id
+})
+MM.Shop.items[id].perk_id = MMPERK_NINJA

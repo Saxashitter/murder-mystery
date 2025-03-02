@@ -1,3 +1,6 @@
+local perk_name = "Ghost"
+local perk_price = 1500
+
 local ghost_min_alpha = FU/2
 freeslot("sfx_cloak1")
 sfxinfo[sfx_cloak1] = {
@@ -220,7 +223,7 @@ MM_PERKS[MMPERK_GHOST] = {
 	
 	icon = icon_name,
 	icon_scale = icon_scale,
-	name = "Ghost",
+	name = perk_name,
 	
 	description = {
 		"\x82Primary:\x80 Become fully invisible to",
@@ -232,5 +235,12 @@ MM_PERKS[MMPERK_GHOST] = {
 		"\x82Secondary:\x80 Become 50% transparent",
 		"when holding your knife!",
 	},
-	cost = FU*10,
+	cost = perk_price,
 }
+
+local id = MM.Shop.addItem({
+	name = perk_name,
+	price = perk_price,
+	category = MM_PERKS.category_id
+})
+MM.Shop.items[id].perk_id = MMPERK_GHOST

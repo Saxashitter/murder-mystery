@@ -12,7 +12,9 @@ the way that these are set up is:
 */
 
 rawset(_G, "MM_PERKS",{})
+MM_PERKS.category_id, MM_PERKS.category_ptr = MM.Shop.addCategory("Perks")
 
+--TODO: weapon 6 & 7 activate primary and secondary perks respectively
 MM_PERKS.perkActiveDown = function(p, inSecondSlot)
 	local has2Perks = inSecondSlot
 	if inSecondSlot
@@ -30,13 +32,13 @@ MM_PERKS.perkActiveDown = function(p, inSecondSlot)
 	return false
 end
 
-dofile(path.."Ghost")
-dofile(path.."Ninja")
-dofile(path.."Swap")
-dofile(path.."Trap")
 dofile(path.."Footsteps")
-dofile(path.."XRay")
-dofile(path.."Haste")
+dofile(path.."Ninja")
 dofile(path.."FakeGun")
+dofile(path.."Haste")
+dofile(path.."Trap")
+dofile(path.."Ghost")
+dofile(path.."XRay")
+dofile(path.."Swap")
 
 MM_PERKS.num_perks = 8

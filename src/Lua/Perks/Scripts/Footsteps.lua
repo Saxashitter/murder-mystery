@@ -1,9 +1,12 @@
+local perk_name = "Footsteps"
+local perk_price = 0
+
 local fuse_max = 20*TICRATE
 local fuse_min = 10*TICRATE
 MM_PERKS[MMPERK_FOOTSTEPS] = {
 	icon = "MM_PI_FOOTSTEP",
 	icon_scale = FU/2,
-	name = "Footsteps",
+	name = perk_name,
 
 	description = {
 		"\x82Primary:\x80 See everyone's footsteps!",
@@ -14,7 +17,7 @@ MM_PERKS[MMPERK_FOOTSTEPS] = {
 		"\x82Secondary:\x80 See everyone's footsteps!",
 		"Footsteps last 10 seconds before disappearing.",
 	},
-	cost = "Free!",
+	cost = perk_price,
 }
 
 freeslot("MT_MM_FOOTSTEP","S_MM_FOOTSTEP")
@@ -161,3 +164,10 @@ addHook("ThinkFrame",do
 		MM_N.spawnfootsteps = true
 	end
 end)
+
+local id = MM.Shop.addItem({
+	name = perk_name,
+	price = perk_price,
+	category = MM_PERKS.category_id
+})
+MM.Shop.items[id].perk_id = MMPERK_FOOTSTEPS

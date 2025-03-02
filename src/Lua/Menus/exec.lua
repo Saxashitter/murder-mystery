@@ -1,7 +1,10 @@
 local path = "Menus/menu_t/"
 
 local tree = {
-	"Shop"
+	"Main",
+	"Shop",
+	"Protips",
+	"AdminPanel",
 }
 
 for k, name in ipairs(tree)

@@ -184,6 +184,6 @@ addHook("KeyDown",function(key)
 	
 	if (key.num == wp5_f)
 	or (key.num == wp5_s)
-		MenuLib.initMenu(MenuLib.findMenu("ShopPage"))
+		MenuLib.initMenu(MenuLib.findMenu("MainMenu"))
 	end
 end)

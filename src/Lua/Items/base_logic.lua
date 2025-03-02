@@ -283,6 +283,7 @@ MM:addPlayerScript(function(p)
 	and (p.cmd.buttons & BT_WEAPONMASK))
 	--not if we reselect our current slot
 	and (min(p.cmd.buttons & BT_WEAPONMASK, inv.count) ~= inv.cur_sel)
+	and (p.cmd.buttons & BT_WEAPONMASK <= inv.count)
 	and not MM.runHook("InventorySwitch", p, inv.cur_sel, 
 		min(p.cmd.buttons & BT_WEAPONMASK, inv.count)
 	) then

@@ -14,10 +14,10 @@ addHook("PreThinkFrame", function()
 		if (p and p.mm) then
 			p.mm.lastside = p.mm.sidemove or 0
 			p.mm.lastforward = p.mm.forwardmove or 0
-	
+			
 			p.mm.forwardmove = p.cmd.forwardmove
 			p.mm.sidemove = p.cmd.sidemove
-	
+			
 			p.mm.buttons = p.cmd.buttons
 		end
 		p.cmd.forwardmove = 0
@@ -88,3 +88,4 @@ addScript "Game End"
 // addScript "Restrict"
 addScript "Gun Manager"
 addScript "Ring Override"
+addScript "MoneyPrinting"

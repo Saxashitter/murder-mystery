@@ -120,8 +120,12 @@ return function(self, maploaded)
 		MM_N.lastmap = gamemap
 		MM.runHook("PostMapLoad")
 		
+		MM.scanMoneySectors()
 		return
 	end
+	
+	MM_N.safe_sectors = {}
+	MM_N.safe_sectors_UD = {}
 	
 	MM_N.map_weather = PRECIP_BLANK
 	MM_N = shallowCopy(matchVars)

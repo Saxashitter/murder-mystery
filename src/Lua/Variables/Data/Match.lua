@@ -74,5 +74,10 @@ return {
 	--round ended because all innocents/murderers left the game
 	disconnect_end = false,
 	killing_end = false,
-	sniped_end = false
+	sniped_end = false,
+	
+	--list of sectors safe to spawn coins in
+	safe_sectors = {},
+	--"UserData"
+	safe_sectors_ud = {},
 }

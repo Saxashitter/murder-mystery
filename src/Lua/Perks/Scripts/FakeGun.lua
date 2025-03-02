@@ -1,5 +1,8 @@
 local TR = TICRATE
 
+local perk_name = "Fake Gun"
+local perk_price = 750
+
 local hud_tween_start = -55*FU
 local hud_tween = hud_tween_start
 local icon_name = "MM_PI_FAKEGUN"
@@ -138,17 +141,24 @@ MM_PERKS[MMPERK_FAKEGUN] = {
 	
 	icon = icon_name,
 	icon_scale = icon_scale,
-	name = "Fake Gun",
+	name = perk_name,
 
 	description = {
 		"\x82When equipped:\x80 Pressing [TOSSFLAG] will",
 		"change your knife's appearance to a random gun,",
-		"fooling Innocents and Sherrifs. You can still",
+		"fooling Innocents. You can still",
 		"kill with it!",
 		
 		"",
 		
 		"Lasts 10 seconds with a 30 second cooldown."
 	},
-	cost = 10*FU
+	cost = perk_price
 }
+
+local id = MM.Shop.addItem({
+	name = perk_name,
+	price = perk_price,
+	category = MM_PERKS.category_id
+})
+MM.Shop.items[id].perk_id = MMPERK_FAKEGUN

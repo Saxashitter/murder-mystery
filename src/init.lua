@@ -50,6 +50,7 @@ dofile "events"
 dofile "Variables/main"
 dofile "Functions/main"
 dofile "Console/main"
+dofile "Shop/main"
 dofile "Perks/main"
 dofile "Interactions/main"
 dofile "Hooks/main"
@@ -71,7 +72,7 @@ setmetatable(MM, {
 		if rawget(self, key) ~= nil then
 			return rawget(self, key)
 		end
-
+		
 		if MM_N[key] ~= nil then
 			return MM_N[key]
 		end
@@ -81,7 +82,11 @@ setmetatable(MM, {
 			MM_N[key] = value
 			return
 		end
-
+		
 		rawset(self, key, value)
 	end
 })
+
+--generate random string for security purposes
+rawset(_G, "MM_luaSignature", "iAmLua"..P_RandomFixed())
+addHook("NetVars",function(n) MM_luaSignature = n($); end)

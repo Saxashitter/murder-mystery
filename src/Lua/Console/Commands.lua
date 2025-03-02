@@ -296,3 +296,10 @@ COM_AddCommand("MM_EquipPerk", function(p, slot, newperk)
 	end
 	
 end)
+
+COM_AddCommand("MM_GiveRings", function(p, rings)
+	if not MM:isMM() then return end
+	if (tonumber(rings) == nil) then return end
+	
+	p.mm_save.rings = $ + tonumber(rings)
+end, COM_ADMIN)

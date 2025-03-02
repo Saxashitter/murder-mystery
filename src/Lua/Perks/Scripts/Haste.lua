@@ -1,13 +1,15 @@
+local perk_name = "Haste"
+local perk_price = 750
+
 MM:RegisterEffect("perk.primary.haste", {
 	modifiers = {
-		--FU*6/5 yw
-		normalspeed_multi = tofixed("1.20") -- no luigi, i hate srb2 division
+		normalspeed_multi = tofixed("1.11") -- no luigi, i hate srb2 division
 	},
 })
 
 MM:RegisterEffect("perk.secondary.haste", {
 	modifiers = {
-		normalspeed_multi = tofixed("1.10")
+		normalspeed_multi = tofixed("1.08")
 	},
 })
 
@@ -127,16 +129,23 @@ MM_PERKS[MMPERK_HASTE] = {
 	--its placeholder for a reason bruh
 	icon = icon_name,
 	icon_scale = icon_scale,
-	name = "Haste",
+	name = perk_name,
 
 	description = {
-		"\x82Primary:\x80 Speed up 20% when holding",
+		"\x82Primary:\x80 Speed up 11% when holding",
 		"your knife out!",
 		
 		"",
 		
-		"\x82Secondary:\x80 Speed up 10% when holding",
+		"\x82Secondary:\x80 Speed up 8% when holding",
 		"your knife out!",
 	},
-	cost = FU*10,
+	cost = perk_price,
 }
+
+local id = MM.Shop.addItem({
+	name = perk_name,
+	price = perk_price,
+	category = MM_PERKS.category_id
+})
+MM.Shop.items[id].perk_id = MMPERK_HASTE

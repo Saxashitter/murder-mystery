@@ -22,7 +22,7 @@ local function HUD_AFKDrawer(v,p,c)
 	end
 
 	v.drawString(160,y,
-		"! YOU WILL BE KICKED !",
+		text,
 		flash|V_SNAPTOBOTTOM,
 		"center"
 	)

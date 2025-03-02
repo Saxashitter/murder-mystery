@@ -51,7 +51,7 @@ local function HUD_InfoDrawer(v, stplyr)
 	
 	--rings
 	do
-		local x = 6*FU - slidein
+		local x = 6*FU
 		local y = (splitscreen and 10 or 21)*FU
 		local yoff = 0
 		local rings = MM:GetPlayerRings(p)
@@ -70,7 +70,8 @@ local function HUD_InfoDrawer(v, stplyr)
 			
 			rings = ($ - p.mm.ringspaid) + MMHUD.info_count
 			
-			v.drawString(x + 14*FU + (v.stringWidth(tostring(rings),0,"normal")*FU),
+			v.drawString(
+				x + 14*FU + (v.stringWidth(tostring(rings),0,"normal")*FU) - slidein,
 				y + 11*FU + yoff,
 				"+"..(p.mm.ringspaid - MMHUD.info_count),
 				V_SNAPTOLEFT|V_SNAPTOTOP|V_GREENMAP|V_PERPLAYER,
@@ -81,13 +82,13 @@ local function HUD_InfoDrawer(v, stplyr)
 		local origin_size = FixedDiv(16*FU, v.cachePatch("MMRING").width*FU) -- Scale to 16 pixels
 		local origin_scale = FU*3/4
 		
-		v.drawScaled(6*FU - slidein,
+		v.drawScaled(x - slidein,
 			y + yoff,
 			FixedMul(origin_size, origin_scale),
 			v.cachePatch("MMRING"),
 			V_SNAPTOLEFT|V_SNAPTOTOP|V_PERPLAYER
 		)
-		v.drawString(x + 14*FU,
+		v.drawString(x + 14*FU - slidein,
 			y + FU + yoff,
 			rings,
 			V_SNAPTOLEFT|V_SNAPTOTOP|V_PERPLAYER,

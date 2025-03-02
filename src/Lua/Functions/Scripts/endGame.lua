@@ -53,7 +53,7 @@ return function(self, endType)
 	and (consoleplayer and consoleplayer.valid)
 		displayplayer = consoleplayer
 	end
-
+	
 	if (MM_N.disconnect_end) then return end
 	if (MM_N.dueling) then return end
 	if (MM_N.waiting_for_players) then return end
@@ -74,7 +74,7 @@ return function(self, endType)
 			)
 			reason = "surviving "..(p.mm.timesurvived/TICRATE).." seconds"
 			payout = FixedFloor(FixedMul(50*FU, percent)) >> FRACBITS
-
+			
 		elseif (p.mm.role == MMROLE_MURDERER)
 			--dont get paid if you suck at the game
 			if (MM_N.peoplekilled >= MM_N.minimum_killed)
@@ -83,7 +83,7 @@ return function(self, endType)
 				)
 				local amount = FixedMul(MM_N.numbertokill*4*FU, 3*FU/4)
 				amount = ease.outsine(FU/3, $, 50*FU)
-
+				
 				reason = "killing "..MM_N.peoplekilled.." out of "..MM_N.numbertokill.." innocents"
 				payout = FixedFloor(FixedMul(amount, percent)) >> FRACBITS
 			end
@@ -95,7 +95,7 @@ return function(self, endType)
 			)
 			reason = "saving "..(MM_N.numbertokill - min(MM_N.peoplekilled, MM_N.numbertokill)).." out of "..MM_N.numbertokill.." innocents"
 			payout = FixedFloor(FixedMul(65*FU, percent)) >> FRACBITS
-
+			
 			--gotta be alive tho
 			payout = (not p.spectator) and $ or 0
 		end

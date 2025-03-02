@@ -62,6 +62,12 @@ MenuLib.addMenu({
 			outline = 19,
 			
 			pressFunc = function()
+				if (consoleplayer ~= server)
+				or (not IsPlayerAdmin(consoleplayer))
+					S_StartSound(nil,sfx_lose, consoleplayer)
+					return
+				end
+				
 				MenuLib.initMenu(MenuLib.findMenu("AdminPanel"))
 			end,
 			

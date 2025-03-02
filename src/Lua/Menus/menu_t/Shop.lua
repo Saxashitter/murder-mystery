@@ -1,4 +1,5 @@
 MMHUD.menus = {}
+local cant_buy = 0
 
 -- https://stackoverflow.com/questions/10989788/format-integer-in-lua
 local function format_int(number)
@@ -49,6 +50,7 @@ MMHUD.menus.drawPerkItem = function(v, x,y, perk, nofunc)
 			MenuLib.initPopup(-1, true)
 		end
 		MenuLib.initPopup(MenuLib.findMenu("Shop_Popup_"..(perk_t.name)))
+		cant_buy = 0
 	end or nil
 	
 	MenuLib.addButton(v, {
@@ -176,8 +178,6 @@ do
 	end
 end
 
-local cant_buy = 0
-
 for i = 1, MM_PERKS.num_perks
 	local perk_t = MM_PERKS[i]
 	
@@ -197,6 +197,11 @@ for i = 1, MM_PERKS.num_perks
 		drawer = function(v, ML, menu, props)
 			local x,y = props.corner_x, props.corner_y
 			local p = consoleplayer
+			
+			if ML.client.currentMenu.id ~= ML.findMenu("ShopPage")
+				MenuLib.initPopup(-1)
+				return
+			end
 			
 			MMHUD.menus.drawPerkItem(v,
 				x + 38,

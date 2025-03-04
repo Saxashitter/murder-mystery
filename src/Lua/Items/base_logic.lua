@@ -59,8 +59,10 @@ MM.FireBullet = function(p,def,item, angle, aiming, callhooks)
 		
 		--This weapon doesnt use ammo
 		if item.max_ammo ~= 0
-		and not (item.noammoinduels and MM_N.dueling)
-			item.ammo = $ - 1
+			if not item.noammoinduels
+			and not MM_N.dueling
+				item.ammo = $ - 1
+			end
 			
 			--remove it
 			if item.ammo <= 0

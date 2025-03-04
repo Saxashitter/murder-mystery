@@ -8,10 +8,9 @@ G_AddGametype({
     name = "Murder Mystery",
     identifier = "SAXAMM",
     typeoflevel = TOL_SAXAMM,
-    rules = GTR_FRIENDLYFIRE|GTR_SPAWNINVUL|GTR_DEATHMATCHSTARTS,
+    rules = GTR_FRIENDLYFIRE|GTR_SPAWNINVUL|GTR_DEATHMATCHSTARTS|GTR_SPAWNENEMIES,
     intermissiontype = int_match,
-    headerleftcolor = 222,
-    headerrightcolor = 84,
+    headercolor = 164,
 	description = "Who murdered this guy? It's a mystery!"
 })
 

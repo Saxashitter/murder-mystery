@@ -76,7 +76,7 @@ local function V_DrawBox(props)
 	local def = MM.Items[item.id]
 	
 	if (item.max_ammo ~= 0)
-	and not (item.noammoinduels and MM_N.dueling)
+	and (not item.noammoinduels and not MM_N.dueling)
 		if not selected
 			v.drawString(x, (y + 32*scale) - 8*FU,
 				item.ammo.."/"..item.max_ammo,

@@ -17,10 +17,17 @@ return function()
 		table.remove(MM_N.safe_sectors, printer_key)
 		return
 	else
-		p_x = (P_RandomRange(
-			printer_ptr.left_bound/FU + P_RandomRange(-128,128),
-			printer_ptr.right_bound/FU + P_RandomRange(-128,128)
-		)*FU) + P_RandomFixed()
+		if P_RandomChance(FU/2)
+			p_x = (P_RandomRange(
+				printer_ptr.left_bound/FU + P_RandomRange(-128,128),
+				printer_ptr.right_bound/FU + P_RandomRange(-128,128)
+			)*FU) + P_RandomFixed()
+		else
+			p_x = printer_ptr.left_bound + (P_RandomRange(
+				P_RandomRange(-128,128),
+				abs(abs(printer_ptr.right_bound) - abs(printer_ptr.left_bound))/FU + P_RandomRange(-128,128)
+			)*FU) + P_RandomFixed()
+		end
 	end
 	
 	local p_y
@@ -30,10 +37,17 @@ return function()
 		table.remove(MM_N.safe_sectors, printer_key)
 		return
 	else
-		p_y = (P_RandomRange(
-			printer_ptr.bottom_bound/FU + P_RandomRange(-128,128),
-			printer_ptr.top_bound/FU + P_RandomRange(-128,128)
-		)*FU) + P_RandomFixed()
+		if P_RandomChance(FU/2)
+			p_y = (P_RandomRange(
+				printer_ptr.bottom_bound/FU + P_RandomRange(-128,128),
+				printer_ptr.top_bound/FU + P_RandomRange(-128,128)
+			)*FU) + P_RandomFixed()
+		else
+			p_y = printer_ptr.bottom_bound + (P_RandomRange(
+				P_RandomRange(-128,128),
+				abs(abs(printer_ptr.top_bound) - abs(printer_ptr.bottom_bound))/FU + P_RandomRange(-128,128)
+			)*FU) + P_RandomFixed()
+		end
 	end
 	
 	local test_print = R_PointInSubsectorOrNil(p_x, p_y)
@@ -50,7 +64,9 @@ return function()
 		if not (rover.flags & (FF_EXISTS|FOF_BLOCKPLAYER)) then continue end
 		
 		local rover_top = rover.t_slope and P_GetZAt(rover.t_slope, ring.x,ring.y) or rover.topheight
+		local rover_bot = rover.b_slope and P_GetZAt(rover.b_slope, ring.x,ring.y) or rover.bottomheight
 		if (ring.z > rover_top) then continue end
+		if rover_bot - FU > ring.z + ring.height then continue end
 		
 		P_SetOrigin(ring, ring.x,ring.y, (rover_top) + 24*ring.scale)
 	end

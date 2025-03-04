@@ -1,8 +1,8 @@
 local TR = TICRATE
 local spawn_wait = 0
 
-local SPAWN_MIN = TR/2
-local SPAWN_MAX = TR*3/2
+local SPAWN_MIN = TR/5
+local SPAWN_MAX = TR
 
 addHook("NetVars", function(n) spawn_wait = n($); end)
 

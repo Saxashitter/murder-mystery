@@ -16,11 +16,8 @@ local function special_override(special, toucher)
 	end
 end
 
-
 addHook("TouchSpecial", special_override, MT_RING)
 addHook("TouchSpecial", special_override, MT_COIN)
-addHook("TouchSpecial", special_override, MT_FLINGRING)
-addHook("TouchSpecial", special_override, MT_FLINGCOIN)
 
 -- Disable respawning for rings.
 addHook("MapLoad", function()

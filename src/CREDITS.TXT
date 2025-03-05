@@ -16,5 +16,7 @@ Tripmine body, minor sprites - luigi budd
 Music:
 Mansion BGM: "Wii Shop Channel if it was made by Casiopea"
 ( https://youtu.be/bTMLW4WgySk?si=jAWY7DwUrTD2f3Hy )
+MilBase BGM: Mix of songs from "The Henry Stickmin Collection"
+( "Toppat Launch Site", "Preparations Interrupted")
 
 WIP

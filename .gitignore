@@ -25,3 +25,4 @@ package-lock.json
 *.autosave8
 *.autosave9
 *.autosave10
+*.bak

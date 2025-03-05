@@ -8,3 +8,7 @@ states[S_MM_RING_SPARKLE] = {SPR_MMSP, A|FF_ANIMATE|FF_FULLBRIGHT, SPARKLE_FRAME
 mobjinfo[MT_RING].spawnstate = S_MM_RING
 mobjinfo[MT_RING].deathstate = S_MM_RING_SPARKLE
 mobjinfo[MT_RING].deathsound = sfx_s3k33
+
+mobjinfo[MT_FLINGRING].spawnstate = S_MM_RING
+mobjinfo[MT_FLINGRING].deathstate = S_MM_RING_SPARKLE
+mobjinfo[MT_FLINGRING].deathsound = sfx_s3k33

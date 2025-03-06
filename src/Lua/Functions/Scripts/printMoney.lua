@@ -54,20 +54,58 @@ return function()
 	if not test_print then return end
 	if not MM_N.safe_sectors_ud[test_print.sector] then return end
 	
+	local spawn_height = GetMobjSpawnHeight(MT_RING, p_x,p_y, 0, false, FU) + 24*FU
 	local ring = P_SpawnMobj(p_x,p_y,
-		GetMobjSpawnHeight(MT_RING, p_x,p_y, 24*FU, false, FU),
+		--should be safe to add 24 directly, we wont be flipping anyway
+		spawn_height,
 		MT_RING
 	)
 	ring.state = S_MM_RING
 	
-	for rover in test_print.sector.ffloors()
-		if not (rover.flags & (FF_EXISTS|FOF_BLOCKPLAYER)) then continue end
+	for rover in ring.subsector.sector.ffloors()
+		if (rover.flags & FOF_BLOCKPLAYER) == 0 then continue end
+		if (rover.flags & FF_EXISTS) == 0 then continue end
 		
-		local rover_top = rover.t_slope and P_GetZAt(rover.t_slope, ring.x,ring.y) or rover.topheight
-		local rover_bot = rover.b_slope and P_GetZAt(rover.b_slope, ring.x,ring.y) or rover.bottomheight
-		if (ring.z > rover_top) then continue end
-		if rover_bot - FU > ring.z + ring.height then continue end
+		local rover_top = rover.topheight
+		if rover.t_slope
+			rover_top = P_GetZAt(rover.t_slope, ring.x,ring.y)
+		end
 		
-		P_SetOrigin(ring, ring.x,ring.y, (rover_top) + 24*ring.scale)
+		local rover_bot = rover.bottomheight
+		if rover.b_slope
+			rover_bot = P_GetZAt(rover.b_slope, ring.x,ring.y)
+		end
+		
+		-- over/under
+		--TODO: fof control sectors have some sort of effect
+		--		to allow rings to spawn on top of them
+		if (ring.z > rover_top)
+		or ring.z + ring.height <= rover_bot - FU
+			
+			continue
+		end
+		
+		P_SetOrigin(ring, ring.x,ring.y, rover_top + 24*ring.scale)
+		
+		if CV_MM.debug.value
+			ring.colorized = true
+			ring.color = SKINCOLOR_GALAXY
+			
+			rover.bottompic = "GKS"
+			rover.toppic = "GKS"
+			
+			local th = P_SpawnMobjFromMobj(ring,0,0,0,MT_THOK)
+			th.z = rover_top
+			th.fuse = 10*TR
+			th.tics = th.fuse
+		end
+	end
+
+	if CV_MM.debug.value
+		local th = P_SpawnMobjFromMobj(ring,0,0,0,MT_THOK)
+		th.color = SKINCOLOR_RED
+		th.z = spawn_height - 24*FU
+		th.fuse = 10*TR
+		th.tics = th.fuse
 	end
 end

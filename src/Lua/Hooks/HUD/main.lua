@@ -58,6 +58,8 @@ local HUD_STARTFADEIN = 50 / 2
 
 local slidein_time = TR*3/4
 local slidein_frac = FixedDiv(FU, slidein_time*FU)
+local game_slidein_time = TR/2
+local game_slidein_frac = FixedDiv(FU, game_slidein_time*FU)
 
 --dont draw if MMHUD.hudtrans == V_100TRANS
 rawset(_G, "V_100TRANS", 10 << V_ALPHASHIFT)
@@ -111,27 +113,41 @@ addHook("MapLoad",do
 	MMHUD.hudtrans = V_100TRANS
 end)
 
+local function Playing()
+	return not MM:pregame() and not MM_N.waiting_for_players
+end
+
 --itd be nice to have hacked in drawfuncs that handled this
 local function DoRegularSlide(v, out)
+	if Playing()
+		MMHUD.slidefrac = min($, FU/2)
+	end
+	
 	local offset = HUD_BEGINNINGXOFF
 	MMHUD.xoffset = FixedMul(offset, MMHUD.slidefrac)
 	
+	local my_frac = Playing() and game_slidein_frac or slidein_frac
 	if not out
-		MMHUD.slidefrac = max($ - slidein_frac, 0)
+		MMHUD.slidefrac = max($ - my_frac, 0)
 	else
-		MMHUD.slidefrac = min($ + slidein_frac, FU)
+		MMHUD.slidefrac = min($ + my_frac, FU)
 	end
 end
 
 --ugh
 local function DoWeaponSlide(v, out)
+	if Playing()
+		MMHUD.wslidefrac = min($, FU/2)
+	end
+	
 	local offset = HUD_BEGINNINGXOFF
 	MMHUD.weaponslidein = FixedMul(offset, MMHUD.wslidefrac)
 	
+	local my_frac = Playing() and game_slidein_frac or slidein_frac
 	if not out
-		MMHUD.wslidefrac = max($ - slidein_frac, 0)
+		MMHUD.wslidefrac = max($ - my_frac, 0)
 	else
-		MMHUD.wslidefrac = min($ + slidein_frac, FU)
+		MMHUD.wslidefrac = min($ + my_frac, FU)
 	end
 end
 MMHUD.DoRegularSlide = DoRegularSlide
@@ -174,8 +190,7 @@ addHook("HUD", function(v,p,c)
 				end
 				
 				--slide in regular hud
-				if not MM:pregame()
-				and not MM_N.waiting_for_players
+				if Playing()
 					DoRegularSlide(v)
 					DoWeaponSlide(v,true)
 				end

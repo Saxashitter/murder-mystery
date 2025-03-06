@@ -30,14 +30,16 @@ local function HUD_InfoDrawer(v, stplyr)
 		
 		local minutes = G_TicsToMinutes(timetic, true)
 		local seconds = G_TicsToSeconds(timetic)
+		local centi = G_TicsToCentiseconds(timetic)
 		
 		if minutes < 10 then minutes = "0"..$ end
 		if seconds < 10 then seconds = "0"..$ end
+		if centi < 10 then centi = "0"..$ end
 		
 		flash = timetic <= 31*TICRATE or MM_N.showdown
 		flash = (flash and ((leveltime%(2*TICRATE)) < 30*TICRATE) and (leveltime/5 & 1))
 		
-		local finalstring = minutes..":"..seconds
+		local finalstring = minutes..":"..seconds .. (CV_MM.debug.value and ("."..centi) or "")
 		if (MM_N.showdown)
 			finalstring = "SHOWDOWN !!" -- ("..$..")"
 		end
@@ -62,7 +64,7 @@ local function HUD_InfoDrawer(v, stplyr)
 			)
 			
 			v.drawString(x + 15*FU, y,
-				finalstring, --.."."..tictrn,
+				finalstring,
 				flags|(flash and V_REDMAP or 0),
 				"fixed"
 			)

@@ -99,7 +99,35 @@ local function HUD_TimeForWeapon(v,p)
 	end
 	waitingfade = 0
 	
-	if leveltime >= MM_N.pregame_time + 5 then return end
+	--we'll also draw the ending countdown here too
+	if leveltime >= MM_N.pregame_time + 5
+		/*
+		if (MM_N.showdown) then return end
+		if (MM_N.time > 30*TICRATE) then return end
+		
+		--end countdown
+		local time = MM_N.time
+		if (time <= 3*TICRATE)
+		and (time > 0)
+			local letterpatch = v.cachePatch("RACE".. ((time/TR) + 1) )
+			local letteroffset = letterpatch.width*FU
+			local yoff = 0
+			if (time % TR) > TR*3/4
+				yoff = 9*FU - (TR - (time % TR))*FU
+				yoff = ease.linear(FU*3/4,$,0)
+			end
+			
+			v.drawScaled(160*FU - letteroffset/2,
+				10*FU - yoff,
+				FU,
+				letterpatch,
+				V_SNAPTOTOP
+			)
+		end
+		*/
+		
+		return
+	end
 	
 	local time = (MM_N.pregame_time)-leveltime
 	if (leveltime < TR)
@@ -159,7 +187,7 @@ local function HUD_TimeForWeapon(v,p)
 					V_SNAPTOTOP
 				)
 			end
-
+			
 		else
 			local work = 0
 			local tstr = tostring(time/TR)

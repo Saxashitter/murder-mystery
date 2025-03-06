@@ -96,7 +96,7 @@ return function()
 			
 			local th = P_SpawnMobjFromMobj(ring,0,0,0,MT_THOK)
 			th.z = rover_top
-			th.fuse = 10*TR
+			th.fuse = 10*TICRATE
 			th.tics = th.fuse
 		end
 	end
@@ -105,7 +105,7 @@ return function()
 		local th = P_SpawnMobjFromMobj(ring,0,0,0,MT_THOK)
 		th.color = SKINCOLOR_RED
 		th.z = spawn_height - 24*FU
-		th.fuse = 10*TR
+		th.fuse = 10*TICRATE
 		th.tics = th.fuse
 	end
 end

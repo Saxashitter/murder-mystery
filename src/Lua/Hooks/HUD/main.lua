@@ -52,7 +52,12 @@ local function is_hud_modded(name)
 end
 
 local TR = TICRATE
-local HUD_BEGINNINGXOFF = 350*FU
+local HUD_BEGINNINGXOFF = 380*FU
+--leveltime at which V_HUDTRANS starts fading in
+local HUD_STARTFADEIN = 50 / 2
+
+local slidein_time = TR*3/4
+local slidein_frac = FixedDiv(FU, slidein_time*FU)
 
 --dont draw if MMHUD.hudtrans == V_100TRANS
 rawset(_G, "V_100TRANS", 10 << V_ALPHASHIFT)
@@ -73,6 +78,9 @@ local htranstable = {
 --DO NOT SYNCH!!!!!!!!
 local MMHUD = {
 	ticker = 0,
+	slidefrac = FU,
+	wslidefrac = FU,
+	
 	xoffset = HUD_BEGINNINGXOFF,
 	weaponslidein = HUD_BEGINNINGXOFF,
 	dontslidein = false,
@@ -97,15 +105,44 @@ addHook("MapLoad",do
 	MMHUD.xoffset = HUD_BEGINNINGXOFF
 	MMHUD.weaponslidein = HUD_BEGINNINGXOFF
 	
+	MMHUD.slidefrac = FU
+	MMHUD.wslidefrac = FU
+	
 	MMHUD.hudtrans = V_100TRANS
 end)
+
+--itd be nice to have hacked in drawfuncs that handled this
+local function DoRegularSlide(v, out)
+	local offset = HUD_BEGINNINGXOFF
+	MMHUD.xoffset = FixedMul(offset, MMHUD.slidefrac)
+	
+	if not out
+		MMHUD.slidefrac = max($ - slidein_frac, 0)
+	else
+		MMHUD.slidefrac = min($ + slidein_frac, FU)
+	end
+end
+
+--ugh
+local function DoWeaponSlide(v, out)
+	local offset = HUD_BEGINNINGXOFF
+	MMHUD.weaponslidein = FixedMul(offset, MMHUD.wslidefrac)
+	
+	if not out
+		MMHUD.wslidefrac = max($ - slidein_frac, 0)
+	else
+		MMHUD.wslidefrac = min($ + slidein_frac, FU)
+	end
+end
+MMHUD.DoRegularSlide = DoRegularSlide
+MMHUD.DoWeaponSlide = DoWeaponSlide
 
 addHook("HUD", function(v,p,c)
 	if MM:isMM() then
 		if not hudwasmm then
 			for i, data in ipairs(huds) do
 				local drawFunc = data[2]
-
+				
 				if drawFunc == "None" then drawFunc = nil end
 				
 				if (is_hud_modded(data[1])
@@ -114,11 +151,11 @@ addHook("HUD", function(v,p,c)
 					customhud.SetupItem(data[1], modname, drawFunc, data[3], data[4] or i)
 					continue
 				end
-
+				
 				customhud.enable(data[1])
 			end
 		end
-
+		
 		MMHUD.ticker = $+1
 		if abs(leveltime - MMHUD.ticker) >= 4
 			MMHUD.ticker = leveltime
@@ -128,20 +165,19 @@ addHook("HUD", function(v,p,c)
 			if not MM.gameover
 				
 				--"Round starts in..."
-				if MMHUD.ticker >= TR*3/2
-					MMHUD.weaponslidein = ease.inquart(FU*9/10,$,0)
+				if MMHUD.ticker >= HUD_STARTFADEIN
+					DoWeaponSlide(v)
 					
 					if MM_N.waiting_for_players
-						MMHUD.xoffset = ease.inquart(FU*9/10,$,0)
+						DoRegularSlide(v)
 					end
 				end
 				
 				--slide in regular hud
 				if not MM:pregame()
 				and not MM_N.waiting_for_players
-					MMHUD.xoffset = ease.inquart(FU*9/10,$,0)
-					
-					MMHUD.weaponslidein = ease.inexpo(FU*7/10,$,HUD_BEGINNINGXOFF)
+					DoRegularSlide(v)
+					DoWeaponSlide(v,true)
 				end
 				
 				--fade in stuff if we've tweened for at least 2 tics
@@ -153,8 +189,8 @@ addHook("HUD", function(v,p,c)
 			
 			--everything slides out
 			else
-				MMHUD.xoffset = ease.inexpo(FU*7/10,$,HUD_BEGINNINGXOFF)
-				MMHUD.weaponslidein = ease.inexpo(FU*7/10,$,HUD_BEGINNINGXOFF)
+				DoRegularSlide(v,true)
+				DoWeaponSlide(v,true)
 				
 				if MMHUD.hudtrans >> V_ALPHASHIFT ~= 10
 					MMHUD.hudtrans = (($ >> V_ALPHASHIFT) + 1) << V_ALPHASHIFT
@@ -182,7 +218,7 @@ addHook("HUD", function(v,p,c)
 				customhud.SetupItem(data[1], "vanilla")
 				continue
 			end
-
+			
 			customhud.disable(data[1])
 		end
 	end

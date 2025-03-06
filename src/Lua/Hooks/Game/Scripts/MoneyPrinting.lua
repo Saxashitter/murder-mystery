@@ -12,9 +12,9 @@ return function()
 		return
 	end
 	
-	do --if P_RandomChance(FU*4/5)
+	if P_RandomChance(FU*4/5)
 		MM.printMoney()
 	end
 	
-	spawn_wait = TR -- P_RandomRange(SPAWN_MIN,SPAWN_MAX)
-end, "waiting"
+	spawn_wait = P_RandomRange(SPAWN_MIN,SPAWN_MAX)
+end

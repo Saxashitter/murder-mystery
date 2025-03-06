@@ -49,11 +49,18 @@ local function HUD_InfoDrawer(v, stplyr)
 		end
 		
 		if flags ~= V_100TRANS
-			v.drawScaled(x, y,
+			v.drawScaled(x + FU, y + FU,
 				FU,
-				v.cachePatch("NGRTIMER"),
+				v.cachePatch("MM_CLOCK2"),
+				flags,
+				v.getColormap(nil,nil,"PureBlack")
+			)
+			v.drawScaled(x,y,
+				FU,
+				v.cachePatch("MM_CLOCK2"),
 				flags
 			)
+			
 			v.drawString(x + 15*FU, y,
 				finalstring, --.."."..tictrn,
 				flags|(flash and V_REDMAP or 0),
@@ -64,8 +71,8 @@ local function HUD_InfoDrawer(v, stplyr)
 	
 	--rings
 	do
-		local x = 6*FU
-		local y = (splitscreen and 10 or 21)*FU
+		local x = 6*FU - FU/2
+		local y = (splitscreen and 10 or 23)*FU
 		local yoff = 0
 		local rings = MM:GetPlayerRings(p)
 		if (MMHUD.info_slideout)
@@ -95,12 +102,20 @@ local function HUD_InfoDrawer(v, stplyr)
 		local origin_size = FixedDiv(16*FU, v.cachePatch("MMRING").width*FU) -- Scale to 16 pixels
 		local origin_scale = FU*3/4
 		
+		v.drawScaled(x - slidein + FU,
+			y + yoff + FU,
+			FixedMul(origin_size, origin_scale),
+			v.cachePatch("MMRING"),
+			V_SNAPTOLEFT|V_SNAPTOTOP|V_PERPLAYER,
+			v.getColormap(nil,nil,"PureBlack")
+		)
 		v.drawScaled(x - slidein,
 			y + yoff,
 			FixedMul(origin_size, origin_scale),
 			v.cachePatch("MMRING"),
 			V_SNAPTOLEFT|V_SNAPTOTOP|V_PERPLAYER
 		)
+		
 		v.drawString(x + 14*FU - slidein,
 			y + FU + yoff,
 			format_int(tostring(rings)),

@@ -1,7 +1,7 @@
 --there could be a better way to do this
 local function HUD_GoalDrawer(v,p)
 	local x = 5*FU - MMHUD.xoffset
-	local y = 34*FU
+	local y = 37*FU
 	local flags = V_SNAPTOTOP|V_SNAPTOLEFT|V_ALLOWLOWERCASE|V_PERPLAYER
 	
 	if MM_N.dueling then return end

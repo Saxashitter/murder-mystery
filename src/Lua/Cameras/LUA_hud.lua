@@ -54,8 +54,8 @@ local function HUD_DrawCamera(v,p)
 	if not (mmc) then return end
 	if not (mmc.cam and mmc.cam.valid) then return end
 	
-	MMHUD.xoffset = ease.inexpo(FU*6/10,$,1000*FU)
-	MMHUD.weaponslidein = MMHUD.xoffset
+	MMHUD.DoRegularSlide(v,true)
+	MMHUD.DoWeaponSlide(v,true)
 	MMHUD.dontslidein = true
 	
 	if mmc.cam.health

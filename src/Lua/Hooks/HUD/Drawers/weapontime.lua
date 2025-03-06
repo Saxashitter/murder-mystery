@@ -91,7 +91,7 @@ local function HUD_TimeForWeapon(v,p)
 			40*FU - MMHUD.weaponslidein,
 			"Waiting for players...",
 			V_SNAPTOTOP|V_ALLOWLOWERCASE|fade,
-			"fixed-center"
+			"thin-fixed-center"
 		)
 		
 		waitingfade = $ + 1

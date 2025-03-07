@@ -99,7 +99,7 @@ local function Init(point)
 	point.init = true
 end
 
-local function SpawnLaser(point,i, debug, x,y, ang, scale, clr)
+local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist)
 	local mastertable = debug and point.debuglasers or point.lasers
 	
 	if (mastertable[i] == nil)
@@ -124,6 +124,7 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr)
 		laser.scale = scale
 		laser.angle = ang + ANGLE_90
 		laser.flags = $|MF_NOTHINK
+		laser.radius = 40 * scale
 	end
 	local laser = mastertable[i]
 	laser.angle = ang + ANGLE_90
@@ -147,13 +148,96 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr)
 	
 	do
 		local starting = MM_N.storm_ticker < STORM_STARTINGTIME and FixedDiv(MM_N.storm_ticker*FU, STORM_STARTINGTIME*FU) or FU
-		laser.alpha = FU/2 + starting/2
+		laser.alpha = starting
 		
 		laser.spriteyscale = FixedMul(
 			FixedDiv(cz - fz, 10*laser.scale),
 			starting
 		)
+		laser.height = FixedMul(cz - fz, starting)
 	end
+	
+	if (leveltime % 6 == 0)
+	and not debug
+		local scale = FU
+		for j = 0,1
+			local dist = P_RandomRange(-40,40)*FU
+			local dust = P_SpawnMobjFromMobj(laser,
+				P_ReturnThrustX(nil, laser.angle, dist),
+				P_ReturnThrustY(nil, laser.angle, dist),
+				0,
+				MT_ARIDDUST
+			)
+			
+			if j == 1
+				dust.eflags = $|MFE_VERTICALFLIP
+			end
+			
+			dust.state = dust.info.spawnstate + P_RandomRange(0, 2)
+			P_SetScale(dust, 3 * scale, true)
+			P_SetOrigin(dust, dust.x, dust.y,
+				j == 1 and (laser.z + laser.height - dust.height) or dust.z
+			)
+			
+			dust.angle = rawangle + FixedAngle( ((MM_N.storm_ticker + 6)*FU) / 2 )
+			P_Thrust(dust,dust.angle, 5 * scale)
+			
+			dust.color = laser.color
+			dust.colorized = true
+			dust.destscale = 1
+			dust.scalespeed = FixedDiv(dust.scale, dust.tics * FU)
+			dust.renderflags = $|RF_SEMIBRIGHT
+			
+			dust.momz = (P_RandomRange(1,4)*scale) * (j == 1 and -1 or 1)
+		end
+	end
+	
+	/*
+	local move_layer = laser.tracer
+	while (move_layer and move_layer.valid)
+		P_MoveOrigin(move_layer,
+			point.x + P_ReturnThrustX(nil, move_layer.angle, dist),
+			point.y + P_ReturnThrustY(nil, move_layer.angle, dist),
+			move_layer.z
+		)
+		P_SetScale(move_layer, scale, true)
+		
+		move_layer.angle = $ + ANG10 / 2
+		
+		move_layer.momx = laser.momx
+		move_layer.momy = laser.momy
+		
+		move_layer = move_layer.tracer
+	end
+	
+	if (leveltime % 24 == 0)
+		for i = 0, 3
+			local fa = i * ANGLE_90
+			local px = point.x + P_ReturnThrustX(nil, fa, dist)
+			local py = point.y + P_ReturnThrustY(nil, fa, dist)
+			local pz = laser.z
+			
+			local layer = P_SpawnMobj(
+				px,py,pz,
+				MT_DUSTLAYER
+			)
+			if not (layer and layer.valid) then continue end
+			
+			P_SetScale(layer, scale, true)
+			layer.momz = 7*scale
+			layer.angle = ANGLE_90 + fa
+			layer.extravalue1 =  3*TICRATE
+			layer.fuse = layer.extravalue1
+			layer.tics = layer.extravalue1
+			
+			layer.color = laser.color
+			layer.colorized = true
+			
+			layer.tracer = laser.tracer
+			laser.tracer = layer
+		end
+	end
+	*/
 	
 	--okay ig... there could be a better way to do this
 	if not S_SoundPlaying(laser,sfx_laser)
@@ -177,6 +261,7 @@ local function SpawnDebugLasers(point,dist)
 	local numlasers = 32
 	local angoff = 360*FU / numlasers
 	local laserspace = 110
+	local ticker_offset = FixedAngle((MM_N.storm_ticker*FU)/2)
 	
 	local circ = FixedMul((22*FU/7), dist*2)
 	local scale = circ / laserspace / numlasers
@@ -187,9 +272,22 @@ local function SpawnDebugLasers(point,dist)
 		local x = point.x + P_ReturnThrustX(nil,ang, dist)
 		local y = point.y + P_ReturnThrustY(nil,ang, dist)
 		
-		SpawnLaser(point,i, true, x,y, ang, scale, SKINCOLOR_GREEN)
+		SpawnLaser(point,i, true, x,y, ang, scale, SKINCOLOR_GREEN, FixedAngle((i-1)*angoff), dist)
 	end
 end
+
+local laser_colors = {
+	SKINCOLOR_GALAXY,
+	SKINCOLOR_VAPOR,
+	SKINCOLOR_DUSK,
+	SKINCOLOR_MAJESTY,
+	SKINCOLOR_PASTEL,
+	SKINCOLOR_PURPLE,
+	SKINCOLOR_NOBLE,
+	SKINCOLOR_MIDNIGHT,
+	SKINCOLOR_LAVENDER,
+	SKINCOLOR_SUPERPURPLE5,
+}
 
 local function SpawnAllLasers(point,dist)
 	if dist <= 0
@@ -207,18 +305,19 @@ local function SpawnAllLasers(point,dist)
 	local numlasers = 32
 	local angoff = 360*FU / numlasers
 	local laserspace = 110
+	local ticker_offset = FixedAngle((MM_N.storm_ticker*FU)/2)
 	
 	local circ = FixedMul((22*FU/7), dist*2)
 	local scale = circ / laserspace / numlasers
 	scale = max(abs($),FU/50)
 	
-	local color = P_RandomRange(SKINCOLOR_GALAXY,SKINCOLOR_NOBLE)
+	local color = laser_colors[P_RandomRange(1, #laser_colors)]
 	for i = 1,numlasers
-		local ang = FixedAngle((i-1)*angoff) + FixedAngle((MM_N.storm_ticker*FU)/2)
+		local ang = FixedAngle((i-1)*angoff) + ticker_offset
 		local x = point.x + P_ReturnThrustX(nil,ang, dist)
 		local y = point.y + P_ReturnThrustY(nil,ang, dist)
 		
-		SpawnLaser(point,i, false, x,y, ang, scale, color)
+		SpawnLaser(point,i, false, x,y, ang, scale, color, FixedAngle((i-1)*angoff), dist)
 	end
 end
 
@@ -349,10 +448,6 @@ return function(self)
 	end
 	
 	MM_N.storm_ticker = $+1
-	if not (MM_N.time)
-	and not MM_N.showdown
-		MM_N.storm_ticker = $+2
-	end
 	
 	if (point.storm_radius ~= point.storm_destradius)
 	and (MM_N.overtime or MM_N.showdown)

@@ -82,7 +82,7 @@ addScript "Waiting"
 addScript "Game Over"
 addScript "Theme Transition"
 
-addScript "Overtime"
+addScript "TimeManager"
 addScript "Showdown"
 addScript "Game End"
 // addScript "Restrict"

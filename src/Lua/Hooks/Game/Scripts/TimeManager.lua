@@ -36,7 +36,8 @@ return function()
 		
 		--people might've joined or left, so recalc minimum kills
 		if leveltime == MM_N.pregame_time
-			if isserver then
+			if isserver
+			and not CV_MM.debug.value then
 				CV_Set(CV_FindVar("restrictskinchange"),1)
 			end
 			
@@ -49,10 +50,6 @@ return function()
 				MM_N.maxtime = MM_N.duel_time
 			end
 		end
-	end
-	
-	if CV_MM.debug.value
-		MM:handleStorm()
 	end
 	
 	---- time management ----
@@ -130,7 +127,11 @@ return function()
 
 	--Overtime storm
 	if MM_N.showdown 
-	or MM_N.overtime then
+	or MM_N.overtime
+	--there used to be a separate block that ran the storm handler
+	--with debug on too, meaning the storm would be handled _twice_
+	--in a tic... YIKES
+	or CV_MM.debug.value then
 		MM:handleStorm()
 	end
 end

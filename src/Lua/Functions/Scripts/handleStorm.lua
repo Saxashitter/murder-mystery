@@ -4,6 +4,7 @@ local ImportantStuff = {
 	"storm_ticker",
 	"storm_timesmigrated",
 	"storm_incre",
+	"storm_graceperiod",
 	"debuglasers",
 	"lasers",
 	"garg",
@@ -94,6 +95,13 @@ local function Init(point)
 		end
 	end
 	
+	local grace = STORM_STARTINGTIME
+	if mapheaderinfo[gamemap].mm_stormtimer_grace ~= nil
+	and tonumber(mapheaderinfo[gamemap].mm_stormtimer_grace) ~= nil
+		grace = abs(tonumber(mapheaderinfo[gamemap].mm_stormtimer_grace))*TICRATE
+	end
+	point.storm_graceperiod = grace
+	
 	SetDestRadius(point, totaltime, point.storm_destradius)
 	
 	point.init = true
@@ -147,7 +155,7 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist)
 	P_MoveOrigin(laser, x,y, fz)
 	
 	do
-		local starting = MM_N.storm_ticker < STORM_STARTINGTIME and FixedDiv(MM_N.storm_ticker*FU, STORM_STARTINGTIME*FU) or FU
+		local starting = MM_N.storm_ticker < point.storm_graceperiod and FixedDiv(MM_N.storm_ticker*FU, point.storm_graceperiod*FU) or FU
 		laser.alpha = starting
 		
 		laser.spriteyscale = FixedMul(
@@ -484,7 +492,7 @@ return function(self)
 		
 		p.mm.lastoob = p.mm.outofbounds
 		p.mm.ouofbounds = false
-		p.mm.oob_lenient = MM_N.storm_ticker <= STORM_STARTINGTIME
+		p.mm.oob_lenient = MM_N.storm_ticker <= point.storm_graceperiod
 		
 		local me = p.mo
 		

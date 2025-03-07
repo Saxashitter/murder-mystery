@@ -113,20 +113,21 @@ function MM:DropItem(p, slot, randomize, dont_notify, forced)
 
 	local def = self.Items[item.id]
 	
+	local mobj
 	if item.allowdropmobj
-		local mobj = P_SpawnMobjFromMobj(p.mo, 0,0,FixedMul(p.mo.height/2, p.mo.scale), MT_THOK)
+		mobj = P_SpawnMobjFromMobj(p.mo, 0,0,FixedMul(p.mo.height/2, p.mo.scale), MT_THOK)
 		mobj.state = item.state
 		mobj.tics = -1
 		mobj.fuse = -1
 		mobj.angle = p.mo.angle
-
+		
 		if randomize then
 			mobj.angle = FixedAngle(P_RandomRange(0, 360)*FU)
 		end
-
+		
 		P_InstaThrust(mobj, mobj.angle, 5*FU)
 		mobj.momz = (3*FU)*P_MobjFlip(p.mo)
-
+		
 		mobj.pickupid = item.id
 		mobj.pickupsfx = item.pickupsfx
 		mobj.restrict = shallowCopy(item.restrict)
@@ -143,7 +144,7 @@ function MM:DropItem(p, slot, randomize, dont_notify, forced)
 		
 	end
 	if def.drop then
-		def.drop(item, p, mobj)
+		def.drop(item, p, mobj /*the dropped pickup*/)
 	end
 	
 	if (item and item.mobj) then

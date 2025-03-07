@@ -167,7 +167,11 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist)
 	
 	if (leveltime % 6 == 0)
 	and not debug
-		local scale = FU
+		local fake_scale = scale
+		if (scale > FU)
+			fake_scale = max(0, $-FU)
+		end
+		local scale = FU + fake_scale
 		for j = 0,1
 			local dist = P_RandomRange(-40,40)*FU
 			local dust = P_SpawnMobjFromMobj(laser,

@@ -8,7 +8,7 @@ NoVisitNeeded = true
 Selectheading = Murder Mystery
 Lua.MM_ClueAmount = 5
 Lua.MM_StormTimer = 25
-Lua.MM_StormTimer_Overtime = 15
+Lua.MM_StormTimer_Overtime = 20
 Lua.MM_SingleClues = true
 
 Level I1
@@ -77,8 +77,7 @@ NoVisitNeeded = true
 Selectheading = Murder Mystery
 Lua.MM_StormTimer_Overtime = 30
 
-#@jisk
-
+#@j1sk
 Level V0
 Levelname = Frozen Creek
 NoZone = true

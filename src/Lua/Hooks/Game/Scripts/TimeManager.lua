@@ -122,6 +122,45 @@ return function()
 			)
 		end
 		
+		if (MM_N.time <= 30*TICRATE)
+		and (MM_N.time > 0)
+		and not (MM_N.showdown)
+		--start emitting AURA if overtime will start
+		and (MM_N.peoplekilled >= MM_N.minimum_killed)
+			local point = MM_N.storm_point
+			local dist = 120*FU
+			local scale = FU / 2
+			local spokes = 12
+			
+			if (leveltime % 9 == 0)
+				local ticker_offset = FixedAngle( ((MM_N.overtime_ticker + 6)*FU) / 2 )
+				for i = 0, spokes - 1
+					local angle = FixedAngle(FixedDiv(360*FU, spokes*FU) * i) + ticker_offset
+					local dust = P_SpawnMobjFromMobj(point,
+						P_ReturnThrustX(nil, angle, dist),
+						P_ReturnThrustY(nil, angle, dist),
+						0,
+						MT_ARIDDUST
+					)
+					
+					dust.state = dust.info.spawnstate + P_RandomRange(0, 2)
+					P_SetScale(dust, 3 * scale, true)
+					P_SetOrigin(dust, dust.x, dust.y, dust.z)
+					
+					dust.angle = angle + ticker_offset
+					P_Thrust(dust,dust.angle, 5 * scale)
+					
+					dust.color = SKINCOLOR_GALAXY
+					dust.colorized = true
+					dust.destscale = 1
+					dust.scalespeed = FixedDiv(dust.scale, dust.tics * FU)
+					dust.renderflags = $|RF_SEMIBRIGHT
+					
+					dust.momz = (P_RandomRange(1,5)*scale)
+				end
+			end
+		end
+		
 		MM_N.overtime_ticker = $+1
 	end
 

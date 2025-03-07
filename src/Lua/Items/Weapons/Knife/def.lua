@@ -113,7 +113,7 @@ weapon.onmiss = function(item,p)
 	S_StartSound(p.mo,item.misssfx)
 end
 
-weapon.attack = function(item,p)
+MM.MeleeWhiffFX = function(p)
 	local me = p.mo
 	
 	if not (me and me.valid) then return end
@@ -130,7 +130,7 @@ weapon.attack = function(item,p)
 	whiff.fuse = -1 --whiff.tics
 	whiff.angle = angle
 	whiff.renderflags = $|RF_NOSPLATBILLBOARD|RF_SLOPESPLAT
-	whiff.scale = $*5/2
+	whiff.scale = FixedMul($, tofixed("1.8"))
 	whiff.height = 0
 	
 	local aiming = AngleFixed(p.aiming + ANGLE_90)
@@ -151,7 +151,10 @@ weapon.attack = function(item,p)
 	whiff.spriteyscale = FixedMul(cos(slope.zangle), whiff.scale + (slope.zangle == ANGLE_90 - 1 and 1024 or 0))
 	
 	me.whiff_fx = whiff
-	
+end
+
+weapon.attack = function(item,p)
+	MM.MeleeWhiffFX(p)
 	if MMCAM
 	and MMCAM.TOTALCAMS
 		for k,cam in pairs(MMCAM.TOTALCAMS)

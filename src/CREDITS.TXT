@@ -1,22 +1,32 @@
 TODO: Discord tags too?
 
 Maps:
-Mansion - luigi budd
+- Mansion - luigi budd
     (Murder Mystery painting by cofterinthecoffe)
-Mil Base - luigi budd
-Flooded Industries - GLideKS
-House - Lemerksiscool
-Seaegg - Pyrodiac
-Swamili Swamp - Pyrodiac
+- Mil Base - luigi budd
+- Flooded Industries - GLideKS
+- House - Lemerksiscool
+- Seaegg - Pyrodiac
+- Swamili Swamp - Pyrodiac
+- Frozen Creek - Jisk
 
 Sprites:
-Camera body, Clues, Weapons (shotgun, knife, luger, revolver, sword, uno reverse) - GLideKS
-Tripmine body, minor sprites - luigi budd
+- Camera body, Clues, Weapons (shotgun, knife, luger, revolver, sword, uno reverse) - GLideKS
+- Tripmine body, minor sprites - luigi budd
+- Knife/Sword whiff - instashield by pastel
 
 Music:
-Mansion BGM: "Wii Shop Channel if it was made by Casiopea"
+- Mansion BGM: "Wii Shop Channel if it was made by Casiopea"
 ( https://youtu.be/bTMLW4WgySk?si=jAWY7DwUrTD2f3Hy )
-MilBase BGM: Mix of songs from "The Henry Stickmin Collection"
+
+- MilBase BGM: Mix of songs from "The Henry Stickmin Collection"
 ( "Toppat Launch Site", "Preparations Interrupted")
+
+- Showdown! (1): ???
+- Showdown! (2): "Mustache Girl EX"
+( https://www.youtube.com/watch?v=YhqAqS6VSnE )
+
+- Showdown! (3): "FINAL 80 HARDCORE (YCR Ver.)"
+( https://www.youtube.com/watch?v=-6M1G6O7K_c )
 
 WIP

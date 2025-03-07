@@ -91,16 +91,16 @@ weapon.thinker = function(item, p)
 		and p2.mo.health
 		and p2.mm
 		and not p2.mm.spectator) then continue end
-
+		
 		local dist = R_PointToDist2(p.mo.x, p.mo.y, p2.mo.x, p2.mo.y)
 		local maxdist = FixedMul(p.mo.radius+p2.mo.radius, item.range)
-
+		
 		if dist > maxdist
 		or abs((p.mo.z + p.mo.height/2) - (p2.mo.z + p2.mo.height/2)) > FixedMul(max(p.mo.height, p2.mo.height), item.zrange or item.range)
 		or not P_CheckSight(p.mo, p2.mo) then
 			continue
 		end
-
+		
 		if roles[p.mm.role].team == roles[p2.mm.role].team
 		and not roles[p.mm.role].friendlyfire then
 			continue
@@ -140,42 +140,7 @@ weapon.attack = function(item,p)
 		item.lungetime = TICRATE/2
 	end
 	
-	do
-		local me = p.mo
-		
-		if not (me and me.valid) then return end
-		
-		local angle = p.cmd.angleturn << 16
-		local dist = 16*FU
-		local whiff = P_SpawnMobjFromMobj(me,
-			P_ReturnThrustX(nil,angle, dist),
-			P_ReturnThrustY(nil,angle, dist),
-			FixedDiv(me.height,me.scale)/2,
-			MT_THOK
-		)
-		whiff.state = S_MM_KNIFE_WHIFF
-		whiff.fuse = -1 --whiff.tics
-		whiff.angle = angle
-		whiff.renderflags = $|RF_NOSPLATBILLBOARD
-		whiff.frame = $|FF_TRANS50
-		whiff.scale = $*5/2
-		whiff.height = 0
-		
-		local aiming = AngleFixed(p.aiming + ANGLE_90)
-		--clamp so it doesnt distort so much
-		aiming = max(50*FU,min(130*FU,$))
-		aiming = FixedAngle($) - ANGLE_90
-		
-		P_CreateFloorSpriteSlope(whiff)
-		local slope = whiff.floorspriteslope
-		slope.o = {
-			x = whiff.x, y = whiff.y, z = whiff.z
-		}
-		slope.zangle = aiming
-		slope.xydirection = angle
-		
-		me.whiff_fx = whiff
-	end
+	MM.MeleeWhiffFX(p)
 end
 
 weapon.unequip = function(item,p)

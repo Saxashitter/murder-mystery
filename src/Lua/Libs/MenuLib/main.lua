@@ -39,6 +39,7 @@ addHook("KeyDown", function(key)
 	if key.name == "mouse1"
 		ML.client.doMousePress = true
 	elseif key.name == "escape"
+	and not chatactive
 		if #ML.client.popups
 			if ML.menus[ML.client.popups[#ML.client.popups].id].ps_flags & PS_NOESCAPE --holy SHIT
 				--do nothing

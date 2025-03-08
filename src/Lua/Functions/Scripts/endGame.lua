@@ -73,8 +73,8 @@ return function(self, endType)
 				min(p.mm.timesurvived, MM_N.maxtime)*FU, MM_N.maxtime*FU
 			)
 			reason = "surviving "..(p.mm.timesurvived/TICRATE).." seconds"
-			payout = FixedFloor(FixedMul(75*FU, percent)) >> FRACBITS
-			
+			payout = FixedFloor(FixedMul(75*FU, percent))
+			payout = ease.outsine(FU/3, $, 75*FU)>> FRACBITS
 		elseif (p.mm.role == MMROLE_MURDERER)
 			--dont get paid if you suck at the game
 			if (MM_N.peoplekilled >= MM_N.minimum_killed)

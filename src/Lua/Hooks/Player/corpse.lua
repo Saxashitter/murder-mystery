@@ -16,6 +16,7 @@ local function nodamage(me, i,s)
 	local p = me.player
 	
 	P_DoPlayerPain(p,s,i)
+    P_PlayRinglossSound(me,p)
 end
 
 addHook("ShouldDamage", function(me, inf, sor, d, dmgt)

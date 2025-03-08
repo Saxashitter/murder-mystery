@@ -79,6 +79,7 @@ local function HUD_InfoDrawer(v, stplyr)
 		local rings = MM:GetPlayerRings(p)
 		if (MMHUD.info_slideout)
 			local ticker = MMHUD.info_ticker
+			ticker = min($, 7*TR)
 			
 			yoff = -12*FU
 			if ticker <= 16

@@ -14,6 +14,19 @@ local function format_int(number)
   return minus .. int:reverse():gsub("^,", "") .. fraction
 end
 
+local itemid_to_perkid = {}
+local perkid_to_itemid = {}
+do
+	local cate = MM_PERKS.category_ptr
+	
+	for i = 1, #cate.items
+		local item = MM.Shop.items[cate.items[i]]
+		
+		itemid_to_perkid[i] = item.perk_id
+		perkid_to_itemid[item.perk_id] = i
+	end
+end
+
 MMHUD.menus.drawRings = function(v, x,y)
 	x = $*FU
 	y = $*FU
@@ -74,6 +87,20 @@ MMHUD.menus.drawPerkItem = function(v, x,y, perk, nofunc)
 		v.cachePatch(perk_t.icon),
 		0
 	)
+	if not nofunc
+		local this_itemid = perkid_to_itemid[perk]
+		if (consoleplayer.mm_save.purchased[this_itemid] == true)
+		or not MM.Shop.items[this_itemid].price
+			v.drawString(
+				(x + 31),
+				(y + 31) - 4,
+				"BOUGHT",
+				V_GREENMAP,
+				"small-thin-right"
+			)
+		end
+	end
+	
 	v.drawFill(x, y + 32, 32, 1, 19)
 	
 	v.drawString(
@@ -165,19 +192,6 @@ MenuLib.addMenu({
 	end
 })
 
-local itemid_to_perkid = {}
-local perkit_to_itemid = {}
-do
-	local cate = MM_PERKS.category_ptr
-	
-	for i = 1, #cate.items
-		local item = MM.Shop.items[cate.items[i]]
-		
-		itemid_to_perkid[i] = item.perk_id
-		perkit_to_itemid[item.perk_id] = i
-	end
-end
-
 for i = 1, MM_PERKS.num_perks
 	local perk_t = MM_PERKS[i]
 	
@@ -217,7 +231,7 @@ for i = 1, MM_PERKS.num_perks
 				return
 			end
 			
-			local this_itemid = perkit_to_itemid[i]
+			local this_itemid = perkid_to_itemid[i]
 			if (consoleplayer.mm_save.purchased[this_itemid] ~= true)
 			and MM.Shop.items[this_itemid].price
 				local cost = "$"..format_int(MM.Shop.items[this_itemid].price)

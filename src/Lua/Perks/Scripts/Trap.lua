@@ -1,5 +1,5 @@
 local perk_name = "Trap"
-local perk_price = 750
+local perk_price = 325 --750
 
 MM.addHook("GiveStartWeapon",function(p)
 	if (p.mm.role ~= MMROLE_MURDERER) then return end

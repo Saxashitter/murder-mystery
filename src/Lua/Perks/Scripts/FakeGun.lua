@@ -1,7 +1,7 @@
 local TR = TICRATE
 
 local perk_name = "Fake Gun"
-local perk_price = 750
+local perk_price = 325 --750
 
 local hud_tween_start = -55*FU
 local hud_tween = hud_tween_start

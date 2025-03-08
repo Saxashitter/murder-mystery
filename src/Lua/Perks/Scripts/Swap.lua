@@ -1,5 +1,5 @@
 local perk_name = "Swap"
-local perk_price = 1700
+local perk_price = 830 --1700
 
 MM.addHook("GiveStartWeapon",function(p)
 	if (p.mm.role ~= MMROLE_MURDERER) then return end

@@ -1,5 +1,5 @@
 local perk_name = "X-Ray"
-local perk_price = 1500
+local perk_price = 525 --1500
 
 local function interpolate(v,set)
 	if v.interpolate ~= nil then v.interpolate(set) end

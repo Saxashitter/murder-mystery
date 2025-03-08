@@ -1,5 +1,5 @@
 local perk_name = "Haste"
-local perk_price = 750
+local perk_price = 325 --750
 
 MM:RegisterEffect("perk.primary.haste", {
 	modifiers = {

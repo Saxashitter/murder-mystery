@@ -1,5 +1,5 @@
 local perk_name = "Ninja"
-local perk_price = 250
+local perk_price = 150 --250
 
 MM_PERKS[MMPERK_NINJA] = {
 	primary = function(p)

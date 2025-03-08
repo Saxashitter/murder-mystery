@@ -1,5 +1,5 @@
 local perk_name = "Ghost"
-local perk_price = 1500
+local perk_price = 525 --1500
 
 local ghost_min_alpha = FU/2
 freeslot("sfx_cloak1")

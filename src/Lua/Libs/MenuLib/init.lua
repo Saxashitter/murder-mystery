@@ -1,4 +1,4 @@
---MenuLib v0.0.3 written by luigi budd
+--MenuLib v0.0.4 written by luigi budd
 
 if rawget(_G,"MenuLib")
 	print("\x85MenuLib already loaded, aborting...")
@@ -10,12 +10,17 @@ rawset(_G, "MenuLib", {})
 rawset(_G, "BASEVIDWIDTH", BASEVIDWIDTH or 320)
 rawset(_G, "BASEVIDHEIGHT", BASEVIDHEIGHT or 200)
 
-local function enumflags(prefix, ...)
-	local work = {...}
-	
+local function enumflags(prefix, work, flagstyle)
 	for k,enum in ipairs(work)
-		local val = 1<<(k-1)
+		local val
+        if flagstyle == "flags"
+            val = 1<<(k-1)
+        elseif flagstyle == "enum"
+            val = k
+        end
+
 		assert(val ~= -1,"\x85Ran out of bits for "..prefix.."! (k="..k..")\x80")
+		assert(val ~= nil,"\x85".."Didn\'t give flagstyle in enumflags\x80")
 		
 		rawset(_G,prefix..enum,val)
 		print("Enummed "..prefix..""..enum.." ("..val..")")
@@ -23,7 +28,7 @@ local function enumflags(prefix, ...)
 end
 
 --Popup-Style flags
-enumflags("PS_",
+enumflags("PS_", {
 	--this popup will automatically draw the title and separating line
 	"DRAWTITLE",
 	
@@ -41,12 +46,32 @@ enumflags("PS_",
 	
 	--HOLY SHIT
 	--this popup cannot be closed with the escape key
-	"NOESCAPE"
-)
+	"NOESCAPE",
+}, "flags")
+
+--Close-Reason enums
+enumflags("CR_", {
+    --we're going back in the menu layers
+	"MENUEXITED",
+
+    --we're closing a popup
+	"POPUPCLOSED",
+
+    --all menus/popups were forced to close
+    "FORCEDCLOSEALL",
+}, "flags")
+--Init-Reason enums
+enumflags("IR_", {
+    --this menu was opened by the initMenu function
+	"INITMENU",
+
+    --this menu was opened by the initPopup function
+	"INITPOPUP",
+}, "enum")
 
 MenuLib.VERSION = 000
-MenuLib.SUBVERSION = 3
---dont forget the ending "/"
+MenuLib.SUBVERSION = 4
+--dont forget the ending "/" (and "debug" from the file tree below!)
 MenuLib.root = "Libs/MenuLib/"
 
 MenuLib.client = {

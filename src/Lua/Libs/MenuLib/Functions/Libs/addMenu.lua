@@ -17,8 +17,21 @@ return function(props)
 		color = getAttrib(props, "color", 27),
 		outline = props.outline,
 		
+		--"hooks"
+		/*
+		function(drawer v,
+			MenuLib ML,
+			menu_t menu,
+			table position {
+				corner_x, corner_y
+			}
+		*/
 		drawer = props.drawer,
-		thinker = props.thinker,
+		
+		--function(initreason IR_*)
+		init = props.init,
+		--function(closereason CR_*, boolean instant? [popup only])
+		exit = props.exit,
 		
 		stringId = props.stringId,
 		

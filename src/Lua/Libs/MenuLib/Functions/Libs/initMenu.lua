@@ -29,8 +29,15 @@ return function(id)
 	input.ignoregameinputs = true
 	local layers = ML.client.currentMenu.layers
 	
-	--immediately close
+	--immediately close ALL menus
 	if id == -2
+		for i = 1, #layers
+			local this_menu = ML.menus[layers[i]]
+			if (this_menu.exit ~= nil)
+				this_menu.exit(CR_MENUEXITED|CR_FORCEDCLOSEALL)
+			end
+		end
+		
 		input.ignoregameinputs = false
 		
 		ML.client.mouse_x = (BASEVIDWIDTH*FU) / 2
@@ -44,11 +51,20 @@ return function(id)
 	
 	if id ~= -1
 		table.insert(ML.client.currentMenu.layers, ML.client.currentMenu.id)
+		local this_menu = ML.menus[id]
+		if (this_menu.init ~= nil)
+			this_menu.init(IR_INITMENU)
+		end
 		
 	--go backwards
 	else
 		--there is NOT an available submenu before this one, so exit
 		if canExitMenu(layers)
+			local this_menu = ML.menus[ML.client.currentMenu.id]
+			if (this_menu.exit ~= nil)
+				this_menu.exit(CR_MENUEXITED)
+			end
+			
 			input.ignoregameinputs = false
 			
 			ML.client.mouse_x = (BASEVIDWIDTH*FU) / 2

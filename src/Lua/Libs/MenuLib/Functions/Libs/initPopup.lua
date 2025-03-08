@@ -7,11 +7,17 @@ return function(id,instant)
 	
 	--close this popup
 	if (id == -1)
-		if ML.menus[#ML.client.popups].ps_flags & PS_NOSLIDEIN
+		local popupitem_t = ML.client.popups[#ML.client.popups]
+		local this_menu = ML.menus[popupitem_t.id]
+		
+		if this_menu.exit ~= nil
+			this_menu.exit(CR_POPUPCLOSED, instant)
+		end
+		
+		if this_menu.ps_flags & PS_NOSLIDEIN
 		or instant
 			table.remove(ML.client.popups)
 		else
-			local popupitem_t = ML.client.popups[#ML.client.popups]
 			popupitem_t.goingdown = true
 			popupitem_t.lifespan = min($, 7)
 		end
@@ -29,5 +35,9 @@ return function(id,instant)
 		goingdown = false,
 		y_off = 700,
 	})
+	local this_menu = ML.menus[id]
+	if this_menu.init ~= nil
+		this_menu.init(IR_INITPOPUP)
+	end
 	
 end

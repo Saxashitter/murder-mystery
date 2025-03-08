@@ -66,7 +66,8 @@ MM.FireBullet = function(p,def,item, angle, aiming, callhooks)
 			
 			--remove it
 			if item.ammo <= 0
-				MM:DropItem(p,nil,false,true,true)
+				item.allowdropmobj = false
+				local dropped = MM:DropItem(p,nil,false,true,true)
 			end
 		end
 	end

@@ -151,6 +151,8 @@ function MM:DropItem(p, slot, randomize, dont_notify, forced)
 		P_RemoveMobj(item.mobj)
 	end
 	p.mm.inventory.items[slot] = nil
+	
+	return mobj
 end
 
 function MM:GetCertainDroppedItems(id)

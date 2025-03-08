@@ -48,4 +48,9 @@ MM.addHook("OnRawChat", function(p, chat_type, target, msg)
 	return true
 end)
 
+weapon.attack = function(item,p)
+	chatprintf(p, "\x82*Announce a message to the whole server with this item!",true)
+end
+
+
 return weapon

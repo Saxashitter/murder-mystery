@@ -31,65 +31,66 @@ end
 
 local function draw_hud(v)
 	// DEFINITION
-
+	
 	if MM_N.end_ticker == nil then return end
-
+	
 	local tics = MM_N.end_ticker
 	local tics_after = max(0, MM_N.end_ticker-MAX_FADE)
-
+	
 	// DRAW THEME
-
+	
 	local theme = MM.themes[MM_N.theme or "srb2"]
-
+	
 	local t = FixedDiv(min(tics, MAX_FADE), MAX_FADE)
 	local trans = ease.linear(t, 10, 0)
-
+	
 	local settings = return_settings(v, theme)
 	if settings == false then return end
-
+	
 	theme.draw(VWarp(v, settings), tics)
-
+	
 	// RESULTS
-
+	
 	local results = v.cachePatch("RESULT")
-
+	
 	local t = FixedDiv(min(tics_after, TICRATE), TICRATE)
 	local x = (160*FU)-(results.width*(FU/2))
 	local y = ease.outquad(t, -results.height*FU, 4*FU)
-
+	
 	v.drawScaled(x, y, FU, results, V_SNAPTOTOP)
-
+	
 	// WINNING PLAYERS
 	//// TEXT
-
+	
 	local endtype = MM.endType or MM.endTypes[1]
-
+	
 	local y = ease.outcubic(t, -10*(FU*2), 18*FU)
-
+	
 	v.drawString(160*FU, y, endtype.name, V_SNAPTOTOP|endtype.color, "fixed-center")
-
+	
 	local murd_text = "\x85Murderers: \x80"
 	for k,p in pairs(MM_N.murderers) do
 		if not (p and p.valid) then continue end
-
+		
 		murd_text = $..p.name
 		if k ~= #MM_N.murderers then
 			murd_text = $..", "
 		end
 	end
-
+	
 	v.drawString(160*FU, y+(10*FU), murd_text, V_SNAPTOTOP, "thin-fixed-center")
-
+	
 	//// ICONS
-
+	
 	local icon_width = 20
-
+	
 	if MM_N[endtype.results] then
 		local icons = {}
 		for _,p in pairs(MM_N[endtype.results]) do
 			if not (p and p.valid) then continue end
+			if (p.mm.afkmodelast) then continue end
 			local patch = v.getSprite2Patch(p.skin, SPR2_LIFE, false, A, 0)
-
+			
 			table.insert(icons, {
 				patch = patch,
 				color = v.getColormap(p.skin, p.skincolor),
@@ -98,13 +99,13 @@ local function draw_hud(v)
 				rings = p.rings
 			})
 		end
-
+		
 		local scale = FU*5/4
-
+		
 		local total_width = (icon_width*(#icons-1))
 		local x = ( 160*FU ) - ( total_width*scale/2 )
 		local y = ( (200-24)*FU )
-
+		
 		for k,icon in pairs(icons) do
 			local myscale = FixedMul(scale,skins[icon.skin].highresscale or FU)
 			v.drawScaled(x, y, myscale, icon.patch, trans|V_SNAPTOBOTTOM, icon.color)

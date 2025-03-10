@@ -1,8 +1,16 @@
 MainCfg
 GameData = SaxasMurderMystery.dat
 
-# i._px
 Clear Unlockables
 Clear Emblems
 Clear ExtraEmblems
 Clear ConditionSets
+
+ConditionSet 1
+Condition1 = PlayTime 1
+
+Unlockable 1
+Name = Sound Test
+Type = SoundTest
+Height = 10
+ConditionSet = 1

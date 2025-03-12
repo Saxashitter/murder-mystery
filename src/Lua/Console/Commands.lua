@@ -303,3 +303,20 @@ COM_AddCommand("MM_GiveRings", function(p, rings)
 	
 	p.mm_save.rings = $ + tonumber(rings)
 end, COM_ADMIN)
+
+COM_AddCommand("MM_RadioSong", function(p, str)
+	if not (str
+	and MMRadio.songs[str:lower()]) then
+		CONS_Printf(p, "Usage: mmradio_song <songname>")
+		CONS_Printf(p, "Select a song to be played on your radio when dropped.")
+		CONS_Printf(p, "")
+		CONS_Printf(p, "OPTIONS:")
+		for k,v in pairs(MMRadio.songs) do
+			CONS_Printf(p, k)
+		end
+		return
+	end
+
+	p.mmradio_song = MMRadio.songs[str:lower()]
+	CONS_Printf(p, "Song has been set to "..str:lower())
+end)

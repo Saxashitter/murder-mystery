@@ -231,7 +231,10 @@ MM:addPlayerScript(function(p)
 					
 					local item = MM:GiveItem(p, reward)
 					if p.mm.role ~= MMROLE_MURDERER -- Don't let other people pick up your hard work!
-						item.droppable = false
+						if not item.droppable_clue then
+							item.droppable = false
+						end
+						
 						item.allowdropmobj = false
 					end
 				end

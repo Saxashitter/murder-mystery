@@ -72,14 +72,18 @@ radio.animation = true
 radio.damage = false
 radio.weaponize = false
 radio.droppable = true
+radio.droppable_clue = true
 radio.shootable = false
 radio.shootmobj = MT_THOK
+radio.allowdropmobj = false
 
 radio.drop = function(item,p,mobj)
-	mobj.targetplayer = p
-	mobj.song = p.mmradio_song or sfx_rsong1
-	mobj.color_set = p.mo.color
-	mobj.ticker = 0
+	if mobj and mobj.valid then
+		mobj.targetplayer = p
+		mobj.song = p.mmradio_song or sfx_rsong1
+		mobj.color_set = p.mo.color
+		mobj.ticker = 0
+	end
 end
 
 radio.pickup = function(mobj,p2)

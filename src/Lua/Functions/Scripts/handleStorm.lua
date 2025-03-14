@@ -163,6 +163,20 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist)
 			starting
 		)
 		laser.height = FixedMul(cz - fz, starting)
+		
+		--handle colormap here too
+		--CANT cause every sector needs a colormap....
+		/*
+		local galclr = skincolors[SKINCOLOR_GALAXY].ramp[4]
+		local r,g,b = color.paletteToRgb(galclr)
+		local cmap = P_GetSectorColormapAt(laser.subsector.sector,
+			laser.x, laser.y, laser.z
+		)
+		if cmap
+			cmap.red,cmap.green,cmap.blue = r,g,b
+			cmap.alpha = 255
+		end
+		*/
 	end
 	
 	if (leveltime % 6 == 0)
@@ -198,7 +212,7 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist)
 			dust.colorized = true
 			dust.destscale = 1
 			dust.scalespeed = FixedDiv(dust.scale, dust.tics * FU)
-			dust.renderflags = $|RF_SEMIBRIGHT
+			dust.renderflags = $|RF_FULLBRIGHT|RF_NOCOLORMAPS
 			
 			dust.momz = (P_RandomRange(1,4)*scale) * (j == 1 and -1 or 1)
 		end

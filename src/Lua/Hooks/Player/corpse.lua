@@ -230,14 +230,14 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 
 	if not MM_N.allow_respawn then
 		local corpse = P_SpawnMobjFromMobj(target, 0,0,0, MT_THOK)
-
+		
 		target.flags2 = $|MF2_DONTDRAW
-
+		
 		corpse.skin = target.skin
 		corpse.color = target.color
 		corpse.state = S_PLAY_BODY
 		corpse.colorized = target.colorized
-
+		
 		corpse.angle = angle
 		corpse.flags = 0
 		corpse.flags2 = 0
@@ -245,14 +245,17 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		corpse.fuse = -1
 		corpse.shadowscale = target.shadowscale
 		corpse.radius = target.radius
+		corpse.translation = "MM_HudShadow"
+		--corpses dont have colormaps?
+		corpse.renderflags = $|RF_SEMIBRIGHT
 		
 		P_InstaThrust(corpse, angle, -8*FU)
 		P_SetObjectMomZ(corpse,6*FU)
-
+		
 		MM_N.corpses[#MM_N.corpses+1] = corpse
 		corpse.playerid = #target.player
 		corpse.playername = target.player.name
-
+		
 		MM.runHook("CorpseSpawn", target, corpse)
 	end
 end, MT_PLAYER)
@@ -293,6 +296,7 @@ addHook("ThinkFrame", function()
 					corpse.state = S_PLAY_BODY
 					corpse.colorized = p.mo.colorized
 					corpse.shadowscale = p.mo.shadowscale
+					corpse.renderflags = $|RF_SEMIBRIGHT
 					
 					corpse.angle = p.mo.deathangle
 					corpse.flags = 0
@@ -352,6 +356,7 @@ addHook("ThinkFrame", function()
 				marker.tics = 10 * TICRATE
 				marker.fuse = marker.tics
 				
+				corpse.translation = nil
 				MM.runHook("CorpseFound", corpse, p.mo)
 			end
 		end

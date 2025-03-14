@@ -154,7 +154,7 @@ return function()
 					dust.colorized = true
 					dust.destscale = 1
 					dust.scalespeed = FixedDiv(dust.scale, dust.tics * FU)
-					dust.renderflags = $|RF_SEMIBRIGHT
+					dust.renderflags = $|RF_SEMIBRIGHT|RF_NOCOLORMAPS
 					
 					dust.momz = (P_RandomRange(1,5)*scale)
 				end
@@ -172,5 +172,10 @@ return function()
 	--in a tic... YIKES
 	or CV_MM.debug.value then
 		MM:handleStorm()
+	end
+	
+	--debug thinker
+	if CV_MM.debug.value
+		MM_N.dueling = false
 	end
 end

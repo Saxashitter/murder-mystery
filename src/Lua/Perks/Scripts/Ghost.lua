@@ -23,6 +23,8 @@ local icon_scale = FU/2
 local perk_maxtime = 8*TR
 local perk_cooldown = 30*TR
 local perk_volume = (255*3)/4
+local perk_translation = "Grayscale"
+local perk_translucent = tofixed("0.6")
 
 MM_PERKS[MMPERK_GHOST] = {
 	primary = function(p)
@@ -142,8 +144,18 @@ MM_PERKS[MMPERK_GHOST] = {
 		
 		if (p.mm.inventory.hidden)
 			me.alpha = FixedCeil(ease.linear(FU/2, $, FU) * 100)/100
+			if me.lasttranslation
+				me.translation = me.lasttranslation.t
+				me.lasttranslation = nil
+			end
 		else
-			me.alpha = FixedFloor(ease.linear(FU/2, $, FU/2) * 100)/100
+			me.alpha = FixedFloor(ease.linear(FU/2, $, perk_translucent) * 100)/100
+			if not me.lasttranslation
+				me.lasttranslation = {
+					t = me.translation
+				}
+			end
+			me.translation = perk_translation
 		end
 	end,
 
@@ -232,7 +244,7 @@ MM_PERKS[MMPERK_GHOST] = {
 		
 		"",
 		
-		"\x82Secondary:\x80 Become 50% transparent",
+		"\x82Secondary:\x80 Become "..string.format("%.1f",(perk_translucent*100)).."% transparent",
 		"when holding your knife!",
 	},
 	cost = perk_price,

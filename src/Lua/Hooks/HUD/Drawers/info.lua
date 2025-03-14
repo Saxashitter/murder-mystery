@@ -55,7 +55,7 @@ local function HUD_InfoDrawer(v, stplyr)
 				FU,
 				v.cachePatch("MM_CLOCK2"),
 				flags,
-				v.getColormap(nil,nil,"PureBlack")
+				v.getColormap(nil,nil,"MM_HudShadow")
 			)
 			v.drawScaled(x,y,
 				FU,
@@ -110,7 +110,7 @@ local function HUD_InfoDrawer(v, stplyr)
 			FixedMul(origin_size, origin_scale),
 			v.cachePatch("MMRING"),
 			V_SNAPTOLEFT|V_SNAPTOTOP|V_PERPLAYER,
-			v.getColormap(nil,nil,"PureBlack")
+			v.getColormap(nil,nil,"MM_HudShadow")
 		)
 		v.drawScaled(x - slidein,
 			y + yoff,

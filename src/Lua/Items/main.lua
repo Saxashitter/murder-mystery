@@ -343,6 +343,7 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		item.damage = def.damage
 		item.weaponize = def.weaponize
 		item.droppable = def.droppable
+		item.droppable_clue = def.droppable_clue
 		item.allowdropmobj = def.allowdropmobj
 		item.shootable = def.shootable
 		item.shootmobj = def.shootmobj

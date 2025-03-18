@@ -30,6 +30,12 @@ MC("perk", "fakegun", 1)
 MC("perk", "trap", 1)
 MC("perk", "xray", 1)
 
+--MurderPerkFlag (amazing name i know)
+--toggleable as primary (no flag assumes passive)
+rawset(_G,"MPF_TOGGLEABLEPRI", (1 << 0))
+--toggleable as secondary (no flag assumes passive)
+rawset(_G,"MPF_TOGGLEABLESEC", (1 << 1))
+
 MM.sniper_theme_offset = 13
 MM.themes = {} -- intermission themes
 MM.player_effects = {}
@@ -37,7 +43,6 @@ MM.player_effects = {}
 local function addTheme(name)
 	MM.themes[name] = dofile("Themes/"..name)
 end
-
-addTheme "srb2"
+addTheme("srb2")
 
 rawset(_G,"MM_PLAYER_STORMMAX",5*TICRATE)

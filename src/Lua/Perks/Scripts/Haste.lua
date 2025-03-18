@@ -130,6 +130,7 @@ MM_PERKS[MMPERK_HASTE] = {
 	icon = icon_name,
 	icon_scale = icon_scale,
 	name = perk_name,
+	flags = 0,
 
 	description = {
 		"\x82Primary:\x80 Speed up 11% when holding",

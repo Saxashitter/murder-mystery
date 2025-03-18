@@ -62,10 +62,10 @@ MM_PERKS[MMPERK_XRAY] = {
 		
 		for k,item in pairs(drawwork)
 			local play = item.player
-
+			
 			local patch = v.cachePatch("MM_SHOWDOWNMARK")
 			local w2s = sglib.ObjectTracking(v, p, cam, play.mo)
-
+			
 			interpolate(v,#play)
 			v.drawScaled(
 				w2s.x,
@@ -84,6 +84,7 @@ MM_PERKS[MMPERK_XRAY] = {
 	icon = "MM_PI_XRAY",
 	icon_scale = FU/2,
 	name = perk_name,
+	flags = 0,
 
 	description = {
 		"\x82Primary:\x80 See everyone through walls!",

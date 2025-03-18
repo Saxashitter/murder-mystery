@@ -3,8 +3,8 @@ local TR = TICRATE
 local perk_name = "Fake Gun"
 local perk_price = 325 --750
 
-local hud_tween_start = -55*FU
-local hud_tween = hud_tween_start
+local hud_tween_start = -4*FU
+local hud_tween = 0
 local icon_name = "MM_PI_FAKEGUN"
 local icon_scale = FU/2
 
@@ -23,8 +23,9 @@ local function perk_thinker(p)
 	p.mm.perk_fake_time = $ or 0
 	p.mm.perk_fake_cooldown = $ or 0
 	
-	if (p.cmd.buttons & BT_TOSSFLAG)
-	and not (p.lastbuttons & BT_TOSSFLAG)
+	if MM_PERKS.perkActiveDown(p,
+		(p.mm_save.sec_perk == MMPERK_FAKEGUN)
+	)
 		p.mm.perk_fake_time = perk_maxtime
 		p.mm.perk_fake_cooldown = perk_cooldown + perk_maxtime
 		p.mm.perk_fake_item = clueItems[P_RandomRange(1,#clueItems)]
@@ -83,65 +84,63 @@ MM_PERKS[MMPERK_FAKEGUN] = {
 	primary = perk_thinker,
 	secondary = perk_thinker,
 	
-	drawer = function(v,p,c, order)
-		local x = 5*FU
-		local y = 100*FU
-		local scale = FU/2
-		local flags = V_SNAPTOLEFT|V_SNAPTOBOTTOM
-		local timer = 0
-		if order == "sec" then y = $ + 18*FU end
+	drawer = function(v,p,c, slot,props)
+		if p.mm.perk_fake_time == nil then return end
+		local flags = 0
+		local notoggle = false
 		
-		if p.mm.perk_fake_time == nilthen return end
-
-		if (order == "pri")
+		do
 			local x = 5*FU - MMHUD.xoffset
-			local y = 162*FU
+			local y = (slot == 1 and 162 or 170)*FU
 			
 			if (p.mm.perk_fake_cooldown == 0)
 				local action = "Fake gun"
 				v.drawString(x,y,
-					"[TOSSFLAG] - "..action,
+					"[WEAPON"..(slot == 1 and "6" or "7").."] - "..action,
 					V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
 					"thin-fixed"
 				)
 			end
 		end
 		
-		if (p.mm.perk_fake_time == 0
-		and p.mm.perk_fake_cooldown == 0)
-		and FixedFloor(hud_tween) == hud_tween_start
-			return
-		end
-		
 		if (p.mm.perk_fake_time > 0)
-			hud_tween = ease.inquad(FU/2, $, 0)
-			timer = p.mm.perk_fake_time/TR
+			hud_tween = ease.inquad(FU/2, $, hud_tween_start)
+			notoggle = true
 		else
-			if p.mm.perk_fake_cooldown == 0
-				hud_tween = ease.inquad(FU/4, $, hud_tween_start)
+			if p.mm.perk_fake_cooldown
+				hud_tween = ease.inquad(FU/2, $, 0)
+				flags = $|V_50TRANS
+				notoggle = true
 			end
-			timer = p.mm.perk_fake_cooldown/TR
-			flags = $|V_50TRANS
 		end
-		x = $ + hud_tween
 		
-		v.drawScaled(x,
-			y,
-			FixedMul(scale, icon_scale),
-			v.cachePatch(icon_name),
-			flags
-		)
-		v.drawString(x,
-			y + (31*scale) - 8*FU,
-			timer,
-			flags &~V_ALPHAMASK,
-			"thin-fixed"
-		)
+		return hud_tween,flags,notoggle
+	end,
+	postdraw = function(v,p,c, slot,props)
+		if p.mm.perk_fake_time == nil then return end
+		
+		local timer = ''
+		if (p.mm.perk_fake_time > 0)
+			timer = p.mm.perk_fake_time/TR
+		elseif p.mm.perk_fake_cooldown
+			timer = p.mm.perk_fake_cooldown/TR
+		end
+			
+		if timer ~= ''
+			v.drawString(
+				props.x,
+				props.y + 32*props.scale - 8*FU,
+				timer,
+				(props.flags &~V_ALPHAMASK)|V_YELLOWMAP,
+				"thin-fixed"
+			)
+		end
 	end,
 	
 	icon = icon_name,
 	icon_scale = icon_scale,
 	name = perk_name,
+	flags = MPF_TOGGLEABLEPRI|MPF_TOGGLEABLESEC,
 
 	description = {
 		"\x82When equipped:\x80 Pressing [TOSSFLAG] will",

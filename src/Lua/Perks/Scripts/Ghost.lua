@@ -15,8 +15,8 @@ sfxinfo[sfx_cloak2] = {
 
 local TR = TICRATE
 
-local hud_tween_start = -55*FU
-local hud_tween = hud_tween_start
+local hud_tween_start = -4*FU
+local hud_tween = 0
 local icon_name = "MM_PI_GHOST"
 local icon_scale = FU/2
 
@@ -35,8 +35,7 @@ MM_PERKS[MMPERK_GHOST] = {
 		
 		local last_ghosting = p.mm.perk_ghost_time
 
-		if (p.cmd.buttons & BT_TOSSFLAG)
-		and not (p.lastbuttons & BT_TOSSFLAG)
+		if MM_PERKS.perkActiveDown(p,false)
 			if (p.mm.perk_ghost_cooldown == 0)
 				p.mm.perk_ghost_time = perk_maxtime
 				p.mm.perk_ghost_cooldown = perk_cooldown + perk_maxtime
@@ -159,17 +158,10 @@ MM_PERKS[MMPERK_GHOST] = {
 		end
 	end,
 
-	drawer = function(v,p,c, order)
-		local x = 5*FU
-		local y = 100*FU
-		local scale = FU/2
-		local flags = V_SNAPTOLEFT|V_SNAPTOBOTTOM
-		local timer = 0
-		if order == "sec" then y = $ + 18*FU end
-		
-		if p.mm.perk_ghost_time == nil and order == "pri" then return end
-
-		if (order == "pri")
+	drawer = function(v,p,c, slot,props)
+		if (slot == 1)
+			if p.mm.perk_ghost_time == nil then return end
+			
 			local x = 5*FU - MMHUD.xoffset
 			local y = 162*FU
 			
@@ -182,60 +174,62 @@ MM_PERKS[MMPERK_GHOST] = {
 					action = "Uncloak"
 				end
 				v.drawString(x,y,
-					"[TOSSFLAG] - "..action,
+					"[WEAPON6] - "..action,
 					V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
 					"thin-fixed"
 				)
 			end
 		end
 		
-		if (p.mm.perk_ghost_time == 0
-		and p.mm.perk_ghost_cooldown == 0
-		and order == "pri")
-		and FixedFloor(hud_tween) == hud_tween_start
-			return
-		end
-		
-		if order == "pri"
-			if (p.mm.perk_ghost_time > 0)
-				hud_tween = ease.inquad(FU/2, $, 0)
-				timer = p.mm.perk_ghost_time/TR
-			else
-				if p.mm.perk_ghost_cooldown == 0
-					hud_tween = ease.inquad(FU/4, $, hud_tween_start)
-				else
-					hud_tween = ease.inquad(FU/2, $, 0)
-				end
-				timer = p.mm.perk_ghost_cooldown/TR
-				flags = $|V_50TRANS
-			end
+		local notoggle = false
+		local newflags = (slot == 2) and V_50TRANS or 0
+		if FixedFloor(p.realmo.alpha) ~= FU
+			hud_tween = ease.inquad(FU/2, $, hud_tween_start)
+			newflags = 0
 		else
-			timer = ""
-			if FixedFloor(p.realmo.alpha) ~= FU
-				hud_tween = ease.inquad(FU/2, $, 0)
-			else
-				hud_tween = ease.inquad(FU/4, $, hud_tween_start)
+			hud_tween = ease.inquad(FU/2, $, 0)
+		end
+		
+		if slot == 1
+			if (p.mm.perk_ghost_time > 0)
+				notoggle = true
+			elseif p.mm.perk_ghost_cooldown
+				notoggle = true
+				newflags = V_50TRANS
 			end
 		end
-		x = $ + hud_tween
 		
-		v.drawScaled(x,
-			y,
-			FixedMul(scale, icon_scale),
-			v.cachePatch(icon_name),
-			flags
-		)
-		v.drawString(x,
-			y + (31*scale) - 8*FU,
-			timer,
-			flags &~V_ALPHAMASK,
-			"thin-fixed"
-		)
+		return hud_tween,newflags,notoggle
+	end,
+	postdraw = function(v,p,c, slot,props)
+		if slot == 2 then return end
+		
+		local timer = ''
+		if slot == 1
+			if p.mm.perk_ghost_time == nil then return end
+			
+			if (p.mm.perk_ghost_time > 0)
+				timer = p.mm.perk_ghost_time/TR
+			elseif p.mm.perk_ghost_cooldown
+				timer = p.mm.perk_ghost_cooldown/TR
+			end
+		end
+		
+		if timer ~= ''
+			v.drawString(
+				props.x,
+				props.y + 32*props.scale - 8*FU,
+				timer,
+				(props.flags &~V_ALPHAMASK)|V_YELLOWMAP,
+				"thin-fixed"
+			)
+		end
 	end,
 	
 	icon = icon_name,
 	icon_scale = icon_scale,
 	name = perk_name,
+	flags = MPF_TOGGLEABLEPRI,
 	
 	description = {
 		"\x82Primary:\x80 Become fully invisible to",

@@ -152,9 +152,10 @@ return function(v, p)
 	
 	--controls
 	x = 5*FU - MMHUD.xoffset
-	y = 170*FU
+	y = (170 + 8)*FU
 	local flags = V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_PERPLAYER
 	
+	/*
 	if (p.pflags & (PF_ANALOGMODE|PF_DIRECTIONCHAR) == (PF_ANALOGMODE|PF_DIRECTIONCHAR))
 		v.drawString(
 			x,y - 16*FU,
@@ -163,6 +164,7 @@ return function(v, p)
 			"thin-fixed"
 		)
 	end
+	*/
 	
 	v.drawString(
 		x,y,
@@ -181,6 +183,8 @@ return function(v, p)
 		y = $+8*FU
 	end
 	
+	--this is obvious, we can save space if we dont draw it
+	/*
 	if (curitem)
 		v.drawString(x,y,
 			"[FIRE] - Use weapon",
@@ -189,4 +193,5 @@ return function(v, p)
 		)
 		y = $+8*FU
 	end
+	*/
 end

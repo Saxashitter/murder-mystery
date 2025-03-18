@@ -7,6 +7,7 @@ MM_PERKS[MMPERK_FOOTSTEPS] = {
 	icon = "MM_PI_FOOTSTEP",
 	icon_scale = FU/2,
 	name = perk_name,
+	flags = 0,
 
 	description = {
 		"\x82Primary:\x80 See everyone's footsteps!",

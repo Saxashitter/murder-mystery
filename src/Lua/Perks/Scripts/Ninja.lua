@@ -27,6 +27,7 @@ MM_PERKS[MMPERK_NINJA] = {
 	
 	icon = "MM_PI_NINJA",
 	name = perk_name,
+	flags = 0,
 
 	description = {
 		"\x82Primary:\x80 Your knife is 50% invisible.",

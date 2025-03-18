@@ -14,6 +14,8 @@ end)
 MM_PERKS[MMPERK_SWAP] = {
 	icon = "MM_PI_SWAP",
 	name = perk_name,
+	--i guess these are passives?
+	flags = 0,
 
 	description = {
 		"\x82When equipped:\x80 Earn a Body Swap Potion!",

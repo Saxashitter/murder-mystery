@@ -227,7 +227,7 @@ local function HUD_TabScoresDrawer(v)
 		if userdataType(p_cmap) ~= "colormap" --!!!
 			p_cmap = v.getColormap(p.skin, p.skincolor)
 		end
-		if roleStyle.overlay then p_cmap = v.getColormap(TC_RAINBOW,SKINCOLOR_BLACK) end
+		if roleStyle.overlay then p_cmap = v.getColormap(p_skin,p_skincolor,"Grayscale") end
 		v.drawScaled(x*FU, y*FU, FU/2, iconpatch, 0, p_cmap)
 		--#endregion
 

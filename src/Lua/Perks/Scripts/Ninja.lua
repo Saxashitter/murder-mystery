@@ -1,6 +1,9 @@
 local perk_name = "Ninja"
 local perk_price = 150 --250
 
+local hud_tween_start = -4*FU
+local hud_tween = 0
+
 MM_PERKS[MMPERK_NINJA] = {
 	primary = function(p)
 		local item = p.mm.inventory.items[p.mm.inventory.cur_sel]
@@ -23,6 +26,22 @@ MM_PERKS[MMPERK_NINJA] = {
 		item.equipsfx = nil
 		item.hitsfx = nil
 		item.misssfx = nil
+	end,
+	drawer = function(v,p,c, slot,props)
+		local flags = V_50TRANS
+		
+		local knifeequiped = true
+		local item = p.mm.inventory.items[p.mm.inventory.cur_sel]
+		if not (item and item.id == "knife") then knifeequiped = false; end
+		if p.mm.inventory.hidden then knifeequiped = false; end
+		
+		if knifeequiped
+			hud_tween = ease.inquad(FU/2, $, hud_tween_start)
+			flags = 0
+		else
+			hud_tween = ease.inquad(FU/2, $, 0)
+		end
+		return hud_tween,flags
 	end,
 	
 	icon = "MM_PI_NINJA",

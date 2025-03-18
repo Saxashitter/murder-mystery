@@ -13,8 +13,8 @@ MM:RegisterEffect("perk.secondary.haste", {
 	},
 })
 
-local hud_tween_start = -55*FU
-local hud_tween = hud_tween_start
+local hud_tween_start = -4*FU
+local hud_tween = 0
 local icon_name = "MM_PI_HASTE"
 local icon_scale = FU/2
 
@@ -98,31 +98,24 @@ MM_PERKS[MMPERK_HASTE] = {
 		end
 	end,
 	
-	drawer = function(v,p,c, order)
-		local x = 5*FU
-		local y = 100*FU
-		local scale = FU/2
-		local flags = V_SNAPTOLEFT|V_SNAPTOBOTTOM
-		if order == "sec" then y = $ + 18*FU end
+	drawer = function(v,p,c, slot,props)
 		
 		local knifeequiped = true
 		local item = p.mm.inventory.items[p.mm.inventory.cur_sel]
 		if not (item and item.id == "knife") then knifeequiped = false; end
 		if p.mm.inventory.hidden then knifeequiped = false; end
+		if not P_IsObjectOnGround(p.realmo) then knifeequiped = false; end
+		if p.speed < 17*p.realmo.scale then knifeequiped = false; end
+		
+		local flags = V_50TRANS
 		
 		if knifeequiped
-			hud_tween = ease.inquad(FU/2, $, 0)
+			hud_tween = ease.inquad(FU/2, $, hud_tween_start)
+			flags = 0
 		else
-			hud_tween = ease.inquad(FU/4, $, hud_tween_start)
+			hud_tween = ease.inquad(FU/2, $, 0)
 		end
-		x = $ + hud_tween
-
-		v.drawScaled(x,
-			y,
-			FixedMul(scale, icon_scale),
-			v.cachePatch(icon_name),
-			flags
-		)
+		return hud_tween,flags
 	end,
 	
 	--this icon is so fucking goofy

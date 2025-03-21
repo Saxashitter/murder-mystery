@@ -66,10 +66,11 @@ make buildrunlinux
 ```
 
 ## How can I help?
-If you can code, try making a pull request for something you want!
-If you can do art, compose, etc. Hit me up at **@saxashitter on Discord!** (1257066741037666447)
+If you can code or do art, hit us up at our Discord server (linked below) or hit up one of the main devs!
+**@epixgamer3333333** (1245610925793345579)
+**@j1sk** (266392657884872715)
 
 ## Is there an Discord server?
 Yes! https://discord.gg/J6yzyJV8Ta
 
-You'll be pinged whenever I'm hosting the mod, you can also contribute directly, and more!
+You'll be pinged whenever our test server gets updated!

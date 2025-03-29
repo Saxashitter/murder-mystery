@@ -5,6 +5,7 @@ local tree = {
 	"Shop",
 	"Protips",
 	"AdminPanel",
+	"UserSettings",
 }
 
 for k, name in ipairs(tree)

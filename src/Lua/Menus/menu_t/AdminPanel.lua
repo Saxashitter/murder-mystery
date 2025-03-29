@@ -24,8 +24,8 @@ MenuLib.addMenu({
 				height = 25,
 				
 				name = "",
-				color = 13,
-				outline = 19,
+				color = 155,
+				outline = 159,
 				
 				pressFunc = function()
 					command_buf = "add mm_afkmode 1"
@@ -90,8 +90,8 @@ MenuLib.addMenu({
 				height = 25,
 				
 				name = "",
-				color = 13,
-				outline = 19,
+				color = 155,
+				outline = 159,
 				
 				pressFunc = function()
 					command_buf = "toggle mm_debug"

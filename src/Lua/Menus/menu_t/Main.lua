@@ -1,5 +1,6 @@
 local command_buf
 
+--buttons that handle cvars should be colored 155 with outline 159
 MenuLib.addMenu({
 	stringId = "MainMenu",
 	title = "Main Menu",
@@ -73,45 +74,22 @@ MenuLib.addMenu({
 			
 		})
 		
-		do
-			MenuLib.addButton(v, {
-				x = (props.corner_x + menu.width) - 5 - buttonwidth,
-				y = y + (menu.height - 40 - 25),
-				
-				width = buttonwidth,
-				height = 25,
-				
-				name = "",
-				color = 13,
-				outline = 19,
-				
-				pressFunc = function()
-					command_buf = "mm_spectatormode"
-				end,
-				
-			})
+		MenuLib.addButton(v, {
+			x = (props.corner_x + menu.width) - 5 - buttonwidth,
+			y = y + (menu.height - 40 - 25),
 			
-			v.drawString(
-				(props.corner_x + menu.width) - 5 - buttonwidth/2,
-				y + (menu.height - 40 - 25) + 2,
-				"Spectator Mode",
-				V_ALLOWLOWERCASE|V_YELLOWMAP,
-				"thin-center"
-			)
-			v.drawString(
-				(props.corner_x + menu.width) - 5 - buttonwidth/2,
-				y + (menu.height - 40 - 25) + 15,
-				consoleplayer.mm_save.afkmode and "On" or "Off",
-				V_ALLOWLOWERCASE,
-				"thin-center"
-			)
-		end
+			width = buttonwidth,
+			height = 25,
+			
+			name = "User Settings",
+			color = 13,
+			outline = 19,
+			
+			pressFunc = function()
+				MenuLib.initMenu(MenuLib.findMenu("UserSettings"))
+			end,
+			
+		})
+		
 	end
 })
-
-addHook("ThinkFrame",do
-	if command_buf
-		COM_BufInsertText(consoleplayer, command_buf)
-		command_buf = nil
-	end
-end)

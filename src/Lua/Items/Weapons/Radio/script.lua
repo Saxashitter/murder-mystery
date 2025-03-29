@@ -4,6 +4,22 @@ local mute = CV_RegisterVar({
 	PossibleValue = CV_YesNo
 })
 
+COM_AddCommand("mm_radiosong", function(p, str)
+	if not (str
+	and MMRadio.songs[str:lower()]) then
+		CONS_Printf(p, "Usage: mm_radiosong <songname>")
+		CONS_Printf(p, "Select a song to be played on your radio when dropped.")
+		CONS_Printf(p, "\x82".."Availiable songs:")
+		for k,v in pairs(MMRadio.songs) do
+			CONS_Printf(p, "* "..k)
+		end
+		return
+	end
+
+	p.mmradio_song = MMRadio.songs[str:lower()]
+	CONS_Printf(p, "Your radio song has been set to "..str:lower())
+end)
+
 local function is_in_dist(self, p)
 	local MAX_DIST = 500*FU
 	local dist = R_PointToDist2(self.x, self.y, p.mo.x, p.mo.y)

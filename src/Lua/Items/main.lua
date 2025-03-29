@@ -135,14 +135,17 @@ function MM:CreateItem(input_table)
 	for k,v in pairs(ITEM_DEF) do
 		if input_table[k] == nil
 		or type(input_table[k]) ~= type(ITEM_DEF[k]) then
-			if input_table[k] == nil then
-				print(tostring(k).." is nil. It has been corrected to the default property from ITEM_DEF.")
-				print("Ignore this notification unless you are the dev and know that something is wrong.")
-			else
-				print(tostring(k).." is not the same type as the default. It has been corrected to the default property from ITEM_DEF.")
+			--these are debugging messages, so only print if so
+			if (CV_MM.debug.value or devparm)
+				if input_table[k] == nil then
+					print(tostring(k).." is nil. It has been corrected to the default property from ITEM_DEF.")
+					print("Ignore this notification unless you are the dev and know that something is wrong.")
+				else
+					print(tostring(k).." is not the same type as the default. It has been corrected to the default property from ITEM_DEF.")
+				end
+				print("View pk3/Lua/Items/main.lua for more information.")
 			end
-			print("View pk3/Lua/Items/main.lua for more information.")
-
+			
 			input_table[k] = ITEM_DEF[k]
 		end
 	end

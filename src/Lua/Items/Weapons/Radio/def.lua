@@ -75,7 +75,7 @@ radio.droppable = true
 radio.droppable_clue = true
 radio.shootable = false
 radio.shootmobj = MT_THOK
-radio.allowdropmobj = false
+radio.allowdropmobj = true
 
 radio.drop = function(item,p,mobj)
 	if mobj and mobj.valid then
@@ -134,7 +134,12 @@ radio.dropthinker = function(mobj)
 	
 	for p in players.iterate do
 		if not (p and p.mo and p.mm) then continue end
-
+		
+		if p.mm.cur_listening
+		and not (p.mm.cur_listening.valid) then
+			p.mm.cur_listening = nil
+		end
+		
 		local play,dist = is_in_dist(mobj, p)
 		
 		if not play then continue end

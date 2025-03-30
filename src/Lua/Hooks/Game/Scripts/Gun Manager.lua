@@ -4,6 +4,15 @@ local roles = MM.require "Variables/Data/Roles"
 local lostgun = roles[MMROLE_SHERIFF].weapon or "revolver"
 
 local function _eligibleGunPlayer(p)
+	local hasfreeslot = false
+	local inv = p.mm.inventory
+	for i = 1, inv.count
+		if inv.items[i] == nil
+			hasfreeslot = true
+			break
+		end
+	end
+	
 	return p
 	and p.mo
 	and p.mo.valid
@@ -12,6 +21,7 @@ local function _eligibleGunPlayer(p)
 	and not p.mm.spectator
 	and p.mm.role ~= MMROLE_MURDERER
 	and not (p.mm.weapon and p.mm.weapon.valid)
+	and hasfreeslot
 end
 
 return function()

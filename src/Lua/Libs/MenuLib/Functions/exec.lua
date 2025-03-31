@@ -3,6 +3,12 @@ local path = MenuLib.root .. "Functions/Libs/"
 local tree = {
 	"clamp",
 	"interpolate",
+	
+	"keyHandler",
+	"newBufferID",
+	"startTextInput",
+	"stopTextInput",
+	
 	"addMenu",
 	"initMenu",
 	"findMenu",

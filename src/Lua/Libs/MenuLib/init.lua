@@ -98,6 +98,16 @@ MenuLib.client = {
 	--use this when detecting mouse presses
 	doMousePress = false,
 	mouseTime = -1,
+	
+	--text input stuff
+	textbuffer = nil,
+	textbuffer_id = nil,
+	textbuffer_funcs = {},
+	text_shiftdown = false,
+	text_ctrldown = false,
+	textbuffer_sfx = nil,
+	
+	commandbuffer = nil,
 }
 
 

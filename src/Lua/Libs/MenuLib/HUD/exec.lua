@@ -45,6 +45,9 @@ table.sort(ML.HUD.items, function(a,b)
 	return (a.id < b.id)
 end)
 
+local textinput_time = 0
+local textinput_tween = TICRATE/5
+local textinput_tweenfrac = FU / textinput_tween
 addHook("HUD",function(v)
 	ML.client.hovering = -1
 	ML.client.canPressSomething = false
@@ -70,5 +73,48 @@ addHook("HUD",function(v)
 		ML.interpolate(v, false)
 	end
 	
+	--text input
+	ML.interpolate(v, true)
+	if (ML.client.textbuffer ~= nil)
+		local boxwidth = (8*(32 + 1)) + 7
+		local x = (BASEVIDWIDTH - boxwidth)/2
+		local y = 80 + ease.outquad(
+			min(textinput_tweenfrac * textinput_time, FU),
+			320*FU, 0
+		) / FU
+		
+		local typestr = "Use your keyboard to type."
+		v.drawFill(x + 5,
+			y - 5,
+			v.stringWidth(typestr,0,"thin") + 6,
+			8+5, 159
+		)
+		v.drawString(x + 8,
+			y - 2,
+			typestr,
+			V_ALLOWLOWERCASE,
+			"thin"
+		)
+		
+		--text box
+		v.drawFill(x + 5,
+			y + 4 + 5,
+			boxwidth - 8,
+			8+6, 159
+		)
+		local blinking = (((4*leveltime)/TICRATE) & 1) and "_" or ""
+		if ML.client.textbuffer:len() == 32 then blinking = ""; end
+		v.drawString(x + 8,
+			y + 12 + 1,
+			ML.client.textbuffer .. blinking,
+			V_ALLOWLOWERCASE|V_6WIDTHSPACE,
+			"left"
+		)
+		
+		textinput_time = min($ + 1, textinput_tween + 1)
+	else
+		textinput_time = 0
+	end
+	ML.interpolate(v, false)
 end)
 

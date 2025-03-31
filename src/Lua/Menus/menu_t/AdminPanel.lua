@@ -1,5 +1,6 @@
 local buttonwidth = 65
 local buttonpad = buttonwidth + 5
+local buttonpad_h = 25 + 5
 
 MenuLib.addMenu({
 	stringId = "AdminPanel",
@@ -66,6 +67,9 @@ MenuLib.addMenu({
 		
 	end
 })
+
+local debug_command = ""
+local debug_commandid = MenuLib.newBufferID()
 
 MenuLib.addMenu({
 	stringId = "AdminPanel_Sub1",
@@ -162,6 +166,83 @@ MenuLib.addMenu({
 				MenuLib.client.commandbuffer = "mm_timeto0"
 			end,
 			
+		})
+		
+		--layer 2
+		MenuLib.addButton(v, {
+			x = x,
+			y = y + buttonpad_h,
+			
+			width = buttonwidth,
+			height = 25,
+			
+			name = "Storm Radius",
+			color = 13,
+			outline = 19,
+			
+			pressFunc = function()
+				ML.startTextInput(debug_command,debug_commandid,nil,function()
+					MenuLib.client.commandbuffer = "mm_stormradius "..ML.client.textbuffer
+					debug_command = ""
+				end, "\x86mm_stormradius <radius> <time>")				
+			end,
+		})
+		
+		MenuLib.addButton(v, {
+			x = x + buttonpad,
+			y = y + buttonpad_h,
+			
+			width = buttonwidth,
+			height = 25,
+			
+			name = "Set Role",
+			color = 13,
+			outline = 19,
+			
+			pressFunc = function()
+				ML.startTextInput(debug_command,debug_commandid,nil,function()
+					MenuLib.client.commandbuffer = "MM_MakeMeA "..ML.client.textbuffer
+					debug_command = ""
+				end, "\x86mm_makemea <role>")				
+			end,
+		})
+		
+		MenuLib.addButton(v, {
+			x = x + buttonpad*2,
+			y = y + buttonpad_h,
+			
+			width = buttonwidth,
+			height = 25,
+			
+			name = "Give Coins",
+			color = 13,
+			outline = 19,
+			
+			pressFunc = function()
+				ML.startTextInput(debug_command,debug_commandid,nil,function()
+					MenuLib.client.commandbuffer = "MM_GiveRings "..ML.client.textbuffer
+					debug_command = ""
+				end, "\x86mm_giverings <rings>")				
+			end,
+		})
+		
+		MenuLib.addButton(v, {
+			x = x + buttonpad*3,
+			y = y + buttonpad_h,
+			
+			width = buttonwidth,
+			height = 25,
+			
+			name = "Set Perks",
+			color = 13,
+			outline = 19,
+			
+			pressFunc = function()
+				ML.startTextInput(debug_command,debug_commandid,nil,function()
+					MenuLib.client.commandbuffer = "MM_SetPerk "..ML.client.textbuffer
+					debug_command = ""
+				end, "\x86mm_setperk <pri/sec> <name>")				
+			end,
 		})
 	end
 })

@@ -93,6 +93,7 @@ COM_AddCommand("MM_stormradius", function(p,dest,time)
 	local point = MM_N.storm_point
 	
 	if not (point and point.valid) then return end
+    if point.storm_radius == nil then return end
 	
 	dest = abs(tofixed($))
 	time = abs(tonumber($))
@@ -307,16 +308,15 @@ end, COM_ADMIN)
 COM_AddCommand("MM_RadioSong", function(p, str)
 	if not (str
 	and MMRadio.songs[str:lower()]) then
-		CONS_Printf(p, "Usage: mmradio_song <songname>")
+		CONS_Printf(p, "Usage: mm_radiosong <songname>")
 		CONS_Printf(p, "Select a song to be played on your radio when dropped.")
-		CONS_Printf(p, "")
-		CONS_Printf(p, "OPTIONS:")
+		CONS_Printf(p, "\x82".."Availiable songs:")
 		for k,v in pairs(MMRadio.songs) do
-			CONS_Printf(p, k)
+			CONS_Printf(p, "* "..k)
 		end
 		return
 	end
 
 	p.mmradio_song = MMRadio.songs[str:lower()]
-	CONS_Printf(p, "Song has been set to "..str:lower())
+	CONS_Printf(p, "Your radio song has been set to "..str:lower())
 end)

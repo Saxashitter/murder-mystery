@@ -13,31 +13,39 @@ states[freeslot "S_MM_RADIO"] = {
 MMRadio.songs = {
 	["macca"] = {
 		name = "RSONG1",
-		bpm = 150
+		bpm = 150,
+        --for menu
+        realname = "macca"
 	},
 	["portal"] = {
 		name = "RSONG2",
 		bpm = 120,
+        realname = "portal"
 	},
 	["fellas"] = {
 		name = "RSONG3",
 		bpm = 120,
+        realname = "fellas"
 	},
 	["tacos"] = {
 		name = "RSONG4",
-		bpm = 120
+		bpm = 120,
+        realname = "tacos"
 	},
 	["elevator"] = {
 		name = "RSONG5",
-		bpm = 120
+		bpm = 120,
+        realname = "elevator"
 	},
 	["sonicr"] = {
 		name = "RSONG6",
-		bpm = 120
+		bpm = 120,
+        realname = "sonicr"
 	},
 	["overtime"] = {
 		name = "RSONG7",
-		bpm = 149
+		bpm = 149,
+        realname = "overtime"
 	},
 }
 

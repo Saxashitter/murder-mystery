@@ -7,4 +7,5 @@ return function(buffer, id, onclose, onenter)
 	ML.client.textbuffer_id = nil
 	ML.client.textbuffer_funcs = {}
 	ML.client.textbuffer_sfx = nil
+	ML.client.textbuffer_tooltip = nil
 end

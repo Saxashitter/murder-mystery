@@ -99,13 +99,14 @@ MenuLib.client = {
 	doMousePress = false,
 	mouseTime = -1,
 	
-	--text input stuff
+	--text input stuff (messy)
 	textbuffer = nil,
 	textbuffer_id = nil,
 	textbuffer_funcs = {},
 	text_shiftdown = false,
 	text_ctrldown = false,
 	textbuffer_sfx = nil,
+	textbuffer_tooltip = nil,
 	
 	commandbuffer = nil,
 }

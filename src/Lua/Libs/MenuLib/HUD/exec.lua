@@ -111,6 +111,23 @@ addHook("HUD",function(v)
 			"left"
 		)
 		
+		if ML.client.textbuffer_tooltip ~= nil
+			local tip = ML.client.textbuffer_tooltip
+			
+			v.drawFill(x + 5,
+				y + 10 + (8+6),
+				v.stringWidth(tip,0,"thin") + 6,
+				8+5, 159
+			)
+			v.drawString(x + 8,
+				y + 27,
+				tip,
+				V_ALLOWLOWERCASE,
+				"thin"
+			)
+			
+		end
+		
 		textinput_time = min($ + 1, textinput_tween + 1)
 	else
 		textinput_time = 0

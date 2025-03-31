@@ -1,6 +1,6 @@
 local ML = MenuLib
 
-return function(buffer, id, onclose, onenter, typesound)
+return function(buffer, id, onclose, onenter, tooltip, typesound)
 	if ML.client.textbuffer_id ~= nil then return end
 	
 	ML.client.textbuffer = buffer
@@ -10,4 +10,5 @@ return function(buffer, id, onclose, onenter, typesound)
 		close = onclose,
 		enter = onenter
 	}
+	ML.client.textbuffer_tooltip = tooltip
 end

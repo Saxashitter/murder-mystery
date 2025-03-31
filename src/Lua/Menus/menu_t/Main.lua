@@ -1,5 +1,3 @@
-local command_buf
-
 --buttons that handle cvars should be colored 155 with outline 159
 MenuLib.addMenu({
 	stringId = "MainMenu",

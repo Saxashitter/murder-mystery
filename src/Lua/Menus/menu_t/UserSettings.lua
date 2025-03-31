@@ -1,4 +1,3 @@
-local command_buf
 local buttonwidth = 65
 local buttonpad = buttonwidth + 5
 
@@ -32,7 +31,7 @@ MenuLib.addMenu({
 				outline = 159,
 				
 				pressFunc = function()
-					command_buf = "mm_spectatormode"
+					MenuLib.client.commandbuffer = "mm_spectatormode"
 				end,
 				
 			})
@@ -71,7 +70,7 @@ MenuLib.addMenu({
 				outline = 159,
 				
 				pressFunc = function()
-					command_buf = "toggle mm_muteradio"
+					MenuLib.client.commandbuffer = "toggle mm_muteradio"
 				end,
 				
 			})
@@ -94,10 +93,3 @@ MenuLib.addMenu({
 		
 	end
 })
-
-addHook("ThinkFrame",do
-	if command_buf
-		COM_BufInsertText(consoleplayer, command_buf)
-		command_buf = nil
-	end
-end)

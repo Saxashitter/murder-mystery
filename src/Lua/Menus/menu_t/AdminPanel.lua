@@ -1,4 +1,3 @@
-local command_buf
 local buttonwidth = 65
 local buttonpad = buttonwidth + 5
 
@@ -28,7 +27,7 @@ MenuLib.addMenu({
 				outline = 159,
 				
 				pressFunc = function()
-					command_buf = "add mm_afkmode 1"
+					MenuLib.client.commandbuffer = "add mm_afkmode 1"
 				end,
 				
 			})
@@ -94,7 +93,7 @@ MenuLib.addMenu({
 				outline = 159,
 				
 				pressFunc = function()
-					command_buf = "toggle mm_debug"
+					MenuLib.client.commandbuffer = "toggle mm_debug"
 				end,
 				
 			})
@@ -126,7 +125,7 @@ MenuLib.addMenu({
 			outline = 19,
 			
 			pressFunc = function()
-				command_buf = "mm_endgame"
+				MenuLib.client.commandbuffer = "mm_endgame"
 			end,
 			
 		})
@@ -143,7 +142,7 @@ MenuLib.addMenu({
 			outline = 19,
 			
 			pressFunc = function()
-				command_buf = "mm_startshowdown"
+				MenuLib.client.commandbuffer = "mm_startshowdown"
 			end,
 			
 		})
@@ -160,16 +159,9 @@ MenuLib.addMenu({
 			outline = 19,
 			
 			pressFunc = function()
-				command_buf = "mm_timeto0"
+				MenuLib.client.commandbuffer = "mm_timeto0"
 			end,
 			
 		})
 	end
 })
-
-addHook("ThinkFrame",do
-	if command_buf
-		COM_BufInsertText(consoleplayer, command_buf)
-		command_buf = nil
-	end
-end)

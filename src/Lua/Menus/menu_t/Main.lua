@@ -1,4 +1,6 @@
 --buttons that handle cvars should be colored 155 with outline 159
+--buttons that open text prompts should probably have a different color?
+
 MenuLib.addMenu({
 	stringId = "MainMenu",
 	title = "Main Menu",

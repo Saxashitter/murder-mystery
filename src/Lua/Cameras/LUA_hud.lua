@@ -128,6 +128,12 @@ local function HUD_DrawCamera(v,p)
 			v.stringWidth("[Spin] - Exit",0,"thin")
 		)
 		
+		v.drawFill(160 - (back/2 + 2),
+			158,
+			back+4, 30,
+			31|V_50TRANS
+		)
+		/*
 		v.drawStretched(160*FU - (back/2 + 2)*FU,
 			158*FU,
 			(back+4)*FU,
@@ -135,6 +141,7 @@ local function HUD_DrawCamera(v,p)
 			v.cachePatch("1PIXEL"),
 			V_50TRANS
 		)
+		*/
 		
 		v.drawString(160,160,
 			camname,

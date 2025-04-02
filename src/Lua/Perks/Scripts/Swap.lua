@@ -13,6 +13,7 @@ end)
 
 MM_PERKS[MMPERK_SWAP] = {
 	icon = "MM_PI_SWAP",
+	icon_scale = FU/2,
 	name = perk_name,
 
 	description = {

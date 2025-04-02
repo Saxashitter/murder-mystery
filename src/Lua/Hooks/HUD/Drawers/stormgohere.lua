@@ -36,4 +36,8 @@ local function HUD_DrawGoHere(v,p,c)
 	
 end
 
-return HUD_DrawGoHere
+return function(v,p,c)
+	MMHUD.interpolate(v,true)
+	HUD_DrawGoHere(v,p,c)
+	MMHUD.interpolate(v,false)
+end

@@ -1,10 +1,6 @@
 --i swear we had this before...
 local sglib = MM.require "Libs/sglib"
 
-local function interpolate(v,set)
-	if v.interpolate ~= nil then v.interpolate(set) end
-end
-
 local function wrap(v,p,c)
 	if not (p.mo and p.mo.valid) then return end
 	if (p.spectator) then return end
@@ -44,9 +40,9 @@ local function wrap(v,p,c)
 end
 
 local function HUD_DrawGoHere(v,p,c)
-	interpolate(v,true)
+	MMHUD.interpolate(v,true)
 	wrap(v,p,c)
-	interpolate(v,false)
+	MMHUD.interpolate(v,false)
 end
 
 return HUD_DrawGoHere

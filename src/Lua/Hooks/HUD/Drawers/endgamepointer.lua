@@ -88,4 +88,8 @@ local function HUD_EndGameDrawer(v,p,c)
 	
 end
 
-return HUD_EndGameDrawer
+return function(v,p,c)
+    MMHUD.interpolate(v,true)
+    HUD_EndGameDrawer(v,p,c)
+    MMHUD.interpolate(v,false)
+end

@@ -82,11 +82,14 @@ MMHUD.menus.drawPerkItem = function(v, x,y, perk, nofunc)
 		
 	})
 	
+	--dont interpolate this
+	MenuLib.interpolate(v,false)
 	v.drawScaled(x*FU, y*FU,
 		perk_t.icon_scale or FU,
 		v.cachePatch(perk_t.icon),
 		0
 	)
+	
 	if not nofunc
 		local this_itemid = perkid_to_itemid[perk]
 		if (consoleplayer.mm_save.purchased[this_itemid] == true)

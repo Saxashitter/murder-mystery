@@ -1,9 +1,6 @@
 local perk_name = "X-Ray"
 local perk_price = 525 --1500
 
-local function interpolate(v,set)
-	if v.interpolate ~= nil then v.interpolate(set) end
-end
 local cv_fov = CV_FindVar("fov")
 local sglib = MM.require "Libs/sglib"
 
@@ -66,7 +63,7 @@ MM_PERKS[MMPERK_XRAY] = {
 			local patch = v.cachePatch("MM_SHOWDOWNMARK")
 			local w2s = sglib.ObjectTracking(v, p, cam, play.mo)
 
-			interpolate(v,#play)
+			MMHUD.interpolate(v,#play)
 			v.drawScaled(
 				w2s.x,
 				w2s.y,
@@ -75,10 +72,10 @@ MM_PERKS[MMPERK_XRAY] = {
 				0,
 				v.getColormap(nil, play.skincolor)
 			)
-			interpolate(v,false)
+			MMHUD.interpolate(v,false)
 			
 		end
-		interpolate(v,false)
+		MMHUD.interpolate(v,false)
 	end,
 
 	icon = "MM_PI_XRAY",

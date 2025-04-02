@@ -1,7 +1,7 @@
 local sglib = MM.require "Libs/sglib"
 local int_ease = MM.require "Libs/int_ease"
 
-return function(v,p,c)
+local function HUD_Wrap(v,p,c)
 	if not MM_N.showdown then
 		return
 	end
@@ -19,15 +19,18 @@ return function(v,p,c)
 			
 			local icon = v.cachePatch("MM_SHOWDOWNMARK") --v.getSprite2Patch(player.skin, SPR2_LIFE, false, A, 0)
 			local to_screen = sglib.ObjectTracking(v,p,c,player.mo)
-
+			
 			if not to_screen.onScreen then continue end
-
+			
 			local dist = R_PointToDist2(c.x, c.y, player.mo.x, player.mo.y)
 			local t = max(0, min(FixedDiv(dist, 1500*FU), FU))
 			local trans = int_ease(t, 10, 0)
-
+			
 			if trans == 10 << V_ALPHASHIFT then continue end
+			
+			MMHUD.interpolate(v,#player)
 			v.drawScaled(to_screen.x, to_screen.y, (FU/4), icon, (trans*V_10TRANS), v.getColormap(nil, player.mo.color))
+			MMHUD.interpolate(v,false)
 		end
 		return
 	end
@@ -41,4 +44,10 @@ return function(v,p,c)
 	local dist = R_PointToDist2(c.x, c.y, player.mo.x, player.mo.y)
 	local t = max(0, min(FixedDiv(dist, 1500*FU), FU))
 	local trans = int_ease(t, 10, 0) */
+end
+
+return function(v,p,c)
+	--MMHUD.interpolate(v,true)
+	HUD_Wrap(v,p,c)
+	MMHUD.interpolate(v,false)
 end

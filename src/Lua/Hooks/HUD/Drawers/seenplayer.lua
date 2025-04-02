@@ -5,10 +5,6 @@ local draw_tag = ""
 local g_seenplayer
 local tics = 0
 
-local function interpolate(v,set)
-	if v.interpolate ~= nil then v.interpolate(set) end
-end
-
 addHook("SeenPlayer", function(player, seenplayer)
 	if not MM:isMM() then return end
 
@@ -82,7 +78,7 @@ local function DrawSeeName(v,p,c)
 end
 
 return function(v,p,c)
-	interpolate(v,true)
+	MMHUD.interpolate(v,true)
 	DrawSeeName(v,p,c)
-	interpolate(v,false)
+	MMHUD.interpolate(v,false)
 end

@@ -96,6 +96,10 @@ local hudwasmm = false
 local modname = "SAXAMM"
 MMHUD.modname = modname
 
+MMHUD.interpolate = function(v,set)
+	if v.interpolate ~= nil then v.interpolate(set) end
+end
+
 local function addHud(name)
 	local func,hudtype,layer = dofile("Hooks/HUD/Drawers/"..name)
 

@@ -13,6 +13,9 @@ return function(v,p,c)
 		local trans = V_10TRANS*int_ease(FixedDiv(pos.time, pos.maxtime), 10, 4)
 		if trans == 10 then return end
 
+        MMHUD.interpolate(v,k)
 		v.drawScaled(to_screen.x, to_screen.y, to_screen.scale, thok_sprite, trans, v.getColormap(nil, SKINCOLOR_RED))
-	end
+        MMHUD.interpolate(v,false)
+    end
+    MMHUD.interpolate(v,false)
 end

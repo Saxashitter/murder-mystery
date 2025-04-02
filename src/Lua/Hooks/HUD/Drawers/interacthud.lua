@@ -3,10 +3,6 @@ local TR = TICRATE
 local sglib = MM.require("Libs/sglib")
 local shallowCopy = MM.require "Libs/shallowCopy"
 
-local function interpolate(v,set)
-	if v.interpolate ~= nil then v.interpolate(set) end
-end
-
 local buttontotext = {
 	[BT_CUSTOM1] = "C1",
 	[BT_CUSTOM2] = "C2",
@@ -29,7 +25,7 @@ local function HUD_InteractDrawer(v,p,cam)
 		return not MM.sortInteracts(p,a,b)
 	end)
 	
-	interpolate(v,true)
+    MMHUD.interpolate(v,true)
 	for k,inter in ipairs(placehold_inter)
 		local mo = inter.mo
 		if not (mo and mo.valid) then mo = inter.backup end
@@ -151,7 +147,7 @@ local function HUD_InteractDrawer(v,p,cam)
 		end
 		
 	end
-	interpolate(v,false)
+	MMHUD.interpolate(v,false)
 	
 end
 return HUD_InteractDrawer

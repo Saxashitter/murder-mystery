@@ -1,6 +1,6 @@
-# Saxa's Murder Mystery
+# EPIC! Murder Mystery
 
-Saxa's Murder Mystery is a combination of multiple different Murder Mystery modes from other games, all added into SRB2, with help from a few devs (Jisk, luigi budd, Unmatched Bracket)
+EPIC! Murder Mystery is a combination of multiple different Murder Mystery modes from other games, all added into SRB2, with help from a few devs (Jisk, luigi budd, Unmatched Bracket)
 
 Our main inspiration is ROBLOX's Murder Mystery 2, and we aim to make the mode mostly similar to it.
 
@@ -64,6 +64,8 @@ Build and test the newly built pk3:
 ```
 make buildrunlinux
 ```
+
+( You can also download the src, extract it, put it in your addons/ folder, and use the addfolder command to load it (ex. "addfolder addons/murder-mystery/src" )
 
 ## How can I help?
 If you can code or do art, hit us up at our Discord server (linked below) or hit up one of the main devs!

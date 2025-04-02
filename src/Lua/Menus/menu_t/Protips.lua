@@ -13,6 +13,10 @@ MenuLib.addMenu({
 		x = $ + 5
 		y = $ + 20
 		
-		v.drawString(160,100,"git gud",V_ALLOWLOWERCASE,"center")
+		v.drawString(160,86,"Please refer to the",V_ALLOWLOWERCASE,"center")
+		v.drawString(160,94," Message Board page.",V_ALLOWLOWERCASE,"center")
+		
+		
+		v.drawString(160,105,"<<link>>",V_YELLOWMAP|V_ALLOWLOWERCASE,"center")
 	end
 })

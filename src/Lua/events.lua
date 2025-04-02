@@ -61,10 +61,10 @@
 			- Return value: Boolean (don't hit target?, nil = use default behavior)
 			
 		* "CreateAlias", function(player_t player, table alias)
-			Executes when the Uno Reverse creates an alias of "player" when swapped with someone.
+			Executes when the Body Swap Potion creates an alias of "player" when swapped with someone.
 			
 		* "ApplyAlias", function(player_t player, table alias)
-			Executes when the Uno Reverse applies an alias for "player" when swapping with someone.
+			Executes when the Body Swap Potion applies an alias for "player" when swapping with someone.
 			
 */
 

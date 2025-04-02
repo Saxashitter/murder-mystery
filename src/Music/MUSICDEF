@@ -1,29 +1,58 @@
 Lump CHALNG
-Title = Bring_it_on!
+Title = Bring_It_On!
 Soundtestpage = 1
 Soundtestcond = 0
-Stoppingtime = 5000
+Stoppingtime = 5
+BPM = 112
 
 Lump SHWDW1
 Title = It's_a_Showdown!
 Alttitle = Showdown_1
 Soundtestpage = 1
 Soundtestcond = 0
+BPM = 150
 
 Lump SHWDW2
 Title = It's_a_Showdown!
 Alttitle = Showdown_2
 Soundtestpage = 1
 Soundtestcond = 0
+BPM = 207.858
 
 Lump SHWDW3
 Title = It's_a_Showdown!
 Alttitle = Showdown_3
 Soundtestpage = 1
 Soundtestcond = 0
+BPM = 200
 
 Lump MMTF2O
 Title = Sniper_Approved.
 Alttitle = TF2_Theme
+Soundtestpage = 1
+Soundtestcond = 0
+
+Lump MANS2M
+Title = Mansion
+Soundtestpage = 1
+Soundtestcond = 0
+
+Lump MAPH2M
+Title = House
+Soundtestpage = 1
+Soundtestcond = 0
+
+Lump MILBSM
+Title = Mil_Base
+Soundtestpage = 1
+Soundtestcond = 0
+
+Lump MMSHIP
+Title = Seaegg
+Soundtestpage = 1
+Soundtestcond = 0
+
+Lump SSWAMP
+Title = Swamili_Swamp
 Soundtestpage = 1
 Soundtestcond = 0

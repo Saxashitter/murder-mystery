@@ -1,22 +1,32 @@
-TODO: Discord tags too?
-
 Dev. Team:
-- 
+- Saxashitter		- creator, retired
+- luigi budd		- lead developer 1, mapper (guess who wrote these)
+- Jisk				- lead developer 2, mapper
+- UnmatchedBracket	- assistant developer
+- Pacola			- assistant developer
+- GLideKS			- spriter, mapper
+- Lemerksiscool		- mapper
+- Pyrodiac			- mapper
+- And everyone who playtested and contributed to our GitHub <3
 
 Maps:
-- Mansion - luigi budd
+- Mansion				- luigi budd
     (Murder Mystery painting by cofterinthecoffe)
-- Mil Base - luigi budd
-- Flooded Industries - GLideKS
-- House - Lemerksiscool
-- Seaegg - Pyrodiac
-- Swamili Swamp - Pyrodiac
-- Frozen Creek - Jisk
+- Mil Base				- luigi budd
+- Flooded Industries	- GLideKS
+- House					- Lemerksiscool
+- Seaegg				- Pyrodiac
+- Swamili Swamp			- Pyrodiac
+- Frozen Creek			- Jisk
 
 Sprites:
-- Camera body, Clues, Weapons (shotgun, knife, luger, revolver, sword, uno reverse) - GLideKS
+- Camera body, Clues, Weapons (shotgun, knife, luger, revolver, sword) - GLideKS
+- Body Swap Potion - normalcate
 - Tripmine body, minor sprites - luigi budd
 - Knife/Sword whiff - instashield by pastel
+
+Sound Effects:
+- Roblox, Fortnite, Minecraft, other sources...
 
 Music:
 - Mansion BGM: "Wii Shop Channel if it was made by Casiopea"
@@ -33,4 +43,8 @@ Music:
 - It's a Showdown! (3): "FINAL 80 HARDCORE (YCR Ver.)"
 ( https://www.youtube.com/watch?v=-6M1G6O7K_c )
 
-WIP
+- Bring It On!: Shorted version of "Sonic 3: Mini Boss"
+
+- Sniper Approved.: "Team Fortress 2 Theme"
+
+- Radio Songs: various sources

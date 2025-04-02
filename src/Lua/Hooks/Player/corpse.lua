@@ -245,7 +245,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		corpse.fuse = -1
 		corpse.shadowscale = target.shadowscale
 		corpse.radius = target.radius
-		corpse.translation = "MM_HudShadow"
+		corpse.translation = "Grayscale"
 		--corpses dont have colormaps?
 		corpse.renderflags = $|RF_SEMIBRIGHT
 		

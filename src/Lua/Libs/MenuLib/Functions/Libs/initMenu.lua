@@ -57,12 +57,14 @@ return function(id)
 	end
 	
 	if id ~= -1
+		--dont open the same menu more than once
+		if ML.client.currentMenu.id == id then return end
+		
 		table.insert(ML.client.currentMenu.layers, ML.client.currentMenu.id)
 		local this_menu = ML.menus[id]
 		if (this_menu.init ~= nil)
 			this_menu.init(IR_INITMENU)
 		end
-		
 	--go backwards
 	else
 		--there is NOT an available submenu before this one, so exit

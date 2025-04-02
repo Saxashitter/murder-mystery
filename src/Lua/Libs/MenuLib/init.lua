@@ -70,7 +70,7 @@ enumflags("IR_", {
 }, "enum")
 
 MenuLib.VERSION = 005
-MenuLib.SUBVERSION = 5
+MenuLib.SUBVERSION = 6
 --dont forget the ending "/" (and "debug" from the file tree below!)
 MenuLib.root = "Libs/MenuLib/"
 

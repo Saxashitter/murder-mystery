@@ -1,12 +1,20 @@
+
+<p align="center">
+  
+  ![EPIC murder mystery](https://github.com/user-attachments/assets/c4b9a689-9a81-4176-87a8-02ab4766004f)
+  
+</p>
+
+
 # EPIC! Murder Mystery
 
 EPIC! Murder Mystery is a combination of multiple different Murder Mystery modes from other games, all added into SRB2, with help from a few devs (Jisk, luigi budd, Unmatched Bracket)
 
 Our main inspiration is ROBLOX's Murder Mystery 2, and we aim to make the mode mostly similar to it.
 
-[If you want a more simple, but unique project. Check out **Leo's Murder Mystery**](https://github.com/LeonardoTheMutant/SRB2-Murder-Mystery)
+[If you want a more simple, but unique project, check out **Leo's Murder Mystery**](https://github.com/LeonardoTheMutant/SRB2-Murder-Mystery)
 
-This mode is 100% re-usable.
+This mode is 100% reusable.
 
 ## How to build it?
 

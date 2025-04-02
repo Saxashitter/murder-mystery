@@ -12,8 +12,6 @@ EPIC! Murder Mystery is a combination of multiple different Murder Mystery modes
 
 Our main inspiration is ROBLOX's Murder Mystery 2, and we aim to make the mode mostly similar to it.
 
-[If you want a more simple, but unique project, check out **Leo's Murder Mystery**](https://github.com/LeonardoTheMutant/SRB2-Murder-Mystery)
-
 This mode is 100% reusable.
 
 ## How to build it?

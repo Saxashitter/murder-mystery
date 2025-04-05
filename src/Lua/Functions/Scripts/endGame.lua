@@ -59,6 +59,14 @@ return function(self, endType)
 	if (MM_N.waiting_for_players) then return end
 	if (MM:pregame()) then return end
 	
+	--this makes me sad
+	local sheriff = 
+		((MM_N.end_killed and MM_N.end_killed.valid and MM_N.end_killed.player and MM_N.end_killed.player.mm.role == MMROLE_MURDERER)
+			and not (MM_N.end_killer and MM_N.end_killer.valid and MM_N.end_killer.health)
+		)
+		and MM_N.end_killed
+		or MM_N.end_killer
+			
 	--pay people rings
 	for p in players.iterate
 		if not (p.mm) then continue end
@@ -68,14 +76,7 @@ return function(self, endType)
 		local payout = 0
 		local reason = ""
 		
-		if (p.mm.role == MMROLE_INNOCENT)
-			local percent = FixedDiv(
-				min(p.mm.timesurvived, MM_N.maxtime)*FU, MM_N.maxtime*FU
-			)
-			reason = "surviving "..(p.mm.timesurvived/TICRATE).." seconds"
-			payout = FixedFloor(FixedMul(75*FU, percent))
-			payout = ease.outsine(FU/3, $, 75*FU)>> FRACBITS
-		elseif (p.mm.role == MMROLE_MURDERER)
+		if (p.mm.role == MMROLE_MURDERER)
 			--dont get paid if you suck at the game
 			if (MM_N.peoplekilled >= MM_N.minimum_killed)
 				local percent = FixedDiv(
@@ -88,8 +89,9 @@ return function(self, endType)
 				payout = FixedFloor(FixedMul(amount, percent)) >> FRACBITS
 			end
 			
-		--TODO: heroes
-		elseif (p.mm.role == MMROLE_SHERIFF)
+		elseif sheriff == p.mo
+		--leech off of your teammate!
+		or (p.mm.role == MMROLE_SHERIFF)
 			local percent = FixedDiv(
 				(MM_N.numbertokill - min(MM_N.peoplekilled, MM_N.numbertokill))*FU, MM_N.numbertokill*FU
 			)
@@ -98,6 +100,13 @@ return function(self, endType)
 			
 			--gotta be alive tho
 			payout = (not p.spectator) and $ or 0
+		else --if (p.mm.role == MMROLE_INNOCENT)
+			local percent = FixedDiv(
+				min(p.mm.timesurvived, MM_N.maxtime)*FU, MM_N.maxtime*FU
+			)
+			reason = "surviving "..(p.mm.timesurvived/TICRATE).." seconds"
+			payout = FixedFloor(FixedMul(75*FU, percent))
+			payout = ease.outsine(FU/3, $, 75*FU)>> FRACBITS
 		end
 		
 		if payout ~= 0

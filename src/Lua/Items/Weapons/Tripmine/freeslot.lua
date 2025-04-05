@@ -517,7 +517,7 @@ addHook("TouchSpecial",function(mine,me)
 	
 	--dont kill our teammates lol
 	if (p.mm.role == MMROLE_MURDERER
-	and mine.tracer.player.mm.role == MMROLE_MURDERER)
+	and mine.tracer and mine.tracer.player.mm.role == MMROLE_MURDERER)
 	and (me ~= mine.tracer)
 		mine.health = mine.info.spawnhealth
 		mine.flags = $|MF_SPECIAL|MF_SOLID

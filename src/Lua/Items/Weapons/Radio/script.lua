@@ -20,12 +20,17 @@ end
 
 local function manage_music(self, p)
 	local song = self.song or MMRadio.songs["macca"]
-
-	if not (p
-	and p.mo
-	and p.mo.health
-	and p.mm
-	and not p.mm.spectator) then
+	
+	local applymusic = false
+	if (p and p.mo and p.mo.health
+	and p.mm and not p.mm.spectator)
+		applymusic = true
+	end
+	if MM_N.gameover
+		applymusic = false
+	end
+	
+	if not (applymusic) then
 		P_RestoreMusic(p)
 		if p.mm then
 			p.mm.cur_listening = nil

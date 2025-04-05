@@ -7,7 +7,10 @@ local mute = CV_RegisterVar({
 local function is_in_dist(self, p)
 	local MAX_DIST = 500*FU
 	local dist = R_PointToDist2(self.x, self.y, p.mo.x, p.mo.y)
-
+	
+	--?
+	if not p.mo.health then return false; end
+	
 	if dist <= MAX_DIST then
 		return true, FixedDiv(dist, MAX_DIST)
 	end
@@ -42,13 +45,13 @@ local function manage_music(self, p)
 
 	local volume = ease.linear(dist, 100, 0)
 
-	if p == displayplayer
+	if p == consoleplayer
 	and S_MusicName() ~= song.name
 	and not (mute.value) then
 		S_ChangeMusic(song.name, true, p)
 	end
 
-	if p == displayplayer then
+	if p == consoleplayer then
 		if not (mute.value) then
 			S_SetInternalMusicVolume(volume)
 		end

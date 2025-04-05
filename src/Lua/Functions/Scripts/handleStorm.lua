@@ -179,8 +179,13 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist)
 		*/
 	end
 	
+	if MM_N.gameover
+		laser.spritexscale = max($ - FU/50, 0)
+	end
+	
 	if (leveltime % 6 == 0)
 	and not debug
+	and not MM_N.gameover
 		local fake_scale = scale
 		if (scale > FU)
 			fake_scale = max(0, $-FU)
@@ -267,6 +272,7 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist)
 	
 	--okay ig... there could be a better way to do this
 	if not S_SoundPlaying(laser,sfx_laser)
+	and not MM_N.gameover
 		S_StartSound(laser,sfx_laser)
 	end
 end
@@ -495,6 +501,8 @@ return function(self)
 	local dist = point.storm_radius
 	FXHandle(point,dist)
 	
+	if MM_N.gameover then return end
+	
 	for p in players.iterate
 		if not p.mm then continue end
 		if p.spectator
@@ -537,7 +545,7 @@ return function(self)
 
 	if point.storm_radius ~= point.storm_destradius then return end
 	if point.otherpoints == nil or #point.otherpoints < 2 then return end
-		
+	
 	if point.movecooldown ~= nil
 		if point.movecooldown
 			point.movecooldown = $-1

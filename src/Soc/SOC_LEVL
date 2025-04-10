@@ -64,7 +64,7 @@ Lua.MM_StormTimer_Grace = 10
 #@glideks
 Level FI
 LevelName = Flood Industries
-Music = MP_RAI
+Music = FLDIND
 NextLevel = FI
 SkyNum = 20
 TypeOfLevel = SaxaMM

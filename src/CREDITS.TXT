@@ -1,34 +1,34 @@
-Dev. Team:
-- Saxashitter		- creator, retired
-- luigi budd		- lead developer 1, mapper (guess who wrote these)
-- Jisk				- lead developer 2, mapper
-- UnmatchedBracket	- assistant developer
-- Pacola			- assistant developer
-- GLideKS			- spriter, mapper
-- Lemerksiscool		- mapper
-- Pyrodiac			- mapper
-- And everyone who playtested and contributed to our GitHub <3
+---------------Dev. Team---------------
+- Saxashitter		- Creator (Retired)
+- Luigi Budd		- Lead developer 1, mapper (guess who wrote these)
+- Jisk				- Lead developer 2, mapper
+- UnmatchedBracket	- Assistant developer
+- Pacola			- Assistant developer
+- GLide KS			- Spriter, Mapper
+- Lemerksiscool		- Mapper
+- Pyrodiac			- Mapper
+- And everyone who playtested and contributed to our GitHub. <3
 
-Maps:
-- Mansion				- luigi budd
+------------------Maps-----------------
+- Mansion				- Luigi Budd
     (Murder Mystery painting by cofterinthecoffe)
-- Mil Base				- luigi budd
-- Flooded Industries	- GLideKS
+- Mil Base				- Luigi Budd
+- Flooded Industries	- GLide KS
 - House					- Lemerksiscool
 - Seaegg				- Pyrodiac
 - Swamili Swamp			- Pyrodiac
 - Frozen Creek			- Jisk
 
-Sprites:
-- Camera body, Clues, Weapons (shotgun, knife, luger, revolver, sword) - GLideKS
-- Body Swap Potion - normalcate
-- Tripmine body, minor sprites - luigi budd
-- Knife/Sword whiff - instashield by pastel
+-----------------Sprites---------------
+- Camera body, Clues, Weapons (Shotgun, Knife, Luger, Revolver, Sword, Bear trap), Items (Loudspeaker, Radio) - GLideKS
+- Body Swap Potion - NormalCate
+- Tripmine body, minor sprites - Luigi Budd
+- Knife/Sword whiff - insta-shield by Pastel
 
-Sound Effects:
+--------------Sound Effects------------
 - Roblox, Fortnite, Minecraft, other sources...
 
-Music:
+------------------Music----------------
 - Mansion BGM: "Wii Shop Channel if it was made by Casiopea"
 ( https://youtu.be/bTMLW4WgySk?si=jAWY7DwUrTD2f3Hy )
 

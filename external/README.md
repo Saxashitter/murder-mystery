@@ -9,7 +9,11 @@ Also includes characters that has been edited with permission of the original cr
 # Credits
 
 Murder Map Pack - GLide KS, Jisk
+
 ZE1 Swarm Map Pack - GLide KS
+
 MMRadio - Saxashitter, GLide KS
+
 Epic MM Model Pack - GLide KS
+
 LeoTM MM Maps - LeoTM, respective map creators

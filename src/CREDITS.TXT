@@ -1,6 +1,6 @@
 ---------------Dev. Team---------------
 - Saxashitter		- Creator (Retired)
-- Luigi Budd		- Lead developer 1, mapper (guess who wrote these)
+- luigi budd		- Lead developer 1, mapper (guess who wrote these)
 - Jisk				- Lead developer 2, mapper
 - UnmatchedBracket	- Assistant developer
 - Pacola			- Assistant developer
@@ -10,9 +10,9 @@
 - And everyone who playtested and contributed to our GitHub. <3
 
 ------------------Maps-----------------
-- Mansion				- Luigi Budd
+- Mansion				- luigi budd
     (Murder Mystery painting by cofterinthecoffe)
-- Mil Base				- Luigi Budd
+- Mil Base				- luigi budd
 - Flooded Industries	- GLide KS
 - House					- Lemerksiscool
 - Seaegg				- Pyrodiac
@@ -22,7 +22,7 @@
 -----------------Sprites---------------
 - Camera body, Clues, Weapons (Shotgun, Knife, Luger, Revolver, Sword, Bear trap), Items (Loudspeaker, Radio) - GLideKS
 - Body Swap Potion - NormalCate
-- Tripmine body, minor sprites - Luigi Budd
+- Tripmine body, minor sprites - luigi budd
 - Knife/Sword whiff - insta-shield by Pastel
 
 --------------Sound Effects------------

@@ -42,7 +42,7 @@ local function V_DrawBox(props)
 
 	if selected then
 		local yoffset = 0
-		local cmap = v.getColormap(TC_RAINBOW,SKINCOLOR_SILVER)
+		local cmap = v.getColormap(nil,nil,"Grayscale")
 		if not inv.hidden
 			if item
 				local cd = item.cooldown

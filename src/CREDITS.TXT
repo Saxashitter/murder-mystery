@@ -35,6 +35,8 @@
 - MilBase BGM: Mix of songs from "The Henry Stickmin Collection"
 ( "Toppat Launch Site", "Preparations Interrupted")
 
+- Flooded Industries BGM: "Tempest Valley Zone, by Malcolm Brown - Remastered by A.J. Freda"
+
 - It's a Showdown! (1): ???
 
 - It's a Showdown! (2): "Mustache Girl EX"

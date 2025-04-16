@@ -100,7 +100,12 @@ return function(self, endType)
 			
 			--gotta be alive tho
 			payout = (not p.spectator) and $ or 0
-		else --if (p.mm.role == MMROLE_INNOCENT)
+			
+		--INNOCENTS
+		else
+			--nice going moron
+			if p.mm.timesurvived == 0 then continue end
+			
 			local percent = FixedDiv(
 				min(p.mm.timesurvived, MM_N.maxtime)*FU, MM_N.maxtime*FU
 			)

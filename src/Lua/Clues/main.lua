@@ -233,9 +233,8 @@ MM:addPlayerScript(function(p)
 					if p.mm.role ~= MMROLE_MURDERER -- Don't let other people pick up your hard work!
 						if not item.droppable_clue then
 							item.droppable = false
+							item.allowdropmobj = false
 						end
-						
-						item.allowdropmobj = false
 					end
 				end
 

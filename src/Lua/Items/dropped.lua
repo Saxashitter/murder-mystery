@@ -23,7 +23,7 @@ local Pickup_Interaction = MM.addInteraction(function(p,mobj)
 		if def.postpickup then
 			def.postpickup(item, p)
 		end
-
+		
 		P_RemoveMobj(mobj)
 		return true
 	end
@@ -141,7 +141,6 @@ function MM:DropItem(p, slot, randomize, dont_notify, forced)
 		mobj.dropid = #MM.DroppedMobjs + 1
 		
 		table.insert(MM.DroppedMobjs, mobj)
-		
 	end
 	if def.drop then
 		def.drop(item, p, mobj /*the dropped pickup*/)

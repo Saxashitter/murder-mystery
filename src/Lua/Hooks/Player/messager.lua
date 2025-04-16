@@ -117,16 +117,19 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	
 	local dist = R_PointToDist2(consoleplayer.mo.x, consoleplayer.mo.y,
 		src.mo.x,
-		src.mo.y)
-
+		src.mo.y
+	)
+	
+	/*
 	if not P_CheckSight(consoleplayer.mo, src.mo)
 	and dist >= 192*FU then
 		if dist > (3000*FU)/4 then return true end
-
+		
 		chatprint("\x86You can hear faint talking through the walls...", true)
 		return true
 	end
-
+	*/
+	
 	if dist > 3000*FU then
 		return true
 	end

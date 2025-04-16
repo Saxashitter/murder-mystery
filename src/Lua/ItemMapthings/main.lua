@@ -2,7 +2,7 @@ freeslot "MT_MM_ITEMSPAWN"
 
 mobjinfo[MT_MM_ITEMSPAWN] = {
 	--$Name Item Spawner
-	--$Sprite UNKNB0
+	--$Sprite RVOLA2A8
 	--$Category SaxaMM
 	--$NotAngled
 	--$StringArg0 Item ID
@@ -10,7 +10,7 @@ mobjinfo[MT_MM_ITEMSPAWN] = {
 	--$Arg0 Price
 	--$Arg0Default 0
 	--$Arg0Type 0
-	--$Arg0Tooltip How many rings does this interaction cost?\nIf the player doesn't have enough rings, the interaction will fail. 
+	--$Arg0Tooltip How many coins does this item cost to pick up?\nIf the player doesn't have enough coins, the item stays in place. 
 	flags = MF_NOGRAVITY|MF_NOBLOCKMAP,
 	radius = 16*FRACUNIT,
 	height = 32*FRACUNIT,

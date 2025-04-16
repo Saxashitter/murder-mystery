@@ -16,7 +16,7 @@ local buttontotext = {
 local function HUD_InteractDrawer(v,p,cam)
 	if (p.mm.interact == nil) then return end
 	if (p.spectator) then return end
-	if (p.awayviewmobj and p.awayviewmobj.dontdrawinteract) then return end
+	if (p.awayviewmobj and p.awayviewmobj.valid and p.awayviewmobj.dontdrawinteract) then return end
 	if (MM.gameover) then return end -- If the game is over, we dont care about seeing interaction.
 	
 	--Re-sort so inactive widgets dont overlap the active one
@@ -25,7 +25,6 @@ local function HUD_InteractDrawer(v,p,cam)
 		return not MM.sortInteracts(p,a,b)
 	end)
 	
-    MMHUD.interpolate(v,true)
 	for k,inter in ipairs(placehold_inter)
 		local mo = inter.mo
 		if not (mo and mo.valid) then mo = inter.backup end
@@ -54,10 +53,10 @@ local function HUD_InteractDrawer(v,p,cam)
 				scalef = $ + FixedDiv(longest*FU,(longeststr + 17)*FU)
 			end
 			
-			
 			local x = w2s.x - (FixedMul(icon.width*FU,scalef)/2)
 			local y = w2s.y
-			do	
+			MMHUD.interpolate(v,k)
+			do	--draw
 				if scalef > 0
 					v.drawStretched(x, y,
 						scalef,
@@ -142,8 +141,8 @@ local function HUD_InteractDrawer(v,p,cam)
 						)
 					end
 				end
-				
 			end
+			MMHUD.interpolate(v,false)
 		end
 		
 	end

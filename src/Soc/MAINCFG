@@ -11,6 +11,6 @@ Condition1 = PlayTime 1
 
 Unlockable 1
 Name = Sound Test
-Type = SoundTest
+Type = hardspeed
 Height = 10
 ConditionSet = 1

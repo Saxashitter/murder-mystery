@@ -89,6 +89,9 @@ local function draw_hud(v)
 		for _,p in pairs(MM_N[endtype.results]) do
 			if not (p and p.valid) then continue end
 			if (p.mm.afkmodelast) then continue end
+			
+			--preferable only alive people 
+			if (p.spectator) then continue end
 			local patch = v.getSprite2Patch(p.skin, SPR2_LIFE, false, A, 0)
 			
 			table.insert(icons, {

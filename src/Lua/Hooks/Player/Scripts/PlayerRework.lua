@@ -7,10 +7,10 @@ local function ApplyMovementBalance(player)
 
     if pmo and pmo.valid then
         local pta = R_PointToAngle2(0, 0, pmo.momx, pmo.momy)
-
+		
         if pmo.lastpta ~= nil then
             local adiff = AngleFixed(pta)-AngleFixed(pmo.lastpta)
-
+			
             if AngleFixed(adiff) > 180*FU
                 adiff = InvAngle($)
             end
@@ -19,7 +19,7 @@ local function ApplyMovementBalance(player)
             and P_IsObjectOnGround(pmo) then
                 pmo.skidscore = 3
             end
-
+			
             if pmo.skidscore then
                 pmo.friction = stopfriction
                 pmo.skidscore = $ - 1
@@ -29,7 +29,7 @@ local function ApplyMovementBalance(player)
 		if P_IsObjectOnGround(pmo) then
 			pmo.playergroundcap = FixedHypot(pmo.momx, pmo.momy) + 10*FU
 		end
-
+		
         pmo.lastpta = pta
     end
 end
@@ -47,8 +47,14 @@ return function(p)
 	p.jumpfactor = FixedMul(sonic.jumpfactor, jumpfactormulti)
 	p.runspeed = 9999*FU
 	
-	local effects = p.mm.effects
+	if (p.panim == PA_ABILITY)
+	or (p.panim == PA_ABILITY2)
+		P_ResetPlayer(p)
+		p.mo.state = S_PLAY_WALK
+		P_MovePlayer(p)
+	end
 	
+	local effects = p.mm.effects
 	for i,v in pairs(effects) do
 		if v.fuse then
 			v.fuse = $ - 1

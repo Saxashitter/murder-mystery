@@ -424,6 +424,7 @@ local function FXHandle(point,dist)
 		point.garg.angle = point.angle
 		point.garg.pitch = 0
 		point.garg.roll = 0
+		point.garg.shadowscale = 0
 	else
 		local garg = P_SpawnMobjFromMobj(
 			point,

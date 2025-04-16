@@ -150,6 +150,12 @@ MM:addPlayerScript(function(p)
 		end
 		clue.mobj.flags2 = $ &~MF2_DONTDRAW
 		
+		--dont "spy" on clues on mapstart
+		if (leveltime == 0)
+		and MM.clues_singlemode
+			clue.mobj.flags2 = $|MF2_DONTDRAW
+		end
+		
 		do
 			clue.mobj.clue_momz = $ - FU/4
 			
@@ -160,6 +166,8 @@ MM:addPlayerScript(function(p)
 			end
 		end
 		clue.mobj.spriteyoffset = clue.mobj.clue_bounce
+		
+		clue.mobj.shadowscale = (FU / 6) + (FU - (FixedDiv(clue.mobj.spriteyoffset, 7*FU)) / 10)
 		
 		if P_RandomChance(FU/2)
 			local wind = P_SpawnMobj(

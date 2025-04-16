@@ -93,6 +93,7 @@ local function set_overtime_point()
 	garg.scale = $*2
 	garg.angle = chosenPoint.a
 	garg.frame = $|FF_SEMIBRIGHT
+	garg.shadowscale = FU
 	MM_N.storm_point.garg = garg
 	MM_N.storm_garg = garg
 	

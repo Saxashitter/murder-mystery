@@ -41,7 +41,13 @@ function MM:spawnClueMobj(p, pos)
 	mobj.clue_momz = CLUE_MAXBOUNCE
 
 	if pos.flip then
+		mobj.eflags = $|MFE_VERTICALFLIP
 		mobj.flags2 = $|MF2_OBJECTFLIP
+	end
+	
+	--try to not have them on the ground
+	if P_IsObjectOnGround(mobj)
+		mobj.z = $ + 32*mobj.scale * P_MobjFlip(mobj)
 	end
 
 	return mobj
@@ -78,17 +84,17 @@ function MM:giveOutClues(amount)
 			end
 			continue
 		end
-
+		
 		local newPos = {}
-
+		
 		newPos.x = thing.x*FU
 		newPos.y = thing.y*FU
-
+		
 		local z = GetMapThingSpawnHeight(MT_MM_CLUESPAWN, thing, newPos.x, newPos.y)
 		newPos.z = z
-
+		
 		newPos.flip = (thing.options & MTF_OBJECTFLIP)
-
+		
 		table.insert(MM.clues_positions, newPos)
 	end
 	
@@ -97,15 +103,15 @@ function MM:giveOutClues(amount)
 		for _, thing in ipairs(fallbackThings) do
 			-- i love copying code!!
 			local newPos = {}
-
+			
 			newPos.x = thing.x*FU
 			newPos.y = thing.y*FU
-
+			
 			local z = GetMapThingSpawnHeight(MT_MM_CLUESPAWN, thing, newPos.x, newPos.y)
 			newPos.z = z
-
+			
 			newPos.flip = (thing.options & MTF_OBJECTFLIP)
-
+			
 			table.insert(MM.clues_positions, newPos)
 		end
 	end
@@ -176,11 +182,11 @@ MM:addPlayerScript(function(p)
 		or not ZCollide(p.mo, clue.mobj) then
 			continue
 		end
-
+		
 		if not (clue.mobj and clue.mobj.valid) then
 			clue.mobj = MM:spawnClueMobj(p, clue.ref)
 		end
-
+		
 		table.insert(removalList, clue)
 	end
 
@@ -188,19 +194,19 @@ MM:addPlayerScript(function(p)
 		for i,clue in pairs(p.mm.clues.list) do
 			if clue == remove then
 				local text = "CLUE FOUND!"
-
+				
 				S_StartSound(p.mo, sfx_cluecl,p)
 				if clue.mobj.valid then
 					P_RemoveMobj(clue.mobj)
 				end
-
+				
 				table.remove(p.mm.clues.list, i)
 				if p.mm.clues.current ~= nil
 					p.mm.clues.current = choosething(unpack(p.mm.clues.list))
 				end
-
+				
 				local subtext = tostring(#p.mm.clues.list).."/"..tostring(p.mm.clues.amount).." remaining..."
-
+				
 				if not (#p.mm.clues.list) then
 					text = "YOU FOUND THEM ALL!"
 					subtext = "Your clues gave you a useful item!"
@@ -237,7 +243,7 @@ MM:addPlayerScript(function(p)
 						end
 					end
 				end
-
+				
 				if p == displayplayer then
 					MMHUD:PushToTop(3*TICRATE, text, subtext, sub2)
 				end

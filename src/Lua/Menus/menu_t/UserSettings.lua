@@ -112,7 +112,7 @@ MenuLib.addMenu({
 					ML.startTextInput(textbuf,textbufid,nil,function()
 						MenuLib.client.commandbuffer = "MM_RadioSong "..ML.client.textbuffer
 						textbuf = ""
-					end, "Sets your radio's song when dropped.")				
+					end, "Sets your radio's song when dropped.", sfx_oldrad)				
 				end,
 				
 			})

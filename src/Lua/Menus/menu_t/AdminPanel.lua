@@ -184,7 +184,7 @@ MenuLib.addMenu({
 				ML.startTextInput(debug_command,debug_commandid,nil,function()
 					MenuLib.client.commandbuffer = "mm_stormradius "..ML.client.textbuffer
 					debug_command = ""
-				end, "\x86mm_stormradius <radius> <time>")				
+				end, "\x86mm_stormradius <radius> <time>", sfx_oldrad)				
 			end,
 		})
 		
@@ -203,7 +203,7 @@ MenuLib.addMenu({
 				ML.startTextInput(debug_command,debug_commandid,nil,function()
 					MenuLib.client.commandbuffer = "MM_MakeMeA "..ML.client.textbuffer
 					debug_command = ""
-				end, "\x86mm_makemea <role>")				
+				end, "\x86mm_makemea <role>", sfx_oldrad)				
 			end,
 		})
 		
@@ -222,7 +222,7 @@ MenuLib.addMenu({
 				ML.startTextInput(debug_command,debug_commandid,nil,function()
 					MenuLib.client.commandbuffer = "MM_GiveRings "..ML.client.textbuffer
 					debug_command = ""
-				end, "\x86mm_giverings <rings>")				
+				end, "\x86mm_giverings <rings>", sfx_oldrad)				
 			end,
 		})
 		
@@ -241,7 +241,7 @@ MenuLib.addMenu({
 				ML.startTextInput(debug_command,debug_commandid,nil,function()
 					MenuLib.client.commandbuffer = "MM_SetPerk "..ML.client.textbuffer
 					debug_command = ""
-				end, "\x86mm_setperk <pri/sec> <name>")				
+				end, "\x86mm_setperk <pri/sec> <name>", sfx_oldrad)				
 			end,
 		})
 	end

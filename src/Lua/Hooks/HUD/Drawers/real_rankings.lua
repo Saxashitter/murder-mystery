@@ -199,12 +199,13 @@ local function HUD_TabScoresDrawer(v)
 		
 		local role = getViewedPlayerRole(p, consoleplayer)
 		local roleStyle = ROLESTYLES[role] or ROLESTYLES.Unknown
-
+		
 		local thisBgPatch = bgPatch
 		if roleStyle.bg then
 			thisBgPatch = v.cachePatch(roleStyle.bg)
 		end
-		v.draw(x, y, thisBgPatch, V_50TRANS)
+		--TODO: use V_REVERSESUBTRACT
+		v.draw(x, y, thisBgPatch, V_50TRANS) --|V_REVERSESUBTRACT, v.getColormap(nil,nil,"Invert"))
 		
 		local p_skin = p.skin
 		local p_skincolor = p.skincolor

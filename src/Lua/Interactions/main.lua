@@ -200,7 +200,7 @@ mobjinfo[MT_MM_INTERACT_POINT] = {
 	--$Arg5 Price
 	--$Arg5Default 0
 	--$Arg5Type 0
-	--$Arg5Tooltip How many rings does this interaction cost?\nIf the player doesn't have enough rings, the interaction will fail. 
+	--$Arg5Tooltip How many coins does this interaction cost?\nIf the player doesn't have enough coins, the interaction will fail. 
 	
 	flags = MF_NOGRAVITY|MF_NOSECTOR|MF_NOCLIP|MF_NOCLIPHEIGHT|MF_NOCLIPTHING,
 	radius = 16*FRACUNIT,

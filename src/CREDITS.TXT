@@ -8,6 +8,7 @@
 - Lemerksiscool		- Mapper
 - Pyrodiac			- Mapper
 - And everyone who playtested and contributed to our GitHub. <3
+---------------------------------------
 
 ------------------Maps-----------------
 - Mansion				- luigi budd
@@ -18,15 +19,18 @@
 - Seaegg				- Pyrodiac
 - Swamili Swamp			- Pyrodiac
 - Frozen Creek			- Jisk
+---------------------------------------
 
 -----------------Sprites---------------
 - Camera body, Clues, Weapons (Shotgun, Knife, Luger, Revolver, Sword, Bear trap), Items (Loudspeaker, Radio) - GLideKS
 - Body Swap Potion - NormalCate
 - Tripmine body, minor sprites - luigi budd
 - Knife/Sword whiff - insta-shield by Pastel
+---------------------------------------
 
 --------------Sound Effects------------
 - Roblox, Fortnite, Minecraft, other sources...
+---------------------------------------
 
 ------------------Music----------------
 - Mansion BGM: "Wii Shop Channel if it was made by Casiopea"
@@ -35,7 +39,8 @@
 - MilBase BGM: Mix of songs from "The Henry Stickmin Collection"
 ( "Toppat Launch Site", "Preparations Interrupted")
 
-- Flooded Industries BGM: "Tempest Valley Zone, by Malcolm Brown - Remastered by A.J. Freda"
+- Workplace BGM: "Overdrive (VRC7)" - Thameuszin
+- Flooded Industries BGM: "Tempest Valley Zone" by Malcolm Brown - Remastered by A.J. Freda
 
 - It's a Showdown! (1): ???
 
@@ -49,4 +54,5 @@
 
 - Sniper Approved.: "Team Fortress 2 Theme"
 
-- Radio Songs: various sources
+- Radio Songs: Various sources
+---------------------------------------

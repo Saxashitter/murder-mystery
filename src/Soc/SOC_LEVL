@@ -22,6 +22,15 @@ Selectheading = Murder Mystery
 Lua.MM_ClueAmount = 8
 Lua.MM_StormTimer_Overtime = 30
 
+Level I3
+Levelname = Workplace
+NoZone = true
+Music = WKPLMS
+TypeOfLevel = SaxaMM
+NoVisitNeeded = true
+Selectheading = Murder Mystery
+Lua.MM_ClueAmount = 5
+
 # @lemerksiscool
 Level H2
 Levelname = House

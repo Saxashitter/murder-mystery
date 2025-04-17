@@ -174,6 +174,7 @@ MM:addPlayerScript(dofile("Hooks/Player/Scripts/Teammates"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/AntiAbility"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/PerkHandler"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/NoAuto"))
+MM:addPlayerScript(dofile("Hooks/Player/Scripts/CashInChecks"), true)
 
 addHook("KeyDown",function(key)
 	if isdedicatedserver then return end

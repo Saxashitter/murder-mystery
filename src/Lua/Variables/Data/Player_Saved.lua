@@ -1,5 +1,7 @@
 return {
 	rings = 0,
+	--tic this down every 3 tics
+	ringstopay = 0,
 	
 	--primary and secondary perks
 	pri_perk = MMPERK_FOOTSTEPS,

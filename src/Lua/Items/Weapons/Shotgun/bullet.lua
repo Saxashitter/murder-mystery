@@ -7,29 +7,12 @@ mobjinfo[freeslot "MT_MM_BULLET"] = {
 	speed = 32*FU
 }
 
-local spread = 10
-local function BulletDies(mo)
-	for i = 0, P_RandomRange(2,5)
-		P_SpawnMobjFromMobj(mo,
-			P_RandomRange(-spread,spread)*FU,
-			P_RandomRange(-spread,spread)*FU,
-			P_RandomRange(-spread,spread)*FU,
-			MT_SMOKE
-		)
-	end
-	
-	local sfx = P_SpawnGhostMobj(mo)
-	sfx.flags2 = $|MF2_DONTDRAW
-	sfx.fuse = TICRATE
-	S_StartSound(sfx,sfx_turhit)
-end
-
 addHook("MobjThinker", function(mo)
 	if not mo.valid then return end
 	
 	if mo.z <= mo.floorz
 	or mo.z+mo.height >= mo.ceilingz then
-		BulletDies(mo)
+		MM.BulletDies(mo)
 		P_RemoveMobj(mo)
 		return
 	end
@@ -60,10 +43,10 @@ end, MT_MM_BULLET)
 
 addHook("MobjMoveCollide", MM.BulletHit, MT_MM_BULLET)
 
-addHook("MobjMoveBlocked", function(ring)
+addHook("MobjMoveBlocked", function(ring, m,l)
 	if not (ring and ring.valid) then return end
 	
-	BulletDies(ring)
+	MM.BulletDies(ring, m,l)
 	P_RemoveMobj(ring)
 end, MT_MM_BULLET)
 

@@ -1,7 +1,7 @@
 local path = "Items/Weapons/"
 
 local spread = 10
-local function BulletDies(mo)
+MM.BulletDies = function(mo, moagainst, line)
 	for i = 0, P_RandomRange(2,5)
 		local ghs = P_SpawnMobjFromMobj(mo,
 			P_RandomRange(-spread,spread)*FU,
@@ -17,6 +17,60 @@ local function BulletDies(mo)
 	sfx.flags2 = $|MF2_DONTDRAW
 	sfx.fuse = TICRATE
 	S_StartSound(sfx,sfx_turhit)
+	
+	local angle = mo.angle + ANGLE_90
+	if (moagainst and moagainst.valid)
+		angle = R_PointToAngle2(
+			mo.x, mo.y,
+			moagainst.x, moagainst.y
+		) + ANGLE_90
+	elseif (line and line.valid)
+		angle = R_PointToAngle2(line.v1.x, line.v1.y, line.v2.x, line.v2.y)
+	end
+	
+	local spokes = 8
+	local fa = FixedDiv(360*FU, spokes*FU)
+	local speed = 6*mo.scale
+	
+	local rev_x = P_ReturnThrustX(nil, mo.angle, -mo.scale * 3)
+	local rev_y = P_ReturnThrustY(nil, mo.angle, -mo.scale * 3)
+	
+	local floormode = false
+	if mo.z <= mo.floorz
+	or mo.z+mo.height >= mo.ceilingz
+		floormode = true
+	end
+	
+	for i = 1, spokes
+		local my_ang = FixedAngle(fa * i)
+		
+		local spark = P_SpawnMobjFromMobj(mo, rev_y, rev_x,
+			FixedDiv((41*mo.height)/48, mo.scale),
+			MT_MINECARTSPARK
+		)
+		if not floormode
+			P_InstaThrust(spark, angle, FixedMul(cos(my_ang), speed))
+			spark.momz = FixedMul(sin(my_ang), speed)
+			
+			P_Thrust(spark, angle + ANGLE_90,
+				speed / 3
+			)
+		else
+			local sign = (mo.z+mo.height >= mo.ceilingz) and -1 or 1
+			P_SetObjectMomZ(spark, speed * sign)
+			P_InstaThrust(spark, my_ang, speed / 3)
+		end
+		
+		spark.flags = $ &~MF_NOGRAVITY
+		spark.fuse = TICRATE * 2 --/3
+		/*
+		spark.blendmode = AST_ADD
+		spark.alpha = FU * 3/4
+		spark.destscale = 0
+		spark.scalespeed = FixedDiv(spark.scale, spark.fuse*FU)
+		*/
+		P_SetOrigin(spark, spark.x, spark.y, spark.z)
+	end
 end
 
 MM.GenericHitscan = function(mo)
@@ -44,7 +98,7 @@ MM.GenericHitscan = function(mo)
 		
 		mo.radius = $ + mo.scale/4
 		if not (mo and mo.valid)
-			BulletDies(gs)
+			MM.BulletDies(gs)
 			return
 		end
 		mo.height = $ + mo.scale/2
@@ -76,7 +130,7 @@ MM.GenericHitscan = function(mo)
 		if mo.z <= mo.floorz
 		or mo.z+mo.height >= mo.ceilingz
 		and (i > 0) then
-			BulletDies(mo)
+			MM.BulletDies(mo)
 			P_RemoveMobj(mo)
 			return
 		end
@@ -102,14 +156,14 @@ MM.GenericHitscan = function(mo)
 		end
 		
 		if FixedHypot(mo.momx,mo.momy) == 0
-			BulletDies(mo)
+			MM.BulletDies(mo)
 			P_RemoveMobj(mo)
 			return			
 		end
 	end
 	
 	if mo and mo.valid then
-		BulletDies(mo)
+		MM.BulletDies(mo)
 		P_RemoveMobj(mo)
 	end
 end
@@ -138,7 +192,7 @@ MM.BulletHit = function(ring,pmo)
 				P_KillMobj(pmo.tracer, ring, (ring.target and ring.target.valid) and ring.target or ring, 2)
 			end
 			
-			BulletDies(ring)
+			MM.BulletDies(ring)
 			P_RemoveMobj(ring)
 		end
 		return
@@ -153,7 +207,7 @@ MM.BulletHit = function(ring,pmo)
 	end
 	
 	P_DamageMobj(pmo, ring, (ring.target and ring.target.valid) and ring.target or ring, 999, DMG_INSTAKILL)
-	BulletDies(ring)
+	MM.BulletDies(ring)
 	P_RemoveMobj(ring)
 end
 

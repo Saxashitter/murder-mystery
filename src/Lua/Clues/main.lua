@@ -47,7 +47,7 @@ function MM:spawnClueMobj(p, pos)
 	
 	--try to not have them on the ground
 	if P_IsObjectOnGround(mobj)
-		mobj.z = $ + 32*mobj.scale * P_MobjFlip(mobj)
+		mobj.z = $ + 64*mobj.scale * P_MobjFlip(mobj)
 	end
 
 	return mobj

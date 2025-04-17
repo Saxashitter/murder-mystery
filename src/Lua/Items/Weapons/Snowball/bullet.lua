@@ -8,13 +8,67 @@ states[freeslot("S_MM_SNOWBALL_B")] = {
 	nextstate = S_MM_REVOLV_B
 }
 
+states[freeslot("S_MM_SNOWBALL_DIE")] = {
+	sprite = SPR_NULL,
+	frame = A,
+	tics = 0,
+	action = function(mo)
+		local angle = mo.angle + ANGLE_90
+		
+		local spokes = 8
+		local fa = FixedDiv(360*FU, spokes*FU)
+		local speed = 6*mo.scale
+		
+		local rev_x = P_ReturnThrustX(nil, mo.angle, -mo.scale * 3)
+		local rev_y = P_ReturnThrustY(nil, mo.angle, -mo.scale * 3)
+		
+		local floormode = false
+		if mo.z <= mo.floorz
+		or mo.z+mo.height >= mo.ceilingz
+			floormode = true
+		end
+		
+		for i = 1, spokes
+			local my_ang = FixedAngle(fa * i)
+			
+			local spark = P_SpawnMobjFromMobj(mo, rev_y, rev_x,
+				FixedDiv((41*mo.height)/48, mo.scale),
+				MT_THOK
+			)
+			if not floormode
+				P_InstaThrust(spark, angle, FixedMul(cos(my_ang), speed))
+				spark.momz = FixedMul(sin(my_ang), speed)
+				
+				P_Thrust(spark, angle + ANGLE_90,
+					speed / 3
+				)
+			else
+				local sign = (mo.z+mo.height >= mo.ceilingz) and -1 or 1
+				P_SetObjectMomZ(spark, speed * sign)
+				P_InstaThrust(spark, my_ang, speed / 3)
+			end
+			
+			spark.flags = $ &~MF_NOGRAVITY
+			spark.fuse = TICRATE * 3
+			spark.tics = spark.fuse
+			spark.sprite = SPR_SNB9
+			
+			P_SetScale(spark, spark.scale * 2, true)
+			spark.spritexscale = $ / 4
+			spark.spriteyscale = $ / 4
+			
+			P_SetOrigin(spark, spark.x, spark.y, spark.z)
+		end
+	end	
+}
+
 mobjinfo[freeslot("MT_MM_SNOWBALL_BULLET")] = {
 	radius = 24*FU,
 	height = 24*FU,
 	spawnstate = S_MM_SNOWBALL_B,
 	flags = MF_NOGRAVITY,
 	speed = 80*FRACUNIT,
-	deathstate = S_SMOKE1
+	deathstate = S_MM_SNOWBALL_DIE
 }
 
 addHook("MobjThinker", function(mobj)

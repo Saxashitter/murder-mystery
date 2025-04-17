@@ -359,6 +359,12 @@ addHook("ThinkFrame", function()
 				marker.fuse = marker.tics
 				
 				corpse.translation = nil
+				
+				local bonus = 25
+				chatprintf(p, "\x83*You got "..bonus.." coins for finding a body!\x80")
+				CONS_Printf(p, "\x83You got "..bonus.." coins for finding a body!\x80")
+				p.mm_save.ringstopay = $ + bonus
+				
 				MM.runHook("CorpseFound", corpse, p.mo)
 			end
 		end

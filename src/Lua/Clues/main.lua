@@ -46,8 +46,9 @@ function MM:spawnClueMobj(p, pos)
 	end
 	
 	--try to not have them on the ground
-	if P_IsObjectOnGround(mobj)
-		mobj.z = $ + 64*mobj.scale * P_MobjFlip(mobj)
+	if (mobj.z <= mobj.floorz)
+	or (mobj.z+mobj.height >= mobj.ceilingz)
+		mobj.z = $ + 40*mobj.scale * P_MobjFlip(mobj)
 	end
 
 	return mobj
@@ -171,9 +172,9 @@ MM:addPlayerScript(function(p)
 		
 		if P_RandomChance(FU/2)
 			local wind = P_SpawnMobj(
-				pos.x + P_RandomRange(-18,18)*p.mo.scale,
-				pos.y + P_RandomRange(-18,18)*p.mo.scale,
-				pos.z + (p.mo.height/2) + P_RandomRange(-20,20)*p.mo.scale,
+				clue.mobj.x + P_RandomRange(-18,18)*p.mo.scale,
+				clue.mobj.y + P_RandomRange(-18,18)*p.mo.scale,
+				clue.mobj.z + (p.mo.height/2) + P_RandomRange(-20,20)*p.mo.scale,
 				MT_BOXSPARKLE
 			)
 			wind.frame = $|FF_FULLBRIGHT

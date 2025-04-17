@@ -112,6 +112,9 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 				*/
 				
 				chatprint(text)
+				
+				--add immediately so we KNOW.
+				MM_N.knownDeadPlayers[#target.player]
 			end
 			
 			local color = roles[target.player.mm.role].colorcode
@@ -247,7 +250,9 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		corpse.fuse = -1
 		corpse.shadowscale = target.shadowscale
 		corpse.radius = target.radius
-		corpse.translation = "Grayscale"
+		if not MM_N.knownDeadPlayers[#target.player]
+			corpse.translation = "Grayscale"
+		end
 		--corpses dont have colormaps?
 		corpse.renderflags = $|RF_SEMIBRIGHT
 		
@@ -340,6 +345,11 @@ addHook("ThinkFrame", function()
 		for p in players.iterate do
 			if not (p and p.mo and p.mo.health and p.mm and p.mm.role ~= MMROLE_MURDERER and not p.mm.spectator) then
 				continue
+			end
+			
+			if MM_N.knownDeadPlayers[corpse.playerid]
+			and (corpse.translation)
+				corpse.translation = nil
 			end
 			
 			if P_CheckSight(corpse, p.mo)

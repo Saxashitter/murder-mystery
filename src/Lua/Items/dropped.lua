@@ -145,6 +145,9 @@ function MM:DropItem(p, slot, randomize, dont_notify, forced)
 	if def.drop then
 		def.drop(item, p, mobj /*the dropped pickup*/)
 	end
+	if item.dropsfx ~= nil then
+		S_StartSound(p.mo, item.dropsfx)
+	end
 	
 	if (item and item.mobj) then
 		P_RemoveMobj(item.mobj)

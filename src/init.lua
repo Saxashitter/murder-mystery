@@ -23,8 +23,8 @@ for i = 0,2
 	sfxinfo[sfx_mmstl0 + i].caption = "\x89".."Exited storm\x80"
 end
 sfxinfo[freeslot("sfx_mmsmig")].caption = "\x89".."Storm migrating\x80"
-sfxinfo[freeslot("sfx_mmstm1")].caption = "\x89".."Raining\x80"
-sfxinfo[freeslot("sfx_mmstm2")].caption = "\x89".."Wind blowing\x80"
+sfxinfo[freeslot("sfx_mmstm1")].caption = "/" --"\x89".."Raining\x80"
+sfxinfo[freeslot("sfx_mmstm2")].caption = "/" --"\x89".."Wind blowing\x80"
 
 --Zombie Escape 2 by Jisk, used with permission
 sfxinfo[freeslot("sfx_oldrad")].caption = "/"

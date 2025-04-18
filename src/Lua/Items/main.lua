@@ -55,7 +55,6 @@ local ITEM_DEF = {
 	{
 		[MMROLE_INNOCENT] = true
 	}
-	
 	this would restrict innocents from picking the item up, but allow for murderers and sheriffs to pick it up
 	*/
 	
@@ -353,19 +352,20 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		item.rapidfire = def.rapidfire
 		item.onlyhitone = def.onlyhitone
 		item.restrict = shallowCopy(def.restrict)
-
+		
 		item.pickupsfx = def.pickupsfx
 		item.equipsfx = def.equipsfx
 		item.attacksfx = def.attacksfx
 		item.hitsfx = def.hitsfx
 		item.finalkillsfx = def.finalkillsfx
 		item.misssfx = def.misssfx
+		item.dropsfx = def.dropsfx
 		
 		item.silencedkill = def.silencedkill
 		
 		item.hiddenforothers = def.hiddenforothers
 		item.cantouch = def.cantouch
-
+		
 		if overrides
 		and type(overrides) == "table" then
 			for k,v in pairs(overrides) do

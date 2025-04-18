@@ -35,6 +35,7 @@ weapon.shootmobj = dofile "Items/Weapons/Shotgun/bullet"
 weapon.pickupsfx = sfx_gnpick
 weapon.equipsfx = sfx_gequip
 weapon.attacksfx = sfx_gnfire
+weapon.dropsfx = sfx_gndrop
 weapon.allowdropmobj = true
 
 function weapon:postpickup(p)

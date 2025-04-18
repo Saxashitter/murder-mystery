@@ -14,5 +14,6 @@ sfxinfo[freeslot "sfx_revlsh"] = {
 	flags = SF_X2AWAYSOUND
 }
 sfxinfo[freeslot "sfx_gnpick"].caption = "Item pick up"
+sfxinfo[freeslot "sfx_gndrop"].caption = "Item drop"
 
 return S_MM_REVOLV

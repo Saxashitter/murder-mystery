@@ -139,23 +139,24 @@ MM.GenericHitscan = function(mo)
 			local ghs = P_SpawnGhostMobj(mo)
 			ghs.frame = (mo.bullframe % E)|FF_SEMIBRIGHT
 			ghs.fuse = $*2
+			ghs.blendmode = AST_ADD
 			P_SetOrigin(ghs, ghs.x,ghs.y,ghs.z)
 			mo.bullframe = $ + 1
 		end
 		
 		P_XYMovement(mo)
-		
 		if not (mo and mo.valid) then
 			return
 		end
 		
 		P_ZMovement(mo)
-		
 		if not (mo and mo.valid) then
 			return
 		end
 		
 		if FixedHypot(mo.momx,mo.momy) == 0
+		--dont step up stairs
+		or (mo.eflags & MFE_JUSTSTEPPEDDOWN)
 			MM.BulletDies(mo)
 			P_RemoveMobj(mo)
 			return			

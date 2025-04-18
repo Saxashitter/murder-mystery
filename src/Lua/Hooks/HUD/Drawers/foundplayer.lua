@@ -1,4 +1,6 @@
+local LAST_TIME = 7*TICRATE
 local CHANGE_TIME = TICRATE/2
+
 local BIO_TEXTS = {
 	"BRING", "IT", "ON!"
 }
@@ -6,27 +8,35 @@ local HEIGHT = (9*FU)*#BIO_TEXTS
 
 local STATE_CHANGE = 4*TICRATE
 
-local BIO_Y = 0
+local BIO_Y = -256
 local BIO_SHAKE = 0
 local BIO_INDEX = 0
 local BIO_CHANGETIME = CHANGE_TIME
+local BIO_TICKER = LAST_TIME
 
 local FADE = 0
 
-local SI_Y = 0
-local LAST_TIME = 7*TICRATE
+local SI_Y = -256
 
 local function init_vars(v)
 	BIO_Y = v.height()*(FU/2)/v.dupy()
 	BIO_SHAKE = 0
 	BIO_INDEX = 0
 	BIO_CHANGETIME = CHANGE_TIME
-	FADE = 0
+	BIO_TICKER = LAST_TIME
+    FADE = 0
 
 	SI_Y = v.height()*FU/v.dupy()
 end
 
 return function(v,p)
+    if BIO_Y == -256
+        BIO_Y = v.height()*(FU/2)/v.dupy()
+    end
+    if SI_Y == -256
+        SI_Y = v.height()*FU/v.dupy()
+    end
+
 	if not (MM_N.waiting_for_players and MM_N.found_player) then
 		init_vars(v)
 		return
@@ -39,7 +49,7 @@ return function(v,p)
 	BIO_CHANGETIME = max(0, $-1)
 	BIO_SHAKE = max(0, $-(FU/12))
 
-	if MM_N.waiting_start_time <= STATE_CHANGE then
+	if BIO_TICKER <= STATE_CHANGE then
 		BIO_Y = ease.linear(FU/7, $, 8*FU + HEIGHT/2)
 		SI_Y = ease.linear(FU/7, $, (v.height()*FU/v.dupy())-(10*FU))
 
@@ -70,4 +80,5 @@ return function(v,p)
 	end
 
 	v.drawString(160*FU, SI_Y, "START IN "..(MM_N.waiting_start_time/TICRATE), V_SNAPTOTOP|V_YELLOWMAP, "fixed-center")
+    BIO_TICKER = max($ - 1, 0)
 end

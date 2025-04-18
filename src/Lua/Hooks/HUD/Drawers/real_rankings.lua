@@ -7,16 +7,17 @@ local ROWLENGTH = 300 / TILEWIDTH
 --		of other people
 --[done?]TODO: murderers should always know who is dead, using this tablist
 --		as a checklist
-local function isDead(p)
+local function isDead(p, alwaysknow)
 	-- print("death", (not (p and p.mo and p.mo.valid)), p.spectator, p.mo.health <= 0)
 	if p.mm and p.mm.joinedmidgame then
 		return true
 	end
 	
 	--those who should ALWAYS know
-	if consoleplayer.mm.role == MMROLE_MURDERER
-	or consoleplayer.mm.spectator
+	if (consoleplayer.mm.role == MMROLE_MURDERER
+	or consoleplayer.mm.spectator)
 	or (MM_N.showdown)
+	or alwaysknow
 		if (not (p and p.mo and p.mo.valid))
 		or p.spectator
 		or p.mo.health <= 0
@@ -26,10 +27,6 @@ local function isDead(p)
 	end
 	
 	if MM_N.knownDeadPlayers[#p]
-		return true
-	end
-	
-	if (p and p.mm and p.mm.role == MMROLE_SHERIFF and p.mm.spectator) then
 		return true
 	end
 	
@@ -115,6 +112,9 @@ local function getViewedPlayerRole(player, viewer)
 	if (player.mm.role == viewer.mm.role)
 	and (viewer.mm.role ~= MMROLE_INNOCENT)
 		-- i should know who my teammates are
+		if isDead(player, true)
+			role = "Dead"
+		end
 		return role
 	end
 	
@@ -132,6 +132,7 @@ local function getViewedPlayerRole(player, viewer)
 		return role
 	end
 	
+	--[[
 	local secrecyLevel = (ROLESTYLES[role] and ROLESTYLES[role].secrecy) or 0
 	local privilegeLevel = SECRECY_NOTSECRET
 	if isDead(viewer) or MM_N.gameover or MM_N.showdown /*DEBUG!* / or (viewer.cmd.buttons & BT_CUSTOM3)/**/  then
@@ -141,8 +142,18 @@ local function getViewedPlayerRole(player, viewer)
 	elseif (viewer.mm and viewer.mm.role == MMROLE_SHERIFF) then
 		privilegeLevel = SECRECY_SHERIFFALLOWED
 	end
-
+	]]--
+	
+	if MM_N.gameover or MM_N.showdown
+		return role
+	end
+	
+	if (viewer ~= player)
+		return "Unknown"
+	end
+	
 	-- print(player.name .. ": " .. role .. " with secrecy " .. secrecyLevel .. " and priv " .. privilegeLevel)
+	/*
 	if role == "Sheriff" then
 		if privilegeLevel ~= SECRECY_SHERIFFALLOWED then
 			role = "Unknown"
@@ -150,6 +161,7 @@ local function getViewedPlayerRole(player, viewer)
 	elseif (privilegeLevel < secrecyLevel) then
 		role = "Unknown"
 	end
+	*/
 	return role
 end
 

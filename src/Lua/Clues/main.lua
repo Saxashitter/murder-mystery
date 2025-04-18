@@ -143,6 +143,10 @@ MM:addPlayerScript(function(p)
 	--we shouldnt have to do this
 	p.mm.clues.list = $ or {}
 	for i,clue in ipairs(p.mm.clues.list) do
+		if not (clue.mobj and clue.mobj.valid) then
+			clue.mobj = MM:spawnClueMobj(p, clue.ref)
+		end
+		
 		local pos = clue.ref
 		clue.mobj.color = p.skincolor
 		if (p.realmo and p.realmo.valid)
@@ -195,10 +199,6 @@ MM:addPlayerScript(function(p)
 		or abs(p.mo.y-pos.y) > clue.mobj.radius + p.mo.radius
 		or not ZCollide(p.mo, clue.mobj) then
 			continue
-		end
-		
-		if not (clue.mobj and clue.mobj.valid) then
-			clue.mobj = MM:spawnClueMobj(p, clue.ref)
 		end
 		
 		table.insert(removalList, clue)

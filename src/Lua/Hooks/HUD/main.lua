@@ -140,18 +140,16 @@ end
 
 --ugh
 local function DoWeaponSlide(v, out)
-	if Playing()
-		MMHUD.wslidefrac = min($, FU/2)
-	end
-	
 	local offset = HUD_BEGINNINGXOFF
 	MMHUD.weaponslidein = FixedMul(offset, MMHUD.wslidefrac)
 	
-	local my_frac = Playing() and game_slidein_frac or slidein_frac
+	local my_frac = slidein_frac
 	if not out
-		MMHUD.wslidefrac = max($ - my_frac, 0)
+		MMHUD.wslidefrac = $ - my_frac
+		MMHUD.wslidefrac = max($, 0)
 	else
-		MMHUD.wslidefrac = min($ + my_frac, FU)
+		MMHUD.wslidefrac = $ + my_frac
+		MMHUD.wslidefrac = min($, FU)
 	end
 end
 MMHUD.DoRegularSlide = DoRegularSlide
@@ -186,6 +184,7 @@ addHook("HUD", function(v,p,c)
 				
 				--"Round starts in..."
 				if MMHUD.ticker >= HUD_STARTFADEIN
+				and not Playing()
 					DoWeaponSlide(v)
 					
 					if MM_N.waiting_for_players
@@ -205,7 +204,7 @@ addHook("HUD", function(v,p,c)
 						MMHUD.hudtrans = (($ >> V_ALPHASHIFT) - 1) << V_ALPHASHIFT
 					end
 				end
-			
+				
 			--everything slides out
 			else
 				DoRegularSlide(v,true)
@@ -261,6 +260,7 @@ addHud "goals"
 --addHud "heldweapon"
 addHud "availableitems"
 addHud "weapontime"
+addHud "pregamehud"
 addHud "payment"
 addHud "info"
 addHud "toptext"

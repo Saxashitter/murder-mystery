@@ -114,7 +114,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 				chatprint(text)
 				
 				--add immediately so we KNOW.
-				MM_N.knownDeadPlayers[#target.player]
+				MM_N.knownDeadPlayers[#target.player] = true
 			end
 			
 			local color = roles[target.player.mm.role].colorcode

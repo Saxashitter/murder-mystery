@@ -32,6 +32,7 @@ function MM:spawnClueMobj(p, pos)
 	mobj.drawonlyforplayer = p
 	mobj.color = p.skincolor
 	mobj.flags = $|MF_NOCLIP|MF_NOCLIPHEIGHT
+	mobj.target = p.mo
 	
 	local mul = FU*2
 	mobj.spritexscale = mul
@@ -49,6 +50,10 @@ function MM:spawnClueMobj(p, pos)
 	if (mobj.z <= mobj.floorz)
 	or (mobj.z+mobj.height >= mobj.ceilingz)
 		mobj.z = $ + 40*mobj.scale * P_MobjFlip(mobj)
+	end
+	
+	if MM.clues_singlemode
+		mobj.flags2 = $|MF2_DONTDRAW
 	end
 
 	return mobj
@@ -261,3 +266,20 @@ MM:addPlayerScript(function(p)
 		end
 	end
 end)
+
+--garbage collection
+addHook("MobjThinker",function(clue)
+	if not (clue and clue.valid) then return end
+	
+	local me = clue.target
+	if not (me and me.valid)
+		P_RemoveMobj(clue)
+		return
+	end
+	
+	local p = me.player
+	if (p.spectator)
+		P_RemoveMobj(clue)
+		return
+	end	
+end,MT_MM_CLUESPAWN)

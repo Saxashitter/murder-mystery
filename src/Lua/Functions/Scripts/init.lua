@@ -31,6 +31,7 @@ local function set_overtime_point()
 				table.insert(radiuspoints,{x = mt.x*FU, y = mt.y*FU})
 			else
 				print("\x82WARNING:\x80 This map has more than 2 Storm Radius Points! Only place 2 on each edge of your desired range.")
+				break
 			end
 		end
 		
@@ -39,7 +40,13 @@ local function set_overtime_point()
 				mobjinfo[MT_PLAYER].height
 			)
 			
-			table.insert(possiblePoints,{x = mt.x*FU, y = mt.y*FU, z = z, a = mt.angle*ANG1, type = mt.type})
+			table.insert(possiblePoints,{
+				x = mt.x*FU,
+				y = mt.y*FU,
+				z = z,
+				a = FixedAngle(mt.angle << FRACBITS),
+				type = mt.type
+			})
 		end
 	end
 	

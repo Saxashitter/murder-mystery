@@ -1,18 +1,9 @@
-local getCount = MM.require "Libs/getCount"
-
-local function is_showdown(innocents, count)
-	if count > 2 then
-		return innocents == 1
-	end
-
-	return false
-end
-
 return function()
-	local count, innocents = getCount()
+    local result = MM:countPlayers()
 
-	-- 1 innocent? start showdown
-	if is_showdown(innocents, count)
+	-- start showdown when the number of innocnts
+    -- is less than or equal to the number of murderers
+	if result.regulars <= result.murderers
 	and not MM_N.showdown then
 		MM:startShowdown()
 	end

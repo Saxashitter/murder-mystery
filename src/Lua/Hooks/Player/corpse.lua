@@ -347,6 +347,7 @@ addHook("ThinkFrame", function()
 				continue
 			end
 			if p.mm.role == MMROLE_MURDERER then continue end
+			if MM_N.gameover then break end
 			
 			if MM_N.knownDeadPlayers[corpse.playerid]
 			and (corpse.translation)

@@ -29,6 +29,11 @@ sfxinfo[freeslot("sfx_mmstm2")].caption = "/" --"\x89".."Wind blowing\x80"
 --Zombie Escape 2 by Jisk, used with permission
 sfxinfo[freeslot("sfx_oldrad")].caption = "/"
 
+sfxinfo[freeslot("sfx_mmdie0")] = {
+	caption = "Dying",
+	flags = SF_X4AWAYSOUND
+}
+
 freeslot("SPR_BGLS")
 freeslot("S_MM_TEAMMATE1")
 states[S_MM_TEAMMATE1] = {

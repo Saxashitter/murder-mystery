@@ -55,23 +55,30 @@ states[S_MM_TRIPMINE_EXPLODE] = {
 	nextstate = S_MM_TRIPMINE_EXPLODE,
 }
 
-local function SpawnExplosions(mine)
-	P_StartQuake(30*FU, TICRATE*2,
-		{mine.x, mine.y, mine.z},
-		550*mine.scale
-	)
+local function SpawnExplosions(mine, doquake, docount)
+	if doquake
+		P_StartQuake(30*FU, TICRATE*2,
+			{mine.x, mine.y, mine.z},
+			550*mine.scale
+		)
+	end
 	
 	local radius = 32*FU
 	local minz = 10
 	local maxz = 30
 	
-	local count = 25
+	local count = docount
+    if count == nil then count = 25 end
+
 	local anglecount = FixedDiv(360*FU,count*FU)
 	for i = 0,count
-		local fa = FixedAngle(anglecount*i) + P_RandomRange(-360, 360)*ANG1
+		local fa = FixedAngle(anglecount*i)
+        -- adjusted fixed angle
+        local afa = fa + P_RandomRange(-360, 360)*ANG1
+
 		local mobj = P_SpawnMobjFromMobj(mine,
-			FixedMul(cos(fa),radius + P_RandomRange(0,10)*FU),
-			FixedMul(sin(fa),radius + P_RandomRange(0,10)*FU),
+			FixedMul(cos(afa),radius + P_RandomRange(0,10)*FU),
+			FixedMul(sin(afa),radius + P_RandomRange(0,10)*FU),
 			0, --FU - FixedMul(mobjinfo[type].height,tracer.scale)/2,
 			MT_THOK
 		)
@@ -90,9 +97,26 @@ local function SpawnExplosions(mine)
 		P_SetObjectMomZ(mobj,P_RandomRange(minz,maxz)*FU)
 		mobj.oldfx = true
 		
+		local static = P_SpawnMobjFromMobj(mine,
+			FixedMul(cos(fa),radius + P_RandomRange(0,10)*FU),
+			FixedMul(sin(fa),radius + P_RandomRange(0,10)*FU),
+			0,
+			MT_THOK
+		)
+		static.flags = MF_NOGRAVITY|MF_NOCLIP|MF_NOCLIPTHING|MF_RUNSPAWNFUNC
+		static.state = S_MM_TRIPMINE_EXPLODE
+		static.momz = 0
+		static.flags2 = $ &~MF2_DONTDRAW
+		
+		static.angle = R_PointToAngle2(mobj.x,mobj.y, mine.x,mine.y)
+		static.scale = $+(P_RandomFixed()*((P_RandomChance(FU/2)) and 1 or -1))
+		
+		P_Thrust(static, static.angle,
+			-6*static.scale
+		)
 	end
-
 end
+MM.Tripmine_SpawnExplosions = SpawnExplosions
 
 SafeFreeslot("SPR_SBSM")
 sfxinfo[SafeFreeslot("sfx_subsma")].caption = "Mine activate"

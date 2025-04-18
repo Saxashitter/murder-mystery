@@ -273,51 +273,86 @@ addHook("ThinkFrame", function()
 
 	if MM_N.gameover
 	and not MM_N.voting
+		--this makes me sad
+		local sheriff = 
+			((MM_N.end_killed and MM_N.end_killed.valid and MM_N.end_killed.player and MM_N.end_killed.player.mm.role == MMROLE_MURDERER)
+				and not (MM_N.end_killer and MM_N.end_killer.valid and MM_N.end_killer.health)
+			)
+			and MM_N.end_killed
+			or MM_N.end_killer
+		
 		for p in players.iterate() do
-			if p.mo and not (p.mo.health) then
+			if not (p.mo and not (p.mo.health)) then continue end
+			if (p.mo == sheriff) then continue end
+			
+			if p.mo.stormkilledme
+				p.mo.color = SKINCOLOR_GALAXY
+				p.mo.colorized = true
+			end
+			
+			--Endcam cutscene
+			local releaseTic = 3*TICRATE
+			if MM_N.sniped_end then
+				-- for music timing
+				releaseTic = 3*TICRATE + MM.sniper_theme_offset
+			end
+			if MM_N.end_ticker < releaseTic
+				p.deadtimer = min($,1)
+				p.mo.momx,p.mo.momy,p.mo.momz = 0,0,0
+				p.mo.flags2 = $ &~MF2_DONTDRAW
+				p.mo.flags = $ | MF_NOGRAVITY
+				p.mo.state = (p.mm.end_deathstate and S_PLAY_DEAD or S_PLAY_PAIN)
+				continue
 				
-				if p.mo.stormkilledme
-					p.mo.color = SKINCOLOR_GALAXY
-					p.mo.colorized = true
-				end
+			else
 				
-				--Endcam cutscene
-				local releaseTic = 3*TICRATE
-				if MM_N.sniped_end then
-					-- for music timing
-					releaseTic = 3*TICRATE + MM.sniper_theme_offset
-				end
-				if MM_N.end_ticker < releaseTic
-					p.deadtimer = min($,3)
-					p.mo.momx,p.mo.momy,p.mo.momz = 0,0,0
+				if MM_N.end_ticker == releaseTic
 					p.mo.flags2 = $ &~MF2_DONTDRAW
-					p.mo.flags = $ | MF_NOGRAVITY
-					p.mo.state = (p.mm.end_deathstate and S_PLAY_DEAD or S_PLAY_PAIN)
-					continue
+					p.mo.flags = $ &~MF_NOGRAVITY
+					p.mo.state = S_PLAY_DEAD
 					
-				elseif MM_N.end_ticker == releaseTic
-					local corpse = P_SpawnMobjFromMobj(p.mo, 0,0,0, MT_THOK)
+					P_InstaThrust(p.mo, p.mo.deathangle, -6*FU)
+					P_SetObjectMomZ(p.mo, 20*FU)
+					S_StartSound(p.mo, sfx_altdi1)
 					
-					corpse.skin = p.mo.skin
-					corpse.color = p.mo.color
-					corpse.state = S_PLAY_BODY
-					corpse.colorized = p.mo.colorized
-					corpse.shadowscale = p.mo.shadowscale
-					corpse.renderflags = $|RF_SEMIBRIGHT
+					local machine = false
+					if (p.charflags & SF_MACHINE)
+					or (skins[p.skin].flags & SF_MACHINE)
+						machine = true
+					end
 					
-					corpse.angle = p.mo.deathangle
-					corpse.flags = 0
-					corpse.flags2 = 0
-					corpse.tics = -1
-					corpse.fuse = -1
+					if not machine then continue end
 					
-					P_InstaThrust(corpse, p.mo.deathangle, -8*FU)
-					P_SetObjectMomZ(corpse,6*FU)
+					p.charflags = $|SF_MACHINE
+					MM.Tripmine_SpawnExplosions(p.mo, false, 10)
+					P_StartQuake(60*FU, TICRATE * 3/4, {p.mo.x, p.mo.y, p.mo.z}, 512*FU)
 					
-					MM.runHook("CorpseSpawn", p.mo, corpse)
+					local sfx = P_SpawnGhostMobj(p.mo)
+					sfx.fuse = 3 * TICRATE
+					sfx.tics = sfx.fuse
+					sfx.flags2 = $|MF2_DONTDRAW
+					S_StartSound(sfx, sfx_mmdie0)
+					S_StartSound(sfx, sfx_mmdie0)
+					
+					local a = p.mo.angle + ANGLE_45
+					local spr_scale = FU
+					local tntstate = S_TNTBARREL_EXPL3
+					local rflags = RF_PAPERSPRITE|RF_FULLBRIGHT|RF_NOCOLORMAPS
+					for i = 0,1
+						local bam = P_SpawnMobjFromMobj(p.mo,0,0,0,MT_THOK)
+						P_SetMobjStateNF(bam, tntstate)
+						bam.spritexscale = FixedMul($, spr_scale)
+						bam.spriteyscale = bam.spritexscale
+						bam.renderflags = $|rflags
+						bam.angle = a + ANGLE_90 * i
+						
+						bam.color = p.skincolor
+						bam.colorized = true
+						bam.blendmode = AST_SUBTRACT
+					end
+					
 				end
 				
-				p.mo.flags2 = $|MF2_DONTDRAW
 				continue
 			end
 		end

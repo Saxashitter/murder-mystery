@@ -4,7 +4,8 @@ return function()
 	-- start showdown when the number of innocnts
     -- is less than or equal to the number of murderers
 	if result.regulars <= result.murderers
-	and not MM_N.showdown then
+    -- never start showdown in duels besides on time over
+	and not MM_N.showdown and not MM_N.dueling then
 		MM:startShowdown()
 	end
 

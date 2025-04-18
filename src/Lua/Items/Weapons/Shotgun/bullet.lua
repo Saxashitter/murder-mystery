@@ -10,6 +10,11 @@ mobjinfo[freeslot "MT_MM_BULLET"] = {
 addHook("MobjThinker", function(mo)
 	if not mo.valid then return end
 	
+	if MM_N.dueling
+		MM.GenericHitscan(mo)
+		return
+	end
+	
 	if mo.z <= mo.floorz
 	or mo.z+mo.height >= mo.ceilingz then
 		MM.BulletDies(mo)

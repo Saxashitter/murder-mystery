@@ -60,6 +60,15 @@ function weapon:attack(p)
 	end
 end
 
+weapon.bulletthinker = function(mo, i)
+	if (i >= 170)
+		mo.momz = $ - (mo.scale/3)*P_MobjFlip(mo)
+	end
+	if (i >= 230)
+		mo.momz = $ - (mo.scale/2)*P_MobjFlip(mo)
+	end
+end
+
 --(v, props.p, item, x,y, scale, flags, selected, not inv.hidden)
 /*
 weapon.drawer = function(v, p,item, x,y,scale,flags, selected, active)

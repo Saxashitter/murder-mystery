@@ -2,6 +2,11 @@ local path = "Items/Weapons/"
 
 local spread = 10
 MM.BulletDies = function(mo, moagainst, line)
+	if (line and line.valid)
+		--no puffs against thok barriers
+		if P_CheckSkyHit(mo,line) then return end
+	end
+	
 	for i = 0, P_RandomRange(2,5)
 		local ghs = P_SpawnMobjFromMobj(mo,
 			P_RandomRange(-spread,spread)*FU,
@@ -71,12 +76,81 @@ MM.BulletDies = function(mo, moagainst, line)
 		*/
 		P_SetOrigin(spark, spark.x, spark.y, spark.z)
 	end
+	
+	--bullet holes
+	if (moagainst and moagainst.valid) then return end
+	if (mo.nobulletholes) then return end
+	
+	local bull_x = mo.x
+	local bull_y = mo.y
+	local bull_z = mo.z
+	local bull_frame = K
+	if (line and line.valid)
+		bull_x,bull_y = P_ClosestPointOnLine(bull_x,bull_y, line)
+	end
+	do
+		local hole = P_SpawnMobjFromMobj(mo, 0,0,0, MT_THOK)
+		hole.radius = mo.scale
+		hole.height = 2 * mo.scale
+		
+		hole.frame = FF_SEMIBRIGHT|FF_PAPERSPRITE
+		hole.sprite = SPR_BGLS
+		hole.frame = $|bull_frame
+		hole.mirrored = P_RandomChance(FU/2)
+		
+		hole.angle = angle
+		hole.fuse = 5 * TICRATE
+		hole.tics = hole.fuse
+		
+		if floormode
+			local floorz = mo.floorz
+			local sign = 1
+			if (mo.z+mo.height >= mo.ceilingz)
+				sign = -1
+				floorz = mo.ceilingz
+			end
+			
+			P_SetOrigin(hole,
+				bull_x,
+				bull_y,
+				floorz + mo.scale*sign
+			)
+			bull_frame = M
+			hole.frame = bull_frame|FF_SEMIBRIGHT|FF_FLOORSPRITE
+			hole.renderflags = $|RF_NOSPLATBILLBOARD
+		else
+			P_SetOrigin(hole,
+				bull_x - P_ReturnThrustX(nil, mo.angle, mo.scale),
+				bull_y - P_ReturnThrustY(nil, mo.angle, mo.scale),
+				bull_z
+			)
+		end
+		
+		--shadow
+		local fx = P_SpawnMobjFromMobj(mo, 0,0,0, MT_THOK)
+		fx.radius = mo.scale
+		fx.height = 2 * mo.scale
+		
+		fx.frame = hole.frame
+		fx.sprite = SPR_BGLS
+		fx.frame = ($ &~FF_FRAMEMASK)|(bull_frame + 1)
+		fx.blendmode = AST_REVERSESUBTRACT
+		fx.renderflags = hole.renderflags
+		fx.mirrored = hole.mirrored
+		
+		fx.angle = angle
+		fx.fuse = hole.fuse
+		fx.tics = hole.fuse
+		
+		P_SetOrigin(fx, hole.x, hole.y, hole.z)
+	end
 end
 
 MM.GenericHitscan = function(mo)
 	if not mo.valid then return end
 	
 	local def = MM.Items[mo.origin.id]
+	local caught = 0
 	
 	/*
 	mo.momx = FixedMul(32*cos(mo.angle), cos(mo.aiming))
@@ -112,21 +186,6 @@ MM.GenericHitscan = function(mo)
 			end
 		end
 		
-		--drop off
-		/*
-		if (i >= 192)
-			if mo.origin.state ~= S_MM_LUGER
-				mo.momz = $ - (mo.scale/3)*P_MobjFlip(mo)
-			else
-				mo.momz = $ - (mo.scale/2)*P_MobjFlip(mo)
-			end
-		end
-		if (i >= 64)
-		and mo.origin.state ~= S_MM_LUGER
-			mo.momz = $ - (mo.scale/2)*P_MobjFlip(mo)
-		end
-		*/
-		
 		if mo.z <= mo.floorz
 		or mo.z+mo.height >= mo.ceilingz
 		and (i > 0) then
@@ -154,12 +213,20 @@ MM.GenericHitscan = function(mo)
 			return
 		end
 		
-		if FixedHypot(mo.momx,mo.momy) == 0
 		--dont step up stairs
-		or (mo.eflags & MFE_JUSTSTEPPEDDOWN)
+		if (mo.eflags & MFE_JUSTSTEPPEDDOWN)
 			MM.BulletDies(mo)
 			P_RemoveMobj(mo)
 			return			
+		end
+		
+		if FixedHypot(mo.momx,mo.momy) == 0
+			if caught >= 8
+				MM.BulletDies(mo)
+				P_RemoveMobj(mo)
+				return
+			end
+			caught = $ + 1
 		end
 	end
 	
@@ -193,6 +260,7 @@ MM.BulletHit = function(ring,pmo)
 				P_KillMobj(pmo.tracer, ring, (ring.target and ring.target.valid) and ring.target or ring, 2)
 			end
 			
+            ring.nobulletholes = true
 			MM.BulletDies(ring)
 			P_RemoveMobj(ring)
 		end
@@ -208,7 +276,8 @@ MM.BulletHit = function(ring,pmo)
 	end
 	
 	P_DamageMobj(pmo, ring, (ring.target and ring.target.valid) and ring.target or ring, 999, DMG_INSTAKILL)
-	MM.BulletDies(ring)
+	ring.nobulletholes = true
+    MM.BulletDies(ring)
 	P_RemoveMobj(ring)
 end
 

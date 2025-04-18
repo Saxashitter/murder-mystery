@@ -343,9 +343,10 @@ addHook("ThinkFrame", function()
 		MM.runHook("CorpseThink", corpse)
 		
 		for p in players.iterate do
-			if not (p and p.mo and p.mo.health and p.mm and p.mm.role ~= MMROLE_MURDERER and not p.mm.spectator) then
+			if not (p and p.mo and p.mo.health and p.mm and not p.mm.spectator) then
 				continue
 			end
+			if p.mm.role == MMROLE_MURDERER then continue end
 			
 			if MM_N.knownDeadPlayers[corpse.playerid]
 			and (corpse.translation)

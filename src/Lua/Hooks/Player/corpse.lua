@@ -375,22 +375,21 @@ addHook("ThinkFrame", function()
 				players[corpse.playerid].mo.flags2 = $1|MF2_DONTDRAW
 			end
 		end
-		
+        if MM_N.knownDeadPlayers[corpse.playerid]
+        and (corpse.translation)
+            corpse.translation = nil
+        end
+        
 		MM.runHook("CorpseThink", corpse)
 		
-		for p in players.iterate do
-			if not (p and p.mo and p.mo.health and p.mm and not p.mm.spectator) then
-				continue
-			end
+        if MM_N.gameover then break end
+		
+        for p in players.iterate do
+			if not (p and p.mo and p.mo.health) then continue end
+            if not p.mm then continue end
 			if p.mm.role == MMROLE_MURDERER then continue end
             if (p.spectator) then continue end
-			if MM_N.gameover then break end
-			
-			if MM_N.knownDeadPlayers[corpse.playerid]
-			and (corpse.translation)
-				corpse.translation = nil
-			end
-			
+
 			if P_CheckSight(corpse, p.mo)
 			and R_PointToDist(corpse.x, corpse.y, p.mo.x, p.mo.y) < 512*FU
 			and not (MM_N.knownDeadPlayers[corpse.playerid]) then
@@ -415,6 +414,7 @@ addHook("ThinkFrame", function()
 				p.mm_save.ringstopay = $ + bonus
 				
 				MM.runHook("CorpseFound", corpse, p.mo)
+                continue
 			end
 		end
 	end

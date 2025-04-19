@@ -97,6 +97,7 @@ MM.BulletDies = function(mo, moagainst, line)
 		hole.sprite = SPR_BGLS
 		hole.frame = $|bull_frame
 		hole.mirrored = P_RandomChance(FU/2)
+		hole.flags = $|MF_SCENERY
 		
 		hole.angle = angle
 		hole.fuse = 5 * TICRATE
@@ -137,6 +138,7 @@ MM.BulletDies = function(mo, moagainst, line)
 		fx.blendmode = AST_REVERSESUBTRACT
 		fx.renderflags = hole.renderflags
 		fx.mirrored = hole.mirrored
+		fx.flags = $|MF_SCENERY
 		
 		fx.angle = angle
 		fx.fuse = hole.fuse

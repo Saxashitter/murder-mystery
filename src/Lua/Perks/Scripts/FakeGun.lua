@@ -52,12 +52,14 @@ local function perk_thinker(p)
 				if not (item.perkfake_setit)
 					item.equipsfx = fake_def.equipsfx
 					item.mobj.state = fake_def.state
+					item.display_icon = fake_def.display_icon
 					item.perkfake_setit = true
 				end
 				
 				if p.mm.perk_fake_time == 0
 					item.equipsfx = knife_def.equipsfx
 					item.mobj.state = knife_def.state
+					item.display_icon = knife_def.display_icon
 					item.perkfake_setit = false
 				end
 			end
@@ -70,6 +72,7 @@ local function perk_thinker(p)
 				if (item.perkfake_setit)
 					item.equipsfx = knife_def.equipsfx
 					item.mobj.state = knife_def.state
+					item.display_icon = knife_def.display_icon
 					item.perkfake_setit = false
 				end
 			end

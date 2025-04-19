@@ -526,7 +526,7 @@ return function(self)
 		local pDist = R_PointToDist2(me.x,me.y, point.x,point.y)
 		p.mm.oob_dist = pDist
 		
-		if pDist > dist
+		if pDist > dist - p.mo.radius
 			p.mm.outofbounds = true
 			
 			if not p.mm.lastoob

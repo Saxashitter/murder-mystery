@@ -44,8 +44,15 @@ return function(self, endType)
 			continue
 		end
 		
+		
 		mo.flags = $|MF_NOTHINK
-		S_StopSound(mo)
+		if not (mo.flags & MF_MISSILE)
+		or (mo.origin and mo.origin.id)
+			S_StopSound(mo)
+		end
+		if (mo.player and mo.player.valid)
+			mo.fake_drawangle = mo.player.drawangle
+		end
 	end
 	
 	--stop spectating
@@ -66,7 +73,7 @@ return function(self, endType)
 		)
 		and MM_N.end_killed
 		or MM_N.end_killer
-			
+	
 	--pay people rings
 	for p in players.iterate
 		if not (p.mm) then continue end

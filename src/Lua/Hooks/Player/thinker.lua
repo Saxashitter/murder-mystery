@@ -52,6 +52,10 @@ addHook("PlayerThink", function(p)
 	or MM:pregame())
 		p.mm.timesurvived = $+1
 	end
+    if (p.mo.fake_drawangle ~= nil)
+        p.drawangle = p.mo.fake_drawangle
+        p.mo.angle = p.drawangle
+    end
 	
 	if p.mm.outofbounds
 		if not MM_N.gameover

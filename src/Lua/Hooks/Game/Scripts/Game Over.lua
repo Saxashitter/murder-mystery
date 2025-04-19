@@ -92,6 +92,7 @@ return function()
 			end
 			
 			mo.flags = $ &~MF_NOTHINK
+			mo.fake_drawangle = nil
 		end
 	end
 	if MM_N.sniped_end and MM_N.end_ticker == releaseTic+8 then

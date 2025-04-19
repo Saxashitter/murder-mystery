@@ -44,6 +44,8 @@ states[S_MM_TRIPMINE_EXPLODE] = {
 			new.state = S_MM_TRIPMINE_EXPLODE
 			new.momz = 0
 			new.flags2 = $ &~MF2_DONTDRAW
+			new.color = mo.color
+			new.colorized = mo.colorized
 		else
 		
 		end
@@ -55,7 +57,7 @@ states[S_MM_TRIPMINE_EXPLODE] = {
 	nextstate = S_MM_TRIPMINE_EXPLODE,
 }
 
-local function SpawnExplosions(mine, doquake, docount)
+local function SpawnExplosions(mine, doquake, docount, colorized)
 	if doquake
 		P_StartQuake(30*FU, TICRATE*2,
 			{mine.x, mine.y, mine.z},
@@ -96,6 +98,10 @@ local function SpawnExplosions(mine, doquake, docount)
 		)
 		P_SetObjectMomZ(mobj,P_RandomRange(minz,maxz)*FU)
 		mobj.oldfx = true
+		if colorized ~= nil
+			mobj.color = colorized
+			mobj.colorized = true
+		end
 		
 		local static = P_SpawnMobjFromMobj(mine,
 			FixedMul(cos(fa),radius + P_RandomRange(0,10)*FU),
@@ -114,6 +120,10 @@ local function SpawnExplosions(mine, doquake, docount)
 		P_Thrust(static, static.angle,
 			-6*static.scale
 		)
+		if colorized ~= nil
+			static.color = colorized
+			static.colorized = true
+		end
 	end
 end
 MM.Tripmine_SpawnExplosions = SpawnExplosions
@@ -155,8 +165,47 @@ mobjinfo[SafeFreeslot("MT_MM_TRIPMINE")] = {
 	flags = MF_SOLID|MF_RUNSPAWNFUNC|MF_SHOOTABLE
 }
 
-local function SpawnExplosion(source, count, dist)
+local function ExplosionCompliment(mine)
+	local sfx = P_SpawnGhostMobj(mine)
+	sfx.fuse = 3 * TICRATE
+	sfx.tics = sfx.fuse
+	sfx.flags2 = $|MF2_DONTDRAW
+	S_StartSound(sfx, sfx_mmdie0)
+	S_StartSound(sfx, sfx_mmdie0)
 	
+	local a = mine.angle + ANGLE_45
+	local spr_scale = FU
+	local tntstate = S_TNTBARREL_EXPL3
+	local rflags = RF_PAPERSPRITE|RF_FULLBRIGHT|RF_NOCOLORMAPS
+	local wavestate = S_FACESTABBERSPEAR
+	local wavetime = TICRATE
+	for i = 0,1
+		local bam = P_SpawnMobjFromMobj(mine,0,0,0,MT_THOK)
+		P_SetMobjStateNF(bam, tntstate)
+		bam.spritexscale = FixedMul($, spr_scale)
+		bam.spriteyscale = bam.spritexscale
+		bam.renderflags = $|rflags
+		bam.angle = a + ANGLE_90 * i
+		
+		bam.color = ColorOpposite(SKINCOLOR_GALAXY)
+		bam.colorized = true
+		bam.blendmode = AST_SUBTRACT
+		
+		local wave = P_SpawnMobjFromMobj(mine,0,0,0,MT_THOK)
+		P_SetMobjStateNF(wave, wavestate)
+		wave.spritexscale = FixedMul($, spr_scale)
+		wave.spriteyscale = wave.spritexscale
+		wave.renderflags = $|rflags
+		wave.angle = a + ANGLE_90 * i
+		wave.tics = wavetime
+		wave.fuse = wavetime
+		wave.destscale = wave.scale * 6
+		wave.scalespeed = FixedDiv(wave.destscale - wave.scale, wavetime*FU)
+		
+		wave.color = SKINCOLOR_GALAXY
+		wave.colorized = true
+		wave.blendmode = AST_ADD
+	end
 end
 
 local function GetActorZ(actor,targ,type)
@@ -572,7 +621,8 @@ addHook("TouchSpecial",function(mine,me)
 	SpawnSparks(mine)
 	SpawnSparks(me)
 	SetPurplePlanes(mine)
-	SpawnExplosions(mine)
+	SpawnExplosions(mine,true,nil,SKINCOLOR_GALAXY)
+	ExplosionCompliment(mine)
 	
 	mine.steppedon = true
 	delete3d(mine)
@@ -594,7 +644,8 @@ addHook("MobjDeath",function(mine,_,src)
 	end
 	SpawnSparks(mine)
 	SetPurplePlanes(mine)
-	SpawnExplosions(mine)
+	SpawnExplosions(mine,true,nil,SKINCOLOR_GALAXY)
+	ExplosionCompliment(mine)
 	delete3d(mine)
 	
 	local killing_player = (src and src.valid and src.player and src.player.valid) and src

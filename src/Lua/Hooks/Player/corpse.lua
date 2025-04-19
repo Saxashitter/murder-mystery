@@ -342,6 +342,8 @@ addHook("ThinkFrame", function()
 					local spr_scale = FU
 					local tntstate = S_TNTBARREL_EXPL3
 					local rflags = RF_PAPERSPRITE|RF_FULLBRIGHT|RF_NOCOLORMAPS
+					local wavestate = S_FACESTABBERSPEAR
+					local wavetime = TICRATE
 					for i = 0,1
 						local bam = P_SpawnMobjFromMobj(p.mo,0,0,0,MT_THOK)
 						P_SetMobjStateNF(bam, tntstate)
@@ -353,6 +355,21 @@ addHook("ThinkFrame", function()
 						bam.color = p.skincolor
 						bam.colorized = true
 						bam.blendmode = AST_SUBTRACT
+						
+						local wave = P_SpawnMobjFromMobj(p.mo,0,0,0,MT_THOK)
+						P_SetMobjStateNF(wave, wavestate)
+						wave.spritexscale = FixedMul($, spr_scale)
+						wave.spriteyscale = wave.spritexscale
+						wave.renderflags = $|rflags
+						wave.angle = a + ANGLE_90 * i
+						wave.tics = wavetime
+						wave.fuse = wavetime
+						wave.destscale = wave.scale * 6
+						wave.scalespeed = FixedDiv(wave.destscale - wave.scale, wavetime*FU)
+						
+						wave.color = SKINCOLOR_GALAXY
+						wave.colorized = true
+						wave.blendmode = AST_ADD
 					end
 					
 				end

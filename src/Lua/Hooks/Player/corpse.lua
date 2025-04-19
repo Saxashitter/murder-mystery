@@ -273,19 +273,18 @@ addHook("ThinkFrame", function()
 	if MM_N.gameover
 	and not MM_N.voting
 		--this makes me sad
+		/*
 		local sheriff = 
 			((MM_N.end_killed and MM_N.end_killed.valid and MM_N.end_killed.player and MM_N.end_killed.player.mm.role == MMROLE_MURDERER)
 				and not (MM_N.end_killer and MM_N.end_killer.valid and MM_N.end_killer.health)
 			)
 			and MM_N.end_killed
 			or MM_N.end_killer
+		*/
 		
 		for p in players.iterate() do
 			if not (p.mo and not (p.mo.health)) then continue end
-			if sheriff ~= nil
-			and (sheriff and sheriff.valid and sheriff.player and sheriff.player.valid)
-				if (p.mo == sheriff) then continue end
-			end
+			--if (p.mo == sheriff) then continue end
 			
 			if p.mo.stormkilledme
 				p.mo.color = SKINCOLOR_GALAXY

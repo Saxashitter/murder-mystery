@@ -97,3 +97,5 @@ setmetatable(MM, {
 --generate random string for security purposes
 rawset(_G, "MM_luaSignature", "iAmLua"..P_RandomFixed())
 addHook("NetVars",function(n) MM_luaSignature = n($); end)
+
+MM.savefile_path = "client/EpicMurderMystery/savefile.dat"

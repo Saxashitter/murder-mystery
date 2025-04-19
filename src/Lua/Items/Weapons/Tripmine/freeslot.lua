@@ -618,7 +618,7 @@ addHook("MobjDeath",function(mine,_,src)
 		end
 		
 		SpawnSparks(me)
-		P_KillMobj(me,mine, kiler, DMG_INSTAKILL)
+		P_KillMobj(me,mine, killer, DMG_INSTAKILL)
 		me.color = SKINCOLOR_GALAXY
 		me.stormkilledme = true
 		me.colorized = true

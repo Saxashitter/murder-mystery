@@ -98,6 +98,18 @@ return function(p)
 	ApplyMovementBalance(p)
 	
 	p.normalspeed = speedcap
+	if not P_IsObjectOnGround(p.mo)
+		local me = p.mo
+		local speedcap = speedcap - 3*FU
+		if p.speed > speedcap
+			local div = 16 * FU
+			
+			local newspeed = p.speed - FixedDiv(p.speed - speedcap,div)
+			me.momx = FixedMul(FixedDiv(me.momx, p.speed), newspeed)
+			me.momy = FixedMul(FixedDiv(me.momy, p.speed), newspeed)
+		end
+		p.normalspeed = $ - 3*FU
+	end
 	
 	p.thrustfactor = sonic.thrustfactor
 	p.accelstart = (sonic.accelstart*3)/2 -- Buff start acceleration

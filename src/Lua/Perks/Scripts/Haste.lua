@@ -65,7 +65,7 @@ local thinkers = {
 		if p.speed < 17*p.mo.scale then return end
 		
 		MM:ApplyPlayerEffect(p, "perk.primary.haste")
-		p.runspeed = FixedMul(MM_N.speed_cap, tofixed("1.20")) - 4*FU
+		p.runspeed = FixedMul(MM_N.speed_cap, tofixed("1.20")) - 7*FU
 		windeffect(p)
 	end,
 	[2] = function(p)
@@ -76,7 +76,7 @@ local thinkers = {
 		if p.speed < 17*p.mo.scale then return end
 		
 		MM:ApplyPlayerEffect(p, "perk.secondary.haste")
-		p.runspeed = FixedMul(MM_N.speed_cap, tofixed("1.10")) - 4*FU
+		p.runspeed = FixedMul(MM_N.speed_cap, tofixed("1.10")) - 7*FU
 		windeffect(p)
 	end,
 }

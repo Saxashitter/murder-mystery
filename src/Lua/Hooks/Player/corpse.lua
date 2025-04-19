@@ -367,7 +367,7 @@ addHook("ThinkFrame", function()
 						wave.destscale = wave.scale * 6
 						wave.scalespeed = FixedDiv(wave.destscale - wave.scale, wavetime*FU)
 						
-						wave.color = SKINCOLOR_GALAXY
+						wave.color = p.skincolor
 						wave.colorized = true
 						wave.blendmode = AST_ADD
 					end

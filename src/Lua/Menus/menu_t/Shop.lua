@@ -14,18 +14,8 @@ local function format_int(number)
   return minus .. int:reverse():gsub("^,", "") .. fraction
 end
 
-local itemid_to_perkid = {}
-local perkid_to_itemid = {}
-do
-	local cate = MM_PERKS.category_ptr
-	
-	for i = 1, #cate.items
-		local item = MM.Shop.items[cate.items[i]]
-		
-		itemid_to_perkid[i] = item.perk_id
-		perkid_to_itemid[item.perk_id] = i
-	end
-end
+local itemid_to_perkid = MM_PERKS.itemid_to_perkid
+local perkid_to_itemid = MM_PERKS.perkid_to_itemid
 
 MMHUD.menus.drawRings = function(v, x,y)
 	x = $*FU

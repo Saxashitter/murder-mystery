@@ -37,6 +37,7 @@ end
 doAndInsert("addCategory")
 doAndInsert("addItem")
 doAndInsert("buyItem")
+doAndInsert("ownsItem")
 
 COM_AddCommand("MM_TryBuyItem", function(p, sig, id, sound)
 	if not MM:isMM() then return end

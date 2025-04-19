@@ -266,6 +266,12 @@ COM_AddCommand("MM_EquipPerk", function(p, slot, newperk)
 		end
 		
 		if realnum ~= nil
+			--check if we own it first
+			if not MM.Shop.ownsItem(p, MM_PERKS.perkid_to_itemid[realnum])
+				CONS_Printf(p,"You don't own this item.")
+				return
+			end
+			
 			local chosen = 0
 			if slot == "1"
 			or string.sub(slot,1,3) == "pri"

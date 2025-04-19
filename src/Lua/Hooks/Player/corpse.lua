@@ -267,7 +267,6 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	end
 end, MT_PLAYER)
 
---TODO: player mobjs arent hidden anymore
 addHook("ThinkFrame", function()
 	if not MM:isMM() then return end
 
@@ -283,7 +282,10 @@ addHook("ThinkFrame", function()
 		
 		for p in players.iterate() do
 			if not (p.mo and not (p.mo.health)) then continue end
-			if (p.mo == sheriff) then continue end
+			if sheriff ~= nil
+			and (sheriff and sheriff.valid and sheriff.player and sheriff.player.valid)
+				if (p.mo == sheriff) then continue end
+			end
 			
 			if p.mo.stormkilledme
 				p.mo.color = SKINCOLOR_GALAXY

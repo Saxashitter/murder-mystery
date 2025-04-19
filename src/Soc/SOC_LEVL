@@ -29,7 +29,8 @@ Music = WKPLMS
 TypeOfLevel = SaxaMM
 NoVisitNeeded = true
 Selectheading = Murder Mystery
-Lua.MM_ClueAmount = 5
+Lua.MM_ClueAmount = 6
+Lua.MM_SingleClues = true
 
 # @lemerksiscool
 Level H2

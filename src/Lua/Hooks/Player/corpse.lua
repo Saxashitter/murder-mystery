@@ -264,6 +264,9 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		corpse.playername = target.player.name
 		
 		MM.runHook("CorpseSpawn", target, corpse)
+		
+		S_StopSound(target)
+		S_StartSound(nil, sfx_altdi1, target.player)
 	end
 end, MT_PLAYER)
 

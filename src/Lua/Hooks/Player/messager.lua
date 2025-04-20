@@ -1,3 +1,4 @@
+local ZCollide = MM.require "Libs/zcollide"
 local dist_values = {}
 
 dist_values["CLOSE"] = 3000/15
@@ -43,13 +44,101 @@ local function skinColorToChatColor(color)
 	return "\x80"
 end
 
+--ugh
+local namechecktype = MT_LETTER
+local function checkRayCast(from, to, props)
+	local blocked = 0
+	
+	local angle = props.angle
+	local aiming = props.aiming
+	local namecheck = P_SpawnMobjFromMobj(from.mo,
+		0, --P_ReturnThrustX(nil,angle, 2*FU),
+		0, --P_ReturnThrustY(nil,angle, 2*FU),
+		0, --41*FixedDiv(from.mo.height, from.mo.scale)/48,
+		namechecktype
+	)
+	namecheck.angle = angle
+	namecheck.aiming = aiming
+	namecheck.flags = MF_NOCLIP|MF_NOCLIPHEIGHT|MF_NOGRAVITY|MF_NOSECTOR
+	namecheck.radius = FixedMul(mobjinfo[MT_NAMECHECK].radius, from.mo.scale)
+	namecheck.height = FixedMul(mobjinfo[MT_NAMECHECK].height, from.mo.scale)
+	namecheck.namecheck = true
+	
+	P_InstaThrust(namecheck, angle, FixedMul(namecheck.radius * 2, cos(aiming)))
+	namecheck.momz = 32*sin(aiming)
+	
+	P_SetOrigin(namecheck, 
+		from.x + P_ReturnThrustX(nil,angle, 4*FU),
+		from.y + P_ReturnThrustY(nil,angle, 4*FU),
+		(from.z + (41*from.mo.height/48)) - 8*FU
+	)
+	
+	local blockrad = namecheck.radius + to.mo.radius
+	local startclipping = 10
+	for i = 0, 255
+		if not (namecheck and namecheck.valid)
+			return false
+		end
+		
+		if CV_MM.debug.value
+			P_SpawnMobjFromMobj(namecheck,0,0,0,MT_SPARK)
+		end
+		
+		if (i == startclipping)
+			namecheck.flags = $ &~MF_NOCLIP
+		end
+		
+		P_XYMovement(namecheck)
+		if not (namecheck and namecheck.valid)
+			return false
+		end
+		
+		P_ZMovement(namecheck)
+		if not (namecheck and namecheck.valid)
+			return false
+		end
+		
+		if (i < startclipping)
+		and R_PointInSubsectorOrNil(namecheck.x,namecheck.y) == nil
+			if (namecheck and namecheck.valid)
+				P_RemoveMobj(namecheck)
+			end
+			return false
+		end
+		
+		if (namecheck.momx == 0 and namecheck.momy == 0)
+			if blocked == 8
+				if (namecheck and namecheck.valid)
+					P_RemoveMobj(namecheck)
+				end
+				return false
+			end
+			blocked = $ + 1
+		end
+		
+		if abs(namecheck.x - to.x) <= blockrad
+		or abs(namecheck.y - to.y) <= blockrad
+		and ZCollide(namecheck, to.mo)
+			if (namecheck and namecheck.valid)
+				P_RemoveMobj(namecheck)
+			end
+			return true
+		end
+	end
+	
+	if (namecheck and namecheck.valid)
+		P_RemoveMobj(namecheck)
+		return false
+	end
+end
+
 addHook("PlayerMsg", function(src, t, trgt, msg)
 	if not MM:isMM() then return end
 	if gamestate ~= GS_LEVEL then return end
 	if MM.gameover then return end
 	if t == 3 then return end
 	
-	--allow dedicated server chats?
+	--allow dedicated server chats
 	if (src == server and not players[0]) then return end
 	
 	if MM.runHook("OnRawChat", src, t, trgt, msg) then
@@ -57,11 +146,11 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	end
 
 	if not (consoleplayer
-		and consoleplayer.mo
-		and consoleplayer.mo.health
-		and consoleplayer.mm
-		and not consoleplayer.mm.spectator) then
-			return
+	and consoleplayer.mo
+	and consoleplayer.mo.health
+	and consoleplayer.mm
+	and not consoleplayer.mm.spectator) then
+		return
 	end
 
 	if not (src
@@ -120,20 +209,26 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 		src.mo.y
 	)
 	
-	/*
-	if not P_CheckSight(consoleplayer.mo, src.mo)
-	and dist >= 192*FU then
-		if dist > (3000*FU)/4 then return true end
-		
-		chatprint("\x86You can hear faint talking through the walls...", true)
-		return true
-	end
-	*/
-	
-	if dist > 3000*FU then
+	if dist > (1 << 12)*FU then
 		return true
 	end
 
+	if not P_CheckSight(consoleplayer.mo, src.mo)
+	and (dist >= 64*FU and dist <= 512*FU) then
+		if not checkRayCast(
+			{mo = consoleplayer.mo,	x = consoleplayer.mo.x,	y = consoleplayer.mo.y,	z = consoleplayer.mo.z},
+			{mo = src.mo,			x = src.mo.x,			y = src.mo.y,			z = src.mo.z},
+			{
+				angle = R_PointToAngle2(consoleplayer.mo.x,consoleplayer.mo.y, src.mo.x,src.mo.y),
+				aiming = R_PointToAngle2(0, consoleplayer.mo.z, dist, src.mo.z),
+				dist = dist,
+			}
+		)
+			chatprint("\x86You can hear faint talking through the walls...", true)
+			return true
+		end
+	end
+	
 	local color = skinColorToChatColor(src.mo and src.mo.color or src.skincolor)
 	
 	if alias
@@ -161,7 +256,7 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 				continue
 			end
 		end
-
+		
 		name = "\x86"..disttext.."\x80".." "..$
 	end
 	

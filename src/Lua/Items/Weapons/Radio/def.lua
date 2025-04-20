@@ -143,6 +143,7 @@ radio.dropthinker = function(mobj)
 	for p in players.iterate do
 		if not (p and p.mo and p.mm) then continue end
 		
+		p.mm.last_listening = p.mm.cur_listening
 		if p.mm.cur_listening
 		and not (p.mm.cur_listening.valid) then
 			p.mm.cur_listening = nil

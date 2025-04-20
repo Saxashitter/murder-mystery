@@ -5,7 +5,7 @@ local mute = CV_RegisterVar({
 })
 
 local function is_in_dist(self, p)
-	local MAX_DIST = 500*FU
+	local MAX_DIST = 256*FU
 	local dist = R_PointToDist2(self.x, self.y, p.mo.x, p.mo.y)
 	
 	--?
@@ -48,12 +48,35 @@ local function manage_music(self, p)
 
 	if not play then return end
 
-	local volume = ease.linear(dist, 100, 0)
+	local volume = ease.inexpo(dist, 100, 0)
+	--audio attenuation
+	local radius = 32 * self.scale + p.mo.radius
+	if (abs(p.mo.x - self.x) > radius
+	or abs(p.mo.y - self.y) > radius)
+		local pointto = R_PointToAngle2(p.mo.x, p.mo.y, self.x,self.y)
+		local myang = p.mo.angle
+		local diff = FixedAngle(
+			AngleFixed(pointto) - AngleFixed(myang)
+		)
+		if AngleFixed(diff) > 180*FU
+			diff = InvAngle($)
+		end
+		
+		if AngleFixed(diff) > 15*FU
+			diff = FixedAngle( AngleFixed($) - 15*FU )
+			
+			local factor = FixedDiv(AngleFixed(diff), (180 - 15)*FU)
+			factor = $ * 3/4
+			
+			volume = FixedMul($, FU - factor)
+		end
+	end
 
 	if p == consoleplayer
-	and S_MusicName() ~= song.name
+	--and S_MusicName() ~= song.name
+	and (p.mm.last_listening ~= p.mm.cur_listening)
 	and not (mute.value) then
-		S_ChangeMusic(song.name, true, p)
+		P_PlayJingleMusic(p, song.name, 0, true, JT_OTHER)
 	end
 
 	if p == consoleplayer then

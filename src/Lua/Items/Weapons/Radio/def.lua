@@ -9,6 +9,39 @@ states[freeslot "S_MM_RADIO"] = {
 	nextstate = S_MM_RADIO
 }
 
+local note_fuse = TICRATE * 3/2
+freeslot("S_MM_RADIO_NOTE")
+states[S_MM_RADIO_NOTE] = {
+	sprite = SPR_RADO,
+	frame = B,
+	tics = 1,
+	nextstate = S_MM_RADIO_NOTE,
+	action = function(note)
+		if P_IsObjectOnGround(note)
+		and (note.lastmomz ~= nil)
+			if not note.wasgrounded
+			and abs(note.lastmomz) > note.scale * 4
+				note.momz = - note.lastmomz / 2
+			end
+			note.momx = $ * 9/10
+			note.momy = $ * 9/10
+		end
+		
+		if not P_IsObjectOnGround(note)
+			note.momz = $ + P_GetMobjGravity(note)
+		end
+		
+		note.lastmomz = note.momz
+		note.wasgrounded = P_IsObjectOnGround(note)
+		if note.myframe ~= nil
+			note.frame = note.myframe
+		end
+		if note.fuse < 10
+			note.alpha = $ - FU/10
+		end
+	end
+}
+
 -- BPM might be unused but still fill it out.
 MMRadio.songs = {
 	["macca"] = {
@@ -140,6 +173,23 @@ end
 radio.dropthinker = function(mobj)
 	mobj.colorized = true
 	mobj.color = mobj.color_set
+	
+	if (leveltime % 10) == 0
+		local wind = P_SpawnMobj(
+			mobj.x + P_RandomRange(-18,18)*mobj.scale,
+			mobj.y + P_RandomRange(-18,18)*mobj.scale,
+			mobj.z + (mobj.height/2) + P_RandomRange(-20,20)*mobj.scale,
+			MT_PARTICLE
+		)
+		wind.flags = MF_NOCLIPTHING
+		wind.state = S_MM_RADIO_NOTE
+		wind.fuse = note_fuse
+		wind.renderflags = $|RF_FULLBRIGHT
+		wind.frame = $ + P_RandomRange(0, 3)
+		wind.myframe = wind.frame
+		P_Thrust(wind, R_PointToAngle2(wind.x,wind.y, mobj.x,mobj.y), 2 * mobj.scale)
+		P_SetObjectMomZ(wind,P_RandomRange(3,6)*FU)
+	end
 	
 	for p in players.iterate do
 		if not (p and p.mo and p.mm) then continue end

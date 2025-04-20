@@ -214,7 +214,12 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	end
 
 	if not P_CheckSight(consoleplayer.mo, src.mo)
-	and (dist >= 64*FU and dist <= 512*FU) then
+	and (dist >= 64*FU) then
+		--dont even bother
+		if dist <= 512*FU
+			return true
+		end
+		
 		if not checkRayCast(
 			{mo = consoleplayer.mo,	x = consoleplayer.mo.x,	y = consoleplayer.mo.y,	z = consoleplayer.mo.z},
 			{mo = src.mo,			x = src.mo.x,			y = src.mo.y,			z = src.mo.z},

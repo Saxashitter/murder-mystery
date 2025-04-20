@@ -84,6 +84,7 @@ radio.droppable_clue = true
 radio.shootable = false
 radio.shootmobj = MT_THOK
 radio.allowdropmobj = true
+radio.noitemsparkles = true
 
 radio.drop = function(item,p,mobj)
 	if mobj and mobj.valid then

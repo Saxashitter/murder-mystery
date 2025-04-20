@@ -131,6 +131,7 @@ function MM:DropItem(p, slot, randomize, dont_notify, forced)
 		mobj.pickupid = item.id
 		mobj.pickupsfx = item.pickupsfx
 		mobj.restrict = shallowCopy(item.restrict)
+		mobj.noitemsparkles = item.noitemsparkles
 		
 		mobj.pickupwait = TICRATE
 		mobj.sourcep = p
@@ -193,6 +194,7 @@ local function manage_unpicked_weapon(mobj)
 	end
 	
 	if P_RandomChance(FU/2)
+	and not mobj.noitemsparkles
 		local wind = P_SpawnMobj(
 			mobj.x + P_RandomRange(-18,18)*mobj.scale,
 			mobj.y + P_RandomRange(-18,18)*mobj.scale,

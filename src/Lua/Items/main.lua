@@ -352,6 +352,7 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		item.rapidfire = def.rapidfire
 		item.onlyhitone = def.onlyhitone
 		item.restrict = shallowCopy(def.restrict)
+		item.noitemsparkles = def.noitemsparkles
 		
 		item.pickupsfx = def.pickupsfx
 		item.equipsfx = def.equipsfx

@@ -6,6 +6,8 @@ local function SafeFreeslot(...)
 		end
 	end
 end
+local HITLAG_DURATION = TR/2
+local HITLAG_JITTER = FU / 2
 
 SafeFreeslot("SPR_TRIPMINEEXPLOSION")
 SafeFreeslot("S_MM_TRIPMINE_EXPLODE")
@@ -174,7 +176,7 @@ local function ExplosionCompliment(mine)
 	S_StartSound(sfx, sfx_mmdie0)
 	
 	local a = mine.angle + ANGLE_45
-	local spr_scale = FU
+	local spr_scale = FU * 2
 	local tntstate = S_TNTBARREL_EXPL3
 	local rflags = RF_PAPERSPRITE|RF_FULLBRIGHT|RF_NOCOLORMAPS
 	local wavestate = S_FACESTABBERSPEAR
@@ -187,7 +189,7 @@ local function ExplosionCompliment(mine)
 		bam.renderflags = $|rflags
 		bam.angle = a + ANGLE_90 * i
 		
-		bam.color = ColorOpposite(SKINCOLOR_GALAXY)
+		bam.color = SKINCOLOR_GALAXY
 		bam.colorized = true
 		bam.blendmode = AST_SUBTRACT
 		
@@ -292,6 +294,20 @@ local function ThreeDThinker(door)
 		return
 	end
 	
+	local x = 0
+	local y = 0
+	local z = 0
+	local movefunc = P_MoveOrigin
+	if door.markedfordeath ~= nil
+		local offset = door.markedfordeath * HITLAG_JITTER
+		if (leveltime & 1) then offset = -$ end
+		
+		x = $ + offset
+		y = $ + offset
+		z = $ + offset
+		movefunc = P_SetOrigin
+	end
+	
 	if not door.made3d
 		local list
 		local flip = P_MobjFlip(door)
@@ -317,10 +333,11 @@ local function ThreeDThinker(door)
 			list[0+i].radius = 0
 			list[0+i].destscale = door.scale
 			list[0+i].scalespeed = list[0+i].destscale + 1
+			list[0+i].translation = door.translation
 			P_SetOrigin(list[0+i],
-				list[0+i].x,
-				list[0+i].y,
-				GetActorZ(door,list[0+i],1)
+				list[0+i].x + x,
+				list[0+i].y + y,
+				GetActorZ(door,list[0+i],1) + z
 			)
 		end
 		list[7] = P_SpawnMobjFromMobj(door,0,0,0,MT_RAY)
@@ -333,7 +350,12 @@ local function ThreeDThinker(door)
 		list[7].scale = door.scale
 		list[7].destscale = door.destscale
 		list[7].scalespeed = door.scalespeed
-		P_SetOrigin(list[7],list[7].x,list[7].y,GetActorZ(door,list[7],1))
+		list[7].translation = door.translation
+		P_SetOrigin(list[7],
+			list[7].x + x,
+			list[7].y + y,
+			GetActorZ(door,list[7],1) + z
+		)
 		
 		door.made3d = true
 	
@@ -349,10 +371,11 @@ local function ThreeDThinker(door)
 			list[0+i].destscale = door.scale
 			list[0+i].scalespeed = list[0+i].destscale + 1
 			list[0+i].frame = ($ &~FF_TRANSMASK)|trans
-			P_MoveOrigin(list[0+i],
-				door.x+P_ReturnThrustX(nil,angle,16*door.scale) + door.momx,
-				door.y+P_ReturnThrustY(nil,angle,16*door.scale) + door.momy,
-				GetActorZ(door,list[0+i],1) + door.momz
+			list[0+i].translation = door.translation
+			movefunc(list[0+i],
+				door.x+P_ReturnThrustX(nil,angle,16*door.scale) + door.momx + x,
+				door.y+P_ReturnThrustY(nil,angle,16*door.scale) + door.momy + y,
+				GetActorZ(door,list[0+i],1) + door.momz + z
 			)
 			
 			if door.fade == 10
@@ -363,10 +386,11 @@ local function ThreeDThinker(door)
 		list[7].angle = door.angle
 		list[7].scale = door.scale
 		list[7].frame = ($ &~FF_TRANSMASK)|trans
-		P_MoveOrigin(list[7],
-			door.x + door.momx,
-			door.y + door.momy,
-			GetActorZ(door,list[7],1) + door.momz
+		list[7].translation = door.translation
+		movefunc(list[7],
+			door.x + door.momx + x,
+			door.y + door.momy + y,
+			GetActorZ(door,list[7],1) + door.momz + z
 		)
 		if door.fade == 10
 			list[7].flags2 = $|MF2_DONTDRAW
@@ -381,6 +405,18 @@ addHook("MobjThinker",function(mine)
 	
 	ThreeDThinker(mine)
 	P_ButteredSlope(mine)
+	
+	--mine.markedfordeath = HITLAG_DURATION
+	if mine.markedfordeath
+		mine.markedfordeath = $ - 1
+		mine.fade = 0
+		mine.translation = "Invert"
+		
+		if mine.markedfordeath == 0
+			P_KillMobj(mine, mine.deathvar[1], mine.deathvar[2])
+			return
+		end
+	end
 	
 	if R_PointToDist2(0,0,mine.momx,mine.momy) <= 3*mine.scale
 		if mine.activatein
@@ -676,6 +712,27 @@ addHook("MobjDeath",function(mine,_,src)
 		S_StartSound(me,mine.info.deathsound)
 	end
 	
+	searchBlockmap("objects", function(ref, me)
+		if mine == me then return end
+		if me.type ~= mine.type then return end
+		if me.markedfordeath then return end
+		
+		if abs(mine.x - me.x) > radius
+		or abs(mine.y - me.y) > radius
+		or abs(mine.z - me.z) > radius
+			return
+		end
+		
+		me.markedfordeath = HITLAG_DURATION
+		me.deathvar = {
+			_, src
+		}
+		S_StartSound(me, sfx_buzz3)
+	end, 
+	mine,
+	mine.x - radius, mine.x + radius,
+	mine.y - radius, mine.y + radius)
+
 end,MT_MM_TRIPMINE)
 
 addHook("MobjRemoved",delete3d,MT_MM_TRIPMINE)

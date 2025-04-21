@@ -157,7 +157,7 @@ MM_PERKS[MMPERK_FAKEGUN] = {
 		"change your knife's appearance to a random gun,",
 		"fooling Innocents. You can still",
 		"kill with it!",
-		"Press [TOSSFLAG] again to deactivate it."
+		"Press [TOSSFLAG] again to deactivate it.",
 		
 		"",
 		

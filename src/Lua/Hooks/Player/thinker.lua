@@ -163,8 +163,6 @@ MM.addHook("PlayerInit",function(p)
 		p.mm.spectator = true
 		p.spectator = true
 	end
-
-	p.mm.afkmodelast = p.mm_save.afkmode
 	
 	--Sure! (hacky fix to allow footsteps perk to be uneqiuped)
 	if MM_PERKS

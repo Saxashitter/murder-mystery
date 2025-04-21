@@ -57,6 +57,8 @@ Music = SSWAMP
 TypeOfLevel = SaxaMM
 Selectheading = Murder Mystery
 Skynum = 129
+Lua.MM_StormTimer = 28
+Lua.MM_StormTimer_Overtime = 20
 
 Level P0
 Levelname = Seaegg

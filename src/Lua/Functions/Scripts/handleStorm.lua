@@ -596,7 +596,7 @@ return function(self)
 		point.movecooldown = 10*TICRATE
 		MMHUD:PushToTop(8*TICRATE,
 			"\x89Storm eye Migrates in",
-			"\x82".."20\x80 seconds"
+			"\x82".."10\x80 seconds"
 		)
 		S_StartSound(nil,sfx_alarm)
 		

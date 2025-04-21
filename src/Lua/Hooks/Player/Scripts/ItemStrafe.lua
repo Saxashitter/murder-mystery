@@ -5,7 +5,11 @@ local function ApplyStrafe(p)
 	p.drawangle = p.cmd.angleturn << 16
 end
 local function NoStrafe(p)
-	p.pflags = $ &~(PF_FORCESTRAFE|PF_ANALOGMODE)
+	if (p.pflags & PF_ANALOGMODE)
+		p.pflags = $|PF_FORCESTRAFE &~(PF_ANALOGMODE|PF_DIRECTIONCHAR)
+	else
+		p.pflags = $ &~(PF_FORCESTRAFE|PF_ANALOGMODE)
+	end
 end
 
 return function(player)

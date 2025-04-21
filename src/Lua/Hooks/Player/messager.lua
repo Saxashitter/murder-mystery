@@ -74,7 +74,7 @@ local function checkRayCast(from, to, props)
 	)
 	
 	local blockrad = namecheck.radius + to.mo.radius
-	local startclipping = 10
+	local startclipping = 7
 	for i = 0, 255
 		if not (namecheck and namecheck.valid)
 			return false
@@ -216,7 +216,7 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	if not P_CheckSight(consoleplayer.mo, src.mo)
 	and (dist >= 64*FU) then
 		--dont even bother
-		if dist <= 512*FU
+		if dist >= 255*FU
 			return true
 		end
 		

@@ -77,7 +77,7 @@ addHook("PlayerSpawn", function(player)
 		end
 	end
 
-	player.mm.afkmodelast = payer.mm_save.afkmode
+	player.mm.afkmodelast = player.mm_save.afkmode
 end)
 
 addScript "Waiting"

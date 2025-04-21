@@ -25,9 +25,15 @@ local function perk_thinker(p)
 	
 	if (p.cmd.buttons & BT_TOSSFLAG)
 	and not (p.lastbuttons & BT_TOSSFLAG)
-		p.mm.perk_fake_time = perk_maxtime
-		p.mm.perk_fake_cooldown = perk_cooldown + perk_maxtime
-		p.mm.perk_fake_item = clueItems[P_RandomRange(1,#clueItems)]
+		if not p.mm.perk_fake_time
+		and not p.mm.perk_fake_cooldown
+			p.mm.perk_fake_time = perk_maxtime
+			p.mm.perk_fake_cooldown = perk_cooldown + perk_maxtime
+			p.mm.perk_fake_item = clueItems[P_RandomRange(1,#clueItems)]
+		elseif p.mm.perk_fake_time
+			p.mm.perk_fake_time = 0
+			p.mm.perk_fake_cooldown = perk_cooldown
+		end
 	end
 	
 	if MM_N.gameover
@@ -151,6 +157,7 @@ MM_PERKS[MMPERK_FAKEGUN] = {
 		"change your knife's appearance to a random gun,",
 		"fooling Innocents. You can still",
 		"kill with it!",
+		"Press [TOSSFLAG] again to deactivate it."
 		
 		"",
 		

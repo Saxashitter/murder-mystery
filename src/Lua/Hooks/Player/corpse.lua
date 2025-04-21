@@ -409,9 +409,9 @@ addHook("ThinkFrame", function()
             if not p.mm then continue end
 			if p.mm.role == MMROLE_MURDERER then continue end
             if (p.spectator) then continue end
-
+			
 			if P_CheckSight(corpse, p.mo)
-			and R_PointToDist(corpse.x, corpse.y, p.mo.x, p.mo.y) < 512*FU
+			and R_PointToDist2(corpse.x, corpse.y, p.mo.x, p.mo.y) < 512*FU
 			and not (MM_N.knownDeadPlayers[corpse.playerid]) then
 				chatprint("\x82*The corpse of "..corpse.playername.." has been found!")
 				MM_N.knownDeadPlayers[corpse.playerid] = true

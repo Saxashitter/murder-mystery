@@ -31,6 +31,7 @@ weapon.damage = false
 weapon.weaponize = false
 weapon.droppable = true
 weapon.shootable = false
+weapon.nostrafe = true
 weapon.shootmobj = MT_THOK
 weapon.equipsfx = sfx_burgr1
 weapon.attacksfx = sfx_burgr2

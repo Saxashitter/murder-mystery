@@ -152,7 +152,6 @@ addHook("PlayerThink", function(p)
 			S_StopSoundByID(displayplayer.mo,sfx_mmstm2)
 		end
 	end
-	
 end)
 
 --when should we be forced into spectating?
@@ -183,7 +182,7 @@ MM:addPlayerScript(dofile("Hooks/Player/Scripts/InteractHandler"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/Teammates"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/AntiAbility"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/PerkHandler"))
-MM:addPlayerScript(dofile("Hooks/Player/Scripts/NoAuto"))
+MM:addPlayerScript(dofile("Hooks/Player/Scripts/ItemStrafe"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/CashInChecks"), true)
 
 addHook("KeyDown",function(key)

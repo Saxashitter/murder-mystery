@@ -31,6 +31,7 @@ weapon.damage = false
 weapon.weaponize = true
 weapon.droppable = false
 weapon.shootable = false
+weapon.nostrafe = true
 weapon.shootmobj = MT_THOK
 weapon.equipsfx = sfx_None
 weapon.attacksfx = sfx_None

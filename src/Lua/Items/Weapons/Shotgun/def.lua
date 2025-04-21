@@ -5,6 +5,8 @@ local roles = MM.require "Variables/Data/Roles"
 local MAX_COOLDOWN = 3*TICRATE
 local MAX_ANIM = TICRATE
 
+dofile("Items/Weapons/Shotgun/bullet")
+
 weapon.id = "shotgun"
 weapon.category = "Weapon"
 weapon.display_name = "Shotgun"
@@ -31,7 +33,7 @@ weapon.damage = false
 weapon.weaponize = true
 weapon.droppable = true
 weapon.shootable = true
-weapon.shootmobj = dofile "Items/Weapons/Shotgun/bullet"
+weapon.shootmobj = MT_RAY
 weapon.pickupsfx = sfx_gnpick
 weapon.equipsfx = sfx_gequip
 weapon.attacksfx = sfx_gnfire
@@ -48,16 +50,18 @@ end
 
 --shotgun spread
 function weapon:attack(p)
+	self.shootmobj = MT_MM_BULLET
 	for i = -2,2
-		if i == 0 then continue end
+		--if i == 0 then continue end
 		
-		MM.FireBullet(p,MM.Items[self.id],self,
+		MM.FireBullet(p, MM.Items[self.id], self,
 			p.mo.angle + FixedAngle(P_RandomFixed()*i)*2,
 			p.aiming + FixedAngle(P_RandomFixed()*(P_RandomChance(FU/2) and 1 or -1))*7,
 			false
 		)
 		
 	end
+	self.shootmobj = MT_RAY
 end
 
 weapon.bulletthinker = function(mo, i)

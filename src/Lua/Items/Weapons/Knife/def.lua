@@ -68,6 +68,7 @@ end
 
 weapon.thinker = function(item, p)
 	if not (p and p.valid) then return end
+	if p.mm.inventory.items[p.mm.inventory.cur_sel].cooldown then return end
 	
 	for p2 in players.iterate do
 		if not (p2 ~= p
@@ -76,10 +77,10 @@ weapon.thinker = function(item, p)
 		and p2.mo.health
 		and p2.mm
 		and not p2.mm.spectator) then continue end
-
+		
 		local dist = R_PointToDist2(p.mo.x, p.mo.y, p2.mo.x, p2.mo.y)
 		local maxdist = FixedMul(p.mo.radius+p2.mo.radius, item.range)
-
+		
 		if roles[p.mm.role].team == roles[p2.mm.role].team
 		and not roles[p.mm.role].friendlyfire then
 			continue

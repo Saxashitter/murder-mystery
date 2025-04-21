@@ -49,7 +49,8 @@ function MM:spawnClueMobj(p, pos)
 	--try to not have them on the ground
 	if (mobj.z <= mobj.floorz)
 	or (mobj.z+mobj.height >= mobj.ceilingz)
-		mobj.z = $ + 40*mobj.scale * P_MobjFlip(mobj)
+		local sign = (mobj.z+mobj.height >= mobj.ceilingz) and -1 or 1
+		mobj.z = $ + 40*mobj.scale * sign
 	end
 	
 	if MM.clues_singlemode

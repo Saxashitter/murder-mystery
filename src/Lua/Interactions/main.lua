@@ -64,11 +64,13 @@ MM.sortInteracts = function(p,a,b)
 	end
 	
 	--Bruh
+	/*
 	if (a.mo.dropip ~= nil and b.mo.dropid ~= nil)
 	and (onPoint(a.mo, b.mo)
 	or (#p.mm.interact.points == 2))
 		return a.mo.dropid < b.mo.dropid
 	end
+	*/
 	
 	local aDist = R_PointToDist2(p.mo.x,p.mo.y, a.mo.x,a.mo.y)
 	local bDist = R_PointToDist2(p.mo.x,p.mo.y, b.mo.x,b.mo.y)

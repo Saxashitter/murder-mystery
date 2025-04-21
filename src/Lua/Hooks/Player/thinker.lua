@@ -166,6 +166,12 @@ MM.addHook("PlayerInit",function(p)
 	end
 
 	p.mm.afkmodelast = p.mm_save.afkmode
+	
+	--Sure! (hacky fix to allow footsteps perk to be uneqiuped)
+	if MM_PERKS
+		--MM.Shop.buyItem(p, MM_PERKS.perkid_to_itemid[MMPERK_FOOTSTEPS], false)
+		p.mm_save.purchased[MM_PERKS.perkid_to_itemid[MMPERK_FOOTSTEPS]] = true
+	end
 end)
 
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/Role Handler"))

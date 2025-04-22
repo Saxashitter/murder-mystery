@@ -126,8 +126,6 @@ local tree = {
 	
 	"Functions/exec",
 	"HUD/exec",
-
-	"debug",
 }
 
 for k,file in ipairs(tree)

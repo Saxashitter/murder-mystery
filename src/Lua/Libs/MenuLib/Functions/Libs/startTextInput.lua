@@ -1,7 +1,12 @@
 local ML = MenuLib
 
-return function(buffer, id, onclose, onenter, tooltip, typesound)
+return function(buffer, id, props)
 	if ML.client.textbuffer_id ~= nil then return end
+	
+	local onclose = props.onclose
+	local onenter = props.onenter
+	local tooltip = props.tooltip
+	local typesound = props.typesound
 	
 	ML.client.textbuffer = buffer
 	ML.client.textbuffer_id = id

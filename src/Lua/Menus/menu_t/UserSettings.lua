@@ -109,10 +109,17 @@ MenuLib.addMenu({
 				outline = 19,
 				
 				pressFunc = function()
-					ML.startTextInput(textbuf,textbufid,nil,function()
-						MenuLib.client.commandbuffer = "MM_RadioSong "..ML.client.textbuffer
-						textbuf = ""
-					end, "Sets your radio's song when dropped.", sfx_oldrad)				
+					ML.startTextInput(textbuf,textbufid,{
+                        onenter = function()
+                            MenuLib.client.commandbuffer = "MM_RadioSong "..ML.client.textbuffer
+                            textbuf = ""
+                        end,
+                        tooltip = {
+                            "Sets your radio's song when dropped. \x82Valid songs:",
+                            "tacos, macca, overtime, fellas, sonicr, elevator, portal"
+                        },
+                        typesound = sfx_oldrad
+                    })				
 				end,
 				
 			})

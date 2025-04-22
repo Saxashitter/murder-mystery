@@ -12,8 +12,14 @@ return function(v,ML)
 	
 	local menu = ML.menus[ML.client.currentMenu.id]
 	
-	ML.HUD.menu_fake_width = FixedCeil(ease.linear(FU/2, $*FU, menu.width*FU)) / FU
-	ML.HUD.menu_fake_height = FixedCeil(ease.linear(FU/2, $*FU, menu.height*FU)) / FU
+	if menu.ms_flags & MS_NOANIM
+		ML.HUD.menu_fake_width = menu.width
+		ML.HUD.menu_fake_height = menu.height
+	else
+		ML.HUD.menu_fake_width = FixedCeil(ease.linear(FU/2, $*FU, menu.width*FU)) / FU
+		ML.HUD.menu_fake_height = FixedCeil(ease.linear(FU/2, $*FU, menu.height*FU)) / FU
+	end
+	
 	local fake_width = ML.HUD.menu_fake_width
 	local fake_height = ML.HUD.menu_fake_height
 	
@@ -28,11 +34,13 @@ return function(v,ML)
 		)
 	end
 	
-	v.drawFill(
-		corner_x, corner_y,
-		fake_width, fake_height,
-		menu.color
-	)
+	if menu.color ~= -1
+		v.drawFill(
+			corner_x, corner_y,
+			fake_width, fake_height,
+			menu.color
+		)
+	end
 	
 	v.drawString(corner_x + 2,
 		corner_y + 2,
@@ -57,10 +65,12 @@ return function(v,ML)
 		})
 	end
 	
-	v.drawFill(corner_x, corner_y + 13,
-		fake_width, 1,
-		0
-	)
+	if not (menu.ms_flags & MS_NOLINE)
+		v.drawFill(corner_x, corner_y + 13,
+			fake_width, 1,
+			0
+		)
+	end
 	
 	if (menu.drawer ~= nil)
 		menu.drawer(v, ML, menu, {

@@ -136,14 +136,29 @@ local function drawIt(v, ML)
 		if ML.client.textbuffer_tooltip ~= nil
 			local tip = ML.client.textbuffer_tooltip
 			
-			
-			drawRect(v, leftmost, y+26, v.stringWidth(tip,0,"thin") + 6, 14)
-			v.drawString(leftmost + 3,
-				y + 29,
-				tip,
-				V_ALLOWLOWERCASE,
-				"thin"
-			)
+			if type(tip) == "string"
+				drawRect(v, leftmost, y+26, v.stringWidth(tip,0,"thin") + 6, 14)
+				v.drawString(leftmost + 3,
+					y + 29,
+					tip,
+					V_ALLOWLOWERCASE,
+					"thin"
+				)
+			elseif type(tip) == "table"
+				drawRect(v, leftmost, y+26, boxwidth - 8, 4 + #tip*10)
+				local worky = 29
+				
+				for k,string in ipairs(tip)
+					v.drawString(leftmost + 3,
+						y + worky,
+						string,
+						V_ALLOWLOWERCASE,
+						"thin"
+					)
+					worky = $ + 10
+				end
+				
+			end
 			
 		end
 	end

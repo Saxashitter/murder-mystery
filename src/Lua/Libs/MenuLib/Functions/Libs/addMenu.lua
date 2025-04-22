@@ -39,6 +39,7 @@ return function(props)
 		x = getAttrib(props, "x", BASEVIDWIDTH/2),
 		y = getAttrib(props, "y", BASEVIDHEIGHT/2),
 		ps_flags = getAttrib(props, "ps_flags", 0),
+		ms_flags = getAttrib(props, "ms_flags", 0),
 	})
 	
 	--every menu item NEEDS a stringId for indentification

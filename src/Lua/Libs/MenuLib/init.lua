@@ -1,4 +1,4 @@
---MenuLib v0.0.5 written by luigi budd
+--MenuLib v0.6 written by luigi budd
 
 if rawget(_G,"MenuLib")
 	print("\x85MenuLib already loaded, aborting...")
@@ -49,6 +49,15 @@ enumflags("PS_", {
 	"NOESCAPE",
 }, "flags")
 
+--Menu-Style flags
+enumflags("MS_", {
+	--the menu will not draw the separating line
+	"NOLINE",
+	
+	--this menu will not do the expanding animation
+	"NOANIM",
+}, "flags")
+
 --Close-Reason enums
 enumflags("CR_", {
     --we're going back in the menu layers
@@ -69,8 +78,8 @@ enumflags("IR_", {
 	"INITPOPUP",
 }, "enum")
 
-MenuLib.VERSION = 005
-MenuLib.SUBVERSION = 6
+MenuLib.VERSION = 006
+MenuLib.SUBVERSION = 0
 --dont forget the ending "/" (and "debug" from the file tree below!)
 MenuLib.root = "Libs/MenuLib/"
 
@@ -117,6 +126,8 @@ local tree = {
 	
 	"Functions/exec",
 	"HUD/exec",
+
+	"debug",
 }
 
 for k,file in ipairs(tree)

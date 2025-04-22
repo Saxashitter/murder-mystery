@@ -229,10 +229,10 @@ MenuLib.addMenu({
 			pressFunc = function()
 				ML.startTextInput(debug_command,debug_commandid, {
                     onenter = function()
-                        MenuLib.client.commandbuffer = "MM_GiveRings "..ML.client.textbuffer
+                        MenuLib.client.commandbuffer = "MM_AddRings "..ML.client.textbuffer
                         debug_command = ""
                     end,
-                    tooltip = "\x86mm_giverings <rings>",
+                    tooltip = "\x86mm_addrings <rings>",
                     typesound = sfx_oldrad
                 })				
 			end,

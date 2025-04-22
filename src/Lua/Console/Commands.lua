@@ -1,6 +1,14 @@
 COM_AddCommand("MM_GiveItem", function(p, name)
 	if not MM:isMM() then return end
 
+    if not MM.Items[name]
+        CONS_Printf(p,"\x85".."Item name "..tostring(name).." not valid. \x82List of items:")
+        for k,v in pairs(MM.Items)
+            CONS_Printf(p, "* "..tostring(k))
+        end
+        return
+    end
+
 	MM:GiveItem(p, name)
 end, COM_ADMIN)
 
@@ -305,7 +313,7 @@ COM_AddCommand("MM_EquipPerk", function(p, slot, newperk)
 	
 end)
 
-COM_AddCommand("MM_GiveRings", function(p, rings)
+COM_AddCommand("MM_AddRings", function(p, rings)
 	if not MM:isMM() then return end
 	if (tonumber(rings) == nil) then return end
 	

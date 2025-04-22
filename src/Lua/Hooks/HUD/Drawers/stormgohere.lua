@@ -27,8 +27,8 @@ local function HUD_DrawGoHere(v,p,c)
 		)
 		v.drawScaled(to_screen.x,
 			to_screen.y - 6*FU,
-			(FU/4),
-			v.cachePatch("GARGA1"),
+			(FU/8),
+			v.cachePatch("GARGB1"),
 			0,
 			v.getColormap(TC_RAINBOW, SKINCOLOR_GALAXY)
 		)

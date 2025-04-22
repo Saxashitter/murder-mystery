@@ -406,22 +406,17 @@ addHook("MobjThinker",function(mine)
 	ThreeDThinker(mine)
 	P_ButteredSlope(mine)
 	
-	if mine.ceilingz - mine.floorz < mine.height
-	and mine.health
-	and not mine.markedfordeath
-		mine.markedfordeath = HITLAG_DURATION
-		S_StartSound(mine, sfx_buzz3)
-	end
-	
 	if mine.markedfordeath
 		mine.markedfordeath = $ - 1
 		mine.fade = 0
 		mine.translation = "Invert"
+		mine.flags = $ &~MF_SHOOTABLE
 		
 		if mine.markedfordeath == 0
 			P_KillMobj(mine, mine.deathvar[1], mine.deathvar[2])
 			return
 		end
+		return true
 	end
 	
 	if R_PointToDist2(0,0,mine.momx,mine.momy) <= 3*mine.scale
@@ -670,8 +665,15 @@ addHook("TouchSpecial",function(mine,me)
 	delete3d(mine)
 end,MT_MM_TRIPMINE)
 
-addHook("MobjDeath",function(mine,_,src)
+addHook("MobjDeath",function(mine,_,src,dmgt)
 	if (mine.steppedon) then return end
+	if dmgt == DMG_CRUSHED
+		mine.flags = $ &~MF_SHOOTABLE
+		mine.markedfordeath = HITLAG_DURATION
+		S_StartSound(mine, sfx_buzz3)
+		mine.deathvar = {_,src}
+		return true
+	end
 
 	local sfx = P_SpawnGhostMobj(mine)
 	sfx.flags2 = $|MF2_DONTDRAW

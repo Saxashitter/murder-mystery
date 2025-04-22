@@ -434,9 +434,8 @@ local function FXHandle(point,dist)
 		garg.flags = MF_NOCLIPTHING
 		garg.colorized = true
 		garg.color = SKINCOLOR_GALAXY
-		garg.scale = $*2
 		garg.angle = point.angle
-		garg.frame = $|FF_FULLBRIGHT
+		garg.frame = ($ &~FF_FRAMEMASK)|B|FF_SEMIBRIGHT
 		point.garg = garg
 	end
 

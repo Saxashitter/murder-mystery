@@ -379,7 +379,7 @@ function MM:GiveItem(p, item_input, slot, overrides)
 				end
 			end
 		end
-
+		
 		if slot then
 			self:FetchInventory(p)[slot] = item
 			if def.spawn then
@@ -389,12 +389,12 @@ function MM:GiveItem(p, item_input, slot, overrides)
 			and p.mm.inventory.cur_sel == slot
 			and item.equipsfx then
 				S_StartSound(p.mo, item.equipsfx)
-
+				
 				item.cooldown = 17
 			end
 			return item
 		end
-
+		
 		if self:FetchEmptySlot(p) then
 			local emptyslot = self:FetchEmptySlot(p) 
 			
@@ -407,10 +407,10 @@ function MM:GiveItem(p, item_input, slot, overrides)
 				and p.mm.inventory.cur_sel == emptyslot
 				and item.equipsfx then
 					S_StartSound(p.mo, item.equipsfx)
-
+					
 					item.cooldown = 17
 				end
-
+				
 				return item
 				--print("Went to empty slot")
 			end

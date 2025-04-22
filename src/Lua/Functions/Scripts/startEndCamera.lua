@@ -147,26 +147,26 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 				
 				MM_N.end_camera.angle = ang - ANGLE_90
 				MM_N.end_camera.ticker = $+1
-
+				
 				if MM_N.end_camera.ticker == MM_N.end_camera.swirldur
 				--hold on the murderer
 				and not MM_N.sniped_end
 					MM_N.end_camera.ticker = 1
 					MM_N.end_camera.swirl_stage = STAGE_INTERMEDIATE
 					MM_N.end_camera.swirldur = TICRATE*3/2
-
+					
 				end
 			--just wait
 			elseif (MM_N.end_camera.swirl_stage == STAGE_INTERMEDIATE)
 				
 				MM_N.end_camera.ticker = $+1
-
+				
 				if MM_N.end_camera.ticker == MM_N.end_camera.swirldur
 				and (sheriff and sheriff.valid)
 					MM_N.end_camera.ticker = 1
 					MM_N.end_camera.swirl_stage = STAGE_TOSHERIFF
 					MM_N.end_camera.swirldur = TICRATE
-
+					
 					MM_N.end_camera.origin = {sheriff.x, sheriff.y, sheriff.z + sheriff.height}
 					MM_N.end_camera.startradius[1] = R_PointToDist2(
 						MM_N.end_camera.x,
@@ -176,7 +176,7 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 					)
 					MM_N.end_camera.lerpradius = MM_N.end_camera.startradius[1]
 					MM_N.end_camera.free_noclip = true
-
+					
 				end
 			elseif (MM_N.end_camera.swirl_stage == STAGE_TOSHERIFF)
 				local swirl = intervalhelper(time, MM_N.end_camera.swirldur)
@@ -212,7 +212,7 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 			MM_N.end_camera.scale = ease.outquad(swirl, $, (sheriff and sheriff.valid) and sheriff.scale or $)
 		end
 		follow(MM_N.end_camera, FixedMul(pan, MM_N.end_camera.panspeed))
-
+		
 		--print(string.format("stage: %d %d %d startz: %f z: %f", MM_N.end_camera.swirl_stage, MM_N.end_ticker, MM_N.end_camera.ticker, MM_N.end_camera.startz, MM_N.end_camera.z))
 		
 	end
@@ -221,4 +221,6 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 		p.awayviewmobj = MM_N.end_camera
 		p.awayviewtics = 21*TICRATE
 	end
+	camera.chase = true
+	camera2.chase = true
 end

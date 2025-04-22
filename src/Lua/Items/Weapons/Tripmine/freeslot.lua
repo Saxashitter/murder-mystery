@@ -406,7 +406,13 @@ addHook("MobjThinker",function(mine)
 	ThreeDThinker(mine)
 	P_ButteredSlope(mine)
 	
-	--mine.markedfordeath = HITLAG_DURATION
+	if mine.ceilingz - mine.floorz < mine.height
+	and mine.health
+	and not mine.markedfordeath
+		mine.markedfordeath = HITLAG_DURATION
+		S_StartSound(mine, sfx_buzz3)
+	end
+	
 	if mine.markedfordeath
 		mine.markedfordeath = $ - 1
 		mine.fade = 0

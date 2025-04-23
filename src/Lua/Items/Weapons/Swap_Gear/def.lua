@@ -138,12 +138,19 @@ function weapon:onhit(player, player2)
 	(mo1 and mo1.valid) and
 	(mo2 and mo2.valid) then
 		self.hit = 0
-
+		
 		local alias = get_alias(player)
 		local alias2 = get_alias(player2)
-
+		
 		apply_alias_to_player(player, alias2)
 		apply_alias_to_player(player2, alias)
+		
+		--do effects after
+		S_StartSound(nil, sfx_bdyswp, player)
+		S_StartSound(nil, sfx_bdyswp, player2)
+		
+		P_SpawnGhostMobj(player.mo).fuse = 5
+		P_SpawnGhostMobj(player2.mo).fuse = 5
 	end
 end
 

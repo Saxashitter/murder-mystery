@@ -3,5 +3,6 @@ states[freeslot "S_MM_SWAP_GEAR"] = {
 	frame = A,
 	tics = -1
 }
+sfxinfo[freeslot("sfx_bdyswp")].caption = "Swap!"
 
 return S_MM_SWAP_GEAR

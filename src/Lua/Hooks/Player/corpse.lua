@@ -89,7 +89,10 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	and roles[source.player.mm.role].team == roles[target.player.mm.role].team
 	and not roles[source.player.mm.role].cankillmates) then
 		chatprintf(source.player, "\x82*That was not the murderer. You were killed for friendly fire!", true)
+		source.player.mm_save.rings = max($ - 40, 0)
+		S_StartSound(nil, sfx_antiri,source.player)
 		P_DamageMobj(source, nil, nil, 999, DMG_INSTAKILL)
+		
 		target.player.mm.whokilledme = "Killed by someone else's stupidity."
 	end
 

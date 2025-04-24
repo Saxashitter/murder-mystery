@@ -24,8 +24,29 @@ local function _eligibleGunPlayer(p)
 	and hasfreeslot
 end
 
+--refill and empty murd/sheriff slots left by players who left
+local function refillSlots()
+	if MM_N.dueling then return end
+	if not MM:pregame() then return end
+	
+	local count = MM.countPlayers()
+	local maxrole = MM_N.special_count
+	
+	if count.murderers < maxrole
+	or count.sheriffs < maxrole
+		MM:assignRoles(maxrole - min(count.murderers, count.sheriffs),
+			true,
+			count.murderers < count.sheriffs
+		)
+		if CV_MM.debug.value
+			print("\x83MM:\x80 Special roles too low! Reassigning roles...")
+		end
+	end
+end
+
 return function()
 	if (MM_N.dueling) then return end
+	refillSlots()
 	if (CV_MM.debug.value) then return end
 	
 	local _,innocents = getCount()

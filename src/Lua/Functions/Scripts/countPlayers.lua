@@ -4,8 +4,12 @@ return function()
         innocents = 0,
         sheriffs = 0,
         murderers = 0,
+		
+		// sheriffs + innocents
         regulars = 0,
         total = 0,
+		
+		// spectators/dead
         inactive = 0,
     }
 

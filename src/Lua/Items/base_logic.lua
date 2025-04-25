@@ -180,9 +180,9 @@ MM:addPlayerScript(function(p)
 	and not (p.lastbuttons & BT_CUSTOM1)
 	and not (MM:pregame()) then
 		inv.hidden = not inv.hidden
-
+		
 		local item = inv.items[inv.cur_sel]
-
+		
 		if item then
 			local def = MM.Items[item.id]
 			if inv.hidden then
@@ -193,11 +193,11 @@ MM:addPlayerScript(function(p)
 				if def.equip then
 					def.equip(item, p)
 				end
-
+				
 				if item.equipsfx then
 					S_StartSound(p.mo, item.equipsfx)
 				end
-
+				
 				item.anim = 0
 				item.hit = 0
 				item.cooldown = max(item.cooldown, 20)
@@ -229,7 +229,7 @@ MM:addPlayerScript(function(p)
 		sel = $-1
 	end
 
-	if abs(sel)
+	if (sel ~= 0)
 	and not MM.runHook("InventorySwitch", p, inv.cur_sel, 
 		shittyfunction(inv.cur_sel+sel, inv.count)
 	) then
@@ -237,21 +237,21 @@ MM:addPlayerScript(function(p)
 		
 		local olditem = inv.items[inv.cur_sel]
 		local olddef = (olditem) and MM.Items[olditem.id] or nil
-
+		
 		local old_sel = inv.cur_sel
 		inv.cur_sel = $+sel
-
+		
 		if inv.cur_sel < 1 then
 			inv.cur_sel = inv.count
 		end
 		if inv.cur_sel > inv.count then
 			inv.cur_sel = 1
 		end
-
+		
 		if not inv.hidden then
 			local newitem = inv.items[inv.cur_sel]
 			local newdef = MM.Items[newitem and newitem.id or ""]
-
+			
 			--saxa might be stupid because none of these were defined before
 			--or whoever added this i shouldnt be blaming everything on saxas
 			--good code lol
@@ -260,18 +260,18 @@ MM:addPlayerScript(function(p)
 			and olddef.unequip then
 				olddef.unequip(olditem, p)
 			end
-	
+			
 			if newitem
 			and newdef
 			and newdef.equip then
 				newdef.equip(newitem, p)
 			end
-	
+			
 			if newitem
 			and newitem.equipsfx then
 				S_StartSound(p.mo, newitem.equipsfx)
 			end
-	
+			
 			if newitem then
 				newitem.anim = 0
 				newitem.hit = 0

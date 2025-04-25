@@ -67,6 +67,7 @@ dofile "Items/main"
 dofile "ItemMapthings/main"
 dofile "Maps/exec"
 dofile "Objects/NeoRings/define"
+dofile "Objects/Vanilla Mobj Tweaks/Monitors"
 dofile "Menus/exec"
 
 -- fool-proofing

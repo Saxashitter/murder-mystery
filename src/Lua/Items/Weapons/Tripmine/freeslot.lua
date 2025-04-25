@@ -511,25 +511,32 @@ addHook("MobjThinker",function(mine)
 	
 end,MT_MM_TRIPMINE)
 
+local sparkle_fuse = TICRATE * 3
+local roll_limit = 20
+
 local function SpawnSparks(mo)
-	for i = 10,P_RandomRange(15,20)
+	for i = 12,P_RandomRange(20,25)
 		local spark = P_SpawnMobjFromMobj(mo,
 			P_RandomRange(-32,32)*FU,
 			P_RandomRange(-32,32)*FU,
 			FixedDiv(mo.height/2,mo.scale) + P_RandomRange(-16,16)*FU,
-			MT_THOK
+			MT_WKPL_SPARKLE
 		)
-		spark.state = S_SPRK1
-		spark.fuse = 16
+		spark.tics = -1
+		spark.alpha = 0
 		spark.colorized = true
-		spark.blendmode = AST_ADD
 		spark.color = SKINCOLOR_MAJESTY
+		spark.scale = $ + P_RandomFixed()/2
+		
+		spark.fuse = sparkle_fuse + P_RandomRange(-5, 5)
+		spark.start = spark.fuse
+		spark.threshold = P_RandomRange(-roll_limit, roll_limit) * ANG1
 		
 		P_Thrust(spark,
 			R_PointToAngle2(spark.x,spark.y, mo.x,mo.y),
-			-3*spark.scale
+			spark.scale
 		)
-		P_SetObjectMomZ(spark,P_RandomRange(-3,3)*FU)
+		P_SetObjectMomZ(spark,P_RandomRange(-1,1)*FU)
 	end
 end
 

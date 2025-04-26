@@ -6,6 +6,7 @@ MM.BulletDies = function(mo, moagainst, line)
 		--no puffs against thok barriers
 		if P_CheckSkyHit(mo,line) then return end
 	end
+	if mo.nobulletfx then return end
 	
 	for i = 0, P_RandomRange(2,5)
 		local ghs = P_SpawnMobjFromMobj(mo,
@@ -195,7 +196,7 @@ MM.GenericHitscan = function(mo)
 			P_RemoveMobj(mo)
 			return
 		end
-
+		
 		if i % 4 == 0 then
 			local ghs = P_SpawnGhostMobj(mo)
 			ghs.frame = (mo.bullframe % E)|FF_SEMIBRIGHT

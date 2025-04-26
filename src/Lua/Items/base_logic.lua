@@ -153,7 +153,7 @@ addHook("PostThinkFrame", do
 			if not (item.mobj and item.mobj.valid) then
 				item.mobj = MM:MakeWeaponMobj(p, item)
 			end
-
+			
 			if i ~= inv.cur_sel
 			or inv.hidden then
 				item.mobj.flags2 = $|MF2_DONTDRAW

@@ -40,6 +40,14 @@ weapon.hitsfx = sfx_kffire
 weapon.misssfx = sfx_kwhiff
 weapon.allowdropmobj = false
 
+local function resetposition(item)
+	item.default_pos.x = weapon.position.x
+	item.default_pos.y = weapon.position.y
+	item.default_pos.z = weapon.position.z
+	
+	item.damage = weapon.damage
+end
+
 local function distchecks(item, p, target)
 	local dist = R_PointToDist2(p.mo.x, p.mo.y, target.x, target.y)
 	local maxdist = FixedMul(p.mo.radius + target.radius, item.range)
@@ -66,9 +74,36 @@ local function distchecks(item, p, target)
 	return true
 end
 
+MM.addHook("ItemUse", function(p)
+	local inv = p.mm.inventory
+	local item = inv.items[inv.cur_sel]
+	
+	if item.id ~= "knife" then return end
+	
+	if item.altfiretime
+		return true
+	end
+end)
+weapon.unequip = function(item, p)
+ 	resetposition(item)
+end
+weapon.drop = weapon.unequip
+
+--item_t btw, get mobj from item->mobj
+local throw_tic = (TICRATE * 5/4)
+local throw_sfx = sfx_cdfm35
+local charge_vol = 255 * 3/5
 weapon.thinker = function(item, p)
 	if not (p and p.valid) then return end
-	if p.mm.inventory.items[p.mm.inventory.cur_sel].cooldown then return end
+	if p.mm.inventory.items[p.mm.inventory.cur_sel].cooldown
+		resetposition(item)
+		if item.throwcooldown
+			item.throwcooldown = $ - 1
+			item.mobj.alpha = (item.throwcooldown == 0) and FU or 0 
+		end
+		
+		return
+	end
 	
 	for p2 in players.iterate do
 		if not (p2 ~= p
@@ -106,12 +141,136 @@ weapon.thinker = function(item, p)
 		end
 	end
 	
+	if item.altfiretime == nil then item.altfiretime = 0 end
+	if item.throwcooldown == nil then item.throwcooldown = 0 end
+
+	local charging = false
+	if (p.cmd.buttons & BT_FIRENORMAL)
+		if not item.release
+			charging = true
+		end
+	else
+		item.release = nil
+	end
+	
+	if charging
+	and not item.release
+	and not item.throwcooldown
+		if item.altfiretime == 0
+			S_StartSound(nil, sfx_kcharg, p)
+		end
+		
+		item.altfiretime = $ + 1
+		item.damage = false
+		item.hit = 0
+		
+		if item.altfiretime == throw_tic
+			item.release = true
+			item.mobj.spriteyoffset = 0
+			S_StartSound(p.mo, weapon.misssfx)
+			S_StartSound(p.mo, weapon.misssfx)
+			--play this from the missile instead
+			--S_StartSoundAtVolume(p.mo, throw_sfx, 255 * 2/10)
+			
+			--throw
+			p.mm.inventory.items[p.mm.inventory.cur_sel].cooldown = weapon.cooldown_time
+			item.throwcooldown = weapon.cooldown_time - 1
+			
+			item.shootable = true
+			item.shootmobj = MT_MM_KNIFE_PROJECT
+			MM.FireBullet(p, MM.Items[item.id], item, p.mo.angle, p.aiming, false)
+			item.shootable = false
+			item.shootmobj = MT_NULL
+			
+			for k,bull in ipairs(item.bullets)
+				if not (bull and bull.valid)
+					table.remove(item.bullets,k)
+					continue
+				end
+				bull.pitch = item.mobj.pitch
+				bull.roll = item.mobj.roll
+			end
+			
+			--fuckkkkk
+			resetposition(item)
+            item.hit = 0
+			item.altfiretime = 0
+		else
+			if not (item.ghost and item.ghost.valid)
+				local g = P_SpawnGhostMobj(item.mobj)
+				g.tics = 12
+				g.fuse = g.tics
+				g.blendmode = AST_ADD
+				g.renderflags = $|RF_FULLBRIGHT
+				g.destscale = g.scale * 2
+				g.scalespeed = FixedDiv(g.destscale - g.scale, g.fuse*FU)
+				g.frame = $ &~FF_TRANSMASK
+				item.ghost = g
+			else
+				P_MoveOrigin(item.ghost,
+					item.mobj.x, item.mobj.y, item.mobj.z
+				)
+				item.ghost.frame = $ &~FF_TRANSMASK
+				item.ghost.angle = item.mobj.angle
+			end
+			item.mobj.spriteyoffset = (item.altfiretime * FU*3/4)
+			
+			item.default_pos.y = -(item.altfiretime * FU/25)
+		end
+	else
+		if item.altfiretime
+		and item.altfiretime < throw_tic
+			p.mm.inventory.items[p.mm.inventory.cur_sel].cooldown = TICRATE * 3/4
+			S_StartSound(p.mo, sfx_kc50)
+		end
+		
+		item.altfiretime = 0
+		
+		if item.ghost and item.ghost.valid
+			P_RemoveMobj(item.ghost)
+		end
+		item.mobj.spriteyoffset = 0
+		resetposition(item)
+	end
 end
 
 --Whiff so people know youre bad at the game
 weapon.onmiss = function(item,p)
 	if not item.misssfx then return end
 	S_StartSound(p.mo,item.misssfx)
+end
+
+weapon.drawer = function(v, p,item, x,y,scale,flags, selected, active)
+	if item.throwcooldown == nil
+	or item.altfiretime == nil
+		return
+	end
+	
+	local width = 32 * scale
+	local height = 32 * scale
+	local bottomy = y + height
+	
+	local timer = 0
+	local maxtime = 0
+	if item.throwcooldown
+		timer = item.throwcooldown
+		maxtime = weapon.cooldown_time - 1
+	elseif item.altfiretime
+		timer = item.altfiretime
+		maxtime = throw_tic
+	end
+	
+	if maxtime ~= 0
+		local patch = v.cachePatch("1PIXELW")
+		local stretch = FixedDiv(timer*FU, maxtime*FU)
+		
+		v.drawStretched(x, bottomy - FixedMul(height, stretch),
+			width, FixedMul(height, stretch), patch,
+			(flags &~V_ALPHAMASK)|V_30TRANS
+		)
+	end
+	
+	--v.drawString(x,y, timer.."/"..maxtime, flags, "thin-fixed")
 end
 
 MM.MeleeWhiffFX = function(p)
@@ -202,7 +361,7 @@ MM:addPlayerScript(function(p)
 		}
 		slope.zangle = aiming
 		slope.xydirection = angle
-
+		
 		--wumbo steve
 		whiff.spritexscale = whiff.scale
 		whiff.spriteyscale = FixedMul(cos(slope.zangle), whiff.scale + (slope.zangle == ANGLE_90 - 1 and 1024 or 0))

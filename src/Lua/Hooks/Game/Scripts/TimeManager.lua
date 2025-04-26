@@ -30,7 +30,7 @@ return function()
 		end
 		
 		if MM:pregame()
-			MM_N.dueling = numplay == 2
+			MM_N.dueling = numplay == 2 or (CV_MM.force_duel.value ~= 0)
 			MM_N.duel_item = possibleItems[P_RandomRange(1,#possibleItems)]
 		end
 		
@@ -176,6 +176,7 @@ return function()
 	
 	--debug thinker
 	if CV_MM.debug.value
+    and not CV_MM.force_duel.value
 		MM_N.dueling = false
 	end
 end

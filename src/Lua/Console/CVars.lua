@@ -13,3 +13,10 @@ CV_MM.debug = CV_RegisterVar({
 	flags = CV_NETVAR,
 	PossibleValue = CV_OnOff
 })
+
+CV_MM.force_duel = CV_RegisterVar({
+	name = "mm_forceduels",
+	defaultvalue = "Off",
+	flags = CV_NETVAR,
+	PossibleValue = CV_OnOff
+})

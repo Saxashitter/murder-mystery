@@ -31,6 +31,7 @@ return function(self, count, alreadychosen, murdorsherf)
 
 	local murderer_chance_table = {} 
 	local sheriff_chance_table = {}
+    local total_table = {}
 
 	-- Insert each player's chances in their tables.
 	for p in players.iterate do
@@ -46,12 +47,26 @@ return function(self, count, alreadychosen, murdorsherf)
 		for i=1,p.mm_save.sheriff_chance_multi do
 			table.insert(sheriff_chance_table, p)
 		end
+        table.insert(total_table,p)
 	end
 
 	-- Select players.
 	local murderers = {}
 	local sheriffs = {}
 	local i = 0
+
+    local firstcount = MM.countPlayers()
+    if MM_N.dueling or CV_MM.force_duel.value
+        for k, player in ipairs(total_table)
+            local result = MM.countPlayers()
+            if result.murderers > result.sheriffs
+                player.mm.role = MMROLE_SHERIFF
+            else
+                player.mm.role = MMROLE_MURDERER
+            end
+        end
+        return murderers, sheriffs
+    end
 
 	while i < count do
 		local mp = select_player_from_table(p, murderer_chance_table)
@@ -60,26 +75,25 @@ return function(self, count, alreadychosen, murdorsherf)
 		if mp ~= sp
 		and not (murderers[mp])
 		and not (sheriffs[sp]) then
-			if murdorsherf == nil or (murdorsherf == true) then
-				mp.mm.role = MMROLE_MURDERER
-				mp.mm_save.murderer_chance_multi = 1
-				
-				if murdorsherf ~= nil
-					chatprintf(mp, "\x83*You have been magically made a \x85Murderer!\x82")
-				end
-				murderers[mp] = true
-			end
-			
-			if murdorsherf == nil or (murdorsherf == false) then
-				sp.mm.role = MMROLE_SHERIFF
-				sp.mm_save.sheriff_chance_multi = 1
-				
-				if murdorsherf ~= nil
-					chatprintf(mp, "\x83*You have been magically made a \x84Sheriff!\x82")
-				end
-				sheriffs[sp] = true
-			end
-
+            if murdorsherf == nil or (murdorsherf == true) then
+                mp.mm.role = MMROLE_MURDERER
+                mp.mm_save.murderer_chance_multi = 1
+                
+                if murdorsherf ~= nil
+                    chatprintf(mp, "\x83*You have been magically made a \x85Murderer!\x82")
+                end
+                murderers[mp] = true
+            end
+            
+            if murdorsherf == nil or (murdorsherf == false) then
+                sp.mm.role = MMROLE_SHERIFF
+                sp.mm_save.sheriff_chance_multi = 1
+                
+                if murdorsherf ~= nil
+                    chatprintf(mp, "\x83*You have been magically made a \x84Sheriff!\x82")
+                end
+                sheriffs[sp] = true
+            end
 			i = $+1
 		end
 	end

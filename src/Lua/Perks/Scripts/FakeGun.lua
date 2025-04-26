@@ -12,11 +12,15 @@ local perk_maxtime = 10*TR
 local perk_cooldown = 30*TR
 
 local clueItems = {
-	"revolver",
 	"shotgun",
+	"revolver",
 	"sword",
+	
+	"loudspeaker",
 	"snowball",
+	
 	"burger",
+	"radio",
 }
 
 local function perk_thinker(p)

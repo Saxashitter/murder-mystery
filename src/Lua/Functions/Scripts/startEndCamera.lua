@@ -222,5 +222,8 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 		p.awayviewtics = 21*TICRATE
 	end
 	camera.chase = true
-	camera2.chase = true
+	
+	if splitscreen then
+		camera2.chase = true
+	end
 end

@@ -55,8 +55,8 @@ function weapon:attack(p)
 		--if i == 0 then continue end
 		
 		MM.FireBullet(p, MM.Items[self.id], self,
-			p.mo.angle + FixedAngle(P_RandomFixed()*i)*2,
-			p.aiming + FixedAngle(P_RandomFixed()*(P_RandomChance(FU/2) and 1 or -1))*7,
+			p.mo.angle + FixedAngle(P_RandomFixed()*(P_RandomChance(FU/2) and 1 or -1))*3,
+			p.aiming + FixedAngle(P_RandomFixed()*(P_RandomChance(FU/2) and 1 or -1))*3,
 			false
 		)
 		

@@ -55,6 +55,42 @@ end
 -- Copied lugger code. This should really be implemented in a cleaner way.
 weapon.hiddenthinker = function(item,p)
 	item.ammoleft = $ or weapon.maxshots
+
+	if (p.mm.inventory.hidden)
+	or (item.cooldown)
+		if (item.ghost and item.ghost.valid)
+			P_RemoveMobj(item.ghost)
+		end
+		return
+	end
+	
+	local me = p.mo
+	local newx = me.x + P_ReturnThrustX(nil,me.angle,64*me.scale)
+	local newy = me.y + P_ReturnThrustY(nil,me.angle,64*me.scale)
+	if not (item.ghost and item.ghost.valid)
+		local g = P_SpawnMobjFromMobj(me,
+			P_ReturnThrustX(nil,me.angle,64*FU),
+			P_ReturnThrustY(nil,me.angle,64*FU),
+			0,
+			MT_PARTICLE
+		)
+		item.ghost = g
+	end
+	local g = item.ghost
+	P_MoveOrigin(g,
+		newx + me.momx,
+		newy + me.momy,
+		P_FloorzAtPos(newx,newy,g.z, 32*me.scale)
+	)
+	P_SetMobjStateNF(g, S_MM_BEARTRAP_FRIENDLY)
+	g.angle = me.angle
+	g.tracer = me
+	g.fuse = -1
+	g.drawonlyforplayer = p
+	g.alpha = FU/2
+	g.renderflags = $|RF_FULLBRIGHT
+	g.translation = "Grayscale"
+	g.shadowscale = FU/2
 end
 weapon.thinker = weapon.hiddenthinker
 
@@ -66,6 +102,21 @@ weapon.attack = function(item,p)
 	
 	if item.ammoleft == 0
 		MM:DropItem(p,nil,false,true,true)
+	end
+	
+	if (item.ghost and item.ghost.valid)
+		P_RemoveMobj(item.ghost)
+	end
+end
+
+weapon.unequip = function(item,p)
+	if (item.ghost and item.ghost.valid)
+		P_RemoveMobj(item.ghost)
+	end
+end
+weapon.drop = function(item,p)
+	if (item.ghost and item.ghost.valid)
+		P_RemoveMobj(item.ghost)
 	end
 end
 

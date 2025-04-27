@@ -39,6 +39,7 @@ weapon.equipsfx = sfx_kequip
 weapon.hitsfx = sfx_kffire
 weapon.misssfx = sfx_kwhiff
 weapon.allowdropmobj = false
+weapon.showinfirstperson = false
 
 local function resetposition(item)
 	item.default_pos.x = weapon.position.x
@@ -46,6 +47,8 @@ local function resetposition(item)
 	item.default_pos.z = weapon.position.z
 	
 	item.damage = weapon.damage
+	item.mobj.frame = ($ &~FF_FRAMEMASK)
+	item.showinfirstperson = false
 end
 
 local function distchecks(item, p, target)
@@ -213,9 +216,14 @@ weapon.thinker = function(item, p)
 				item.ghost.frame = $ &~FF_TRANSMASK
 				item.ghost.angle = item.mobj.angle
 			end
-			item.mobj.spriteyoffset = (item.altfiretime * FU*3/4)
+			--item.mobj.spriteyoffset = (item.altfiretime * FU*3/4)
+			item.mobj.frame = ($ &~FF_FRAMEMASK)|B
+			item.mobj.dontdrawforviewmobj = nil
 			
+			item.showinfirstperson = true
+			item.default_pos.x = weapon.position.x - (item.altfiretime * FU/100)
 			item.default_pos.y = -(item.altfiretime * FU/25)
+			item.default_pos.z = (item.altfiretime * FU/50)
 		end
 	else
 		if item.altfiretime

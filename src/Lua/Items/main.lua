@@ -39,6 +39,8 @@ local ITEM_DEF = {
 									-- useful for cooldowns after throwing a weapon, or if you just want to do a fake-drop or something
 	hiddenforothers = false,	-- determines if the stick is hidden for others
 									-- stick needs to be true for this to operate correctly
+	showinfirstperson = false,
+	
 	cantouch = false,
 	animation = true,			-- enable if you want the weapon to be tweened between it's hit pos and default pos
 	damage = true,				-- enable if this can damage people
@@ -104,6 +106,7 @@ local ITEM_STRUCT = {
 
 	stick = true,
 	hiddenforothers = false,
+	showinfirstperson = false,
 	cantouch = false, -- damage attribute without the damage.
 	
 	animation = true,
@@ -368,6 +371,7 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		item.silencedkill = def.silencedkill
 		
 		item.hiddenforothers = def.hiddenforothers
+		item.showinfirstperson = def.showinfirstperson
 		item.cantouch = def.cantouch
 		
 		if overrides

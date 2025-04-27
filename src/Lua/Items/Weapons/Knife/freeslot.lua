@@ -3,6 +3,14 @@ states[freeslot("S_MM_KNIFE")] = {
 	frame = A,
 	tics = -1
 }
+states[freeslot("S_MM_KNIFE_SPIN")] = {
+	sprite = SPR_KNFE,
+	frame = C|FF_FULLBRIGHT|FF_ANIMATE,
+	var1 = 3,
+	var2 = 1,
+	tics = 4,
+	nextstate = S_MM_KNIFE_SPIN
+}
 
 sfxinfo[freeslot("sfx_kequip")].caption = "Knife equip"
 sfxinfo[freeslot("sfx_kffire")] = { 
@@ -24,7 +32,7 @@ states[freeslot("S_MM_KNIFE_WHIFF")] = {
 mobjinfo[freeslot("MT_MM_KNIFE_PROJECT")] = {
 	radius = 8*FU,
 	height = 16*FU,
-	spawnstate = S_MM_KNIFE,
+	spawnstate = S_MM_KNIFE_SPIN,
 	flags = MF_NOGRAVITY,
 	--move in quarter steps
 	speed = 80*FU / 4,
@@ -35,6 +43,7 @@ addHook("MobjThinker",function(mo)
 	if not (mo and mo.valid) then return end
 	if not mo.health
 		mo.momx,mo.momy,mo.momz = 0,0,0
+		mo.renderflags = $|RF_FULLBRIGHT
 		return
 	end
 	if mo.timealive == nil
@@ -67,10 +76,11 @@ addHook("MobjThinker",function(mo)
 		if not (mo and mo.valid) then return end
 	end
 	
-	if leveltime % 3 == 0
+	do --if leveltime % 3 == 0
 		local g = P_SpawnGhostMobj(mo)
 		g.blendmode = AST_ADD
 		g.renderflags = $|RF_FULLBRIGHT
+		g.translation = "Grayscale"
 	end
 	
 	if (mo.z <= mo.floorz)

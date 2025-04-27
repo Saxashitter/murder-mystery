@@ -138,7 +138,11 @@ local function manage_position(p, item, set)
 	end
 	
 	--Hide in 1st person
-	item.mobj.dontdrawforviewmobj = p.mo 
+	if item.showinfirstperson
+		item.mobj.dontdrawforviewmobj = nil
+	else
+		item.mobj.dontdrawforviewmobj = p.mo 
+	end
 end
 
 addHook("PostThinkFrame", do

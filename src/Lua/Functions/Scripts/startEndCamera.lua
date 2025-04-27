@@ -219,10 +219,10 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 	
 	for p in players.iterate
 		p.awayviewmobj = MM_N.end_camera
-		p.awayviewtics = 21*TICRATE
+		p.awayviewtics = 40*TICRATE
 	end
+
 	camera.chase = true
-	
 	if splitscreen then
 		camera2.chase = true
 	end

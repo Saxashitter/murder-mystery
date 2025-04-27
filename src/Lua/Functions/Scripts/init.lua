@@ -131,16 +131,18 @@ return function(self, maploaded)
 		return
 	end
 	
-	MM_N.safe_sectors = {}
-	MM_N.safe_sectors_UD = {}
-	
-	MM_N.map_weather = PRECIP_BLANK
-	MM_N = shallowCopy(matchVars)
+	local oldrounds = MM_N.rounds
 	if (MM_N.end_camera and MM_N.end_camera.valid) then
 		P_RemoveMobj(MM_N.end_camera)
 		MM_N.end_camera = nil
 	end
-
+    
+	MM_N = shallowCopy(matchVars)
+	MM_N.safe_sectors = {}
+	MM_N.safe_sectors_UD = {}
+	MM_N.map_weather = PRECIP_BLANK
+	MM_N.rounds = oldrounds or 0
+	
 	local count = 0
 	for p in players.iterate do
 		self:playerInit(p, true)

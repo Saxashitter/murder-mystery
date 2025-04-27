@@ -34,7 +34,7 @@ return function()
 			if mapc == 1 then
 				MM_N.mapVote.state = "done"
 				MM_N.mapVote.selected_map = pool[1]
-				MM_N.mapVote.ticker = 3*TICRATE
+				MM_N.mapVote.ticker = 5*TICRATE
 				MM_N.mapVote.unanimous = true
 				S_StartSound(nil, sfx_s3kb3)
 			else
@@ -64,12 +64,28 @@ return function()
 
 			if MM_N.mapVote.ticker <= 0 then
 				MM_N.mapVote.state = "done"
-				MM_N.mapVote.ticker = 3*TICRATE
+				MM_N.mapVote.ticker = 5*TICRATE
 				S_StartSound(nil, sfx_s3kb3)
 			end
 		elseif MM_N.mapVote.state == "done" and MM_N.mapVote.ticker <= 0 then
 			G_SetCustomExitVars(MM_N.mapVote.selected_map, 2)
 			G_ExitLevel()
+		end
+		
+		local changemusic = 1
+		--this song is very long
+		if mapmusname == "CHPASS" --"MMWIN"
+			changemusic = 5*TICRATE + TICRATE/2
+		elseif mapmusname == "_CLEAR"
+		or mapmusname == "CHFAIL"
+			changemusic = 2*TICRATE + TICRATE/2
+		end
+		
+		if MM_N.end_ticker == changemusic
+		and (MM_N.killing_end)
+			local theme = MM.themes[MM_N.theme or "srb2"]
+			mapmusname = theme.music or "CHRSEL"
+			S_ChangeMusic(mapmusname, true, nil, 0,0, MUSICRATE)
 		end
 		return
 	end
@@ -97,6 +113,44 @@ return function()
 	end
 	if MM_N.sniped_end and MM_N.end_ticker == releaseTic+8 then
 		S_StartSound(nil, sfx_mmsnp1 + P_RandomRange(0, 2))
+	end
+	if not MM_N.sniped_end
+	and MM_N.end_ticker == releaseTic + 8
+	and (MM_N.killing_end)
+		if (consoleplayer and consoleplayer.valid)
+			local p = consoleplayer
+			
+			if p.mm
+			and (p.mo and p.mo.valid)
+				--this makes me sad
+				local sheriff = 
+					((MM_N.end_killed and MM_N.end_killed.valid and MM_N.end_killed.player and MM_N.end_killed.player.mm.role == MMROLE_MURDERER)
+						and not (MM_N.end_killer and MM_N.end_killer.valid and MM_N.end_killer.health)
+					)
+					and MM_N.end_killed
+					or MM_N.end_killer
+				
+				--we made the winning kill
+				if (p.mo == sheriff)
+				and p.mo.health
+					mapmusname = "CHPASS" --"MMWIN"
+				--innocents won
+				elseif ((MM.endType.results == "innocents")
+				and (p.mm.role ~= MMROLE_MURDERER))
+				--murderers won
+				or ((MM.endType.results == "murderers")
+				and (p.mm.role == MMROLE_MURDERER))
+					mapmusname = "_CLEAR" --"MMOKAY"
+				else
+					mapmusname = "CHFAIL" --"MMLOSE"
+				end
+				
+				S_ChangeMusic(mapmusname, false)
+			else
+				mapmusname = "_CLEAR" --"MMOKAY"
+				S_ChangeMusic(mapmusname, false)
+			end
+		end
 	end
 	
 	/*if MM_N.end_ticker >= 5*TICRATE then

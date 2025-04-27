@@ -1,13 +1,13 @@
 local theme = {}
 
-local background
-
-theme.start_transparent = true
+theme.start_transparent = false
 theme.transition = false
 theme.transition_time = 0
 theme.music = "_INTER"
 theme.stretch = false
+theme.slide = true
 
+/*
 local function draw_parallax(v, x, y, scale, patch, flags)
 	if not (patch and patch.valid) then return end
 	
@@ -35,16 +35,20 @@ local function draw_parallax(v, x, y, scale, patch, flags)
 		y = $+(height*scale)
 	end
 end
+*/
 
 function theme.draw(v, tics)
-	if not background then
-		background = v.cachePatch "SRB2BACK"
-	end
+	/*
+	local background = v.cachePatch("SRB2BACK")
 
 	local scale = FU/2
 	local scroll = tics*scale
 
 	draw_parallax(v, scroll, scroll, scale, background, V_SNAPTOTOP|V_SNAPTOLEFT)
+	*/
+	if tics < 10 then return end
+	
+	v.fadeScreen(0xFF00, min(tics - 10, 26))
 end
 
 return theme

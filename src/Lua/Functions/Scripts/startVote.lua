@@ -7,13 +7,15 @@ return function(self)
 	MM_N.mapVote = {
 		maps = {},
 		state = "voting",
-		ticker = 10*TICRATE
+		ticker = 12*TICRATE
 	}
-
-	local theme = MM.themes[MM_N.theme or "srb2"]
-
-	mapmusname = theme.music or "CHRSEL"
-	S_ChangeMusic(mapmusname)
+	
+	if not (MM_N.killing_end)
+		local theme = MM.themes[MM_N.theme or "srb2"]
+		
+		mapmusname = theme.music or "CHRSEL"
+		S_ChangeMusic(mapmusname)
+	end
 	P_SwitchWeather(PRECIP_NONE)
 	
 	local addedMaps = 0

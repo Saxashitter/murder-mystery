@@ -37,6 +37,7 @@ return function()
 	MM_N.waiting_start_time = max(0, $-1)
 
 	if not (MM_N.waiting_start_time) then
+		MM_N.restartingformap = true
 		COM_BufInsertText(server, "map "..G_BuildMapName(gamemap).." -f")
 		MM_N.waiting_for_players = false
 	end

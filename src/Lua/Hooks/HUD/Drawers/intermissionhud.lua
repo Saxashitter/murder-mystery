@@ -1,14 +1,19 @@
 local int_ease = MM.require "Libs/int_ease"
-local MAX_FADE = 20
+local MAX_FADE = 10
+local SLIDEIN_TIME = 30
 
 local VWarp = MM.require "Libs/vwarp"
 
+local global = {
+	xoffset = 0,
+}
+
 local function return_settings(v, theme, transition)
 	local settings = {}
+	local tics = MM_N.end_ticker
 
 	if theme.start_transparent
 	and not transition then
-		local tics = MM_N.end_ticker
 		local t = FixedDiv(min(tics, MAX_FADE), MAX_FADE)
 		local trans = ease.linear(t, 10, 0)
 
@@ -25,20 +30,30 @@ local function return_settings(v, theme, transition)
 		settings.yscale = FixedDiv(sh, 200)
 		settings.xorigin = -(sw-320)*FU/2
 	end
+	
+	global.xoffset = 0
+	if theme.slide then
+		if tics < SLIDEIN_TIME
+			local slidein = ease.linear(
+				FixedDiv(tics*FU, SLIDEIN_TIME*FU),
+				640*FU,
+				0
+			)
+			settings.xoffset = slidein
+			global.xoffset = slidein
+		end
+	end
 
 	return settings
 end
 
 local function draw_hud(v)
-	// DEFINITION
-	
 	if MM_N.end_ticker == nil then return end
 	
 	local tics = MM_N.end_ticker
 	local tics_after = max(0, MM_N.end_ticker-MAX_FADE)
 	
-	// DRAW THEME
-	
+	-- DRAW THEME
 	local theme = MM.themes[MM_N.theme or "srb2"]
 	
 	local t = FixedDiv(min(tics, MAX_FADE), MAX_FADE)
@@ -46,27 +61,39 @@ local function draw_hud(v)
 	
 	local settings = return_settings(v, theme)
 	if settings == false then return end
+	local warpedv = VWarp(v, settings)
 	
-	theme.draw(VWarp(v, settings), tics)
+	theme.draw(warpedv, tics)
 	
-	// RESULTS
-	
+	-- RESULTS
+	/*
 	local results = v.cachePatch("RESULT")
-	
 	local t = FixedDiv(min(tics_after, TICRATE), TICRATE)
-	local x = (160*FU)-(results.width*(FU/2))
-	local y = ease.outquad(t, -results.height*FU, 4*FU)
+	local x = (160*FU) - (results.width*(FU/2))
+	v.drawScaled(x, 4*FU, FU, results, V_SNAPTOTOP)
+	*/
 	
-	v.drawScaled(x, y, FU, results, V_SNAPTOTOP)
-	
-	// WINNING PLAYERS
-	//// TEXT
+	-- WINNING PLAYERS
+	---- TEXT
 	
 	local endtype = MM.endType or MM.endTypes[1]
+	local endpatch = v.cachePatch(endtype.patch)
+	local endstringw = v.stringWidth(endtype.name,0,"normal")
+	local centered = endstringw + max(v.levelTitleWidth(tostring(MM_N.rounds)), endpatch.width/2)
+	centered = ($*FU)/2
 	
-	local y = ease.outcubic(t, -10*(FU*2), 18*FU)
-	
-	v.drawString(160*FU, y, endtype.name, V_SNAPTOTOP|endtype.color, "fixed-center")
+	v.drawScaled(
+		(160 + 8)*FU - centered + endstringw*FU,
+		10*FU, FU/2,
+		endpatch, V_SNAPTOTOP
+	)
+	v.drawString(160*FU - centered, 10*FU, endtype.name, V_SNAPTOTOP|endtype.color, "fixed")
+	v.drawLevelTitle(
+		160 - centered/FU + endstringw + 11 - v.levelTitleWidth(tostring(MM_N.rounds))/2,
+		10 - 3, -- v.levelTitleHeight(tostring(MM_N.rounds)),
+		tostring(MM_N.rounds),
+		V_SNAPTOTOP|V_YELLOWMAP
+	)
 	
 	local murd_text = "\x85Murderers: \x80"
 	for k,p in pairs(MM_N.murderers) do
@@ -78,7 +105,7 @@ local function draw_hud(v)
 		end
 	end
 	
-	v.drawString(160*FU, y+(10*FU), murd_text, V_SNAPTOTOP, "thin-fixed-center")
+	v.drawString(160*FU, 28*FU, murd_text, V_SNAPTOTOP, "thin-fixed-center")
 	
 	//// ICONS
 	
@@ -90,7 +117,7 @@ local function draw_hud(v)
 			if not (p and p.valid) then continue end
 			if (p.mm.afkmodelast) then continue end
 			
-			--preferable only alive people 
+			--preferably only alive people 
 			if (p.spectator) then continue end
 			local patch = v.getSprite2Patch(p.skin, SPR2_LIFE, false, A, 0)
 			
@@ -258,7 +285,11 @@ MMHUD.themedrawer = function(v)
 	local theme = MM.themes[MM_N.theme or "srb2"]
 
 	if MM_N.voting then
-		draw_hud(v)
+		draw_hud(VWarp(v, {
+			xoffset = (theme.slide and (MM_N.end_ticker < SLIDEIN_TIME))
+				and ease.linear(FixedDiv(MM_N.end_ticker*FU, SLIDEIN_TIME*FU), 640*FU, 0)
+				or 0
+		}))
 	end
 
 	local settings = return_settings(v, theme, true)

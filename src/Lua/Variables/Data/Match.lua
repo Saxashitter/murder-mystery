@@ -8,6 +8,7 @@ return {
 	pregame_time = pregame_time,
 	duel_time = duel_time,
 	dueling = false,
+	rounds = 0,
 	
 	gametype = "classic",
 

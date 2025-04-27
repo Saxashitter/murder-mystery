@@ -1,3 +1,5 @@
+--UNUSED
+
 local function HUD_IntermissionText(v)
 	local type = MM_N.endType or MM.endTypes[1]
 

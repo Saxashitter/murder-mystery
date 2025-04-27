@@ -268,7 +268,7 @@ local function VWarp (truev, settings)
             -- fontName, padding, flags, align
             "STTNUM", nil, f, "right",
             -- scale, color
-            FU, colorflag2skincolor(f)
+            FU, colorflag2skincolor(f), f & V_CHARCOLORMASK
         )
     end
     modv.drawPaddedNum = function (x, y, n, d, f)
@@ -286,7 +286,7 @@ local function VWarp (truev, settings)
             -- fontName, padding, flags, align
             "STTNUM", d, f, "right",
             -- scale, color
-            FU, colorflag2skincolor(f)
+            FU, colorflag2skincolor(f), f & V_CHARCOLORMASK
         )
     end
     modv.drawFill = function (x, y, w, h, c)
@@ -339,7 +339,7 @@ local function VWarp (truev, settings)
                 -- fontname, flags, align
                 metadata[3], f or 0, metadata[1],
                 -- scale, color
-                metadata[2], colorflag2skincolor(f)
+                metadata[2], colorflag2skincolor(f), f & V_CHARCOLORMASK
             )
             y = $ + FixedMul(lineheight*FU, metadata[2])
         end
@@ -433,7 +433,7 @@ local function VWarp (truev, settings)
                 -- fontname, flags, align
                 "LTFNT", f or 0, "left",
                 -- scale, color
-                FU, colorflag2skincolor(f)
+                FU, colorflag2skincolor(f), f & V_CHARCOLORMASK
             )
             y = $ + lineheight*FU
         end
@@ -652,7 +652,7 @@ function vwarpcustomhud.CustomFontStringWidth(v, str, fontName, scale)
 	return strwidth;
 end
 
-function vwarpcustomhud.CustomFontChar(v, x, y, charByte, fontName, flags, scale, color)
+function vwarpcustomhud.CustomFontChar(v, x, y, charByte, fontName, flags, scale, color, textmap)
 	if not (type(charByte) == "number") then
 		warn("No character byte given in customhud.CustomFontChar");
 		return;
@@ -689,7 +689,9 @@ function vwarpcustomhud.CustomFontChar(v, x, y, charByte, fontName, flags, scale
 	end
 
 	local wc = nil;
-	if (color) then
+	if (textmap) then
+		wc = v.getStringColormap(textmap)
+	elseif (color) then
         -- EDITED: rainbow instead of default sometimes
         local tc = iif(fontName == "STCFN" or fontName == "TNYFN" or fontName == "LTFNT", TC_RAINBOW, TC_DEFAULT)
 		wc = v.getColormap(tc, color);
@@ -726,7 +728,7 @@ function vwarpcustomhud.CustomFontChar(v, x, y, charByte, fontName, flags, scale
 	return nextx;
 end
 
-function vwarpcustomhud.CustomFontString(v, x, y, str, fontName, flags, align, scale, color)
+function vwarpcustomhud.CustomFontString(v, x, y, str, fontName, flags, align, scale, color, textmap)
 	if not (type(str) == "string") then
 		warn("No string given in customhud.CustomFontString");
 		return;
@@ -763,7 +765,9 @@ function vwarpcustomhud.CustomFontString(v, x, y, str, fontName, flags, align, s
 	end
 
 	local wc = nil;
-	if (color) then
+	if textmap then
+		wc = v.getStringColormap(textmap)
+	elseif (color) then
         -- EDITED: rainbow instead of default sometimes
         local tc = iif(font == "STCFN" or font == "TNYFN" or font == "LTFNT", TC_RAINBOW, TC_DEFAULT)
 		wc = v.getColormap(tc, color);
@@ -781,9 +785,10 @@ function vwarpcustomhud.CustomFontString(v, x, y, str, fontName, flags, align, s
 		local nextByte = str:byte(i,i);
         if nextByte >= 0x80 and nextByte <= 0x8f then
             color = colorflag2skincolor((nextByte-0x80)*V_MAGENTAMAP)
+			textmap = (nextByte-0x80)*V_MAGENTAMAP
             continue
         end
-		nextx = vwarpcustomhud.CustomFontChar(v, nextx, y, nextByte, fontName, flags, scale, color);
+		nextx = vwarpcustomhud.CustomFontChar(v, nextx, y, nextByte, fontName, flags, scale, color, textmap);
 	end
 end
 

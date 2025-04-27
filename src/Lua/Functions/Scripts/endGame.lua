@@ -1,13 +1,18 @@
+--why is this here
 MM.endTypes = {
 	{
-		name = "Innocents win!",
+		msg = "Innocents win!",
+		name = "Innocents win Round",
 		color = V_GREENMAP,
-		results = "innocents"
+		results = "innocents",
+		patch = "LTACTGREEN"
 	},
 	{
-		name = "Murderer wins!",
+		msg = "Murderer wins!",
+		name = "Murderers win Round",
 		color = V_REDMAP,
-		results = "murderers"
+		results = "murderers",
+		patch = "LTACTRED"
 	}
 }
 
@@ -26,11 +31,14 @@ return function(self, endType)
 	end
 
 	local endType = MM.endTypes[endType] or 1
-	MM:discordMessage("***"..endType.name.."***\n")
+	MM:discordMessage("***"..endType.msg.."***\n")
 	
 	MM_N.endType = endType
 	MM_N.gameover = true
-
+	if not MM_N.restartingformap
+		MM_N.rounds = $ + 1
+	end
+	
 	if not MM_N.sniped_end then
 		S_StopMusic(consoleplayer)
 	end
@@ -43,7 +51,6 @@ return function(self, endType)
 			mo.notthinking = true
 			continue
 		end
-		
 		
 		mo.flags = $|MF_NOTHINK
 		if not (mo.flags & MF_MISSILE)
@@ -64,6 +71,7 @@ return function(self, endType)
 	if (MM_N.disconnect_end) then return end
 	if (MM_N.dueling) then return end
 	if (MM_N.waiting_for_players) then return end
+	if MM_N.restartingformap then return end
 	if (MM:pregame()) then return end
 	
 	--this makes me sad

@@ -4,7 +4,7 @@ local roles = MM.require "Variables/Data/Roles"
 local function HUD_EndGameDrawer(v,p,c)
 	if not MM_N.gameover then return end
 
-	if MM_N.sniped_end then
+	if MM_N.sniped_end and not MM_N.voting then
 		local patch = v.cachePatch("MM_SNIPER_APPROVED")
 		local tic = MM_N.end_ticker - (TICRATE*3 + MM.sniper_theme_offset) + 6
 		if tic > 0 then

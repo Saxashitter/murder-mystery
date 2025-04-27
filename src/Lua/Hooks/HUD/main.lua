@@ -54,12 +54,14 @@ end
 local TR = TICRATE
 local HUD_BEGINNINGXOFF = 380*FU
 --leveltime at which V_HUDTRANS starts fading in
-local HUD_STARTFADEIN = 50 / 2
+local HUD_STARTFADEIN = (50 / 2) + 10
 
-local slidein_time = TR*3/4
+local slidein_time = 25
 local slidein_frac = FixedDiv(FU, slidein_time*FU)
-local game_slidein_time = TR/2
+/*
+local game_slidein_time = 20
 local game_slidein_frac = FixedDiv(FU, game_slidein_time*FU)
+*/
 
 --dont draw if MMHUD.hudtrans == V_100TRANS
 rawset(_G, "V_100TRANS", 10 << V_ALPHASHIFT)
@@ -118,20 +120,17 @@ addHook("MapLoad",do
 end)
 
 local function Playing()
-	return not MM:pregame() and not MM_N.waiting_for_players
+	return not MM:pregame() and not MM_N.waiting_for_players and not MM_N.gameover
 end
 
 --itd be nice to have hacked in drawfuncs that handled this
 local function DoRegularSlide(v, out)
-	if Playing()
-		MMHUD.slidefrac = min($, FU/2)
-	end
-	
 	local offset = HUD_BEGINNINGXOFF
 	MMHUD.xoffset = FixedMul(offset, MMHUD.slidefrac)
 	
-	local my_frac = Playing() and game_slidein_frac or slidein_frac
+	local my_frac = slidein_frac
 	if not out
+		MMHUD.slidefrac = min($, my_frac * 5)
 		MMHUD.slidefrac = max($ - my_frac, 0)
 	else
 		MMHUD.slidefrac = min($ + my_frac, FU)
@@ -145,6 +144,7 @@ local function DoWeaponSlide(v, out)
 	
 	local my_frac = slidein_frac
 	if not out
+		MMHUD.wslidefrac = min($, my_frac * 5)
 		MMHUD.wslidefrac = $ - my_frac
 		MMHUD.wslidefrac = max($, 0)
 	else

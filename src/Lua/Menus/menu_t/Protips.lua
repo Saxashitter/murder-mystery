@@ -226,6 +226,7 @@ local murd_text = {
 	
 	"* Pick up "..(sher_cc).."Sheriffs'\x80 guns to use as your own.", "",
 	"* Purchase \x82Perks\x80 from the Shop to make your job easier!", "",
+	"* Hold \x82[FIRE NORMAL]\x80 to throw your knife.", "",
 }
 MenuLib.addMenu({
 	stringId = "GuidePage_Murderer",
@@ -280,6 +281,116 @@ MenuLib.addMenu({
 	end
 })
 
+local inter_text = {
+	"Dropped items can be picked up through \x82Interactions.\x80",
+	"Other map gimmicks can be interacted too, just look for the prompt.",
+	"You may need to hold the button on the prompt in order to",
+	"completely interact with it. Interaction progress is",
+	"signified through the \"loading bar.\"",
+	
+	"patchdraw",
+}
+MenuLib.addMenu({
+	stringId = "GuidePage_Interactions",
+	title = "Interactions",
+	
+	width = 250,
+	height = 130,
+	
+	drawer = function(v, ML, menu, props)
+		MenuLib.interpolate(v, false)
+		local x,y = props.corner_x, props.corner_y
+		x = $ + 5
+		y = $ + 20
+	
+		for k,str in ipairs(inter_text)
+			if str == "patchdraw"
+				x = (props.corner_x + props.fakewidth/2) * FU
+				y = ($ + 20)*FU
+				
+				local icon = v.cachePatch("MM_INTERBOX")
+				x = $ - icon.width * FU/2
+				
+				v.drawScaled(x - 10*FU, y + (icon.height + 5)*FU, FU,
+					v.cachePatch("RVOLA2A8"), 0
+				)
+				v.drawScaled(x,y, FU,
+					icon, V_50TRANS
+				)
+
+				v.drawString(x + 30*FU,
+					y + 3*FU,
+					"Revolver",
+					V_ALLOWLOWERCASE,
+					"thin-fixed"
+				)
+				v.drawString(x + 30*FU,
+					y + 13*FU,
+					"Pick up",
+					V_ALLOWLOWERCASE|V_GRAYMAP,
+					"thin-fixed"
+				)
+				
+				v.drawScaled(x + 15*FU,
+					y + 16*FU,
+					FU,
+					v.cachePatch("MM_INTERBALLBG"),
+					V_30TRANS,
+					v.getColormap(nil,SKINCOLOR_CARBON)
+				)
+				v.drawScaled(x + 15*FU,
+					y + 16*FU,
+					FU/2,
+					v.cachePatch("MM_INTERBUT"),
+					0
+				)
+				v.drawString(x + 15*FU,
+					y + 12*FU,
+					"C3",
+					V_ALLOWLOWERCASE,
+					"thin-fixed-center"
+				)
+				
+				local resolution = 55
+				local timetic = FU * 2/3
+				local radi = 12
+				if timetic ~= 0
+					for i = 0,resolution
+						local angle = FixedAngle(
+							FixedMul(
+								FixedDiv(
+									FixedMul(360*FU,timetic),
+									resolution*FU
+								),
+								i*FU
+							)-90*FU
+						)
+						v.drawScaled(x + 15*FU + radi*cos(angle),
+							y + 16*FU + radi*sin(angle),
+							FU/6,
+							v.cachePatch("MM_INTERBALL"),
+							trans,
+							v.getColormap(nil,SKINCOLOR_CLOUDY)
+						)
+					end
+				end
+				
+				continue
+			end
+			
+			v.drawString(x,y,str, V_ALLOWLOWERCASE, "small")
+			
+			if str == ""
+				y = $ + 7
+			else
+				y = $ + 5
+			end
+			
+		end
+		
+	end
+})
+
 MenuLib.addMenu({
 	stringId = "GuidePage_Mechanics",
 	title = "Mechanics",
@@ -293,25 +404,27 @@ MenuLib.addMenu({
 		x = $ + 10
 		y = $ + 20
 		
-		drawGenericButton(v,x,y, "\x89".."The Storm", "TheStorm")	
-		y = $ + rolebutt.h + 4
+		local rightsnap = (props.fakewidth - 10 - rolebutt.w) - 10
 		
-		drawGenericButton(v,x,y, "", "Overtime", false, 8)
+		drawGenericButton(v,x,y, "\x89".."The Storm", "TheStorm")	
+		--y = $ + rolebutt.h + 4
+		
+		drawGenericButton(v,x+rightsnap,y, "", "Overtime", false, 8)
 		do
 			local center = y + (rolebutt.h + 8) / 2
-			v.drawString(x + rolebutt.w/2, center - 9,
+			v.drawString(x + rolebutt.w/2 + rightsnap, center - 9,
 				"\x85Overtime\n\x82Showdown",
 				V_ALLOWLOWERCASE,
 				"thin-center"
 			)
 		end
-		y = $ + rolebutt.h + 4 + 8
+		y = $ + rolebutt.h + 32
 		
-		drawGenericButton(v,x,y, "\x82Interactions", "TheStorm")	
-		y = $ + rolebutt.h + 4
+		drawGenericButton(v,x,y, "\x82Interactions", "Interactions")	
+		--y = $ + rolebutt.h + 4
 		
-		drawGenericButton(v,x,y, "\x82Perks", nil,nil,nil, 3)
-		y = $ + rolebutt.h + 4
+		drawGenericButton(v,x + rightsnap,y, "\x82Perks", nil,nil,nil, 3)
+		--y = $ + rolebutt.h + 4
 		
 	end
 })

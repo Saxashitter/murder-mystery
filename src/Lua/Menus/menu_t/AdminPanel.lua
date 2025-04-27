@@ -182,12 +182,12 @@ MenuLib.addMenu({
 			
 			pressFunc = function()
 				ML.startTextInput(debug_command,debug_commandid, {
-                    onenter = function()
-                        MenuLib.client.commandbuffer = "mm_stormradius "..ML.client.textbuffer
-                        debug_command = ""
-                    end,
-                    tooltip = "\x86mm_stormradius <radius> <time>",
-                    typesound = sfx_oldrad
+					onenter = function()
+						MenuLib.client.commandbuffer = "mm_stormradius "..ML.client.textbuffer
+						debug_command = ""
+					end,
+					tooltip = "\x86mm_stormradius <radius> <time>",
+					typesound = sfx_oldrad
                 })				
 			end,
 		})
@@ -205,12 +205,12 @@ MenuLib.addMenu({
 			
 			pressFunc = function()
 				ML.startTextInput(debug_command,debug_commandid, {
-                    onenter = function()
-                        MenuLib.client.commandbuffer = "MM_MakeMeA "..ML.client.textbuffer
-                        debug_command = ""
-                    end,
-                    tooltip = "\x86mm_makemea <role>",
-                    typesound = sfx_oldrad
+					onenter = function()
+						MenuLib.client.commandbuffer = "MM_MakeMeA "..ML.client.textbuffer
+						debug_command = ""
+					end,
+					tooltip = "\x86mm_makemea <role>",
+					typesound = sfx_oldrad
                 })				
 			end,
 		})
@@ -228,13 +228,13 @@ MenuLib.addMenu({
 			
 			pressFunc = function()
 				ML.startTextInput(debug_command,debug_commandid, {
-                    onenter = function()
-                        MenuLib.client.commandbuffer = "MM_AddRings "..ML.client.textbuffer
-                        debug_command = ""
-                    end,
-                    tooltip = "\x86mm_addrings <rings>",
-                    typesound = sfx_oldrad
-                })				
+					onenter = function()
+						MenuLib.client.commandbuffer = "MM_AddRings "..ML.client.textbuffer
+						debug_command = ""
+					end,
+					tooltip = "\x86mm_addrings <rings>",
+					typesound = sfx_oldrad
+				})				
 			end,
 		})
 		
@@ -251,13 +251,37 @@ MenuLib.addMenu({
 			
 			pressFunc = function()
 				ML.startTextInput(debug_command,debug_commandid, {
-                    onenter = function()
-                        MenuLib.client.commandbuffer = "MM_SetPerk "..ML.client.textbuffer
-                        debug_command = ""
-                    end,
-                    tooltip = "\x86mm_setperk <pri/sec> <name>",
-                    typesound = sfx_oldrad
-                })				
+					onenter = function()
+						MenuLib.client.commandbuffer = "MM_SetPerk "..ML.client.textbuffer
+						debug_command = ""
+					end,
+					tooltip = "\x86mm_setperk <pri/sec> <name>",
+					typesound = sfx_oldrad
+				})				
+			end,
+		})
+
+		--layer 3
+		MenuLib.addButton(v, {
+			x = x,
+			y = y + buttonpad_h,
+			
+			width = buttonwidth,
+			height = 25,
+			
+			name = "Give Item",
+			color = 13,
+			outline = 19,
+			
+			pressFunc = function()
+				ML.startTextInput(debug_command,debug_commandid, {
+					onenter = function()
+						MenuLib.client.commandbuffer = "mm_giveitem "..ML.client.textbuffer
+						debug_command = ""
+					end,
+					tooltip = "\x86mm_giveitem <name>",
+					typesound = sfx_oldrad
+				})				
 			end,
 		})
 	end

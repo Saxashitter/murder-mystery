@@ -275,6 +275,9 @@ MM.BulletHit = function(ring,pmo)
 	if pmo.player and pmo.player.mm
 	and pmo.player.mm.role == ring.target.player.mm.role
 	and ring.target.player.mm.role ~= MMROLE_INNOCENT
+		ring.nobulletholes = true
+		MM.BulletDies(ring)
+		P_RemoveMobj(ring)
 		return
 	end
 	

@@ -402,8 +402,8 @@ MM:addPlayerScript(function(p)
 				continue
 			end
 			
-			if roles[p.mm.role].team == roles[p2.mm.role].team
-			and not roles[p.mm.role].friendlyfire then
+			if p.mm.role == p2.mm.role
+			and p.mm.role ~= MMROLE_INNOCENT then
 				continue
 			end
 			

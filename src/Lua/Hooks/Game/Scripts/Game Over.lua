@@ -72,7 +72,10 @@ return function()
 			G_ExitLevel()
 		end
 		
-		local changemusic = 1
+		
+		local changemusic = 1 -- Tic to change music
+		
+		/* UNUSED
 		--this song is very long
 		if mapmusname == "CHPASS" --"MMWIN"
 			changemusic = 5*TICRATE + TICRATE/2
@@ -80,9 +83,11 @@ return function()
 		or mapmusname == "CHFAIL"
 			changemusic = 2*TICRATE + TICRATE/2
 		end
+		*/
 		
-		if MM_N.end_ticker == changemusic
-		and (MM_N.killing_end)
+		-- if MM_N.end_ticker == changemusic (Scrapped condition)
+		if MM_N.mapVote.ticker 
+		and (MM_N.killing_end) then
 			local theme = MM.themes[MM_N.theme or "srb2"]
 			mapmusname = theme.music or "CHRSEL"
 			S_ChangeMusic(mapmusname, true, nil, 0,0, MUSICRATE)
@@ -114,6 +119,8 @@ return function()
 	if MM_N.sniped_end and MM_N.end_ticker == releaseTic+8 then
 		S_StartSound(nil, sfx_mmsnp1 + P_RandomRange(0, 2))
 	end
+	
+	/* UNUSED
 	if not MM_N.sniped_end
 	and MM_N.end_ticker == releaseTic + 8
 	and (MM_N.killing_end)
@@ -152,6 +159,7 @@ return function()
 			end
 		end
 	end
+	*/
 	
 	/*if MM_N.end_ticker >= 5*TICRATE then
 		local song = "MMWINR"

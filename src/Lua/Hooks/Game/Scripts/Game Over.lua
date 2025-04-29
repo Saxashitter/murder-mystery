@@ -178,6 +178,17 @@ return function()
 
 	-- an extra half second for the new killcam sequence
 	if MM_N.end_ticker >= 5*TICRATE + (TICRATE) then
+		-- freeze all player's angles
+		for player in players.iterate do
+			if player and player.valid 
+			and player.mo and player.mo.valid 
+			and player.mo.health and not player.spectator 
+			and player.mm then
+				print(#player)
+				player.mm.freeze_angle = player.mo.angle 
+			end
+		end
+		
 		MM_N.end_ticker = 1
 		MM:startTransition()
 	end

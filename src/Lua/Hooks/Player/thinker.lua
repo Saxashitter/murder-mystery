@@ -182,6 +182,7 @@ MM:addPlayerScript(dofile("Hooks/Player/Scripts/AntiAbility"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/PerkHandler"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/ItemStrafe"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/CashInChecks"), true)
+MM:addPlayerScript(dofile("Hooks/Player/Scripts/FreezeAngle"))
 
 addHook("KeyDown",function(key)
 	if isdedicatedserver then return end

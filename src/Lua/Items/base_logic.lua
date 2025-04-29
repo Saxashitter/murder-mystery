@@ -178,6 +178,7 @@ MM:addPlayerScript(function(p)
 	local inv = p.mm.inventory
 	local sel = 0
 	
+	if not (p.mo and p.mo.valid) then return end
 	if (p.mo.flags & MF_NOTHINK) then return end
 	
 	if p.cmd.buttons & BT_CUSTOM1

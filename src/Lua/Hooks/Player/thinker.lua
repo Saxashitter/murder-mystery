@@ -22,13 +22,14 @@ addHook("PlayerThink", function(p)
 		script(p)
 	end
 
-	if not (p.mo and p.mo.valid and p.mo.health) then
-		--Force a respawn
+	--Force a respawn
+	if not (p.mo and p.mo.valid) then
 		if p.deadtimer >= 3*TICRATE
 		and p.playerstate == PST_DEAD
 			G_DoReborn(#p)
 			p.deadtimer = 0
 		end
+		
 		p.mm.oob_ticker = 0
 		
 		MM.runHook("DeadPlayerThink", p)
@@ -52,7 +53,13 @@ addHook("PlayerThink", function(p)
 	or MM:pregame())
 		p.mm.timesurvived = $+1
 	end
-    if (p.mo.fake_drawangle ~= nil)
+	
+	-- Check if valid again, hooks could kill the player.
+	if not (p.mo and p.mo.valid) then
+		return
+	end
+	
+    if (p.mo.fake_drawangle ~= nil) then
         p.drawangle = p.mo.fake_drawangle
         p.mo.angle = p.drawangle
     end
@@ -183,6 +190,7 @@ MM:addPlayerScript(dofile("Hooks/Player/Scripts/PerkHandler"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/ItemStrafe"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/CashInChecks"), true)
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/FreezeAngle"))
+MM:addPlayerScript(dofile("Hooks/Player/Scripts/ForbidJoin"))
 
 addHook("KeyDown",function(key)
 	if isdedicatedserver then return end

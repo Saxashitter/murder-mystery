@@ -56,19 +56,28 @@ return function(self, count, alreadychosen, murdorsherf)
 	local i = 0
 
 	local firstcount = MM.countPlayers()
-	if MM_N.dueling or CV_MM.force_duel.value
-		for k, player in ipairs(total_table)
-			local result = MM.countPlayers()
+	if MM_N.dueling or CV_MM.force_duel.value then		
+		local murderer = select_player_from_table(p, murderer_chance_table)
+		local sheriff = select_player_from_table(p, sheriff_chance_table)
+		local tries = 0
+		local max_tries = 50
+		
+		-- If sheriff is the same as murderer, then reroll sheriff
+		while (sheriff == murderer) and tries < max_tries do
+			sheriff = total_table[P_RandomRange(1,#total_table)]
+			tries = $ + 1
 			
-			if result.murderers == 0
-			or result.sheriffs == 0
-				player.mm.role = P_RandomChance(FU/2) and MMROLE_MURDERER or MMROLE_SHERIFF
-			elseif result.murderers > result.sheriffs
-				player.mm.role = MMROLE_SHERIFF
-			else
-				player.mm.role = MMROLE_MURDERER
+			if tries == max_tries then
+				error("Caught infinite loop.")
 			end
 		end
+		
+		murderers[murderer] = true
+		murderer.mm.role = MMROLE_MURDERER
+		
+		sheriffs[sheriff] = true
+		sheriff.mm.role = MMROLE_SHERIFF
+		
 		return murderers, sheriffs
 	end
 

@@ -161,6 +161,15 @@ return function(self, maploaded)
 
 	MM:assignRoles(special_count)
 	
+	-- Spectate players that arent either muderer/sheriff. (IN DUELS MODE)
+	if MM_N.dueling or CV_MM.force_duel.value then	
+		for player in players.iterate do
+			if (player.mm.role == MMROLE_INNOCENT) then
+				player.mm.forbid_join = true
+			end
+		end
+	end
+		
 	local innocents = 0
 	for p in players.iterate do
 		if (p.mm and p.mm.role ~= MMROLE_MURDERER)

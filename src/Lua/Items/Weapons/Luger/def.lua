@@ -13,7 +13,7 @@ weapon.state = dofile("Items/Weapons/Luger/freeslot")
 weapon.timeleft = -1
 weapon.hit_time = TICRATE/3
 weapon.animation_time = TICRATE/3
-weapon.cooldown_time = 4*TICRATE
+weapon.cooldown_time = 2*TICRATE + TICRATE/2
 weapon.range = FU*2
 weapon.position = {
 	x = FU,
@@ -36,7 +36,7 @@ weapon.pickupsfx = sfx_gnpick
 weapon.equipsfx = sfx_gequip
 weapon.attacksfx = sfx_lugrsh
 weapon.allowdropmobj = false
-weapon.max_ammo = 5
+weapon.max_ammo = 4
 weapon.noammoinduels = true
 
 function weapon:postpickup(p)

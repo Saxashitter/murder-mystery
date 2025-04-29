@@ -84,9 +84,8 @@ return function()
 			changemusic = 2*TICRATE + TICRATE/2
 		end
 		*/
-		
-		-- if MM_N.end_ticker == changemusic (Scrapped condition)
-		if MM_N.mapVote.ticker 
+
+		if MM_N.end_ticker == changemusic
 		and (MM_N.killing_end) then
 			local theme = MM.themes[MM_N.theme or "srb2"]
 			mapmusname = theme.music or "CHRSEL"

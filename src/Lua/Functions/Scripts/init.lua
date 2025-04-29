@@ -107,6 +107,12 @@ local function set_overtime_point()
 	MM_N.storm_point.otherpoints = possiblePoints
 end
 
+local function _chance_equation(x)
+	local a = FixedMul(x*FU, tofixed("1.25"))
+	
+	return 1 + abs(FixedRound(a)/FU)
+end
+
 return function(self, maploaded)
 	if maploaded then
 		if not MM:isMM() then return end
@@ -181,11 +187,11 @@ return function(self, maploaded)
 		
 		if not p.mm_save.afkmode then
 			if (p.mm.role ~= MMROLE_MURDERER) then 
-				p.mm_save.murderer_chance_multi = $ + 1
+				p.mm_save.murderer_chance_multi = _chance_equation($)
 			end 
 
 			if (p.mm.role ~= MMROLE_SHERIFF) then 
-				p.mm_save.sheriff_chance_multi = $ + 1
+				p.mm_save.sheriff_chance_multi = _chance_equation($)
 			end
 		end
 		
@@ -226,7 +232,9 @@ return function(self, maploaded)
 		p.mm_save.cons_murderer_chance = result_m
 		p.mm_save.cons_sheriff_chance = result_s
 		
-		CONS_Printf(p, string.format("\x85Murderer Chance: (%.2f percent)\n\x84Sheriff Chance: (%.2f percent)", result_m, result_s))
+		CONS_Printf(p, string.format("\x85Murderer Chance: (%.2f percent)\n\x84Sheriff Chance: (%.2f percent)", 
+			result_m, result_s
+		))
 	end
 	MM_N.minimum_killed = max(1,innocents/5)
 	

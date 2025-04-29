@@ -184,7 +184,6 @@ return function()
 			and player.mo and player.mo.valid 
 			and player.mo.health and not player.spectator 
 			and player.mm then
-				print(#player)
 				player.mm.freeze_angle = player.mo.angle 
 			end
 		end

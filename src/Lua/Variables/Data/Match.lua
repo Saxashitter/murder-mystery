@@ -40,6 +40,7 @@ return {
 	showdown_ticker = 0,
 	showdown_left = {},
 	showdown_right = {},
+	showdown_ticker = 0,
 
 	overtime = false,
 	overtime_ticker = 0,

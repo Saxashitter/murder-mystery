@@ -2,7 +2,7 @@ local choosething = MM.require "Libs/choosething"
 local shallowCopy = MM.require "Libs/shallowCopy"
 
 return function(self, p)
-	local amount = self.clues_amount
+	local amount = MM_N.clues_amount
 	local clues = {}
 	local found = {}
 	--the ACTUAL table of clues, saxa's implemtation of this is weird

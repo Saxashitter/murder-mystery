@@ -102,10 +102,10 @@ function MM:giveOutClues(amount)
 		
 		newPos.flip = (thing.options & MTF_OBJECTFLIP)
 		
-		table.insert(MM.clues_positions, newPos)
+		table.insert(MM_N.clues_positions, newPos)
 	end
 	
-	if not #MM.clues_positions
+	if not #MM_N.clues_positions
 	and #fallbackThings then
 		for _, thing in ipairs(fallbackThings) do
 			-- i love copying code!!
@@ -119,14 +119,14 @@ function MM:giveOutClues(amount)
 			
 			newPos.flip = (thing.options & MTF_OBJECTFLIP)
 			
-			table.insert(MM.clues_positions, newPos)
+			table.insert(MM_N.clues_positions, newPos)
 		end
 	end
 	
-	if not (#MM.clues_positions) then return end
+	if not (#MM_N.clues_positions) then return end
 	
 	--weird issue where it would default to 5 even if theres more clue amounts?
-	amount = min(#MM.clues_positions, amount)
+	amount = min(#MM_N.clues_positions, amount)
 	MM_N.clues_amount = amount
 	
 	for p in players.iterate do

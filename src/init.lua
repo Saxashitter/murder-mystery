@@ -76,6 +76,7 @@ dofile "Menus/exec"
 -- ofc, its faster to reference the correct tables
 -- so dont use this too much
 setmetatable(MM, {
+	--guess im the fool for trying to optimize this one huh..
 	__index = function(self, key)
 		if rawget(self, key) ~= nil then
 			return rawget(self, key)

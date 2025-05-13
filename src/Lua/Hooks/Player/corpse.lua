@@ -386,10 +386,11 @@ addHook("ThinkFrame", function()
 	
 	--JUST in case...
 	if not MM_N then return end
+	if not (MM_N.corpses) then return end --BRUH
 	
 	local body_found = false
 	
-	for _,corpse in pairs(MM_N.corpses) do
+	for _,corpse in ipairs(MM_N.corpses) do
 		if not (corpse and corpse.valid) then
 			table.remove(MM_N.corpses, _)
 			continue

@@ -74,7 +74,7 @@ function MM:giveOutClues(amount)
 	--Bruh
 	if (MM_N.dueling) then return end
 	
-	MM.clues_positions = {}
+	MM_N.clues_positions = {}
 	local fallbackThings = {}
 	--local useNewClues = false
 	

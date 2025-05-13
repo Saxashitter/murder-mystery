@@ -274,6 +274,8 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 end, MT_PLAYER)
 
 addHook("ThinkFrame", function()
+	if not MM then return end
+	if not MM_N then return end
 	if not MM:isMM() then return end
 
 	if MM_N.gameover
@@ -381,6 +383,9 @@ addHook("ThinkFrame", function()
 			end
 		end
 	end
+	
+	--JUST in case...
+	if not MM_N then return end
 	
 	local body_found = false
 	

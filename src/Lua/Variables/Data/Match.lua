@@ -1,11 +1,11 @@
 local match_time = 180*TICRATE
 local duel_time = 60*TICRATE
-local pregame_time = 10*TICRATE
+local pregame__time = 10*TICRATE
 
 return {
-	time = match_time+pregame_time,
+	time = match_time + pregame__time,
 	maxtime = match_time,
-	pregame_time = pregame_time,
+	pregame_time = pregame__time,
 	duel_time = duel_time,
 	dueling = false,
 	rounds = 0,

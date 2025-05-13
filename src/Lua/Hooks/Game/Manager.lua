@@ -30,6 +30,7 @@ end)
 
 addHook("ThinkFrame", function()
 	if not MM:isMM() then return end
+	if not MM_N then return end
 
 	for k,func in pairs(funcs.global) do
 		func()

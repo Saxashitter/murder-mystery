@@ -76,21 +76,6 @@ dofile "Menus/exec"
 -- ofc, its faster to reference the correct tables
 -- so dont use this too much
 setmetatable(MM, {
-	--a table is more faster than having a function
-	/*source: https://lua.org/pil/13.4.1.html:
-		"The use of a table as an __index metamethod provides a cheap
-		 and simple way of implementing single inheritance.
-		 A function, although more expensive, provides more
-		 flexibility...
-		"
-		heh.... take THAT jisk and saxa
-	*/
-	__index = MM_N,
-	__newindex = function(t,k,v)
-		print("\x82WARNING\x80: attempt to create implicit variable \""..k.."\". Define it in Variables/Data/Match.lua first.")
-	end,
-	
-	/*
 	__index = function(self, key)
 		if rawget(self, key) ~= nil then
 			return rawget(self, key)
@@ -108,7 +93,6 @@ setmetatable(MM, {
 		
 		rawset(self, key, value)
 	end
-	*/
 })
 
 --generate random string for security purposes

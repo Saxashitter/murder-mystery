@@ -11,6 +11,9 @@ local previousRoundTic = 0
 
 return function()
 	if not (MM_N) then return end
+	--Bruh stop bro
+	--STOP BEING SHITTYY
+	if MM_N.pregame_time == nil then return end
 	
 	--starting countdown
 	if (leveltime >= (MM_N.pregame_time - 4*TICRATE - 1) and leveltime <= MM_N.pregame_time - TICRATE)

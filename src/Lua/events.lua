@@ -41,18 +41,18 @@
 				Strings (item name, variable arguments)
 			
 	--[Items]--
-		* "InventorySwitch", function(player_t player, int cur_slot, int new_slot)
+		* "InventorySwitch", function(player_t player, int cur_slot, int new_slot, item_t cur_item, item_t new_item)
 			Executes when a player decides to switch inventory slots, but before
 			the switching executes.
 			- Return value: Boolean (override default behavior?)
 			
-		* "ItemDrop", function(player_t player)
+		* "ItemDrop", function(player_t player, itemdef_t def, item_t item)
 			Executes when a player drops an item by choice. This will not trigger
 			during pregame or when forcibly dropped, like when a murderer picks up the
 			revolver, for example.
 			- Return value: Boolean (override default behavior?)
 			
-		* "ItemUse", function(player_t player)
+		* "ItemUse", function(player_t player, itemdef_t def, item_t item)
 			Executes when a player uses a weapon that fires bullets.
 			- Return value: Boolean (override default behavior?)
 			

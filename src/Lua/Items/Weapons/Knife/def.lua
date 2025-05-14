@@ -87,10 +87,6 @@ MM.addHook("ItemUse", function(p)
 		return true
 	end
 end)
-weapon.unequip = function(item, p)
- 	resetposition(item)
-end
-weapon.drop = weapon.unequip
 
 --item_t btw, get mobj from item->mobj
 local throw_tic = (TICRATE * 5/4)
@@ -163,11 +159,42 @@ weapon.thinker = function(item, p)
 			S_StartSound(nil, sfx_kcharg, p)
 		end
 		
-		item.altfiretime = $ + 1
+		item.altfiretime = min($ + 1, throw_tic)
 		item.damage = false
 		item.hit = 0
 		
-		if item.altfiretime == throw_tic
+		do --if not item.altfiretime == throw_tic
+			if not (item.ghost and item.ghost.valid)
+				local g = P_SpawnGhostMobj(item.mobj)
+				g.tics = 12
+				g.fuse = g.tics
+				g.blendmode = AST_ADD
+				g.renderflags = $|RF_FULLBRIGHT
+				g.destscale = g.scale * 2
+				g.scalespeed = FixedDiv(g.destscale - g.scale, g.fuse*FU)
+				g.frame = $ &~FF_TRANSMASK
+				item.ghost = g
+				P_SetOrigin(item.ghost,
+					item.mobj.x + p.mo.momx, item.mobj.y + p.mo.momy, item.mobj.z + p.mo.momz
+				)
+			else
+				P_MoveOrigin(item.ghost,
+					item.mobj.x + p.mo.momx, item.mobj.y + p.mo.momy, item.mobj.z + p.mo.momz
+				)
+				item.ghost.frame = $ &~FF_TRANSMASK
+				item.ghost.angle = item.mobj.angle
+			end
+			--item.mobj.spriteyoffset = (item.altfiretime * FU*3/4)
+			item.mobj.frame = ($ &~FF_FRAMEMASK)|B
+			item.mobj.dontdrawforviewmobj = nil
+			
+			item.showinfirstperson = true
+			item.default_pos.x = weapon.position.x - (item.altfiretime * FU/100)
+			item.default_pos.y = -(item.altfiretime * FU/25)
+			item.default_pos.z = (item.altfiretime * FU/50)
+		end
+	else
+		if item.altfiretime >= throw_tic
 			item.release = true
 			item.mobj.spriteyoffset = 0
 			S_StartSound(p.mo, weapon.misssfx)
@@ -195,37 +222,9 @@ weapon.thinker = function(item, p)
 			end
 			
 			--fuckkkkk
-			resetposition(item)
             item.hit = 0
-			item.altfiretime = 0
-		else
-			if not (item.ghost and item.ghost.valid)
-				local g = P_SpawnGhostMobj(item.mobj)
-				g.tics = 12
-				g.fuse = g.tics
-				g.blendmode = AST_ADD
-				g.renderflags = $|RF_FULLBRIGHT
-				g.destscale = g.scale * 2
-				g.scalespeed = FixedDiv(g.destscale - g.scale, g.fuse*FU)
-				g.frame = $ &~FF_TRANSMASK
-				item.ghost = g
-			else
-				P_MoveOrigin(item.ghost,
-					item.mobj.x, item.mobj.y, item.mobj.z
-				)
-				item.ghost.frame = $ &~FF_TRANSMASK
-				item.ghost.angle = item.mobj.angle
-			end
-			--item.mobj.spriteyoffset = (item.altfiretime * FU*3/4)
-			item.mobj.frame = ($ &~FF_FRAMEMASK)|B
-			item.mobj.dontdrawforviewmobj = nil
-			
-			item.showinfirstperson = true
-			item.default_pos.x = weapon.position.x - (item.altfiretime * FU/100)
-			item.default_pos.y = -(item.altfiretime * FU/25)
-			item.default_pos.z = (item.altfiretime * FU/50)
 		end
-	else
+		
 		if item.altfiretime
 		and item.altfiretime < throw_tic
 			p.mm.inventory.items[p.mm.inventory.cur_sel].cooldown = TICRATE * 3/4
@@ -241,6 +240,21 @@ weapon.thinker = function(item, p)
 		resetposition(item)
 	end
 end
+
+weapon.unequip = function(item,p)
+	if item.altfiretime
+		item.cooldown = TICRATE * 3/4
+		S_StartSound(p.mo, sfx_kc50)
+	end
+	item.altfiretime = 0
+	
+	if item.ghost and item.ghost.valid
+		P_RemoveMobj(item.ghost)
+	end
+	item.mobj.spriteyoffset = 0
+	resetposition(item)
+end
+weapon.drop = weapon.unequip
 
 --Whiff so people know youre bad at the game
 weapon.onmiss = function(item,p)

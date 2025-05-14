@@ -1,4 +1,6 @@
 local roles = MM.require "Variables/Data/Roles"
+
+--wraps a value around the inventory's max count
 local function shittyfunction(newvalue, maximum)
 	if newvalue < 1 then newvalue = maximum end
 	if newvalue > maximum then newvalue = 1 end
@@ -236,7 +238,16 @@ MM:addPlayerScript(function(p)
 
 	if (sel ~= 0)
 	and not MM.runHook("InventorySwitch", p, inv.cur_sel, 
-		shittyfunction(inv.cur_sel+sel, inv.count)
+		shittyfunction(inv.cur_sel+sel, inv.count),
+		--curitem
+		inv.items[inv.cur_sel],
+		--newitem
+		MM.Items[
+			inv.items[shittyfunction(inv.cur_sel+sel, inv.count)]
+			and
+			inv.items[shittyfunction(inv.cur_sel+sel, inv.count)].id
+			or ""
+		]
 	) then
 		S_StartSound(nil,sfx_menu1,p)
 		
@@ -293,7 +304,16 @@ MM:addPlayerScript(function(p)
 	and (min(p.cmd.buttons & BT_WEAPONMASK, inv.count) ~= inv.cur_sel)
 	and (p.cmd.buttons & BT_WEAPONMASK <= inv.count)
 	and not MM.runHook("InventorySwitch", p, inv.cur_sel, 
-		min(p.cmd.buttons & BT_WEAPONMASK, inv.count)
+		min(p.cmd.buttons & BT_WEAPONMASK, inv.count),
+		--curitem
+		inv.items[inv.cur_sel],
+		--newitem
+		MM.Items[
+			inv.items[min(p.cmd.buttons & BT_WEAPONMASK, inv.count)]
+			and
+			inv.items[min(p.cmd.buttons & BT_WEAPONMASK, inv.count)].id
+			or ""
+		]
 	) then
 		S_StartSound(nil,sfx_menu1,p)
 		
@@ -305,7 +325,7 @@ MM:addPlayerScript(function(p)
 		if not inv.hidden then
 			local newitem = inv.items[inv.cur_sel]
 			local newdef = MM.Items[newitem and newitem.id or ""]
-
+			
 			--saxa might be stupid because none of these were defined before
 			--or whoever added this i shouldnt be blaming everything on saxas
 			--good code lol
@@ -314,18 +334,18 @@ MM:addPlayerScript(function(p)
 			and olddef.unequip then
 				olddef.unequip(olditem, p)
 			end
-	
+			
 			if newitem
 			and newdef
 			and newdef.equip then
 				newdef.equip(newitem, p)
 			end
-	
+			
 			if newitem
 			and newitem.equipsfx then
 				S_StartSound(p.mo, newitem.equipsfx)
 			end
-	
+			
 			if newitem then
 				newitem.anim = 0
 				newitem.hit = 0
@@ -361,7 +381,7 @@ MM:addPlayerScript(function(p)
 	and not (p.lastbuttons & BT_CUSTOM2)
 	--wtf are you doing???
 	and not MM:pregame()
-	and not MM.runHook("ItemDrop", p) then
+	and not MM.runHook("ItemDrop", p, def,item) then
 		MM:DropItem(p)
 		return
 	end
@@ -379,7 +399,7 @@ MM:addPlayerScript(function(p)
 	if canfire
 	and not (item.cooldown) 
 	and not inv.hidden
-	and not MM.runHook("ItemUse", p) then
+	and not MM.runHook("ItemUse", p, def,item) then
 		MM.FireBullet(p,def,item, p.mo.angle, p.aiming, true)
 	end
 

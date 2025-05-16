@@ -1,7 +1,7 @@
 local function ApplyStrafe(p)
 	--no PF_FORCESTRAFE since that turns camera turn buttons
 	--into strafe movement buttons (we want to keep old behavior)
-	p.pflags = $ &~(PF_ANALOGMODE|PF_DIRECTIONCHAR)
+	p.pflags = $ &~(PF_ANALOGMODE)
 	p.drawangle = p.cmd.angleturn << 16
 end
 local function NoStrafe(p)

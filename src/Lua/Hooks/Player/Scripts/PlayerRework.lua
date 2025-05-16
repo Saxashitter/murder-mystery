@@ -22,6 +22,10 @@ local function ApplyMovementBalance(player)
 			
             if pmo.skidscore then
                 pmo.friction = stopfriction
+				if CV_MM.skid_dust.value then
+					P_SpawnSkidDust(player, 4*FU, true)
+				end
+				
                 pmo.skidscore = $ - 1
             end
         end

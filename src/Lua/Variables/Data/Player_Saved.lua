@@ -9,6 +9,7 @@ return {
 	
 	afkmode = false,
 	timesafk = 0,
+	adminbadge = true,
 	
 	murderer_chance_multi = 1,
 	sheriff_chance_multi = 1,

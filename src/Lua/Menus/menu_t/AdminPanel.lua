@@ -65,6 +65,41 @@ MenuLib.addMenu({
 			
 		})
 		
+		--line 2
+		do
+			local ypos = y + (menu.height - 5 - 25) - 25
+			MenuLib.addButton(v, {
+				x = x,
+				y = ypos,
+				
+				width = buttonwidth,
+				height = 25,
+				
+				name = "",
+				color = 155,
+				outline = 159,
+				
+				pressFunc = function()
+					MenuLib.client.commandbuffer = "MM_AdminBadge"
+				end,
+				
+			})
+			
+			v.drawString(x + (buttonwidth/2),
+				ypos + 2,
+				"Admin Badge",
+				V_ALLOWLOWERCASE|V_YELLOWMAP,
+				"thin-center"
+			)
+			v.drawString(x + (buttonwidth/2),
+				ypos + 15,
+				consoleplayer.mm_save.adminbadge and "Visible" or "Hidden",
+				V_ALLOWLOWERCASE,
+				"thin-center"
+			)
+			
+		end
+		
 	end
 })
 
@@ -264,7 +299,7 @@ MenuLib.addMenu({
 		--layer 3
 		MenuLib.addButton(v, {
 			x = x,
-			y = y + buttonpad_h,
+			y = y + buttonpad_h*2,
 			
 			width = buttonwidth,
 			height = 25,

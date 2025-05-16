@@ -335,3 +335,23 @@ COM_AddCommand("MM_RadioSong", function(p, str)
 	p.mmradio_song = MMRadio.songs[str:lower()]
 	CONS_Printf(p, "Your radio song has been set to "..str:lower())
 end)
+
+COM_AddCommand("MM_AdminBadge", function(p)
+	if not MM:isMM() then return end
+	if not (p.mm) then return end
+	
+	p.mm_save.adminbadge = not $
+	
+	local msg = ""
+	if p.mm_save.adminbadge
+		msg = "Your admin badge will now be \x82shown\x80 in chat."
+	else
+		msg = "Your admin badge will now be \x82hidden\x80 in chat."
+	end
+	if not (IsPlayerAdmin(p) or (p == server))
+		msg = $ .. "\x86(Changes will only be visible when you're an admin)"
+	end
+	S_StartSound(nil, sfx_strpst,p)
+	
+	CONS_Printf(p,msg)
+end)

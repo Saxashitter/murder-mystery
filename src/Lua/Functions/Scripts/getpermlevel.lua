@@ -11,5 +11,10 @@ return function(self, player)
 		level = 2
 	end
 	
+	--yes, this also hides the ~ server indicator too lol
+	if (player.mm_save.adminbadge == false and (level > 0))
+		level = 0
+	end
+	
 	return level
 end

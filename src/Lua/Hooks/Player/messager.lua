@@ -196,7 +196,7 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 
 	if alias then
 		if alias.perm_level ~= nil then
-			perm_level = alias.perm_level
+			perm_level = MM:getpermlevel(alias.posingas)
 		end
 		
 		if alias.name then

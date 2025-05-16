@@ -1,5 +1,5 @@
 local speedCap = MM.require "Libs/speedCap"
-local stopfriction = tofixed("0.823")
+local stopfriction = tofixed("0.750")
 local jumpfactormulti = tofixed("1.10")
 
 local function ApplyMovementBalance(player)

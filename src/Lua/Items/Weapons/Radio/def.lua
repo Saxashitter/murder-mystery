@@ -174,7 +174,7 @@ radio.dropthinker = function(mobj)
 	mobj.colorized = true
 	mobj.color = mobj.color_set
 	
-	if (leveltime % 10) == 0
+	if (leveltime % 13) == 0
 		local wind = P_SpawnMobj(
 			mobj.x + P_RandomRange(-18,18)*mobj.scale,
 			mobj.y + P_RandomRange(-18,18)*mobj.scale,

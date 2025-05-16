@@ -1,8 +1,23 @@
+local LAST_POSITION = 0
+addHook("MapChange",do LAST_POSITION = 0; end)
+
 local mute = CV_RegisterVar({
 	name = "mm_muteradio",
 	defaultvalue = 0,
 	PossibleValue = CV_YesNo
 })
+
+local function restoremusic(p)
+	if not MM_N.gameover
+		if P_IsLocalPlayer(p)
+			P_RestoreMusic(p)
+			if LAST_POSITION
+				S_SetMusicPosition(LAST_POSITION)
+			end
+		end
+	end
+	LAST_POSITION = 0
+end
 
 local function is_in_dist(self, p)
 	local MAX_DIST = 256*FU
@@ -31,7 +46,7 @@ local function manage_music(self, p)
 	end
 	
 	if not (applymusic) then
-		P_RestoreMusic(p)
+		restoremusic(p)
 		if p.mm then
 			p.mm.cur_listening = nil
 		end
@@ -42,7 +57,7 @@ local function manage_music(self, p)
 
 	if not play
 	and p.mm.cur_listening then
-		P_RestoreMusic(p)
+		restoremusic(p)
 		p.mm.cur_listening = nil
 	end
 
@@ -72,28 +87,29 @@ local function manage_music(self, p)
 		end
 	end
 
-	if p == consoleplayer
-	--and S_MusicName() ~= song.name
-	and (p.mm.last_listening ~= p.mm.cur_listening)
-	and not (mute.value) then
-		P_PlayJingleMusic(p, song.name, 0, true, JT_OTHER)
-	end
-
-	if p == consoleplayer then
+	if P_IsLocalPlayer(p)
+	and not (mute.value)
+		if (p.mm.last_listening ~= p.mm.cur_listening) then
+			LAST_POSITION = S_GetMusicPosition()
+			P_PlayJingleMusic(p, song.name, 0, true, JT_OTHER)
+			
+			--only synch when music starts
+			local pos = S_GetMusicPosition()
+			local leng = S_GetMusicLength()
+			
+			if leng ~= 0 then
+				local ticpos = self.ticker%(leng*TICRATE/MUSICRATE)
+				
+				if abs(ticpos - (pos*TICRATE/MUSICRATE)) >= TICRATE then
+					S_SetMusicPosition(ticpos*MUSICRATE/TICRATE)
+				end
+			end
+		end
+		
 		if not (mute.value) then
 			S_SetInternalMusicVolume(volume)
 		end
 		
-		local pos = S_GetMusicPosition()
-		local leng = S_GetMusicLength()
-		
-		if leng ~= 0 then
-			local ticpos = self.ticker%(leng*TICRATE/MUSICRATE)
-			
-			if abs(ticpos - (pos*TICRATE/MUSICRATE)) >= TICRATE then
-				S_SetMusicPosition(ticpos*MUSICRATE/TICRATE)
-			end
-		end
 	end
 end
 
@@ -101,7 +117,7 @@ MM.addHook("PlayerThink", function(p)
 	if not (p.mm.cur_listening and p.mm.cur_listening.valid) then
 		if p.mm.cur_listening then
 			p.mm.cur_listening = nil
-			P_RestoreMusic(p)
+			restoremusic(p)
 		end
 		return
 	end

@@ -48,6 +48,7 @@ end
 local namechecktype = MT_LETTER
 local function checkRayCast(from, to, props)
 	local blocked = 0
+	local debug = CV_MM.debug.value
 	
 	local angle = props.angle
 	local aiming = props.aiming
@@ -80,7 +81,7 @@ local function checkRayCast(from, to, props)
 			return false
 		end
 		
-		if CV_MM.debug.value
+		if debug
 			P_SpawnMobjFromMobj(namecheck,0,0,0,MT_SPARK)
 		end
 		
@@ -132,14 +133,40 @@ local function checkRayCast(from, to, props)
 	end
 end
 
+local function AntiAdmin(src, msg)
+	local admincolor = "\x82"
+	local normcolor = "\x80 "
+	local color = skinColorToChatColor(src.mo and src.mo.color or src.skincolor)
+	if (gamestate == GS_LEVEL)
+	and (src.spectator)
+		color = "\x86"
+		normcolor = "\x86 "
+	end
+	
+	local plrname = src.name
+	local name = color.."<"..plrname..">" -- default
+	local perm_level = MM:getpermlevel(src)
+	
+	if perm_level == 1 then -- is Admin
+		name = color.."<"..admincolor.."@"..color..plrname..">"
+	elseif perm_level == 2 then -- is Server
+		name = color.."<"..admincolor.."~"..color..plrname..">"
+	end
+	
+	chatprint(name..normcolor..msg, true)
+	return true
+end
+
 addHook("PlayerMsg", function(src, t, trgt, msg)
 	if not MM:isMM() then return end
-	if gamestate ~= GS_LEVEL then return end
-	if MM.gameover then return end
-	if t == 3 then return end
 	
 	--allow dedicated server chats
 	if (src == server and not players[0]) then return end
+	if gamestate ~= GS_LEVEL then return AntiAdmin(src,msg); end
+	if t == 3 then return end
+	
+	--only apply AntiAdmin here
+	if MM.gameover then return AntiAdmin(src,msg); end
 	
 	if MM.runHook("OnRawChat", src, t, trgt, msg) then
 		return true
@@ -150,7 +177,7 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	and consoleplayer.mo.health
 	and consoleplayer.mm
 	and not consoleplayer.mm.spectator) then
-		return
+		return AntiAdmin(src,msg);
 	end
 
 	if not (src
@@ -161,12 +188,34 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 			return true
 	end
 	
+	local plrname = src.name
+	local alias = src.mm.alias
+	
+	local perm_level = MM:getpermlevel(src)
+
+	if alias then
+		if alias.perm_level ~= nil then
+			perm_level = MM:getpermlevel(alias.posingas)
+		end
+		
+		if alias.name then
+			plrname = alias.name
+		end
+	end
+	
 	--talk from cameras
 	if (src.mmcam and src.mmcam.cam and src.mmcam.cam.valid)
 		MMCAM.CameraSay(src,src.mmcam.cam,msg)
 	--talk to cameras
 	elseif #MMCAM.TOTALCAMS ~= nil
 		local me = src.mo
+		local myyname = plrname
+		if perm_level == 1 then -- is Admin
+			myyname = "\x82@".. $ .."\x86"
+		elseif perm_level == 2 then -- is Server
+			myyname = "\x82~".. $ .."\x86"
+		end
+		
 		for k,cam in ipairs(MMCAM.TOTALCAMS)
 			
 			if not (me and me.valid) then break end
@@ -184,26 +233,11 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 				if not (p.mm) then continue end
 				if (p.spectator or p.mm.spectator) then continue end
 				
-				chatprintf(p,"\x86[CAM]<"..src.name..">\x80 "..msg,true)
+				chatprintf(p,"\x86[CAM]<"..myyname..">\x80 "..msg,true)
 			end
 		end
 	end
 
-	local plrname = src.name
-	local alias = src.mm.alias
-	
-	local perm_level = MM:getpermlevel(src)
-
-	if alias then
-		if alias.perm_level ~= nil then
-			perm_level = MM:getpermlevel(alias.posingas)
-		end
-		
-		if alias.name then
-			plrname = alias.name
-		end
-	end
-	
 	local dist = R_PointToDist2(consoleplayer.mo.x, consoleplayer.mo.y,
 		src.mo.x,
 		src.mo.y

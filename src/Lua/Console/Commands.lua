@@ -349,7 +349,7 @@ COM_AddCommand("MM_AdminBadge", function(p)
 		msg = "Your admin badge will now be \x82hidden\x80 in chat."
 	end
 	if not (IsPlayerAdmin(p) or (p == server))
-		msg = $ .. "\x86(Changes will only be visible when you're an admin)"
+		msg = $ .. " \x86(Changes will only be visible when you're an admin)"
 	end
 	S_StartSound(nil, sfx_strpst,p)
 	

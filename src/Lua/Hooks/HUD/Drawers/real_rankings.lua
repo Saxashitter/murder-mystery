@@ -16,7 +16,7 @@ local function isDead(p, alwaysknow)
 	--those who should ALWAYS know
 	if (consoleplayer.mm.role == MMROLE_MURDERER
 	or consoleplayer.mm.spectator)
-	or (MM_N.showdown)
+	or (MM_N.showdown or MM_N.dueling)
 	or alwaysknow
 		if (not (p and p.mo and p.mo.valid))
 		or p.spectator
@@ -283,17 +283,23 @@ local function HUD_TabScoresDrawer(v)
 		
 		--draw ping
 		do
+			local player = p
+			if p.mm
+			and p.mm.alias then
+				player = p.mm.alias.posingas
+			end
+			
 			local pingclr = V_REDMAP
-			local pingstr = p.ping.."ms"
-			if p.bot
+			local pingstr = player.ping.."ms"
+			if player.bot
 				pingstr = "BOT"
 				pingclr = V_GRAYMAP
-			elseif (p.ping < 128)
+			elseif (player.ping < 128)
 				pingclr = V_GREENMAP
-			elseif (p.ping < 256)
+			elseif (player.ping < 256)
 				pingclr = V_YELLOWMAP
 			end
-			if (p == server)
+			if (player == server)
 				pingstr = "SERV"
 				pingclr = V_AQUAMAP
 			end

@@ -34,17 +34,17 @@ jobs:
     - name: Make build
       run: |
         mkdir build
-        node PaK3/main.js src/ build/SaxasMM-${{ env.BUILD_DATE }}.pk3
+        node PaK3/main.js src/ build/EPICMM-${{ env.BUILD_DATE }}.pk3
 
     - name: Upload build to Actions
       uses: actions/upload-artifact@v4
       with:
-        name: MurderMystery
-        path: build/SaxasMM-${{ env.BUILD_DATE }}.pk3
+        name: EPICMurderMystery
+        path: build/EPICMM-${{ env.BUILD_DATE }}.pk3
         
     - name: Upload build to Discord
       uses: sinshutu/upload-to-discord@master
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:
-        args: build/SaxasMM-${{ env.BUILD_DATE }}.pk3
+        args: build/EPICMM-${{ env.BUILD_DATE }}.pk3

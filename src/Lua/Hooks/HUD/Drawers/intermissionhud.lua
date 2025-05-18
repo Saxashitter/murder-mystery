@@ -262,7 +262,6 @@ local function draw_hud(v)
 	end
 
 	// START IN
-	v.drawString(160, 200-20, "JOIN US AT https://discord.gg/PxT4XKhZxd", V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_REDMAP|trans, "center")
 	if MM_N.mapVote then
 		local time = (MM_N.mapVote.ticker-1)/TICRATE+1
 		local prefix = ""

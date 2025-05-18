@@ -139,5 +139,58 @@ MenuLib.addMenu({
 				"thin-center"
 			)
 		end
+		
+		do
+			local ypos = y + (menu.height - 5 - 25) - 25
+			MenuLib.addButton(v, {
+				x = (props.corner_x + menu.width) - 5 - buttonwidth,
+				y = ypos,
+				
+				width = buttonwidth,
+				height = 25,
+				
+				name = "\x82".."Discord",
+				color = 13,
+				outline = 19,
+				
+				id = 1000,
+				pressFunc = function() end,
+				
+			})
+			
+			if MenuLib.client.hovering == 1000
+				menu.sexdick = 14
+			end
+			
+		end
+		
+		if menu.sexdick == nil
+			menu.sexdick = 0
+		elseif menu.sexdick
+			menu.sexdick = $ - 2
+			
+			local trans = 0
+			if (menu.sexdick < 10)
+				trans = (10 - menu.sexdick) << V_ALPHASHIFT
+			end
+			
+			if menu.sexdick
+				MenuLib.interpolate(v,true)
+				local x,y = MenuLib.client.mouse_x + 3*FU,MenuLib.client.mouse_y + 3*FU
+				--drawfillfixed wheeeeen
+				local width,height = 113,16
+				v.drawFill(x/FU, y/FU, width,height, 19|trans)
+				v.drawFill((x/FU) + 1, (y/FU) + 1, width-2,height-2, menu.color|trans) 
+				
+				v.drawString(x + 2*FU,y + 2*FU,
+					"Join us in our Discord server!\x82\n"..
+					"discord.gg/XVcvm97Mqx",
+					V_ALLOWLOWERCASE|trans,
+					"small-fixed"
+				)
+				MenuLib.interpolate(v,false)
+			end
+		end
+		
 	end
 })

@@ -15,6 +15,11 @@ end
 
 local function HUD_InfoDrawer(v, stplyr)
 	local p = displayplayer
+	
+	if stplyr == secondarydisplayplayer then
+		p = secondarydisplayplayer
+	end
+	
 	local slidein = MMHUD.xoffset
 	
 	--Timer

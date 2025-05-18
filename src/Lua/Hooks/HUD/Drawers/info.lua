@@ -77,7 +77,14 @@ local function HUD_InfoDrawer(v, stplyr)
 		local x = 6*FU - FU/2
 		local y = (splitscreen and 10 or 23)*FU
 		local yoff = 0
-		local rings = MM:GetPlayerRings(secondarydisplayplayer or p)
+		local rings = MM:GetPlayerRings(p)
+		
+		if splitscreen then
+			if secondarydisplayplayer == stplyr then
+				rings = MM:GetPlayerRings(secondarydisplayplayer)
+			end
+		end
+		
 		if (MMHUD.info_slideout)
 			local ticker = MMHUD.info_ticker
 			ticker = min($, 7*TR)

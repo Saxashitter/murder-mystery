@@ -2,6 +2,8 @@ local flashtime = 0
 local whiteflash = 5
 
 local function HUD_DeathFlash(v, p)
+	if splitscreen then return end -- TODO: support later, right now it covers the whole screen
+
 	if (p.playerstate ~= PST_DEAD)
 	or (MM_N.gameover)
 		flashtime = 0

@@ -160,7 +160,29 @@ return function(self, maploaded)
 
 	MM_N.waiting_for_players = count < 2
 
-	if not (self:isMM() and count >= 2) then return end
+	-- the worst code in this whole code base
+	if not (self:isMM() and count >= 2) then 
+		if splitscreen then
+			-- im crying this code is so hacky
+			local player1 = displayplayer
+			local player2 = secondarydisplayplayer
+			self:playerInit(player1, true)
+			self:playerInit(player2, true)
+			
+			-- shitty game!!!!!!!!!
+			if player1 and player1.valid and player2 and player2.valid then
+				if P_RandomChance(FU/2) then
+					player1.mm.role = MMROLE_MURDERER
+					player2.mm.role = MMROLE_SHERIFF
+				else
+					player1.mm.role = MMROLE_SHERIFF
+					player2.mm.role = MMROLE_MURDERER
+				end
+			end
+		end
+		
+		return 
+	end
 
 	local special_count = P_RandomRange(1, max(1, min(count/6, 3)))
 	MM_N.special_count = special_count

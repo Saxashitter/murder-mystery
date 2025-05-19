@@ -83,7 +83,6 @@ TypeOfLevel = SaxaMM
 RecordAttack = false
 Keywords = industries
 Weather =  	PRECIP_STORM
-SubTitle = By: GLide KS
 NoZone = true
 NoVisitNeeded = true
 Selectheading = Murder Mystery

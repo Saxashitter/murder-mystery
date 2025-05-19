@@ -42,7 +42,10 @@
 ( "Toppat Launch Site", "Preparations Interrupted")
 
 - Workplace BGM: "Overdrive (VRC7)" - Thameuszin
+
 - Flooded Industries BGM: "Tempest Valley Zone" by Malcolm Brown - Remastered by A.J. Freda
+
+- Commerce Plaza BGM: "Ikebukuro Underground District" - Shin Megami Tensei IV OST
 
 - It's a Showdown! (1): ???
 

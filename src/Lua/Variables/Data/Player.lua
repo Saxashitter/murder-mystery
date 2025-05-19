@@ -1,4 +1,5 @@
-return {
+local player_variables = 
+{
 	role = MMROLE_INNOCENT,
 	spectator = false,
 	got_weapon = false,
@@ -73,3 +74,7 @@ return {
 	
 	effects = {},
 }
+
+setmetatable(player_variables, MM.player_metatable)
+
+return player_variables

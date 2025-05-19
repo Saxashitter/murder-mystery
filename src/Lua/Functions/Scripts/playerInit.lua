@@ -1,12 +1,18 @@
 local shallowCopy = MM.require "Libs/shallowCopy"
+local deepCopy = MM.require "Libs/deepCopy"
 local playerVars = MM.require "Variables/Data/Player"
 local savedPlayerVars = MM.require "Variables/Data/Player_Saved"
 
 return function(self, p, mapchange)
-	p.mm = shallowCopy(playerVars)
+	p.mm = deepCopy(playerVars)
+	p.mm.player = p -- reference player
+	
 	if not p.mm_save then
 		p.mm_save = shallowCopy(savedPlayerVars)
 	end
+	
+	p.mm:give_item("burger")
+	p.mm:clear_slot(1)
 
 	local midgame = not mapchange and not MM:pregame()
 	if MM_N.waiting_for_players then

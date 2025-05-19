@@ -89,6 +89,19 @@ NoVisitNeeded = true
 Selectheading = Murder Mystery
 Lua.MM_StormTimer_Overtime = 30
 
+Level CM
+LevelName = Commerce Plaza
+Music = CITY
+NextLevel = CM
+SkyNum = 4
+TypeOfLevel = SaxaMM
+RecordAttack = false
+Keywords = plaza
+NoZone = true
+NoVisitNeeded = true
+Selectheading = Murder Mystery
+Lua.MM_ClueAmount = 6
+
 #@j1sk
 Level V0
 Levelname = Frozen Creek

@@ -31,7 +31,7 @@ states[freeslot("S_MM_KNIFE_WHIFF")] = {
 
 mobjinfo[freeslot("MT_MM_KNIFE_PROJECT")] = {
 	radius = 8*FU,
-	height = 16*FU,
+	height = 24*FU,
 	spawnstate = S_MM_KNIFE_SPIN,
 	flags = MF_NOGRAVITY,
 	--move in quarter steps

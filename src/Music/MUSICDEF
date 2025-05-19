@@ -47,6 +47,11 @@ Title = Mil_Base
 Soundtestpage = 1
 Soundtestcond = 0
 
+Lump WKPLMS
+Title = Workplace
+Soundtestpage = 1
+Soundtestcond = 0
+
 Lump MMSHIP
 Title = Seaegg
 Soundtestpage = 1

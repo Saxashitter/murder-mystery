@@ -10,9 +10,6 @@ return function(self, p, mapchange)
 	if not p.mm_save then
 		p.mm_save = shallowCopy(savedPlayerVars)
 	end
-	
-	p.mm:give_item("burger")
-	p.mm:clear_slot(1)
 
 	local midgame = not mapchange and not MM:pregame()
 	if MM_N.waiting_for_players then

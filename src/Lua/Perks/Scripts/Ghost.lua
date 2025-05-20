@@ -34,7 +34,7 @@ MM_PERKS[MMPERK_GHOST] = {
 		local me = p.mo
 		
 		local last_ghosting = p.mm.perk_ghost_time
-
+		
 		if (p.cmd.buttons & BT_TOSSFLAG)
 		and not (p.lastbuttons & BT_TOSSFLAG)
 			if (p.mm.perk_ghost_cooldown == 0)
@@ -139,6 +139,10 @@ MM_PERKS[MMPERK_GHOST] = {
 		local item = p.mm.inventory.items[p.mm.inventory.cur_sel]
 		if not (item and item.id == "knife")
 			me.alpha = FixedCeil(ease.linear(FU/2, $, FU) * 100)/100
+			if me.lasttranslation
+				me.translation = me.lasttranslation.t
+				me.lasttranslation = nil
+			end
 			return
 		end
 		

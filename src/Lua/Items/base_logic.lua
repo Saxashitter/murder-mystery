@@ -408,7 +408,6 @@ MM:addPlayerScript(function(p)
 		if item.aimtrail
 		and (p == displayplayer and camera or camera2).chase
 		and not inv.hidden
-			local micros = getTimeMicros()
 			local me = p.mo
 			local max_iter = 8
 			local max_dist = 128 * me.scale
@@ -453,7 +452,6 @@ MM:addPlayerScript(function(p)
 				end
 				*/
 			end
-			print(getTimeMicros() - micros)
 		end
 	end
 

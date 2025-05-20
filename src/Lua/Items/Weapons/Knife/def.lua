@@ -49,6 +49,7 @@ local function resetposition(item)
 	item.damage = weapon.damage
 	item.mobj.frame = ($ &~FF_FRAMEMASK)
 	item.showinfirstperson = false
+	item.aimtrail = false
 end
 
 local function distchecks(item, p, target)
@@ -192,6 +193,7 @@ weapon.thinker = function(item, p)
 			item.default_pos.x = weapon.position.x - (item.altfiretime * FU/100)
 			item.default_pos.y = -(item.altfiretime * FU/25)
 			item.default_pos.z = (item.altfiretime * FU/50)
+			item.aimtrail = true
 		end
 	else
 		if item.altfiretime >= throw_tic
@@ -247,6 +249,7 @@ weapon.unequip = function(item,p)
 		S_StartSound(p.mo, sfx_kc50)
 	end
 	item.altfiretime = 0
+	item.release = true
 	
 	if item.ghost and item.ghost.valid
 		P_RemoveMobj(item.ghost)

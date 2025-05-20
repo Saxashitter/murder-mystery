@@ -53,6 +53,7 @@ local ITEM_DEF = {
 	nostrafe = false,
 	rapidfire = false,			-- allows shooting by holding down
 	onlyhitone = false,			-- for melees, this weapon wont hit more than 1 person in succession
+	aimtrail = false,			-- for aimables, show a trail where youre aiming in 3rd person?
 	restrict = {},				-- restricts pickup from certain roles
 	/* example:
 	{
@@ -117,6 +118,7 @@ local ITEM_STRUCT = {
 	shootmobj = MT_THOK,
 	nostrafe = false,
 	rapidfire = false,
+	aimtrail = false,
 	onlyhitone = false,
 
 	restrict = {},
@@ -359,6 +361,7 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		item.onlyhitone = def.onlyhitone
 		item.restrict = shallowCopy(def.restrict)
 		item.noitemsparkles = def.noitemsparkles
+		item.aimtrail = def.aimtrail
 		
 		item.pickupsfx = def.pickupsfx
 		item.equipsfx = def.equipsfx

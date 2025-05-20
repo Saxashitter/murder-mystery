@@ -36,6 +36,7 @@ weapon.shootmobj = MT_THOK
 weapon.equipsfx = sfx_None
 weapon.attacksfx = freeslot "sfx_mcthrw"
 weapon.max_ammo = 8
+weapon.aimtrail = true
 
 weapon.attack = function(item,p)
 	P_SPMAngle(p.mo, MT_MM_SNOWBALL_BULLET, p.mo.angle, 1)

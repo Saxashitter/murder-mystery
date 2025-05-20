@@ -35,5 +35,6 @@ weapon.attacksfx = sfx_revlsh
 weapon.allowdropmobj = true
 weapon.rapidfire = true
 weapon.max_ammo = 100
+weapon.aimtrail = true
 
 return weapon

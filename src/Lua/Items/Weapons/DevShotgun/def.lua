@@ -41,6 +41,7 @@ weapon.dropsfx = sfx_gndrop
 weapon.allowdropmobj = true
 weapon.rapidfire = true
 weapon.max_ammo = 50
+weapon.aimtrail = true
 
 function weapon:postpickup(p)
 	if (MM_N.dueling) then return end

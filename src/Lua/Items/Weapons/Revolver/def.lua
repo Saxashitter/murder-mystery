@@ -37,6 +37,7 @@ weapon.equipsfx = sfx_gequip
 weapon.attacksfx = sfx_revlsh
 weapon.dropsfx = sfx_gndrop
 weapon.allowdropmobj = true
+weapon.aimtrail = true
 
 weapon.bulletthinker = function(mo, i)
 	if (i >= 192)

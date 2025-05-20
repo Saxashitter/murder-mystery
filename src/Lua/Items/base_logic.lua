@@ -402,6 +402,60 @@ MM:addPlayerScript(function(p)
 	and not MM.runHook("ItemUse", p, def,item) then
 		MM.FireBullet(p,def,item, p.mo.angle, p.aiming, true)
 	end
+	
+	if (displayplayer and displayplayer.valid)
+	and (p == displayplayer or p == secondarydisplayplayer)
+		if item.aimtrail
+		and (p == displayplayer and camera or camera2).chase
+		and not inv.hidden
+			local micros = getTimeMicros()
+			local me = p.mo
+			local max_iter = 8
+			local max_dist = 128 * me.scale
+			local step = max_dist / max_iter
+			--close enough
+			--TODO: align these properly
+			local vstep = FixedMul(FixedMul(step, tofixed("1.25")), sin(p.aiming))
+			
+			local ang = me.angle
+			for i = -3, max_iter do
+				local move = step * i
+				local vmove = vstep * i
+				local trail = P_SpawnMobjFromMobj(me,0,0,0,MT_THOK)
+				P_SetOrigin(trail,
+					me.x + P_ReturnThrustX(nil, ang, move) + me.momx,
+					me.y + P_ReturnThrustY(nil, ang, move) + me.momy,
+					(p.mo.z + (41*p.mo.height/48))-8*FU + vmove + me.momz
+				)
+				trail.tics = 2
+				trail.fuse = -1
+				trail.spritexscale = FU/10
+				trail.spriteyscale = trail.spritexscale
+				trail.translation = "AllWhite"
+				trail.blendmode = AST_SUBTRACT
+				trail.dispoffset = 110
+				trail.radius = 2 * me.scale
+				trail.height = 4 * me.scale
+				trail.dontdrawforviewmobj = me
+				/*
+				trail.flags = $ &~(MF_NOCLIP|MF_NOBLOCKMAP)
+				if not P_CheckPosition(trail,
+					trail.x + P_ReturnThrustX(nil, ang, step),
+					trail.y + P_ReturnThrustY(nil, ang, step),
+					trail.z + FixedMul(32 * me.scale, sin(aim))
+				)
+					trail.translation = nil
+					trail.color = SKINCOLOR_RED
+					trail.spritexscale = FU/5
+					trail.spriteyscale = trail.spritexscale
+					--trail.blendmode = AST_SUBTRACT
+					break
+				end
+				*/
+			end
+			print(getTimeMicros() - micros)
+		end
+	end
 
 	// hit detection
 

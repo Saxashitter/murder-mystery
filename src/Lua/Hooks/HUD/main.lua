@@ -173,11 +173,13 @@ addHook("HUD", function(v,p,c)
 				customhud.enable(data[1])
 			end
 		end
-		
+
+		/*
 		MMHUD.ticker = $+1
 		if abs(leveltime - MMHUD.ticker) >= 4
 			MMHUD.ticker = leveltime
 		end
+		*/
 		
 		if not MMHUD.dontslidein
 			if not MM.gameover

@@ -192,6 +192,7 @@ MM:addPlayerScript(dofile("Hooks/Player/Scripts/ItemStrafe"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/CashInChecks"), true)
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/FreezeAngle"))
 MM:addPlayerScript(dofile("Hooks/Player/Scripts/ForbidJoin"))
+MM:addPlayerScript(dofile("Hooks/Player/Scripts/NoTeeter"))
 
 addHook("KeyDown",function(key)
 	if isdedicatedserver then return end

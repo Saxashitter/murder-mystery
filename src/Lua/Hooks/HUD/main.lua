@@ -152,8 +152,60 @@ local function DoWeaponSlide(v, out)
 		MMHUD.wslidefrac = min($, FU)
 	end
 end
+
+local function TickSliders()
+	MMHUD.ticker = $+1
+	if abs(leveltime - MMHUD.ticker) >= 4
+		MMHUD.ticker = leveltime
+	end
+	
+	if not MMHUD.dontslidein
+		if not MM.gameover
+			
+			--"Round starts in..."
+			if MMHUD.ticker >= HUD_STARTFADEIN
+			and not Playing()
+				DoWeaponSlide(v)
+				
+				if MM_N.waiting_for_players
+					DoRegularSlide(v)
+				end
+			end
+			
+			--slide in regular hud
+			if Playing()
+				DoRegularSlide(v)
+				DoWeaponSlide(v,true)
+			end
+			
+			--fade in stuff if we've tweened for at least 2 tics
+			if MMHUD.xoffset <= FixedMul(HUD_BEGINNINGXOFF, FixedSqrt(FU*7/10))
+				if MMHUD.hudtrans >> V_ALPHASHIFT ~= 0
+					MMHUD.hudtrans = (($ >> V_ALPHASHIFT) - 1) << V_ALPHASHIFT
+				end
+			end
+			
+		--everything slides out
+		else
+			DoRegularSlide(v,true)
+			DoWeaponSlide(v,true)
+			
+			if MMHUD.hudtrans >> V_ALPHASHIFT ~= 10
+				MMHUD.hudtrans = (($ >> V_ALPHASHIFT) + 1) << V_ALPHASHIFT
+			end
+		end
+	else
+		if MMHUD.hudtrans >> V_ALPHASHIFT ~= 10
+			MMHUD.hudtrans = (($ >> V_ALPHASHIFT) + 1) << V_ALPHASHIFT
+		end
+		
+		MMHUD.dontslidein = false
+	end
+	MMHUD.hudtranshalf = htranstable[10 - (MMHUD.hudtrans >> V_ALPHASHIFT)] << V_ALPHASHIFT	
+end
 MMHUD.DoRegularSlide = DoRegularSlide
 MMHUD.DoWeaponSlide = DoWeaponSlide
+MMHUD.TickSliders = TickSliders
 
 addHook("HUD", function(v,p,c)
 	if MM:isMM() then
@@ -173,58 +225,8 @@ addHook("HUD", function(v,p,c)
 				customhud.enable(data[1])
 			end
 		end
-
-		/*
-		MMHUD.ticker = $+1
-		if abs(leveltime - MMHUD.ticker) >= 4
-			MMHUD.ticker = leveltime
-		end
-		*/
 		
-		if not MMHUD.dontslidein
-			if not MM.gameover
-				
-				--"Round starts in..."
-				if MMHUD.ticker >= HUD_STARTFADEIN
-				and not Playing()
-					DoWeaponSlide(v)
-					
-					if MM_N.waiting_for_players
-						DoRegularSlide(v)
-					end
-				end
-				
-				--slide in regular hud
-				if Playing()
-					DoRegularSlide(v)
-					DoWeaponSlide(v,true)
-				end
-				
-				--fade in stuff if we've tweened for at least 2 tics
-				if MMHUD.xoffset <= FixedMul(HUD_BEGINNINGXOFF, FixedSqrt(FU*7/10))
-					if MMHUD.hudtrans >> V_ALPHASHIFT ~= 0
-						MMHUD.hudtrans = (($ >> V_ALPHASHIFT) - 1) << V_ALPHASHIFT
-					end
-				end
-				
-			--everything slides out
-			else
-				DoRegularSlide(v,true)
-				DoWeaponSlide(v,true)
-				
-				if MMHUD.hudtrans >> V_ALPHASHIFT ~= 10
-					MMHUD.hudtrans = (($ >> V_ALPHASHIFT) + 1) << V_ALPHASHIFT
-				end
-			end
-		else
-			if MMHUD.hudtrans >> V_ALPHASHIFT ~= 10
-				MMHUD.hudtrans = (($ >> V_ALPHASHIFT) + 1) << V_ALPHASHIFT
-			end
-			
-			MMHUD.dontslidein = false
-		end
-		MMHUD.hudtranshalf = htranstable[10 - (MMHUD.hudtrans >> V_ALPHASHIFT)] << V_ALPHASHIFT
-		
+		TickSliders()
 		hudwasmm = true
 		return
 	end
@@ -246,6 +248,12 @@ addHook("HUD", function(v,p,c)
 	hudwasmm = false
 end)
 
+--Cool
+addHook("HUD",function(v)
+	if hudwasmm
+		TickSliders()
+	end
+end,"scores")
 addHud "deathflash"
 addHud "outofbounds"
 addHud "afktimeout"

@@ -405,6 +405,7 @@ MM:addPlayerScript(function(p)
 	
 	if (displayplayer and displayplayer.valid)
 	and (p == displayplayer or p == secondarydisplayplayer)
+	and not (MM_N.gameover)
 		if item.aimtrail
 		and (p == displayplayer and camera or camera2).chase
 		and not inv.hidden

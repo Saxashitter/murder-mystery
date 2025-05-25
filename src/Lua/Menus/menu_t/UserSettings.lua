@@ -178,6 +178,7 @@ MenuLib.addMenu({
 				MenuLib.interpolate(v,true)
 				local x,y = MenuLib.client.mouse_x + 3*FU,MenuLib.client.mouse_y + 3*FU
 				--drawfillfixed wheeeeen
+				--NOW! In SRB2-edit !!! :steamhappy:
 				local width,height = 113,16
 				v.drawFill(x/FU, y/FU, width,height, 19|trans)
 				v.drawFill((x/FU) + 1, (y/FU) + 1, width-2,height-2, menu.color|trans) 

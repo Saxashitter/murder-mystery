@@ -281,6 +281,53 @@ MenuLib.addMenu({
 	end
 })
 
+local storm_text = {
+	"\x89The Storm\x80 forms during Overtime or Showdown. It closes",
+	"into the \x89Storm Gargoyle\x80. If you can't find it, there is",
+	"a pointer to it on your screen. \x89The Storm\x80 closes in",
+	"faster during Overtime, so you'd better pick up the pace.",
+	"There is around a 15 second grace window of being in \x89The",
+	"\x89Storm\x80, after that time window, you can stay in \x89The Storm",
+	"for up to 5 seconds before dying.",
+	
+	"patchdraw",
+}
+MenuLib.addMenu({
+	stringId = "GuidePage_TheStorm",
+	title = "The Storm",
+	
+	width = 217,
+	height = 130,
+	
+	drawer = function(v, ML, menu, props)
+		MenuLib.interpolate(v, false)
+		local x,y = props.corner_x, props.corner_y
+		x = $ + 5
+		y = $ + 20
+	
+		for k,str in ipairs(storm_text)
+			if str == "patchdraw"
+				x = (props.corner_x + props.fakewidth/2) * FU
+				y = ($ + 20)*FU
+				
+				v.drawScaled(x,y, FU/2,
+					v.cachePatch("MMGUD_GARG"), 0
+				)
+				
+				continue
+			end
+			
+			v.drawString(x,y,str, V_ALLOWLOWERCASE, "small")
+			
+			if str == ""
+				y = $ + 7
+			else
+				y = $ + 5
+			end
+		end
+	end
+})
+
 local inter_text = {
 	"Dropped items can be picked up through \x82Interactions.\x80",
 	"Other map gimmicks can be interacted too, just look for the prompt.",
@@ -391,41 +438,131 @@ MenuLib.addMenu({
 	end
 })
 
-MenuLib.addMenu({
-	stringId = "GuidePage_Mechanics",
-	title = "Mechanics",
+local perks_text = {
+	"\x82Perks\x80 are abilities you can buy from the Shop. They",
+	"make your role as \x85Murderer\x80 a little bit easier.",
+	"You can get coins in many ways, so play a couple rounds",
+	"and buy yourself some perks, it's a worthwhile investment!",
+	/*
+	"There is around a 15 second grace window of being in \x89The",
+	"\x89Storm\x80, after that time window, you can stay in \x89The Storm",
+	"for up to 5 seconds before dying.",
+	*/
 	
-	width = 250,
-	height = 130,
+	"patchdraw",
+}
+MenuLib.addMenu({
+	stringId = "GuidePage_Perks",
+	title = "Perks",
+	
+	width = 217,
+	height = 110,
 	
 	drawer = function(v, ML, menu, props)
 		MenuLib.interpolate(v, false)
 		local x,y = props.corner_x, props.corner_y
-		x = $ + 10
+		x = $ + 5
 		y = $ + 20
-		
-		local rightsnap = (props.fakewidth - 10 - rolebutt.w) - 10
-		
-		drawGenericButton(v,x,y, "\x89".."The Storm", "TheStorm")	
-		--y = $ + rolebutt.h + 4
-		
-		drawGenericButton(v,x+rightsnap,y, "", "Overtime", false, 8)
-		do
-			local center = y + (rolebutt.h + 8) / 2
-			v.drawString(x + rolebutt.w/2 + rightsnap, center - 9,
-				"\x85Overtime\n\x82Showdown",
-				V_ALLOWLOWERCASE,
-				"thin-center"
-			)
+	
+		for k,str in ipairs(perks_text)
+			if str == "patchdraw"
+				x = (props.corner_x + props.fakewidth/2)
+				y = $ + 10
+				
+				MMHUD.menus.drawPerkItem(v,
+					(x - 32) - 4, y, MMPERK_HASTE, true
+				)
+				
+				MenuLib.addButton(v, {
+					x = x + 4, y = y,
+					width = rolebutt.w, height = rolebutt.h,
+					name = "Shop",
+					color = 13,
+					outline = 19,
+					
+					pressFunc = function()
+						MenuLib.initMenu(MenuLib.findMenu("ShopPage"))
+						--quick exits
+						MenuLib.client.currentMenu.layers = {}
+					end
+				})
+				continue
+			end
+			
+			v.drawString(x,y,str, V_ALLOWLOWERCASE, "small")
+			
+			if str == ""
+				y = $ + 7
+			else
+				y = $ + 5
+			end
 		end
-		y = $ + rolebutt.h + 32
-		
-		drawGenericButton(v,x,y, "\x82Interactions", "Interactions")	
-		--y = $ + rolebutt.h + 4
-		
-		drawGenericButton(v,x + rightsnap,y, "\x82Perks", nil,nil,nil, 3)
-		--y = $ + rolebutt.h + 4
-		
+	end
+})
+
+local overt_text = {
+	"\x85Overtime\x80 only starts when time runs out AND the \x85Murderer",
+	"has killed at least a fifth of the total players. The \x85Murderer",
+	"will slowly be revealed during \x85Overtime\x80. \x82Showdown\x80 starts when",
+	"the number of \x85Murderers\x80 matches the number of \x83Innocents\x80.",
+	"\x85Murderers\x80 can see \x83Innocents\x80, so be on the look out!",
+	/*
+	"There is around a 15 second grace window of being in \x89The",
+	"\x89Storm\x80, after that time window, you can stay in \x89The Storm",
+	"for up to 5 seconds before dying.",
+	*/
+	
+	"patchdraw",
+}
+MenuLib.addMenu({
+	stringId = "GuidePage_Overtime",
+	title = "Overtime & Showdown",
+	
+	width = 230,
+	height = 110,
+	
+	drawer = function(v, ML, menu, props)
+		MenuLib.interpolate(v, false)
+		local x,y = props.corner_x, props.corner_y
+		x = $ + 5
+		y = $ + 20
+	
+		for k,str in ipairs(overt_text)
+			if str == "patchdraw"
+				x = (props.corner_x + props.fakewidth/2)*FU
+				y = ($ + 10)*FU
+				
+				local sonis = v.cachePatch("MMSD_SONIC")
+				local knux = v.cachePatch("MMSD_KNUCKLES")
+				local vs = v.cachePatch("MM_VERSUS")
+				
+				v.drawScaled(x - 50*FU,
+					y, FU/4,
+					sonis, 0,
+					v.getColormap(nil,SKINCOLOR_BLUE)
+				)
+				
+				v.drawScaled(x - FixedMul(vs.width*FU,FU/4)/2,
+					y + FixedMul(vs.height*FU,FU/4)/2,
+					FU/4, vs, 0
+				)
+				
+				v.drawScaled(x + 50*FU,
+					y, FU/4,
+					knux, V_FLIP,
+					v.getColormap(nil,SKINCOLOR_RED)
+				)
+				continue
+			end
+			
+			v.drawString(x,y,str, V_ALLOWLOWERCASE, "small")
+			
+			if str == ""
+				y = $ + 7
+			else
+				y = $ + 5
+			end
+		end
 	end
 })
 
@@ -433,7 +570,7 @@ MenuLib.addMenu({
 	stringId = "Protips",
 	title = "Guide",
 	
-	width = 250,
+	width = 180,
 	height = 130,
 	
 	drawer = function(v, ML, menu, props)
@@ -455,7 +592,7 @@ MenuLib.addMenu({
 			drawRoleButton(v,x,y, MMROLE_MURDERER)
 			y = $ + rolebutt.h + 4
 			
-			y = $ + 6
+			y = $ + 8
 			drawGenericButton(v,x,y, "\x82".."HUD", "HUDPU", true)
 			
 		end
@@ -463,8 +600,24 @@ MenuLib.addMenu({
 		x = props.corner_x + 100
 		y = props.corner_y + 32
 		
+		drawGenericButton(v,x,y, "\x89".."The Storm", "TheStorm")
+		y = $ + rolebutt.h + 4
+		
+		drawGenericButton(v,x,y, "\x82Interactions", "Interactions")
+		y = $ + rolebutt.h + 4
+		
+		drawGenericButton(v,x,y, "\x82Perks", "Perks")
+		y = $ + rolebutt.h + 4
+		
+		drawGenericButton(v,x,y, "", "Overtime", false, 8)
 		do
-			drawGenericButton(v,x,y, "\x82".."Mechanics", "Mechanics")			
+			local center = y + (rolebutt.h + 8) / 2
+			v.drawString(x + rolebutt.w/2, center - 9,
+				"\x85Overtime\n\x82Showdown",
+				V_ALLOWLOWERCASE,
+				"thin-center"
+			)
 		end
+		y = $ + rolebutt.h + 32
 	end
 })

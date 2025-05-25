@@ -378,6 +378,7 @@ local function FXHandle(point,dist)
 		laser.sprite = SPR_BGLS
 		laser.frame = B|FF_FULLBRIGHT
 		laser.scale = $
+		laser.dispoffset = -25
 	end
 	
 	--people like to hide behind these so dont let em do that

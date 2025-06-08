@@ -58,6 +58,7 @@ local HUD_STARTFADEIN = (50 / 2) + 10
 
 local slidein_time = 25
 local slidein_frac = FixedDiv(FU, slidein_time*FU)
+
 /*
 local game_slidein_time = 20
 local game_slidein_frac = FixedDiv(FU, game_slidein_time*FU)
@@ -267,7 +268,6 @@ addHud "role"
 --good coding practices
 addHud "gamerole"
 addHud "goals"
---addHud "heldweapon"
 addHud "availableitems"
 addHud "weapontime"
 addHud "pregamehud"

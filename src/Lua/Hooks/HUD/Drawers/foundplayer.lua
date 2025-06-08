@@ -42,6 +42,10 @@ return function(v,p)
 		return
 	end
 
+	MMHUD.DoRegularSlide(v,true)
+	MMHUD.DoWeaponSlide(v,true)
+	MMHUD.dontslidein = true
+	
 	FADE = min($+1, 13)
 
 	v.fadeScreen(0xFF00, FADE)

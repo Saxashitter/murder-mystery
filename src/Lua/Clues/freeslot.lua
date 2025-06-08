@@ -8,11 +8,11 @@ sfxinfo[freeslot "sfx_cluecl"].caption = "Collected clue!"
 mobjinfo[MT_MM_CLUESPAWN] = {
 	--$Name Clue Spawner
 	--$Sprite BGLSJ0
-	--$Category SaxaMM
+	--$Category EPIC!MM
 	--$NotAngled
 	flags = MF_NOGRAVITY,
 	radius = 16*FRACUNIT,
 	height = 32*FRACUNIT,
-	doomednum = 3001,
+	doomednum = 8001,
 	spawnstate = S_NULL
 }

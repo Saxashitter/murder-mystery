@@ -14,11 +14,11 @@ freeslot("MT_MM_STORMDIST")
 mobjinfo[MT_MM_STORMDIST] = {
 	--$Name Storm Radius Point
 	--$Sprite BGLSC0
-	--$Category SaxaMM
+	--$Category EPIC!MM
 	flags = MF_NOSECTOR|MF_NOTHINK|MF_SCENERY,
 	radius = 28*FRACUNIT,
 	height = 1,
-	doomednum = 3002,
+	doomednum = 8002,
 	spawnstate = S_NULL
 }
 

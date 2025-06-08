@@ -3,7 +3,7 @@ freeslot "MT_MM_ITEMSPAWN"
 mobjinfo[MT_MM_ITEMSPAWN] = {
 	--$Name Item Spawner
 	--$Sprite RVOLA2A8
-	--$Category SaxaMM
+	--$Category EPIC!MM
 	--$NotAngled
 	--$StringArg0 Item ID
 	--$StringArg0ToolTip The item's ID to spawn.
@@ -14,7 +14,7 @@ mobjinfo[MT_MM_ITEMSPAWN] = {
 	flags = MF_NOGRAVITY|MF_NOBLOCKMAP,
 	radius = 16*FRACUNIT,
 	height = 32*FRACUNIT,
-	doomednum = 3003,
+	doomednum = 8003,
 	spawnstate = S_NULL
 }
 

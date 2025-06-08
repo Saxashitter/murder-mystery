@@ -164,7 +164,7 @@ freeslot("MT_MM_INTERACT_POINT")
 mobjinfo[MT_MM_INTERACT_POINT] = {
 	--$Name Interaction Point
 	--$Sprite BGLSD0
-	--$Category SaxaMM
+	--$Category EPIC!MM
 	--$NotAngled
 	
 	--$StringArg0 Name
@@ -207,7 +207,7 @@ mobjinfo[MT_MM_INTERACT_POINT] = {
 	flags = MF_NOGRAVITY|MF_NOSECTOR|MF_NOCLIP|MF_NOCLIPHEIGHT|MF_NOCLIPTHING,
 	radius = 16*FRACUNIT,
 	height = 32*FRACUNIT,
-	doomednum = 5000,
+	doomednum = 8000,
 	spawnstate = S_INVISIBLE
 }
 

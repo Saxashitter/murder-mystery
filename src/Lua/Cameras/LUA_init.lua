@@ -4,7 +4,7 @@ freeslot("SPR_MMCD")
 mobjinfo[MT_MM_CAMERA] = {
 	--$Name Camera
 	--$Sprite MMCMJ0
-	--$Category SaxaMM
+	--$Category EPIC!MM
 	
 	--$StringArg0 Name
 	--$StringArg0ToolTip The name of this camera. (Ex. Kitchen, Hallway)
@@ -54,7 +54,7 @@ mobjinfo[MT_MM_CAMERA] = {
 	--$Arg7Enum { 0="No"; 1="Yes";}
 	--$Arg7Tooltip If true, this camera will not draw a wire from the ceiling.\nThe camera wont draw a wire at all if it's invisible.
 	
-	doomednum = 10000,
+	doomednum = 8004,
 	spawnhealth = 1,
 	flags = MF_NOGRAVITY|MF_NOCLIP, --|MF_SPAWNCEILING,
 	radius = 8*FRACUNIT,

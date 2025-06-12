@@ -57,6 +57,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	*/
 	
 	if not (target and target.valid and target.player and target.player.mm) then return end
+	if target.player.mm.spectator or target.player.spectator then return end
 
 	if not (MM_N.waiting_for_players or CV_MM.debug.value or MM_N.allow_respawn) then
 		target.player.mm.spectator = true

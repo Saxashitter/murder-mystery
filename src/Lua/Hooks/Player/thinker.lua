@@ -206,4 +206,12 @@ addHook("KeyDown",function(key)
 	or (key.num == wp5_s)
 		MenuLib.initMenu(MenuLib.findMenu("MainMenu"))
 	end
+	
+	--Manual replacement
+	if key.name == "f1"
+		local protips = MenuLib.findMenu("Protips")
+		MenuLib.menus[protips].fromkeydown = true
+		MenuLib.initMenu(protips)
+		return true
+	end
 end)

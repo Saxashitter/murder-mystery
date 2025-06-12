@@ -571,7 +571,7 @@ MenuLib.addMenu({
 	title = "Guide",
 	
 	width = 180,
-	height = 130,
+	height = 140,
 	
 	drawer = function(v, ML, menu, props)
 		MenuLib.interpolate(v, false)
@@ -619,5 +619,19 @@ MenuLib.addMenu({
 			)
 		end
 		y = $ + rolebutt.h + 32
+		
+		if menu.fromkeydown
+			v.drawString(
+				160,
+				props.corner_y + props.fakeheight - 10,
+				"Press \x82[WEAPON 5]\x80 to open this menu again!",
+				V_ALLOWLOWERCASE,
+				"thin-center"
+			)
+		end
+	end,
+	
+	exit = function(flags)
+		MenuLib.menus[MenuLib.findMenu("Protips")].fromkeydown = nil
 	end
 })

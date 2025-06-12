@@ -85,7 +85,7 @@ function MM:giveOutClues(amount)
 	end
 
 	for thing in mapthings.iterate do
-		if thing.type ~= 3001 then
+		if thing.type ~= mobjinfo[MT_MM_CLUESPAWN].doomednum then
 			if fallbackNums[thing.type] then
 				table.insert(fallbackThings, thing)
 			end

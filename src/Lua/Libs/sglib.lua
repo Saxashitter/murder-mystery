@@ -100,7 +100,7 @@ function module.ObjectTracking(v, p, c, point, reverse, allowspectator)
 	local fov = ((baseFov - fovDiff) / 2) - (p.fovadd / 2)
 	local fovTangent = tan(FixedAngle(fov))
 
-	if splitscreen == 1 then
+	if splitscreen then
 		-- Splitscreen FOV is adjusted to maintain expected vertical view
 		fovTangent = 10*fovTangent/17
 	end

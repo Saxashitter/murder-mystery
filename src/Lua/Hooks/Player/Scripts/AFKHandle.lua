@@ -2,6 +2,9 @@ local activebuttons = BT_JUMP|BT_WEAPONNEXT|BT_WEAPONPREV|BT_ATTACK|BT_CUSTOM1|B
 --lol
 rawset(_G,"AFK_TIMEOUT", 45*TICRATE)
 
+--minimum difference to be detected as "player input"
+local ANGLE_FUDGE = 3*FU
+
 local function handleTimeout(p)
 	if CV_MM.afkkickmode.value == 0 then return end
 	
@@ -24,6 +27,16 @@ local function handleTimeout(p)
 	else
 		COM_BufAddText(server,"kick "..#p.." AFK")
 	end
+end
+
+local function angleDiff(ang1, ang2)
+	local adiff = FixedAngle(
+		AngleFixed(ang1) - AngleFixed(ang2)
+	)
+	if AngleFixed(adiff) > 180*FU
+		adiff = InvAngle($)
+	end
+	return AngleFixed(adiff)
 end
 
 return function(p)
@@ -56,8 +69,8 @@ return function(p)
 	
 	if not ((cmd.forwardmove or cmd.sidemove
 	or cmd.buttons & activebuttons)
-	or (afk.lastangle ~= cmd.angleturn << 16)
-	or (afk.lastaiming ~= cmd.aiming))
+	or (angleDiff(afk.lastangle, cmd.angleturn << 16) >= ANGLE_FUDGE)
+	or (angleDiff(afk.lastaiming, cmd.aiming) >= ANGLE_FUDGE))
 		if afk.timeuntilreset < 10*TICRATE
 			afk.timeuntilreset = $+1
 		else

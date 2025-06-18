@@ -13,6 +13,10 @@ local function format_int(number)
   return minus .. int:reverse():gsub("^,", "") .. fraction
 end
 
+MMHUD.info_xpos = 0
+
+-- "gameandscores" hud now returns the player for game hud so we can tell
+-- if this item is being drawn on the game or scores hud
 local function HUD_InfoDrawer(v, stplyr)
 	local p = displayplayer
 	
@@ -69,6 +73,8 @@ local function HUD_InfoDrawer(v, stplyr)
 				flags|(flash and V_REDMAP or 0),
 				"fixed"
 			)
+			
+			MMHUD.info_xpos = (x/FU) + 15 + v.stringWidth(finalstring,0,"normal")
 		end
 	end
 	
@@ -127,12 +133,16 @@ local function HUD_InfoDrawer(v, stplyr)
 			V_SNAPTOLEFT|V_SNAPTOTOP|V_PERPLAYER
 		)
 		
-		v.drawString(x + 14*FU - slidein,
+		local ring_string = format_int(tostring(rings))
+		v.drawString(x + 15*FU - slidein,
 			y + FU + yoff,
-			format_int(tostring(rings)),
+			ring_string,
 			V_SNAPTOLEFT|V_SNAPTOTOP|V_PERPLAYER,
 			"fixed"
-		)	
+		)
+		MMHUD.info_xpos = max($,
+			(x/FU) + 15 + v.stringWidth(ring_string,0,"normal")
+		)
 	end
 
 end

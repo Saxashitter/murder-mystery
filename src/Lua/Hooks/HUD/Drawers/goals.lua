@@ -30,7 +30,7 @@ local function HUD_GoalDrawer(v,p)
 	end
 	
 	do
-		local longest_str = 55
+		local longest_str = max(55, MMHUD.info_xpos or 0)
 		local goal_len = 0
 		for k,val in ipairs(goals)
 			longest_str = max(

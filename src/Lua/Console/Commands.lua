@@ -324,3 +324,8 @@ COM_AddCommand("MM_AdminBadge", function(p)
 	
 	CONS_Printf(p,msg)
 end)
+
+COM_AddCommand("MM_OpenMenu", function()
+	if MenuLib.client.currentMenu.id ~= -1 then return end
+	MM.openMenu()
+end, COM_LOCAL)

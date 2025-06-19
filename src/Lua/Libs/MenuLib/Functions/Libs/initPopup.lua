@@ -24,7 +24,7 @@ return function(id,instant)
 		return
 	end
 	
-	input.ignoregameinputs = true
+	ML.client.overrideinputs = true
 	
 	table.insert(ML.client.popups, {
 		id = id,

@@ -209,9 +209,7 @@ addHook("KeyDown",function(key)
 	
 	--Manual replacement
 	if key.name == "f1"
-		local protips = MenuLib.findMenu("Protips")
-		MenuLib.menus[protips].fromkeydown = true
-		MenuLib.initMenu(protips)
+		MM.openMenu()
 		return true
 	end
 end)

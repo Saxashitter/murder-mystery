@@ -21,7 +21,14 @@ addHook("PreThinkFrame", do
 	
 	ML.client.mouse_x = $ + mouse.dx * 3700
 	ML.client.mouse_y = $ + mouse.dy * 3700
-	
+
+	-- controller/mobileAdd commentMore actions
+	local angle = R_PointToAngle2(0, 0, ML.client.sidemove*FU, -ML.client.forwardmove*FU)
+	local analog = max(abs(ML.client.forwardmove), abs(ML.client.sidemove))*FU/50
+
+	ML.client.mouse_x = $ + FixedMul(cos(angle), analog*4)
+	ML.client.mouse_y = $ + FixedMul(sin(angle), analog*4)
+
 	ML.client.mouse_x = ML.clamp(0, $, BASEVIDWIDTH*FU)
 	ML.client.mouse_y = ML.clamp(0, $, BASEVIDHEIGHT*FU)
 	
@@ -107,4 +114,25 @@ addHook("KeyDown", function(key)
 		S_StartSound(nil,sfx_menu1,consoleplayer)
 		ML.stopTextInput()
 	end
+end)
+
+addHook("PlayerCmd", function(p, cmd)
+	if not ML.client.overrideinputs then return end
+
+	ML.client.lastbuttons = ML.client.buttons
+	ML.client.buttons = cmd.buttons
+	ML.client.forwardmove = cmd.forwardmove
+	ML.client.sidemove = cmd.sidemove
+
+	if ML.client.buttons & BT_JUMP
+	and ML.client.lastbuttons & BT_JUMP == 0 then
+		ML.client.doMousePress = true
+	end
+
+	cmd.buttons = 0
+	cmd.sidemove = 0
+	cmd.forwardmove = 0
+
+	cmd.angleturn = p.cmd.angleturn
+	cmd.aiming = p.cmd.aiming
 end)

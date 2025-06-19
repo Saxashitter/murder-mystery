@@ -116,7 +116,13 @@ MenuLib.client = {
 	text_ctrldown = false,
 	textbuffer_sfx = nil,
 	textbuffer_tooltip = nil,
-	
+
+	overrideinputs = false,
+	forwardmove = 0,
+	sidemove = 0,
+	buttons = 0,
+	lastbuttons = 0,
+
 	commandbuffer = nil,
 }
 

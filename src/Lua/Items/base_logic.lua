@@ -10,6 +10,10 @@ end
 --also kickstarts the melee function
 MM.FireBullet = function(p,def,item, angle, aiming, callhooks)
 	item.hit = item.max_hit
+	if item.latencyadjust
+		item.hit = $ + max(p.cmd.latency - item.max_hit + 1, 0)
+	end
+	
 	item.anim = item.max_anim
 	item.cooldown = item.max_cooldown
 
@@ -456,7 +460,7 @@ MM:addPlayerScript(function(p)
 		end
 	end
 
-	// hit detection
+	-- hit detection
 
 	if (item.damage or item.cantouch)
 	and item.hit

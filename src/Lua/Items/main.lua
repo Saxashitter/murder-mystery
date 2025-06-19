@@ -46,6 +46,8 @@ local ITEM_DEF = {
 	damage = true,				-- enable if this can damage people
 	weaponize = true,			-- make item identify as a weapon (#woke /j)
 									-- weapons are usually on the players right hand, while items are on the players left
+	latencyadjust = false,		-- melee items will adjust to have a longer
+									-- hit window according to latency
 	droppable = false,			-- enable to let item be dropped
 	allowdropmobj = true,		-- determines whether dropping the item will spawn another to be picked up
 	shootable = false,			-- enable to make weapon shoot projectiles instead of stabbing
@@ -113,6 +115,7 @@ local ITEM_STRUCT = {
 	animation = true,
 	damage = true,
 	weaponize = true,
+	latencyadjust = false,
 	droppable = false,
 	shootable = false,
 	shootmobj = MT_THOK,
@@ -351,6 +354,7 @@ function MM:GiveItem(p, item_input, slot, overrides)
 		item.animation = def.animation
 		item.damage = def.damage
 		item.weaponize = def.weaponize
+		item.latencyadjust = def.latencyadjust
 		item.droppable = def.droppable
 		item.droppable_clue = def.droppable_clue
 		item.allowdropmobj = def.allowdropmobj

@@ -33,6 +33,7 @@ weapon.stick = true
 weapon.animation = true
 weapon.damage = true
 weapon.weaponize = true
+weapon.latencyadjust = true
 weapon.droppable = true
 weapon.shootable = false
 weapon.shootmobj = MT_THOK

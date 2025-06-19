@@ -27,8 +27,8 @@ return function(v,p)
 	y = $ + 8
 
 	v.drawString(0, y,
-		"(mm_spectatormode in console to toggle)",
-		snap|V_ALLOWLOWERCASE|V_GRAYMAP,
+		"\x82[WEAPON 5]\x80 - Open Menu",
+		snap|V_ALLOWLOWERCASE,
 		"thin"
 	)
 	y = $ + 8

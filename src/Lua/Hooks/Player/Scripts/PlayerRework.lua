@@ -104,7 +104,7 @@ return function(p)
 	p.normalspeed = speedcap
 	if not P_IsObjectOnGround(p.mo)
 		local me = p.mo
-		local speedcap = speedcap - 3*FU
+		local speedcap = max(speedcap - 3*me.scale, 20 * me.scale)
 		if p.speed > speedcap
 			local div = 16 * FU
 			

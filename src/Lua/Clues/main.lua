@@ -22,6 +22,7 @@ local clueitemtiers = {
 	}
 }
 
+local CLUE_FLOOROFF = 40*FU
 function MM:spawnClueMobj(p, pos)
 	local mobj = P_SpawnMobj(pos.x, pos.y, pos.z, MT_MM_CLUESPAWN)
 
@@ -50,7 +51,7 @@ function MM:spawnClueMobj(p, pos)
 	if (mobj.z <= mobj.floorz)
 	or (mobj.z+mobj.height >= mobj.ceilingz)
 		local sign = (mobj.z+mobj.height >= mobj.ceilingz) and -1 or 1
-		mobj.z = $ + 40*mobj.scale * sign
+		mobj.z = $ + FixedMul(CLUE_FLOOROFF, mobj.scale) * sign
 	end
 	
 	if MM.clues_singlemode
@@ -149,42 +150,44 @@ MM:addPlayerScript(function(p)
 		end
 		
 		local pos = clue.ref
-		clue.mobj.color = p.skincolor
+		local mo = clue.mobj
+		
+		mo.color = p.skincolor
 		if (p.realmo and p.realmo.valid)
-			clue.mobj.scale = p.realmo.scale
+			mo.scale = p.realmo.scale
 		end
 		
 		if p.mm.clues.current ~= nil
 		and clue ~= p.mm.clues.current
-			clue.mobj.flags2 = $|MF2_DONTDRAW
+			mo.flags2 = $|MF2_DONTDRAW
 			continue
 		end
-		clue.mobj.flags2 = $ &~MF2_DONTDRAW
+		mo.flags2 = $ &~MF2_DONTDRAW
 		
 		--dont "spy" on clues on mapstart
 		if (leveltime == 0)
 		and MM.clues_singlemode
-			clue.mobj.flags2 = $|MF2_DONTDRAW
+			mo.flags2 = $|MF2_DONTDRAW
 		end
 		
 		do
-			clue.mobj.clue_momz = $ - FU/4
+			mo.clue_momz = $ - FU/4
 			
-			clue.mobj.clue_bounce = $ + clue.mobj.clue_momz
-			if clue.mobj.clue_bounce <= 0
-				clue.mobj.clue_bounce = 0
-				clue.mobj.clue_momz = CLUE_MAXBOUNCE
+			mo.clue_bounce = $ + mo.clue_momz
+			if mo.clue_bounce <= 0
+				mo.clue_bounce = 0
+				mo.clue_momz = CLUE_MAXBOUNCE
 			end
 		end
-		clue.mobj.spriteyoffset = clue.mobj.clue_bounce
+		mo.spriteyoffset = mo.clue_bounce
 		
-		clue.mobj.shadowscale = (FU / 6) + (FU - (FixedDiv(clue.mobj.spriteyoffset, 7*FU)) / 10)
+		mo.shadowscale = (FU / 6) + (FU - (FixedDiv(mo.spriteyoffset, 7*FU)) / 10)
 		
 		if P_RandomChance(FU/2)
 			local wind = P_SpawnMobj(
-				clue.mobj.x + P_RandomRange(-18,18)*p.mo.scale,
-				clue.mobj.y + P_RandomRange(-18,18)*p.mo.scale,
-				clue.mobj.z + (p.mo.height/2) + P_RandomRange(-20,20)*p.mo.scale,
+				mo.x + P_RandomRange(-18,18)*p.mo.scale,
+				mo.y + P_RandomRange(-18,18)*p.mo.scale,
+				mo.z + (p.mo.height/2) + P_RandomRange(-20,20)*p.mo.scale,
 				MT_BOXSPARKLE
 			)
 			wind.frame = $|FF_FULLBRIGHT
@@ -193,12 +196,19 @@ MM:addPlayerScript(function(p)
 			P_SetObjectMomZ(wind,P_RandomRange(1,3)*FU)
 		end
 		
+		-- Ugh (FNF)
+		if (mo.z + mo.height > mo.ceilingz - FixedMul(CLUE_FLOOROFF, mo.scale))
+			mo.z = mo.ceilingz - mo.height - FixedMul(CLUE_FLOOROFF, mo.scale)
+		elseif (mo.z < mo.floorz + FixedMul(CLUE_FLOOROFF, mo.scale))
+			mo.z = mo.floorz + FixedMul(CLUE_FLOOROFF, mo.scale)
+		end
+		
 		--debugging + actual purpose
-		clue.mobj.radius = p.mo.radius*3/2
-		clue.mobj.height = p.mo.height*3/2
-		if abs(p.mo.x-pos.x) > clue.mobj.radius + p.mo.radius
-		or abs(p.mo.y-pos.y) > clue.mobj.radius + p.mo.radius
-		or not ZCollide(p.mo, clue.mobj) then
+		mo.radius = p.mo.radius*3/2
+		mo.height = p.mo.height*3/2
+		if abs(p.mo.x-pos.x) > mo.radius + p.mo.radius
+		or abs(p.mo.y-pos.y) > mo.radius + p.mo.radius
+		or not ZCollide(p.mo, mo) then
 			continue
 		end
 		

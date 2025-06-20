@@ -67,7 +67,7 @@ states[S_MM_FOOTSTEP] = {
 mobjinfo[MT_MM_FOOTSTEP] = {
 	doomednum = -1,
 	spawnstate = S_MM_FOOTSTEP,
-	flags = MF_NOGRAVITY,
+	flags = MF_NOGRAVITY|MF_NOCLIP|MF_NOCLIPHEIGHT|MF_NOCLIPTHING,
 	spawnhealth = 1,
 	height = 0,
 	radius = 6*FRACUNIT,
@@ -121,7 +121,7 @@ MM.addHook("PlayerThink",function(player)
 	
 	if not spawnit then return end
 	
-	local step = P_SpawnMobjFromMobj(player.mo, 0,0,0, MT_MM_FOOTSTEP)
+	local step = P_SpawnMobjFromMobj(player.mo, 0,0,FU/5, MT_MM_FOOTSTEP)
 	step.color = player.skincolor
 	local size = FU*3/4
 	step.spritexscale,step.spriteyscale = size,size

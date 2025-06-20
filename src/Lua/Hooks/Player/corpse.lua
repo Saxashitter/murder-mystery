@@ -269,6 +269,9 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		MM_N.corpses[#MM_N.corpses+1] = corpse
 		corpse.playerid = #target.player
 		corpse.playername = target.player.name
+		if (target.player.mm.alias and target.player.mm.alias.name)
+			corpse.playername = target.player.mm.alias.name
+		end
 		
 		MM.runHook("CorpseSpawn", target, corpse)
 		

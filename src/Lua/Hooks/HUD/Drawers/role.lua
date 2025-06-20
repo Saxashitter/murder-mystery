@@ -27,9 +27,11 @@ local function HUD_RoleDrawer(v,p)
 			if type(src) == "string"
 			and src ~= ''
 				killerstring = src
+			--TODO: if the sheriff dies, this will get replaced
+			--		by the default text instead
 			elseif type(src) == "userdata" and userdataType(src) == "mobj_t"
 			and ((src and src.valid) and (src.player and src.player.valid)) then
-				killername = "\x85"..src.player.name
+				killername = roles[src.player.mm.role].colorcode .. src.player.name
 				killerstring = $..killername
 			else
 				killerstring = $..killername

@@ -1,3 +1,5 @@
+local wrapadd = MM.require("Libs/wrappedadd")
+
 COM_AddCommand("MM_GiveItem", function(p, name)
 	if not MM:isMM() then return end
 
@@ -286,7 +288,7 @@ COM_AddCommand("MM_AddRings", function(p, rings)
 	if not MM:isMM() then return end
 	if (tonumber(rings) == nil) then return end
 	
-	p.mm_save.rings = $ + tonumber(rings)
+	p.mm_save.rings = wrapadd($, tonumber(rings))
 end, COM_ADMIN)
 
 COM_AddCommand("MM_RadioSong", function(p, str)

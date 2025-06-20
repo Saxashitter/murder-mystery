@@ -1,3 +1,5 @@
+local wrapadd = MM.require("Libs/wrappedadd")
+
 states[freeslot "S_PLAY_BODY"] = {
 	sprite = SPR_PLAY,
 	frame = freeslot "SPR2_OOF_"|A,
@@ -441,7 +443,7 @@ addHook("ThinkFrame", function()
 				local bonus = 25
 				chatprintf(p, "\x83*You got "..bonus.." coins for finding a body!\x80")
 				CONS_Printf(p, "\x83You got "..bonus.." coins for finding a body!\x80")
-				p.mm_save.ringstopay = $ + bonus
+				p.mm_save.ringstopay = wrapadd($, bonus)
 				
 				MM.runHook("CorpseFound", corpse, p.mo)
                 continue

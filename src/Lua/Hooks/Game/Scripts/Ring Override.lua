@@ -1,3 +1,5 @@
+local wrapadd = MM.require("Libs/wrappedadd")
+
 local norespawn_mobjs = {
 	[MT_RING] = true,
 	[MT_COIN] = true,
@@ -10,8 +12,8 @@ local function special_override(special, toucher)
 		
 		if player and player.valid then
 			player.rings = 0
-			player.mm_save.rings = $ + 1
-			player.mm.rings = $ + 1
+			player.mm_save.rings = wrapadd($, 1)
+			player.mm.rings = wrapadd($, 1)
 		end
 	end
 end

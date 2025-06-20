@@ -1,3 +1,5 @@
+local wrapadd = MM.require("Libs/wrappedadd")
+
 --why is this here
 MM.endTypes = {
 	{
@@ -130,7 +132,7 @@ return function(self, endType)
 		end
 		
 		if payout ~= 0
-			p.mm_save.rings = $ + payout
+			p.mm_save.rings = wrapadd($, payout)
 			CONS_Printf(p,"\x82Got "..payout.." ring"..(payout ~= 1 and "s" or "")..
 			" that round for "..reason.."!")
 		end

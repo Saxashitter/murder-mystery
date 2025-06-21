@@ -7,6 +7,10 @@ local norespawn_mobjs = {
 
 -- Make the game use a completely different ring variable.
 local function special_override(special, toucher)
+	if not MM:isMM() then
+		return
+	end
+	
 	if special and special.valid and toucher and toucher.valid then
 		local player = toucher.player
 		

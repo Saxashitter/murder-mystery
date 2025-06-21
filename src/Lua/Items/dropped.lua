@@ -161,7 +161,7 @@ end
 function MM:GetCertainDroppedItems(id)
 	local wpns = {}
 
-	for i,item in pairs(MM.DroppedMobjs) do
+	for i,item in ipairs(MM.DroppedMobjs) do
 		if item and item.valid then
 			if item.pickupid == id then
 				table.insert(wpns, item)
@@ -183,6 +183,7 @@ local function manage_unpicked_weapon(mobj)
 	mobj.spriteyoffset = z
 	mobj.angle = angle
 	mobj.flags = 0
+	mobj.shadowscale = FU/2
 	
 	if (displayplayer and displayplayer.valid)
 		local p = displayplayer
@@ -250,7 +251,7 @@ end
 
 addHook("PostThinkFrame", do
 	local lastitem
-	for i,mobj in pairs(MM.DroppedMobjs) do
+	for i,mobj in ipairs(MM.DroppedMobjs) do
 		if not (mobj and mobj.valid and not manage_unpicked_weapon(mobj)) then
 			table.remove(MM.DroppedMobjs, i)
 			continue

@@ -11,7 +11,7 @@ return function(self)
 		and p.mo
 		and p.mo.health
 		and p.mm
-		and not p.mm.spectator) then
+		and not (p.mm.spectator or p.spectator)) then
 			continue
 		end
 

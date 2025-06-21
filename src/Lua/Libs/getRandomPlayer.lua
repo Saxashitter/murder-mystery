@@ -11,18 +11,12 @@ local function conditionsPassed(p, conditions)
 end
 
 return function(conditions)
-	local p
-	local loop = 0
-	while not (p and loop <= 32) do
-		p = players[P_RandomKey(#players)]
-
+	local passed = {}
+	for p in players.iterate
 		if (p and p.valid and conditionsPassed(p, conditions)) then
-			return p
+			table.insert(passed, p)
+			print(p.name.." passed")
 		end
-
-		p = nil
-		loop = $+1
 	end
-
-	return false
+	return passed[P_RandomRange(1, #passed)]
 end

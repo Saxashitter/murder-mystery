@@ -45,7 +45,7 @@ return function(p)
 	local speedcap = MM_N.speed_cap
 	local basespeedmulti = FU
 	
-	p.charflags = $ &~(SF_DASHMODE|SF_RUNONWATER|SF_CANBUSTWALLS|SF_MACHINE)
+	p.charflags = $ &~(SF_DASHMODE|SF_RUNONWATER|SF_CANBUSTWALLS|SF_MACHINE|SF_NOJUMPDAMAGE)
 	p.charability = CA_NONE
 	p.charability2 = CA2_NONE
 	p.jumpfactor = FixedMul(sonic.jumpfactor, jumpfactormulti)

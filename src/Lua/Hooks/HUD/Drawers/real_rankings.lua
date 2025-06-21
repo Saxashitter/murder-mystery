@@ -285,7 +285,8 @@ local function HUD_TabScoresDrawer(v)
 		do
 			local player = p
 			if p.mm
-			and p.mm.alias then
+			and p.mm.alias
+			and (p.mm.alias.posingas and p.mm.alias.posingas.valid) then
 				player = p.mm.alias.posingas
 			end
 			

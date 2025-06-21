@@ -64,8 +64,10 @@ local function DrawSeeName(v,p,c)
 		local to_screen = sglib.ObjectTracking(v,p,c,{ x = g_mo.x, y = g_mo.y, z = g_mo.z+(( (g_mo.height*3)/2)*flip ) })
 		
 		if to_screen and to_screen.onScreen then
+			MMHUD.interpolate(v, #g_seenplayer)
 			v.drawString(to_screen.x, to_screen.y-4*to_screen.scale, draw_name, V_ALLOWLOWERCASE|V_GREENMAP|V_50TRANS, "thin-fixed-center")
 			v.drawString(to_screen.x, to_screen.y-4*to_screen.scale+10*FU, draw_tag, V_ALLOWLOWERCASE|V_BLUEMAP|V_50TRANS, "thin-fixed-center")
+			MMHUD.interpolate(v,false)
 		end
 	end
 	
@@ -78,7 +80,6 @@ local function DrawSeeName(v,p,c)
 end
 
 return function(v,p,c)
-	MMHUD.interpolate(v,true)
 	DrawSeeName(v,p,c)
 	MMHUD.interpolate(v,false)
 end

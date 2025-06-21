@@ -13,15 +13,14 @@ local function _eligibleGunPlayer(p)
 		end
 	end
 	
-	return p
+	return (p
 	and p.mo
 	and p.mo.valid
 	and p.mo.health
 	and p.mm
-	and not p.mm.spectator
+	and not (p.mm.spectator or p.spectator)
 	and p.mm.role ~= MMROLE_MURDERER
-	and not (p.mm.weapon and p.mm.weapon.valid)
-	and hasfreeslot
+	and hasfreeslot)
 end
 
 --refill and empty murd/sheriff slots left by players who left

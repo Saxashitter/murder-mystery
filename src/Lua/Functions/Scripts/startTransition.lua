@@ -8,6 +8,7 @@ return function(self)
 
 		R_SetPlayerSkin(p, alias.skin)
 		p.skincolor = alias.skincolor
+		p.realmo.color = p.skincolor
 	end
 
 	if not theme.transition then

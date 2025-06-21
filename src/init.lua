@@ -47,6 +47,12 @@ states[S_MM_TEAMMATE2] = {
 	frame = F|FF_FULLBRIGHT,
 	tics = 2
 }
+freeslot("S_MM_SWAPIND")
+states[S_MM_SWAPIND] = {
+	sprite = SPR_BGLS,
+	frame = O|FF_FULLBRIGHT,
+	tics = 2
+}
 
 MM.require = dofile "Libs/require"
 dofile "Libs/CustomHud.lua"

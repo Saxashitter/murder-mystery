@@ -207,7 +207,8 @@ weapon.thinker = function(item, p)
 		
 		if not distchecks(item,p,p2.mo) then continue end
 		
-		P_SpawnLockOn(p, p2.mo, S_LOCKON1)
+		P_SpawnLockOn(p, p2.mo, S_MM_SWAPIND)
+		break
 	end
 
 end

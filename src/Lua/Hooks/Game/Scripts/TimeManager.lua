@@ -32,6 +32,11 @@ return function()
 				innocents = $+1
 			end
 			numplay = $+1
+
+			-- Don't allow players to change colors midgame
+			if leveltime == MM_N.pregame_time
+				p.mm.savedcolor = p.skincolor
+			end
 		end
 		
 		if MM:pregame()

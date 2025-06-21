@@ -16,9 +16,7 @@ local player_variables =
 	alias = nil,
 	alias_save = nil,
 
-	permanentcolor = nil,
-	permanentskin = nil, -- doesn't set skin, just for ranking hud display
-	lastcolor = nil,
+	savedcolor = nil,
 	joinedmidgame = false,
 
 	selected_map = false,

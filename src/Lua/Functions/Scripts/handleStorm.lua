@@ -191,6 +191,7 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist)
 			fake_scale = max(0, $-FU)
 		end
 		local scale = FU + fake_scale
+		
 		for j = 0,1
 			local dist = P_RandomRange(-40,40)*FU
 			local dust = P_SpawnMobjFromMobj(laser,
@@ -218,6 +219,11 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist)
 			dust.destscale = 1
 			dust.scalespeed = FixedDiv(dust.scale, dust.tics * FU)
 			dust.renderflags = $|RF_FULLBRIGHT|RF_NOCOLORMAPS
+			if scale < FU/2
+				dust.alpha = max(FU/10,
+					FixedDiv(scale, FU/2)
+				)
+			end
 			
 			dust.momz = (P_RandomRange(1,4)*scale) * (j == 1 and -1 or 1)
 		end

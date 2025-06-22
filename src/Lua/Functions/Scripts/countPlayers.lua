@@ -5,11 +5,11 @@ return function()
         sheriffs = 0,
         murderers = 0,
 		
-		// sheriffs + innocents
+		-- sheriffs + innocents
         regulars = 0,
         total = 0,
 		
-		// spectators/dead
+		-- spectators/dead
         inactive = 0,
     }
 

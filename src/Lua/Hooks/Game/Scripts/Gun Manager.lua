@@ -24,6 +24,7 @@ local function _eligibleGunPlayer(p)
 end
 
 --refill and empty murd/sheriff slots left by players who left
+--this is a bad place to put this function
 local function refillSlots()
 	if MM_N.dueling then return end
 	if not MM:pregame() then return end

@@ -27,8 +27,6 @@ local getCount = dofile("Libs/getCount")
 --if alreadychosen is true, then we've already set roles, and are just filling up missing slots (people who left)
 --murdorsherf: true = only murds, false = only count sheriffs, nil = do nothing
 return function(self, count, alreadychosen, murdorsherf)
-	local pcount = getCount()
-
 	local murderer_chance_table = {} 
 	local sheriff_chance_table = {}
 	local total_table = {}
@@ -55,7 +53,6 @@ return function(self, count, alreadychosen, murdorsherf)
 	local sheriffs = {}
 	local i = 0
 
-	local firstcount = MM.countPlayers()
 	if MM_N.dueling or CV_MM.force_duel.value then		
 		local murderer = select_player_from_table(p, murderer_chance_table)
 		local sheriff = select_player_from_table(p, sheriff_chance_table)
@@ -93,7 +90,11 @@ return function(self, count, alreadychosen, murdorsherf)
 				mp.mm_save.murderer_chance_multi = 1
 				
 				if murdorsherf ~= nil
-					chatprintf(mp, "\x83*You have been magically made a \x85Murderer!\x82")
+					if CV_MM.debug.value
+						chatprint("\x83*" .. mp.name .. "\x83 has been magically made a \x85Murderer!\x82")
+					else
+						chatprintf(mp, "\x83*You have been magically made a \x85Murderer!\x82")
+					end
 				end
 				murderers[mp] = true
 			end
@@ -103,7 +104,11 @@ return function(self, count, alreadychosen, murdorsherf)
 				sp.mm_save.sheriff_chance_multi = 1
 				
 				if murdorsherf ~= nil
-					chatprintf(mp, "\x83*You have been magically made a \x84Sheriff!\x82")
+					if CV_MM.debug.value
+						chatprint("\x83*" .. sp.name .. "\x83 has been magically made a \x84Sheriff!\x82")
+					else
+						chatprintf(mp, "\x83*You have been magically made a \x84Sheriff!\x82")
+					end
 				end
 				sheriffs[sp] = true
 			end

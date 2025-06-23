@@ -23,7 +23,7 @@ local function _eligibleGunPlayer(p)
 	and hasfreeslot)
 end
 
---refill and empty murd/sheriff slots left by players who left
+--refill any empty murd/sheriff slots left by players who left
 --this is a bad place to put this function
 local function refillSlots()
 	if MM_N.dueling then return end
@@ -41,6 +41,7 @@ local function refillSlots()
 		)
 		if CV_MM.debug.value
 			print("\x83MM:\x80 Special roles too low! Reassigning roles... (required: ".. MM_N.special_count ..", needed: "..neededrole..")")
+			print("\x83MM:\x80 extra "..(count.murderers < count.sheriffs and "Murderers" or "Sheriffs".. "needed")
 		end
 	end
 end

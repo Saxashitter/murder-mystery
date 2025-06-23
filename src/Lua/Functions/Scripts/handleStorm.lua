@@ -219,9 +219,9 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist)
 			dust.destscale = 1
 			dust.scalespeed = FixedDiv(dust.scale, dust.tics * FU)
 			dust.renderflags = $|RF_FULLBRIGHT|RF_NOCOLORMAPS
-			if scale < FU/2
+			if scale < FU
 				dust.alpha = max(FU/10,
-					FixedDiv(scale, FU/2)
+					FixedDiv(scale, FU)
 				)
 			end
 			

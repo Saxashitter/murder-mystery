@@ -148,6 +148,7 @@ return function(self, maploaded)
 	MM_N.safe_sectors_UD = {}
 	MM_N.map_weather = PRECIP_BLANK
 	MM_N.rounds = oldrounds or 0
+	MM_N.player_colors = {}
 	
 	local count = 0
 	for p in players.iterate do

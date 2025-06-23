@@ -32,10 +32,16 @@ return function()
 				innocents = $+1
 			end
 			numplay = $+1
-
+			
 			-- Don't allow players to change colors midgame
 			if leveltime == MM_N.pregame_time
 				p.mm.savedcolor = p.skincolor
+				
+				table.insert(MM_N.player_colors,{
+					player = p,
+					color = p.skincolor,
+					skin = skins[p.skin].name
+				})
 			end
 		end
 		

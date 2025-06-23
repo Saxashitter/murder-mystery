@@ -712,10 +712,15 @@ addHook("MobjDeath",function(mine,_,src,dmgt)
 		or abs(mine.z - me.z) > radius
 			continue
 		end
-		
+
 		--credit the sheriff if they killed the murderer
 		local killer = mine.tracer
 		if (p.mm.role == MMROLE_MURDERER)
+			--Bro
+			if killing_player.player.mm.role == MMROLE_MURDERER
+				continue
+			end
+			
 			killer = killing_player
 		end
 		

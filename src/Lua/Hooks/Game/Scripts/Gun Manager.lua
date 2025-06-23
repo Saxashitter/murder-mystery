@@ -34,12 +34,13 @@ local function refillSlots()
 	
 	if count.murderers < maxrole
 	or count.sheriffs < maxrole
-		MM:assignRoles(maxrole - min(count.murderers, count.sheriffs),
+		local neededrole = min(count.murderers, count.sheriffs)
+		MM:assignRoles(maxrole - neededrole,
 			true,
 			count.murderers < count.sheriffs
 		)
 		if CV_MM.debug.value
-			print("\x83MM:\x80 Special roles too low! Reassigning roles...")
+			print("\x83MM:\x80 Special roles too low! Reassigning roles... (required: ".. MM_N.special_count ..", needed: "..neededrole..")")
 		end
 	end
 end

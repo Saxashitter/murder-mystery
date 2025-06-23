@@ -41,7 +41,7 @@ local function refillSlots()
 		)
 		if CV_MM.debug.value
 			print("\x83MM:\x80 Special roles too low! Reassigning roles... (required: ".. MM_N.special_count ..", needed: "..neededrole..")")
-			print("\x83MM:\x80 extra "..(count.murderers < count.sheriffs and "Murderers" or "Sheriffs".. "needed")
+			print("\x83MM:\x80 extra "..(count.murderers < count.sheriffs and "Murderers" or "Sheriffs").. "needed")
 		end
 	end
 end

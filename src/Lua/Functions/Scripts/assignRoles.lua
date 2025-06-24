@@ -107,7 +107,7 @@ return function(self, count, alreadychosen, murdorsherf)
 					if CV_MM.debug.value
 						chatprint("\x83*" .. sp.name .. "\x83 has been magically made a \x84Sheriff!\x82")
 					else
-						chatprintf(mp, "\x83*You have been magically made a \x84Sheriff!\x82")
+						chatprintf(sp, "\x83*You have been magically made a \x84Sheriff!\x82")
 					end
 				end
 				sheriffs[sp] = true

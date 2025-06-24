@@ -273,7 +273,12 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 			corpse.playername = target.player.mm.alias.name
 		end
 		
-		MM.runHook("CorpseSpawn", target, corpse)
+		local hook_event = MM.events["CorpseSpawn"]
+		for i,v in ipairs(hook_event)
+			MM.tryRunHook("CorpseSpawn", v,
+				target, corpse
+			)
+		end
 		
 		S_StopSound(target)
 		S_StartSound(nil, sfx_altdi1, target.player)
@@ -416,7 +421,12 @@ addHook("ThinkFrame", function()
             corpse.translation = nil
         end
         
-		MM.runHook("CorpseThink", corpse)
+		local hook_event = MM.events["CorpseThink"]
+		for i,v in ipairs(hook_event)
+			MM.tryRunHook("CorpseThink", v,
+				corpse
+			)
+		end
 		
         if MM_N.gameover then break end
 		
@@ -449,7 +459,12 @@ addHook("ThinkFrame", function()
 				CONS_Printf(p, "\x83You got "..bonus.." coins for finding a body!\x80")
 				p.mm_save.ringstopay = wrapadd($, bonus)
 				
-				MM.runHook("CorpseFound", corpse, p.mo)
+				local hook_event = MM.events["CorpseFound"]
+				for i,v in ipairs(hook_event)
+					MM.tryRunHook("CorpseFound", v,
+						corpse, p.mo
+					)
+				end
                 continue
 			end
 		end

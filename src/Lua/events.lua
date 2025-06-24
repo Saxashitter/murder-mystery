@@ -112,28 +112,37 @@ MM.addHook = function(hooktype, func)
 			errored = false
 		})
 	else
-		error("Invalid HookType")
+		error("\x83MM: \x82WARNING:\x80 Hook type \""..hooktype.."\" does not exist.", 2)
 	end
 end
 
-MM.runHook = function(hooktype, ...)
-	if not events[hooktype] then
-		error("Invalid HookType")
-	end
-
+MM.tryRunHook = function(hooktype, v, ...)
 	local handler = events[hooktype].handler or handler_default
 	local override = handler.initial
+	local outofresults = false
 
-    for i,v in ipairs(events[hooktype]) do
-		local status, result = pcall(v.func, ...)
-		if status then
-			override = handler.func(override, result)
-		elseif not v.errored then
-			v.errored = true
-			print("WARNING: Error in Murder Mystery " .. hooktype .. " hook handler #" .. i .. ":")
-			print(result)
-		end
-    end
+	local results = {pcall(v.func, ...)}
+	local status = results[1]
+	table.remove(results,1)
+	-- the above removal might remove the imaginary nil key left
+	-- so tell the handler that, yes, this nil DOES exist
+	if not #results
+		outofresults = true
+	end
+	
+	if status then
+		override = {handler.func((not outofresults) and override or nil, unpack(results))}
+	elseif not v.errored then
+		v.errored = true
+		S_StartSound(nil,sfx_lose)
+		print("\x83MM: \x82WARNING:\x80 Hook " .. hooktype .. " handler #" .. i .. " error:")
+		print(result)
+	end
+	return unpack(override)
+end
 
-    return override
+MM.events = events
+MM.runHook = function()
+	error("MM.runHook is deprecated, please use MM.tryRunHook instead.")
+	return false
 end

@@ -168,8 +168,13 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	--only apply AntiAdmin here
 	if MM.gameover then return AntiAdmin(src,msg); end
 	
-	if MM.runHook("OnRawChat", src, t, trgt, msg) then
-		return true
+	local hook_event = MM.events["OnRawChat"]
+	for i,v in ipairs(hook_event)
+		if MM.tryRunHook("OnRawChat", v,
+			src, t, trgt, msg
+		) then
+			return true
+		end
 	end
 
 	if not (consoleplayer

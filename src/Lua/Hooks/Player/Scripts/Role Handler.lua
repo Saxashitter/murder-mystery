@@ -9,27 +9,25 @@ return function(p) -- Role handler
 		givenweapon = MM_N.duel_item
 	end
 	
-	local newweapon = MM.runHook("GiveStartWeapon", p)
-	local queuedweapons
-	local allstring = true
+	local queuedweapons = {}
+	local hook_event = MM.events["GiveStartWeapon"]
+	for i,v in ipairs(hook_event)
+		local result = {MM.tryRunHook("GiveStartWeapon", v,
+			p
+		)}
+		for k, v in ipairs(result)
+			--override
+			if v == true
+				p.mm.got_weapon = true
+				return
+			end
 
-	-- check if arguments are string
-	for i,v in ipairs({newweapon}) do
-		if type(v) ~= "string" then
-			allstring = false
+			if type(v) == "string"
+				table.insert(queuedweapons, v)
+			end
 		end
 	end
-	
-	if newweapon ~= nil then
-		--override
-		if newweapon == true then
-			p.mm.got_weapon = true
-			return
-		elseif allstring then
-			queuedweapons = ({newweapon})
-		end
-	end
-	
+
 	if not givenweapon then
 		p.mm.got_weapon = true
 		return
@@ -37,7 +35,7 @@ return function(p) -- Role handler
 	
 	MM:GiveItem(p, givenweapon) -- Main item
 
-	if allstring and queuedweapons then
+	if #queuedweapons then
 		for i,weapon_id in ipairs(queuedweapons) do
 			MM:GiveItem(p, weapon_id)
 		end

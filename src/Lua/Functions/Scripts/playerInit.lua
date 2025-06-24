@@ -24,5 +24,10 @@ return function(self, p, mapchange)
 		p.spectator = true
 	end
 
-	MM.runHook("PlayerInit", p, midgame)
+	local hook_event = MM.events["PlayerInit"]
+	for i,v in ipairs(hook_event)
+		MM.tryRunHook("PlayerInit", v,
+			p, midgame
+		)
+	end
 end

@@ -59,9 +59,20 @@ local function get_alias(player)
 		alias.perm_level = MM:getpermlevel(player)
 		alias.posingas = player
 
-		local alias_addon = MM.runHook("CreateAlias", player, alias)
+		local alias_addon = {}
+		local hook_event = MM.events["CreateAlias"]
+		for i,v in ipairs(hook_event)
+			local result = MM.tryRunHook("CreateAlias", v,
+				player, alias
+			)
+			if type(result) ~= "table" then continue end
 
-		if type(alias_addon) == "table" then
+			for k,v in pairs(result)
+				alias_addon[k] = v
+			end
+		end
+
+		if #alias_addon then
 			for k,v in pairs(alias_addon) do
 				alias[k] = v
 			end
@@ -117,7 +128,12 @@ local function apply_alias_to_player(player, alias)
 	player.skincolor = alias.skincolor
 	R_SetPlayerSkin(player, alias.skin)
 
-	MM.runHook("ApplyAlias", player, alias)
+	local hook_event = MM.events["ApplyAlias"]
+	for i,v in ipairs(hook_event)
+		MM.tryRunHook("ApplyAlias", v,
+			player, alias
+		)
+	end
 
 	player.mm.alias = alias
 	alias.ext = nil

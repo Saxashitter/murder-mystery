@@ -131,7 +131,10 @@ return function(self, maploaded)
 		set_overtime_point()
 		MM_N.map_weather = mapheaderinfo[gamemap].weather
 		MM_N.lastmap = gamemap
-		MM.runHook("PostMapLoad")
+		local hook_event = MM.events["PostMapLoad"]
+		for i,v in ipairs(hook_event)
+			MM.tryRunHook("PostMapLoad", v)
+		end
 		
 		MM.scanMoneySectors()
 		return
@@ -265,5 +268,8 @@ return function(self, maploaded)
 		CV_Set(CV_FindVar("restrictskinchange"),0)
 	end
 	
-	MM.runHook("Init")
+	local hook_event = MM.events["Init"]
+	for i,v in ipairs(hook_event)
+		MM.tryRunHook("Init", v)
+	end
 end

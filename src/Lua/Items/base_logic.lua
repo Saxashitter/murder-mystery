@@ -7,6 +7,19 @@ local function shittyfunction(newvalue, maximum)
 	return newvalue
 end
 
+local function hooksPassed(eventname, ...)
+	local args = {...}
+	local hook_event = MM.events[eventname]
+	for i,v in ipairs(hook_event)
+		if MM.tryRunHook(eventname, v,
+			unpack(args) -- i dont know lua syntax enough to know if passing '...' is valid
+		) then
+			return false
+		end
+	end
+	return true
+end
+
 --also kickstarts the melee function
 MM.FireBullet = function(p,def,item, angle, aiming, callhooks)
 	item.hit = item.max_hit
@@ -241,7 +254,8 @@ MM:addPlayerScript(function(p)
 	end
 
 	if (sel ~= 0)
-	and not MM.runHook("InventorySwitch", p, inv.cur_sel, 
+	and hooksPassed("InventorySwitch",
+		p, inv.cur_sel, 
 		shittyfunction(inv.cur_sel+sel, inv.count),
 		--curitem
 		inv.items[inv.cur_sel],
@@ -307,7 +321,8 @@ MM:addPlayerScript(function(p)
 	--not if we reselect our current slot
 	and (min(p.cmd.buttons & BT_WEAPONMASK, inv.count) ~= inv.cur_sel)
 	and (p.cmd.buttons & BT_WEAPONMASK <= inv.count)
-	and not MM.runHook("InventorySwitch", p, inv.cur_sel, 
+	and hooksPassed("InventorySwitch",
+		p, inv.cur_sel, 
 		min(p.cmd.buttons & BT_WEAPONMASK, inv.count),
 		--curitem
 		inv.items[inv.cur_sel],
@@ -385,7 +400,7 @@ MM:addPlayerScript(function(p)
 	and not (p.lastbuttons & BT_CUSTOM2)
 	--wtf are you doing???
 	and not MM:pregame()
-	and not MM.runHook("ItemDrop", p, def,item) then
+	and hooksPassed("ItemDrop", p, def,item) then
 		MM:DropItem(p)
 		return
 	end
@@ -403,7 +418,7 @@ MM:addPlayerScript(function(p)
 	if canfire
 	and not (item.cooldown) 
 	and not inv.hidden
-	and not MM.runHook("ItemUse", p, def,item) then
+	and hooksPassed("ItemUse", p, def,item) then
 		MM.FireBullet(p,def,item, p.mo.angle, p.aiming, true)
 	end
 	
@@ -502,8 +517,13 @@ MM:addPlayerScript(function(p)
 				end
 			end
 			
-			if MM.runHook("AttackPlayer", p, p2) then
-				continue
+			local hook_event = MM.events["AttackPlayer"]
+			for i,v in ipairs(hook_event)
+				if MM.tryRunHook("AttackPlayer", v,
+					p, p2, item
+				) then
+					continue
+				end
 			end
 			
 			if item.damage then

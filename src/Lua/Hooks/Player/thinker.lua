@@ -33,14 +33,24 @@ addHook("PlayerThink", function(p)
 		
 		p.mm.oob_ticker = 0
 		
-		MM.runHook("DeadPlayerThink", p)
+		local hook_event = MM.events["DeadPlayerThink"]
+		for i,v in ipairs(hook_event)
+			MM.tryRunHook("DeadPlayerThink", v,
+				p
+			)
+		end
 		
 		return
 	end
 
 	p.spectator = p.mm.spectator
 	if p.mm.spectator then
-		MM.runHook("DeadPlayerThink", p)
+		local hook_event = MM.events["DeadPlayerThink"]
+		for i,v in ipairs(hook_event)
+			MM.tryRunHook("DeadPlayerThink", v,
+				p
+			)
+		end
 		return
 	end
 	
@@ -48,7 +58,12 @@ addHook("PlayerThink", function(p)
 		script(p)
 	end
 
-	MM.runHook("PlayerThink", p)
+	local hook_event = MM.events["PlayerThink"]
+	for i,v in ipairs(hook_event)
+		MM.tryRunHook("PlayerThink", v,
+			p
+		)
+	end
 	
 	if not (MM_N.gameover
 	or MM:pregame())

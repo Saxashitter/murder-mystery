@@ -1,4 +1,5 @@
 local roles = MM.require "Variables/Data/Roles"
+local ZCollide = MM.require("Libs/zcollide")
 
 --wraps a value around the inventory's max count
 local function shittyfunction(newvalue, maximum)
@@ -18,6 +19,104 @@ local function hooksPassed(eventname, ...)
 		end
 	end
 	return true
+end
+
+--ugh
+local function SphereToCartesian(alpha,beta)
+	return {
+	   	x = FixedMul(cos(alpha), cos(beta)),
+	    y = FixedMul(sin(alpha), cos(beta)),
+	    z = sin(beta)
+	}
+end
+
+local namechecktype = MT_LETTER
+local function checkRayCast(from, to, props)
+	local blocked = 0
+	local debug = CV_MM.debug.value
+	
+	local angle = props.angle
+	local aiming = props.aiming
+	local namecheck = P_SpawnMobjFromMobj(from.mo,
+		0, --P_ReturnThrustX(nil,angle, 2*FU),
+		0, --P_ReturnThrustY(nil,angle, 2*FU),
+		0, --41*FixedDiv(from.mo.height, from.mo.scale)/48,
+		namechecktype
+	)
+	namecheck.sprite = SPR_NULL
+	namecheck.angle = angle
+	namecheck.aiming = aiming
+	namecheck.flags = MF_NOGRAVITY
+	namecheck.radius = FixedMul(3*FU, from.mo.scale)
+	namecheck.height = FixedMul(3*FU, from.mo.scale)
+	namecheck.namecheck = true
+	
+	local speed = namecheck.radius * 2
+	local vec = SphereToCartesian(angle,aiming)
+	namecheck.momx = FixedMul(speed, vec.x)
+	namecheck.momy = FixedMul(speed, vec.y)
+	namecheck.momz = FixedMul(speed, vec.z)
+	
+	P_SetOrigin(namecheck, 
+		from.x + P_ReturnThrustX(nil,angle, 4*FU),
+		from.y + P_ReturnThrustY(nil,angle, 4*FU),
+		(from.z + (41*from.mo.height/48)) - 8*FU
+	)
+	
+	local blockrad = namecheck.radius + to.mo.radius
+	for i = 0, 255
+		if not (namecheck and namecheck.valid)
+			return false
+		end
+		
+		if debug
+			P_SpawnMobjFromMobj(namecheck,0,0,0,MT_SPARK)
+		end
+		
+		P_XYMovement(namecheck)
+		if not (namecheck and namecheck.valid)
+			return false
+		end
+		
+		P_ZMovement(namecheck)
+		if not (namecheck and namecheck.valid)
+			return false
+		end
+		
+		if R_PointInSubsectorOrNil(namecheck.x,namecheck.y) == nil
+			if (namecheck and namecheck.valid)
+				P_RemoveMobj(namecheck)
+			end
+			return false
+		end
+		
+		if (namecheck.momx == 0 and namecheck.momy == 0)
+			if blocked == 8
+				if (namecheck and namecheck.valid)
+					P_RemoveMobj(namecheck)
+				end
+				return false
+			end
+			blocked = $ + 1
+		end
+		
+		if (not (abs(namecheck.x - to.x) > blockrad
+		or abs(namecheck.y - to.y) > blockrad))
+		and ZCollide(namecheck, to.mo)
+			if debug
+				P_SpawnMobjFromMobj(namecheck,0,0,0,MT_UNKNOWN).fuse = TICRATE
+			end
+			if (namecheck and namecheck.valid)
+				P_RemoveMobj(namecheck)
+			end
+			return true
+		end
+	end
+	
+	if (namecheck and namecheck.valid)
+		P_RemoveMobj(namecheck)
+		return false
+	end
 end
 
 --also kickstarts the melee function
@@ -491,7 +590,7 @@ MM:addPlayerScript(function(p)
 			and not p2.mm.spectator) then continue end
 			
 			local dist = R_PointToDist2(p.mo.x, p.mo.y, p2.mo.x, p2.mo.y)
-			local maxdist = FixedMul(p.mo.radius+p2.mo.radius, item.range)
+			local maxdist = FixedMul(p.mo.radius+p2.mo.radius, item.range) * 5
 			
 			if dist > maxdist
 			or abs((p.mo.z + p.mo.height/2) - (p2.mo.z + p2.mo.height/2)) > FixedMul(max(p.mo.height, p2.mo.height), item.zrange or item.range)
@@ -504,6 +603,19 @@ MM:addPlayerScript(function(p)
 				continue
 			end
 			
+			--sight check passed, but did it logically pass?
+			if not checkRayCast(
+				{mo = p.mo,		x = p.mo.x,		y = p.mo.y,		z = p.mo.z},
+				{mo = p2.mo,	x = p2.mo.x,	y = p2.mo.y,	z = p2.mo.z},
+				{
+					angle = R_PointToAngle2(p.mo.x,p.mo.y, p2.mo.x,p2.mo.y),
+					aiming = R_PointToAngle2(0, p.mo.z, dist, p2.mo.z),
+					dist = dist,
+				}
+			) then
+				continue
+			end
+
 			--no need to check for angles if we're touchin the guy
 			if dist > p.mo.radius + p2.mo.radius
 				local adiff = FixedAngle(

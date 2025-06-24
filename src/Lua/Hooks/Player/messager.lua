@@ -45,6 +45,14 @@ local function skinColorToChatColor(color)
 end
 
 --ugh
+local function SphereToCartesian(alpha,beta)
+	return {
+	   	x = FixedMul(cos(alpha), cos(beta)),
+	    y = FixedMul(sin(alpha), cos(beta)),
+	    z = sin(beta)
+	}
+end
+
 local namechecktype = MT_LETTER
 local function checkRayCast(from, to, props)
 	local blocked = 0
@@ -65,8 +73,11 @@ local function checkRayCast(from, to, props)
 	namecheck.height = FixedMul(mobjinfo[MT_NAMECHECK].height, from.mo.scale)
 	namecheck.namecheck = true
 	
-	P_InstaThrust(namecheck, angle, FixedMul(namecheck.radius * 2, cos(aiming)))
-	namecheck.momz = 32*sin(aiming)
+	local speed = namecheck.radius * 2
+	local vec = SphereToCartesian(angle,aiming)
+	namecheck.momx = FixedMul(speed, vec.x)
+	namecheck.momy = FixedMul(speed, vec.y)
+	namecheck.momz = FixedMul(speed, vec.z)
 	
 	P_SetOrigin(namecheck, 
 		from.x + P_ReturnThrustX(nil,angle, 4*FU),
@@ -117,8 +128,8 @@ local function checkRayCast(from, to, props)
 			blocked = $ + 1
 		end
 		
-		if abs(namecheck.x - to.x) <= blockrad
-		or abs(namecheck.y - to.y) <= blockrad
+		if (not (abs(namecheck.x - to.x) > blockrad
+		or abs(namecheck.y - to.y) > blockrad))
 		and ZCollide(namecheck, to.mo)
 			if (namecheck and namecheck.valid)
 				P_RemoveMobj(namecheck)

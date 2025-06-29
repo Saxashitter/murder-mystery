@@ -69,18 +69,20 @@
 */
 
 local handler_snaptrue = {
-	func = function(current, result)
-		return result or current
+	func = function(current, ...)
+		local arg = {...}
+		return (#arg and true or false) or current
 	end,
 	initial = false
 }
 
 local handler_snapany = {
-	func = function(current, result)
-		if result ~= nil then
-			return result
+	func = function(current, ...)
+		local arg = {...}
+		if #arg then
+			return unpack(arg)
 		else
-			return current
+			return current ~= nil and unpack(current) or nil
 		end
 	end,
 	initial = nil
@@ -119,25 +121,24 @@ end
 MM.tryRunHook = function(hooktype, v, ...)
 	local handler = events[hooktype].handler or handler_default
 	local override = handler.initial
-	local outofresults = false
 
 	local results = {pcall(v.func, ...)}
 	local status = results[1]
 	table.remove(results,1)
-	-- the above removal might remove the imaginary nil key left
-	-- so tell the handler that, yes, this nil DOES exist
-	if not #results
-		outofresults = true
-	end
 	
 	if status then
-		override = {handler.func((not outofresults) and override or nil, unpack(results))}
+		override = {handler.func(
+			override,
+			unpack(results)
+		)}
 	elseif not v.errored then
 		v.errored = true
 		S_StartSound(nil,sfx_lose)
 		print("\x83MM: \x82WARNING:\x80 Hook " .. hooktype .. " handler #" .. i .. " error:")
 		print(result)
 	end
+	
+	if override == nil then return nil; end
 	return unpack(override)
 end
 

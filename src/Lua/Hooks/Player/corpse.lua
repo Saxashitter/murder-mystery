@@ -155,19 +155,19 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	if MM:canGameEnd() and not MM_N.gameover 
 	and not (CV_MM.debug.value) then
 		-- funny sniper sound
-		if target.player.mm.role == MMROLE_SHERIFF and source and source.valid then
+		if target.player.mm.role == MMROLE_MURDERER and source and source.valid then
 			local dist = R_PointToDist2(
 				R_PointToDist2(target.x, target.y, source.x, source.y), target.z,
 				0, source.z
 			)
-			local required_dist = FU*960
+			local required_dist = FU*600
 			local required_speed = FU*20
 			if not P_IsObjectOnGround(target) then
-				required_dist = FU*800
+				required_dist = FU*450
 				required_speed = FU*12
 			end
 			required_speed = FixedMul($, target.scale)
-
+			
 			if dist > required_dist and target.player.speed > required_speed then
 				MM_N.sniped_end = true
 				S_ChangeMusic("mmtf2o", false, nil)

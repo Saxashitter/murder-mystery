@@ -22,7 +22,7 @@ local clueitemtiers = {
 	}
 }
 
-local CLUE_FLOOROFF = 40*FU
+local CLUE_FLOOROFF = 20*FU
 function MM:spawnClueMobj(p, pos)
 	local mobj = P_SpawnMobj(pos.x, pos.y, pos.z, MT_MM_CLUESPAWN)
 
@@ -197,10 +197,20 @@ MM:addPlayerScript(function(p)
 		end
 		
 		-- Ugh (FNF)
-		if (mo.z + mo.height > mo.ceilingz - FixedMul(CLUE_FLOOROFF, mo.scale))
-			mo.z = mo.ceilingz - mo.height - FixedMul(CLUE_FLOOROFF, mo.scale)
-		elseif (mo.z < mo.floorz + FixedMul(CLUE_FLOOROFF, mo.scale))
-			mo.z = mo.floorz + FixedMul(CLUE_FLOOROFF, mo.scale)
+		if ((mo.ceilingz - mo.floorz) > mo.height + FixedMul(CLUE_FLOOROFF*2, mo.scale))
+			if (mo.z + mo.height > mo.ceilingz - FixedMul(CLUE_FLOOROFF, mo.scale))
+				mo.z = mo.ceilingz - mo.height - FixedMul(CLUE_FLOOROFF, mo.scale)
+			elseif (mo.z < mo.floorz + FixedMul(CLUE_FLOOROFF, mo.scale))
+				mo.z = mo.floorz + FixedMul(CLUE_FLOOROFF, mo.scale)
+			end
+		-- "There isn't enough room up here..."
+		else
+			--Set it to the middle of the sector once
+			if not mo.threshold
+				local sec_height = mo.ceilingz - mo.floorz
+				mo.z = mo.floorz + sec_height/2 - (mo.height/2)
+				mo.threshold = 1
+			end
 		end
 		
 		--debugging + actual purpose

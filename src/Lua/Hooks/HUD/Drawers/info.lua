@@ -80,7 +80,7 @@ local function HUD_InfoDrawer(v, stplyr)
 	
 	--rings
 	do
-		local x = 6*FU - FU/2
+		local x = 5*FU
 		local y = (splitscreen and 10 or 23)*FU
 		local yoff = 0
 		local rings = MM:GetPlayerRings(p)
@@ -108,7 +108,7 @@ local function HUD_InfoDrawer(v, stplyr)
 			rings = ($ - p.mm.ringspaid) + MMHUD.info_count
 			
 			v.drawString(
-				x + 14*FU + (v.stringWidth(tostring(rings),0,"normal")*FU) - slidein,
+				x + 15*FU + (v.stringWidth(tostring(rings),0,"normal")*FU) - slidein,
 				y + 11*FU + yoff,
 				"+"..(p.mm.ringspaid - MMHUD.info_count),
 				V_SNAPTOLEFT|V_SNAPTOTOP|V_GREENMAP|V_PERPLAYER,

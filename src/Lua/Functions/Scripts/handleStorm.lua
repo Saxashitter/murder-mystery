@@ -21,6 +21,7 @@ local ImportantStuff = {
 --longer to shrink to minimum radius
 local BigRadius = 6144*FU
 local STORM_STARTINGTIME = 15*TICRATE
+local STORM_CLOSERADIUS = 512*FU
 
 --Stores everything important stored in MM_N.storm_point
 local function Backup(point)
@@ -219,9 +220,9 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist)
 			dust.destscale = 1
 			dust.scalespeed = FixedDiv(dust.scale, dust.tics * FU)
 			dust.renderflags = $|RF_FULLBRIGHT|RF_NOCOLORMAPS
-			if scale < FU
+			if point.storm_radius <= STORM_CLOSERADIUS
 				dust.alpha = max(FU/10,
-					FixedDiv(scale, FU)
+					FixedDiv(point.storm_radius, STORM_CLOSERADIUS)
 				)
 			end
 			

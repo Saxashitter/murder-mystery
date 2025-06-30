@@ -174,7 +174,7 @@ MM_PERKS[MMPERK_GHOST] = {
 		if p.mm.perk_ghost_time == nil and order == "pri" then return end
 
 		if (order == "pri")
-			local x = 5*FU - MMHUD.xoffset
+			local x = 5*FU
 			local y = 162*FU
 			
 			if (p.mm.perk_ghost_cooldown == 0
@@ -185,7 +185,7 @@ MM_PERKS[MMPERK_GHOST] = {
 				elseif p.mm.perk_ghost_time >= 0
 					action = "Uncloak"
 				end
-				v.drawString(x,y,
+				v.slideDrawString(x,y,
 					"[TOSSFLAG] - "..action,
 					V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
 					"thin-fixed"

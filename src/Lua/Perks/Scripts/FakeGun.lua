@@ -107,12 +107,12 @@ MM_PERKS[MMPERK_FAKEGUN] = {
 		if p.mm.perk_fake_time == nilthen return end
 
 		if (order == "pri")
-			local x = 5*FU - MMHUD.xoffset
+			local x = 5*FU
 			local y = 162*FU
 			
 			if (p.mm.perk_fake_cooldown == 0)
 				local action = "Fake gun"
-				v.drawString(x,y,
+				v.slideDrawString(x,y,
 					"[TOSSFLAG] - "..action,
 					V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
 					"thin-fixed"

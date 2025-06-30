@@ -1,8 +1,9 @@
 local wrapadd = MM.require("Libs/wrappedadd")
 
+freeslot("SPR2_OOF_")
 states[freeslot "S_PLAY_BODY"] = {
 	sprite = SPR_PLAY,
-	frame = freeslot "SPR2_OOF_"|A,
+	frame = SPR2_OOF_|A,
 	tics = -1
 }
 spr2defaults[SPR2_OOF_] = SPR2_DEAD

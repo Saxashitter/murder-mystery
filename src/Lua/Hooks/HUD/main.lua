@@ -79,6 +79,36 @@ local htranstable = {
 	[9] = 5,
 	[10] = 5,
 }
+local hudplusalpha = {
+	[0] = 10,
+	[1] = 8,
+	[2] = 6,
+	[3] = 4,
+	[4] = 2,
+	[5] = 0,
+	[6] = 0,
+	[7] = 0,
+	[8] = 0,
+	[9] = 0,
+	[10] = 0,
+}
+local fixedalignlut = {
+	["left"] = "fixed",
+	["right"] = "fixed-right",
+	["center"] = "fixed-center",
+	
+	["small"] = "small-fixed",
+	["small-center"] = "small-fixed-center",
+	["small-right"] = "small-fixed-right",
+
+	["small-thin"] = "small-thin-fixed",
+	["small-thin-center"] = "small-thin-fixed-center",
+	["small-thin-right"] = "small-thin-fixed-right",
+
+	["thin"] = "thin-fixed",
+	["thin-center"] = "thin-fixed-center",
+	["thin-right"] = "thin-fixed-right",
+}
 
 --DO NOT SYNCH!!!!!!!!
 local MMHUD = {
@@ -90,8 +120,8 @@ local MMHUD = {
 	weaponslidein = HUD_BEGINNINGXOFF,
 	dontslidein = false,
 
-	hudtrans = V_100TRANS,
-	hudtranshalf = V_100TRANS,
+	hudtrans = 10,
+	hudtranshalf = 10,
 }
 rawset(_G, "MMHUD", MMHUD)
 
@@ -181,8 +211,8 @@ local function TickSliders()
 			
 			--fade in stuff if we've tweened for at least 2 tics
 			if MMHUD.xoffset <= FixedMul(HUD_BEGINNINGXOFF, FixedSqrt(FU*7/10))
-				if MMHUD.hudtrans >> V_ALPHASHIFT ~= 0
-					MMHUD.hudtrans = (($ >> V_ALPHASHIFT) - 1) << V_ALPHASHIFT
+				if MMHUD.hudtrans ~= 0
+					MMHUD.hudtrans = $ - 1
 				end
 			end
 			
@@ -191,13 +221,13 @@ local function TickSliders()
 			DoRegularSlide(v,true)
 			DoWeaponSlide(v,true)
 			
-			if MMHUD.hudtrans >> V_ALPHASHIFT ~= 10
-				MMHUD.hudtrans = (($ >> V_ALPHASHIFT) + 1) << V_ALPHASHIFT
+			if MMHUD.hudtrans ~= 10
+				MMHUD.hudtrans = $ + 1
 			end
 		end
 	else
-		if MMHUD.hudtrans >> V_ALPHASHIFT ~= 10
-			MMHUD.hudtrans = (($ >> V_ALPHASHIFT) + 1) << V_ALPHASHIFT
+		if MMHUD.hudtrans ~= 10
+			MMHUD.hudtrans = $ + 1
 		end
 		
 		MMHUD.dontslidein = false
@@ -209,6 +239,91 @@ MMHUD.DoWeaponSlide = DoWeaponSlide
 MMHUD.TickSliders = TickSliders
 
 addHook("HUD", function(v,p,c)
+	--wrapper
+	v.slideDrawScaled2 = function(x,y,scale,patch,flags,cmap, weapons)
+		local slide = MMHUD.xoffset
+		if weapons
+			slide = MMHUD.weaponslidein
+		end
+		if (flags & V_SNAPTOLEFT)
+			x = $ - slide
+		elseif (flags & V_SNAPTORIGHT)
+			x = $ + slide
+		elseif (flags & V_SNAPTOTOP)
+			y = $ - slide
+		elseif (flags & V_SNAPTOBOTTOM)
+			y = $ + slide
+		else
+			local alpha = (flags & V_ALPHAMASK) >> V_ALPHASHIFT
+			if flags & V_HUDTRANSHALF
+				alpha = htranstable[MMHUD.hudtrans]
+			elseif flags & V_HUDTRANSDOUBLE
+				alpha = hudplusalpha[MMHUD.hudtrans]
+			else
+				alpha = (MMHUD.hudtrans)
+			end
+			if alpha >= 10 then return end
+			
+			flags = ($ &~V_ALPHAMASK)|(alpha << V_ALPHASHIFT)
+		end
+		
+		v.drawScaled(x,y,scale,patch,flags,cmap,translation)
+	end
+	v.slideDrawScaled = function(x,y,scale,patch,flags,cmap)
+		v.slideDrawScaled2(x,y,scale,patch,flags,cmap,false)
+	end
+	v.WslideDrawScaled = function(x,y,scale,patch,flags,cmap)
+		v.slideDrawScaled2(x,y,scale,patch,flags,cmap,true)
+	end
+	
+	--wrapper
+	v.slideDrawString2 = function(x,y,str,flags,align,fixed, weapons)
+		if fixed == nil then fixed = true end
+		str = $ or (fixed and "fixed" or "left")
+		if not fixed
+			x = $*FU
+			y = $*FU
+		end
+		
+		local slide = MMHUD.xoffset
+		if weapons
+			slide = MMHUD.weaponslidein
+		end
+		
+		if (flags & V_SNAPTOLEFT)
+			x = $ - slide
+		elseif (flags & V_SNAPTORIGHT)
+			x = $ + slide
+		elseif (flags & V_SNAPTOTOP)
+			y = $ - slide
+		elseif (flags & V_SNAPTOBOTTOM)
+			y = $ + slide
+		else
+			local alpha = (flags & V_ALPHAMASK) >> V_ALPHASHIFT
+			if flags & V_HUDTRANSHALF
+				alpha = htranstable[MMHUD.hudtrans]
+			elseif flags & V_HUDTRANSDOUBLE
+				alpha = hudplusalpha[MMHUD.hudtrans]
+			else
+				alpha = (MMHUD.hudtrans)
+			end
+			if alpha >= 10 then return end
+			
+			flags = ($ &~V_ALPHAMASK)|(alpha << V_ALPHASHIFT)
+		end
+		
+		if not fixed
+			align = fixedalignlut[$]
+		end
+		v.drawString(x,y,str,flags,align)
+	end
+	v.slideDrawString = function(x,y,str,flags,align,fixed)
+		v.slideDrawString2(x,y,str,flags,align,fixed,false)
+	end
+	v.WslideDrawSring = function(x,y,str,flags,align,fixed)
+		v.slideDrawString2(x,y,str,flags,align,fixed,true)
+	end
+	
 	if MM:isMM() then
 		if not hudwasmm then
 			for i, data in ipairs(huds) do

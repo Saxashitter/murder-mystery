@@ -33,7 +33,7 @@ local function V_DrawBox(props)
 	--Presumably no item in this slot
 	if selected and (graphic ~= "MM_NOITEM") then trans = 0 end
 
-	v.drawScaled(
+	v.slideDrawScaled(
 		x,y,
 		scale,
 		v.cachePatch(graphic),
@@ -53,7 +53,7 @@ local function V_DrawBox(props)
 			cmap = nil
 		end
 		
-		v.drawScaled(
+		v.slideDrawScaled(
 			x-(4*scale),
 			y-(4*scale) + yoffset,
 			scale*2,
@@ -64,10 +64,10 @@ local function V_DrawBox(props)
 	end
 
 	if timeleft >= 0 then
-		v.drawString(x, y,
+		v.slideDrawString(x, y,
 			tostring(timeleft/TICRATE),
 			flags|trans,
-			"fixed"
+			"fixed", true
 		)
 	end
 	
@@ -78,16 +78,16 @@ local function V_DrawBox(props)
 	if (item.max_ammo ~= 0)
 	and (not item.noammoinduels and not MM_N.dueling)
 		if not selected
-			v.drawString(x, (y + 32*scale) - 8*FU,
+			v.slideDrawString(x, (y + 32*scale) - 8*FU,
 				item.ammo.."/"..item.max_ammo,
 				(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE,
-				"thin-fixed"
+				"thin-fixed", true
 			)
 		else
-			v.drawString(160*FU,y - 20*FU,
+			v.slideDrawString(160*FU,y - 20*FU,
 				"Ammo: "..item.ammo.." / "..item.max_ammo,
 				(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE,
-				"thin-fixed-center"
+				"thin-fixed-center", true
 			)
 		end
 	end
@@ -109,10 +109,9 @@ return function(v, p)
 	local myitemname = p == displayplayer and itemname[1] or itemname[2]
 	
 	local x = 160*FU
-	local y = 172*FU + MMHUD.xoffset
+	local y = 172*FU
 	local scale = FU*3/4 --*2/count
 	x = $ - (count*17*scale)
-	
 	
 	if curitem ~= myitemname.oldid
 		myitemname.tics = 3*TICRATE
@@ -123,10 +122,10 @@ return function(v, p)
 		
 		if curitem and curitem.display_name
 			local trans = myitemname.tics < 10 and (9 - myitemname.tics)<<V_ALPHASHIFT or 0
-			v.drawString(x, y - 12*FU,
+			v.slideDrawString(x, y - 12*FU,
 				curitem.display_name,
 				V_PERPLAYER|V_SNAPTOBOTTOM|trans|V_ALLOWLOWERCASE,
-				"thin-fixed"
+				"thin-fixed", true
 			)
 		end
 	end
@@ -151,41 +150,41 @@ return function(v, p)
 	myitemname.oldid = curitem
 	
 	--controls
-	x = 5*FU - MMHUD.xoffset
+	x = 5*FU
 	y = 170*FU
 	local flags = V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_PERPLAYER
 	
 	if (p.pflags & (PF_ANALOGMODE|PF_DIRECTIONCHAR) == (PF_ANALOGMODE|PF_DIRECTIONCHAR))
-		v.drawString(
+		v.slideDrawString(
 			x,y - 16*FU,
 			"Automatic mode\nis not recommended.",
 			flags|V_REDMAP|V_RETURN8,
-			"thin-fixed"
+			"thin-fixed", true
 		)
 	end
 	
-	v.drawString(
+	v.slideDrawString(
 		x,y,
 		"[C1] - "..(inv.hidden and "Equip" or "Unequip").." Items",
 		flags,
-		"thin-fixed"
+		"thin-fixed", true
 	)
 	y = $+8*FU
 	
 	if curitem and curitem.droppable then
-		v.drawString(x,y,
+		v.slideDrawString(x,y,
 			"[C2] - Drop weapon",
 			flags,
-			"thin-fixed"
+			"thin-fixed", true
 		)
 		y = $+8*FU
 	end
 	
 	if (curitem)
-		v.drawString(x,y,
+		v.slideDrawString(x,y,
 			"[FIRE] - Use weapon",
 			flags,
-			"thin-fixed"
+			"thin-fixed", true
 		)
 		y = $+8*FU
 	end

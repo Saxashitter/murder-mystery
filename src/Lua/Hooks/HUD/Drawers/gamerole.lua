@@ -6,8 +6,6 @@ local function HUD_RoleDrawer(v,p)
 	if not (p.mm and roles[p.mm.role]) then return end
 	if (p.mm_save.afkmode and p.spectator) then return end
 	
-	local off = MMHUD.xoffset
-	
 	--we have enough screen space
 	if v.width() >= 800
 	--the game would squish the text to illegibility
@@ -22,7 +20,7 @@ local function HUD_RoleDrawer(v,p)
 	if p.spectator 
 	or not (p.mo and p.mo.valid)
 	or p.mo.health == 0 then
-		v.drawString(320*FU + off,
+		v.slideDrawString(320*FU,
 			y,
 			"Dead",
 			V_GRAYMAP|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
@@ -32,7 +30,7 @@ local function HUD_RoleDrawer(v,p)
 	end
 	----
 	
-	v.drawString(320*FU + off,
+	v.slideDrawString(320*FU,
 		y,
 		roles[p.mm.role].name,
 		roles[p.mm.role].color|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
@@ -41,7 +39,7 @@ local function HUD_RoleDrawer(v,p)
 	
 	if leveltime <= MM_N.pregame_time*2
 	and not splitscreen
-		v.drawString(320*FU + off,
+		v.slideDrawString(320*FU,
 			8*FU,
 			"Press TAB to view more",
 			V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE|V_PERPLAYER,

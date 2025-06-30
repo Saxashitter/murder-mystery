@@ -14,7 +14,6 @@ local function HUD_RoleDrawer(v,p)
 	if not (p.mm and roles[p.mm.role]) then return end
 	
 	local patch = v.cachePatch("MMROLE")
-	local off = MMHUD.xoffset
 	
 	local longest_width = 0
 	----Calc "Killed by" string
@@ -81,9 +80,8 @@ local function HUD_RoleDrawer(v,p)
 		end
 		
 		local x = (320*FU) - longest_width*FU
-		v.drawScaled(x + off, y, FU, patch, V_SNAPTOTOP|V_SNAPTORIGHT|V_50TRANS)
-		v.drawString(x + off, y + (2*FU), version, V_SNAPTOTOP|V_SNAPTORIGHT|V_80TRANS, "thin-fixed")
-		
+		v.slideDrawScaled(x, y, FU, patch, V_SNAPTOTOP|V_SNAPTORIGHT|V_50TRANS)
+		v.slideDrawString(x, y + (2*FU), version, V_SNAPTOTOP|V_SNAPTORIGHT|V_80TRANS, "thin-fixed")
 	end
 	----
 	
@@ -91,7 +89,7 @@ local function HUD_RoleDrawer(v,p)
 	if p.spectator 
 	or not (p.mo and p.mo.valid)
 	or p.mo.health == 0 then
-		v.drawString(320*FU + off,
+		v.slideDrawString(320*FU,
 			0,
 			"Dead",
 			V_GRAYMAP|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
@@ -99,13 +97,13 @@ local function HUD_RoleDrawer(v,p)
 		)
 		if p.spectator
 			
-			v.drawString(320*FU + off,
+			v.slideDrawString(320*FU,
 				8*FU,
 				killerstring,
 				V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
 				"small-fixed-right"
 			)
-			v.drawString(320*FU + off,
+			v.slideDrawString(320*FU,
 				12*FU,
 				"You cannot interact with alive people.",
 				V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
@@ -116,14 +114,14 @@ local function HUD_RoleDrawer(v,p)
 	end
 	----
 	
-	v.drawString(320*FU + off,
+	v.slideDrawString(320*FU,
 		0,
 		roles[p.mm.role].name,
 		roles[p.mm.role].color|V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,
 		"fixed-right"
 	)
 	for k,va in ipairs(roles[p.mm.role].desc)
-		v.drawString(320*FU + off,
+		v.slideDrawString(320*FU,
 			(8+(4*(k-1)))*FU,
 			va,
 			V_SNAPTORIGHT|V_SNAPTOTOP|V_ALLOWLOWERCASE,

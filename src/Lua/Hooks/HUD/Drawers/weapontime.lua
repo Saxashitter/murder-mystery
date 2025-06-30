@@ -136,7 +136,15 @@ local function HUD_TimeForWeapon(v,p)
 	end
 	lastp = displayplayer
 	
+	local flags = V_SNAPTOTOP
+	local ypos = 32*FU - MMHUD.weaponslidein
+	if (splitscreen)
+		flags = V_HUDTRANS
+		ypos = 80*FU
+	end
+	
 	if not (p.spectator)
+	and not splitscreen
 		local color = roles[p.mm.role].colorcode
 		local name = roles[p.mm.role].name
 		local grammar = ''
@@ -146,18 +154,18 @@ local function HUD_TimeForWeapon(v,p)
 		local text = (MM_N.dueling and "You're dueling!" or "You're a"..grammar..' '..color..name.."\x80!")
 		
 		v.drawString(160*FU,
-			32*FU - MMHUD.weaponslidein,
+			ypos,
 			text,
-			V_SNAPTOTOP|V_ALLOWLOWERCASE,
+			flags|V_ALLOWLOWERCASE,
 			"thin-fixed-center"
 		)
 	end
 	
 	v.drawString(160*FU,
-		40*FU - MMHUD.weaponslidein,
+		ypos + 8*FU,
 		(not splitscreen) and (roles[p.mm.role].weapon and "You'll get your weapon in" or
 		"Round starts in") or "Duel starts in",
-		V_SNAPTOTOP|V_ALLOWLOWERCASE,
+		flags|V_ALLOWLOWERCASE,
 		roles[p.mm.role].weapon and "thin-fixed-center" or "fixed-center"
 	)
 	do
@@ -174,17 +182,17 @@ local function HUD_TimeForWeapon(v,p)
 
 			if (MM_N.dueling and time/TR == 0)
 				v.drawString(160*FU,
-					50*FU - MMHUD.weaponslidein - yoff,
+					ypos + 18*FU - yoff,
 					"DUEL!!",
-					V_SNAPTOTOP|V_YELLOWMAP,
+					flags|V_YELLOWMAP,
 					"fixed-center"
 				)
 			else
 				v.drawScaled(160*FU - letteroffset/2,
-					50*FU - MMHUD.weaponslidein - yoff,
+					ypos + 18*FU - yoff,
 					FU,
 					letterpatch,
-					V_SNAPTOTOP
+					flags
 				)
 			end
 			
@@ -193,10 +201,10 @@ local function HUD_TimeForWeapon(v,p)
 			local tstr = tostring(time/TR)
 			for i = 1,string.len(tstr)
 				v.drawScaled(160*FU - letteroffset/2 + work,
-					50*FU - MMHUD.weaponslidein - yoff,
+					ypos + 18*FU - yoff,
 					FU,
 					v.cachePatch("STTNUM"..string.sub(tstr,i,i)),
-					V_SNAPTOTOP
+					flags
 				)
 				work = $ + v.cachePatch("STTNUM0").width*FU
 			end

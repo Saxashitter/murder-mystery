@@ -32,7 +32,6 @@ return function(v)
 	if not (MMHUD.texts and #MMHUD.texts) then return end
 
 	local listForRemoval = {}
-	local slidein = MMHUD.xoffset
 
 	local target_y = 16*FU
 	for i,str in pairs(MMHUD.texts) do
@@ -60,7 +59,7 @@ return function(v)
 		str.y = lerp($, target_y, FU/7)
 		total_height = text_height
 		
-		v.drawString(160*FU, str.y - slidein, str.text, V_SNAPTOTOP|trans, "fixed-center")
+		v.slideDrawString(160*FU, str.y, str.text, V_SNAPTOTOP|trans, "fixed-center")
 		
 		for i,subt in ipairs(str.subtexts) do
 			if subt == nil
@@ -71,7 +70,7 @@ return function(v)
 			
 			y = $+(subtext_height*(i-1))
 			
-			v.drawString(160*FU, y - slidein, subt, V_SNAPTOTOP|trans, "thin-fixed-center")
+			v.slideDrawString(160*FU, y, subt, V_SNAPTOTOP|trans, "thin-fixed-center")
 			total_height = $ + subtext_height
 		end
 		

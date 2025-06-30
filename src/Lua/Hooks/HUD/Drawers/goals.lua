@@ -1,6 +1,8 @@
 --there could be a better way to do this
 local function HUD_GoalDrawer(v,p)
-	local x = 6*FU - MMHUD.xoffset
+	if splitscreen then return end
+	
+	local x = 6*FU
 	local y = 40*FU
 	local flags = V_SNAPTOTOP|V_SNAPTOLEFT|V_ALLOWLOWERCASE|V_PERPLAYER
 	
@@ -43,6 +45,8 @@ local function HUD_GoalDrawer(v,p)
 		
 		height = $ + 29
 		y = 9*FU
+
+		local x = x - MMHUD.xoffset
 		
 		v.drawFill((x/FU) - 1, (y/FU) - 3,
 			longest_str + 2, 1,
@@ -61,7 +65,7 @@ local function HUD_GoalDrawer(v,p)
 	end
 	
 	for k,val in ipairs(goals)
-		v.drawString(x,y, val.string, val.flags, "thin-fixed")
+		v.slideDrawString(x,y, val.string, val.flags, "thin-fixed")
 		y = $ + 8*FU
 	end
 end

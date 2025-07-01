@@ -590,7 +590,7 @@ MM:addPlayerScript(function(p)
 			and not p2.mm.spectator) then continue end
 			
 			local dist = R_PointToDist2(p.mo.x, p.mo.y, p2.mo.x, p2.mo.y)
-			local maxdist = FixedMul(p.mo.radius+p2.mo.radius, item.range) * 5
+			local maxdist = FixedMul(p.mo.radius+p2.mo.radius, item.range)
 			
 			if dist > maxdist
 			or abs((p.mo.z + p.mo.height/2) - (p2.mo.z + p2.mo.height/2)) > FixedMul(max(p.mo.height, p2.mo.height), item.zrange or item.range)

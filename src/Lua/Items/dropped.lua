@@ -69,6 +69,10 @@ function MM:SpawnItemDrop(item_id, x, y, z, angle, flip, extra)
 		if extra.price then
 			mobj.pickupprice = extra.price
 		end
+		
+		if extra.pickuptime then
+			mobj.pickuptime = extra.pickuptime
+		end
 	end
 	
 	mobj.flags = 0
@@ -240,7 +244,7 @@ local function manage_unpicked_weapon(mobj)
 			name = def.display_name or "Item",
 			intertext = "Pick up",
 			button = BT_CUSTOM3,
-			time = TICRATE/7,
+			time = mobj.pickuptime or TICRATE/7,
 			funcid = Pickup_Interaction,
 			price = mobj.pickupprice,
 		})

@@ -15,7 +15,6 @@ return function(conditions)
 	for p in players.iterate
 		if (p and p.valid and conditionsPassed(p, conditions)) then
 			table.insert(passed, p)
-			print(p.name.." passed")
 		end
 	end
 	return passed[P_RandomRange(1, #passed)]

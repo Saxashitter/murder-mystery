@@ -8,6 +8,12 @@ end
 local INTER_RANGE = 64*FU
 local TWEENTIME = TICRATE/2
 
+local rolebits = {
+	[MMROLE_INNOCENT] = 1 << 0,
+	[MMROLE_SHERIFF] = 1 << 1,
+	[MMROLE_MURDERER] = 1 << 2,
+}
+
 return function(p)
 	local me = p.realmo
 	
@@ -62,11 +68,15 @@ return function(p)
 						
 						local caninteract = true
 						if (inter.price ~= 0)
-							caninteract = p.mm_save.rings >= inter.price
+							caninteract = (p.mm_save.rings >= inter.price) and (not (inter.restrict[p.mm.role]));
 							if caninteract
 								p.mm_save.rings = $ - inter.price
 								S_StartSound(nil,sfx_chchng,p)
 							else
+								if inter.restrict[p.mm.role] then
+									chatprintf(p, "\x82*This interaction is prohibited from your role.")
+								end
+								
 								S_StartSound(nil,sfx_adderr,p)
 							end
 						end

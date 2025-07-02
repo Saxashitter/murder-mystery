@@ -19,8 +19,14 @@ jobs:
         rm src/Lua/version.lua
         printf "local commit_sha = \"${{ github.sha }}\"\n\nreturn commit_sha" > src/Lua/version.lua
 
-    - name: Make date
-      run: echo "BUILD_DATE=$(git rev-parse --abbrev-ref HEAD)-$(date +%Y-%m-%d)" >> $GITHUB_ENV
+    - name: Set up build vars
+      run: |
+        echo "BUILD_HASH=$(git rev-parse --short=7 HEAD)" >> $GITHUB_ENV
+        echo "BUILD_DATE=$(git rev-parse --abbrev-ref HEAD)-$(date +%Y-%m-%d)" >> $GITHUB_ENV
+        options=("1329261667640541325" "1328478475459236041" "1332171698610507866")
+        echo "EMOJI_LOL=${options[$RANDOM % 3]}" >> $GITHUB_ENV
+        options=("build time baby" "this build won't be a mystery" "murder :)")
+        echo "NAME_LOL=${options[$RANDOM % 3]}" >> $GITHUB_ENV
 
     - name: Install dependencies
       run: |

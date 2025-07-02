@@ -178,10 +178,6 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 			)
 			local required_dist = FU*600
 			local required_speed = FU*20
-			if not P_IsObjectOnGround(target) then
-				required_dist = FU*450
-				required_speed = FU*12
-			end
 			required_speed = FixedMul($, target.scale)
 			
 			if dist > required_dist and target.player.speed > required_speed then

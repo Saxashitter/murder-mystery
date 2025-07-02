@@ -31,9 +31,11 @@ return function(p)
 			if v.player == p then mytable = v; continue end
 			if v.color ~= p.skincolor then continue end
 			if v.skin ~= skins[p.skin].name then continue end
-
+			--We had this color first, skip.
+			if #p < #v.player then continue end
+			
 			repeat
-				p.skincolor = P_RandomRange(SKINCOLOR_NONE,SKINCOLOR_VOLCANIC)
+				p.skincolor = P_RandomRange(SKINCOLOR_WHITE,SKINCOLOR_VOLCANIC)
 			until (p.skincolor ~= v.color)
 			p.mm.savedcolor = p.skincolor
 			p.mo.color = p.skincolor

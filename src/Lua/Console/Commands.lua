@@ -41,7 +41,7 @@ COM_AddCommand("MM_MapClueCount", function(p)
 	local count = 0
 	
 	for thing in mapthings.iterate do
-		if thing.type == 3001 then
+		if thing.type == mobjinfo[MT_MM_CLUESPAWN].doomednum then
 			count = $ + 1
 		end
 	end

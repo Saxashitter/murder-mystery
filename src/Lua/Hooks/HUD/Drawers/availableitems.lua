@@ -181,6 +181,7 @@ return function(v, p)
 	end
 	
 	if (curitem)
+	and not inv.hidden
 		v.slideDrawString(x,y,
 			"[FIRE] - Use weapon",
 			flags,

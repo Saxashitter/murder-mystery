@@ -651,7 +651,7 @@ MM:addPlayerScript(function(p)
 			end
 			
 			item.anim = min(item.max_anim/3, $)
-			if item.hitsfx then
+			if item.hitsfx and (item.hit == item.max_hit) then
 				S_StartSound(p.mo, item.hitsfx)
 			end
 			hitsomething = true

@@ -41,10 +41,25 @@ jobs:
       with:
         name: EPICMurderMystery
         path: build/EPICMM-${{ env.BUILD_DATE }}.pk3
-        
-    - name: Upload build to Discord
-      uses: sinshutu/upload-to-discord@master
-      env:
-        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+
+    - name: Upload build to Litterbox
+      run: |
+        cd build
+        curl -F "reqtype=fileupload" -F "time=72h" -F "fileToUpload=@EPICMM-${{ env.BUILD_DATE }}.pk3" https://litterbox.catbox.moe/resources/internals/api.php > upload.txt
+        echo "CATBOX_URL=$(cat upload.txt)" >> $GITHUB_ENV
+        cat upload.txt
+
+    - name: Send card to Discord
+      uses: stegzilla/discord-notify@v4
       with:
-        args: build/EPICMM-${{ env.BUILD_DATE }}.pk3
+        webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+
+        title: "Build: ${{ env.BUILD_DATE }}"
+
+        message: "Built off commit [${{ env.BUILD_SHASH }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})\n[.pk3 link (lasts 3 days)](${{ env.CATBOX_URL }})" # default is 
+
+        avatar_url: "https://cdn.discordapp.com/emojis/${{ env.EMOJI_LOL }}.webp?size=96" # optional, default is 
+
+        username: ${{ env.NAME_LOL }} # optional, default is GitHub
+
+        colour: "#00ff99" # optional, default is #3371FF

@@ -68,12 +68,17 @@ return function(p)
 						
 						local caninteract = true
 						if (inter.price ~= 0)
-							caninteract = (p.mm_save.rings >= inter.price) and (not (inter.restrict[p.mm.role]));
+							caninteract = (p.mm_save.rings >= inter.price)
+							
+							if inter.restrict then
+								caninteract = not (inter.restrict[p.mm.role])
+							end
+							
 							if caninteract
 								p.mm_save.rings = $ - inter.price
 								S_StartSound(nil,sfx_chchng,p)
 							else
-								if inter.restrict[p.mm.role] then
+								if inter.restrict and inter.restrict[p.mm.role] then
 									chatprintf(p, "\x82*This interaction is prohibited from your role.")
 								end
 								

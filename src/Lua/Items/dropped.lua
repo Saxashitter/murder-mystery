@@ -52,8 +52,7 @@ function MM:SpawnItemDrop(item_id, x, y, z, angle, flip, extra)
 	else
 		mobj.angle = angle
 	end
-
-	P_InstaThrust(mobj, mobj.angle, 5*FU)
+	
 	mobj.momz = (3*FU)*flip
 
 	mobj.pickupid = item.id
@@ -68,6 +67,18 @@ function MM:SpawnItemDrop(item_id, x, y, z, angle, flip, extra)
 	if extra then
 		if extra.price then
 			mobj.pickupprice = extra.price
+		end
+		
+		if extra.pickuptime then
+			mobj.pickuptime = extra.pickuptime
+		end
+		
+		if extra.restrict then
+			mobj.restrict = extra.restrict
+		end
+		
+		if not extra.disablespawnslide then
+			P_InstaThrust(mobj, mobj.angle, 5*FU)
 		end
 	end
 	
@@ -240,7 +251,8 @@ local function manage_unpicked_weapon(mobj)
 			name = def.display_name or "Item",
 			intertext = "Pick up",
 			button = BT_CUSTOM3,
-			time = TICRATE/7,
+			restrict = mobj.restrict or {},
+			time = mobj.pickuptime or TICRATE/7,
 			funcid = Pickup_Interaction,
 			price = mobj.pickupprice,
 		})

@@ -129,6 +129,8 @@ MM.interactPoint = function(p,mobj,properties)
 		interacting = 0,
 		timesinteracted = 0,
 		
+		restrict = properties.restrict,
+		
 		button = properties.button or 0,
 		timespan = 0,
 		price = properties.price or 0,
@@ -265,6 +267,7 @@ addHook("MobjThinker",function(point)
 			button = point.button,
 			time = point.duration,
 			price = point.price,
+			restrict = point.restrict,
 			funcid = MT_Interaction
 		})
 	end

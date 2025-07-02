@@ -102,7 +102,8 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	end
 	
 	--this is not a good place to put this
-	if (inflictor.type == MT_MM_KNIFE_PROJECT)
+	if (inflictor and inflictor.valid)
+	and (inflictor.type == MT_MM_KNIFE_PROJECT)
 	and (
 		source
 		and source.player

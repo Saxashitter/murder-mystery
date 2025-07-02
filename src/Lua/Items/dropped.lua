@@ -52,8 +52,7 @@ function MM:SpawnItemDrop(item_id, x, y, z, angle, flip, extra)
 	else
 		mobj.angle = angle
 	end
-
-	P_InstaThrust(mobj, mobj.angle, 5*FU)
+	
 	mobj.momz = (3*FU)*flip
 
 	mobj.pickupid = item.id
@@ -72,6 +71,10 @@ function MM:SpawnItemDrop(item_id, x, y, z, angle, flip, extra)
 		
 		if extra.pickuptime then
 			mobj.pickuptime = extra.pickuptime
+		end
+		
+		if not extra.disablespawnslide then
+			P_InstaThrust(mobj, mobj.angle, 5*FU)
 		end
 	end
 	

@@ -33,6 +33,7 @@ addHook("MapThingSpawn",function(mo,mt)
 				MM:SpawnItemDrop(item_id, mo.x, mo.y, mo.z, mo.angle, 0, {
 					price = item_cost;
 					pickuptime = item_pickuptime;
+					disablespawnslide = true; -- makes it so it doesnt slide when it spawns
 				})
 			end
 		end

@@ -2,6 +2,7 @@
 return function(p)
 	if MM:pregame() then return end
 	if MM_N.waiting_for_players then return end
+	if MM_N.gameover then return end
 	if (p.spectator or p.mm.spectator) then return end
 	
 	local alias = p.mm.alias

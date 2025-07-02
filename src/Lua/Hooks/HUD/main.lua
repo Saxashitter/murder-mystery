@@ -238,34 +238,39 @@ MMHUD.DoRegularSlide = DoRegularSlide
 MMHUD.DoWeaponSlide = DoWeaponSlide
 MMHUD.TickSliders = TickSliders
 
+local function SlideTemplate(x,y,flags,weapons)
+	local alpha = (flags & V_ALPHAMASK) >> V_ALPHASHIFT
+	local slide = MMHUD.xoffset
+	if weapons
+		slide = MMHUD.weaponslidein
+	end
+	if (flags & V_SNAPTOLEFT)
+		x = $ - slide
+	elseif (flags & V_SNAPTORIGHT)
+		x = $ + slide
+	elseif (flags & V_SNAPTOTOP)
+		y = $ - slide
+	elseif (flags & V_SNAPTOBOTTOM)
+		y = $ + slide
+	else
+		if flags & V_HUDTRANSHALF
+			alpha = htranstable[MMHUD.hudtrans]
+		elseif flags & V_HUDTRANSDOUBLE
+			alpha = hudplusalpha[MMHUD.hudtrans]
+		else
+			alpha = (MMHUD.hudtrans)
+		end
+	end
+	return x,y,alpha
+end
+
 addHook("HUD", function(v,p,c)
 	--wrapper
 	v.slideDrawScaled2 = function(x,y,scale,patch,flags,cmap, weapons)
-		local slide = MMHUD.xoffset
-		if weapons
-			slide = MMHUD.weaponslidein
-		end
-		if (flags & V_SNAPTOLEFT)
-			x = $ - slide
-		elseif (flags & V_SNAPTORIGHT)
-			x = $ + slide
-		elseif (flags & V_SNAPTOTOP)
-			y = $ - slide
-		elseif (flags & V_SNAPTOBOTTOM)
-			y = $ + slide
-		else
-			local alpha = (flags & V_ALPHAMASK) >> V_ALPHASHIFT
-			if flags & V_HUDTRANSHALF
-				alpha = htranstable[MMHUD.hudtrans]
-			elseif flags & V_HUDTRANSDOUBLE
-				alpha = hudplusalpha[MMHUD.hudtrans]
-			else
-				alpha = (MMHUD.hudtrans)
-			end
-			if alpha >= 10 then return end
-			
-			flags = ($ &~V_ALPHAMASK)|(alpha << V_ALPHASHIFT)
-		end
+		local x2,y2,alpha = SlideTemplate(x,y,flags,weapons)
+		x,y = x2,y2
+		if alpha >= 10 then return end
+		flags = ($ &~V_ALPHAMASK)|(alpha << V_ALPHASHIFT)
 		
 		v.drawScaled(x,y,scale,patch,flags,cmap,translation)
 	end
@@ -285,32 +290,10 @@ addHook("HUD", function(v,p,c)
 			y = $*FU
 		end
 		
-		local slide = MMHUD.xoffset
-		if weapons
-			slide = MMHUD.weaponslidein
-		end
-		
-		if (flags & V_SNAPTOLEFT)
-			x = $ - slide
-		elseif (flags & V_SNAPTORIGHT)
-			x = $ + slide
-		elseif (flags & V_SNAPTOTOP)
-			y = $ - slide
-		elseif (flags & V_SNAPTOBOTTOM)
-			y = $ + slide
-		else
-			local alpha = (flags & V_ALPHAMASK) >> V_ALPHASHIFT
-			if flags & V_HUDTRANSHALF
-				alpha = htranstable[MMHUD.hudtrans]
-			elseif flags & V_HUDTRANSDOUBLE
-				alpha = hudplusalpha[MMHUD.hudtrans]
-			else
-				alpha = (MMHUD.hudtrans)
-			end
-			if alpha >= 10 then return end
-			
-			flags = ($ &~V_ALPHAMASK)|(alpha << V_ALPHASHIFT)
-		end
+		local x2,y2,alpha = SlideTemplate(x,y,flags,weapons)
+		x,y = x2,y2
+		if alpha >= 10 then return end
+		flags = ($ &~V_ALPHAMASK)|(alpha << V_ALPHASHIFT)
 		
 		if not fixed
 			align = fixedalignlut[$]
@@ -322,6 +305,22 @@ addHook("HUD", function(v,p,c)
 	end
 	v.WslideDrawSring = function(x,y,str,flags,align,fixed)
 		v.slideDrawString2(x,y,str,flags,align,fixed,true)
+	end
+	
+	--wrapper
+	v.slideDrawStretched2 = function(x,y,hs,vs,patch,flags,cmap, weapons)
+		local x2,y2,alpha = SlideTemplate(x,y,flags,weapons)
+		x,y = x2,y2
+		if alpha >= 10 then return end
+		flags = ($ &~V_ALPHAMASK)|(alpha << V_ALPHASHIFT)
+		
+		v.drawStretched(x,y,hs,vs,patch,flags,cmap)
+	end
+	v.slideDrawStretched = function(x,y,hs,vs,patch,flags,cmap)
+		v.slideDrawStretched2(x,y,hs,vs,patch,flags,cmap,false)
+	end
+	v.WslideDrawStretched2 = function(x,y,hs,vs,patch,flags,cmap)
+		v.slideDrawStretched2(x,y,hs,vs,patch,flags,cmap,true)
 	end
 	
 	if MM:isMM() then

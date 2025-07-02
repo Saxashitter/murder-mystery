@@ -100,6 +100,20 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		
 		target.player.mm.whokilledme = "Killed by someone else's stupidity."
 	end
+	
+	--this is not a good place to put this
+	if (inflictor.type == MT_MM_KNIFE_PROJECT)
+	and (
+		source
+		and source.player
+		and source.player.mm
+	) and R_PointToDist2(source.x,source.y, target.x,target.y) >= 100*source.scale
+		chatprintf(source.player,
+			"\x83*Ranged kill! (+ $10)",
+			true
+		)
+		source.player.mm_save.ringstopay = wrapadd($, 10)
+	end
 
 	if not MM:canGameEnd()
 	and MM_N.special_count >= 2 then
@@ -456,7 +470,7 @@ addHook("ThinkFrame", function()
 				corpse.translation = nil
 				
 				local bonus = 25
-				chatprintf(p, "\x83*You got "..bonus.." coins for finding a body!\x80")
+				chatprintf(p, "\x83*Found a body! (+ $"..bonus..")\x80")
 				CONS_Printf(p, "\x83You got "..bonus.." coins for finding a body!\x80")
 				p.mm_save.ringstopay = wrapadd($, bonus)
 				

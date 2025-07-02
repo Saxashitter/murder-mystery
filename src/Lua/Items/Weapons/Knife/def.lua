@@ -290,7 +290,7 @@ weapon.drawer = function(v, p,item, x,y,scale,flags, selected, active)
 		local patch = v.cachePatch("1PIXELW")
 		local stretch = FixedDiv(timer*FU, maxtime*FU)
 		
-		v.drawStretched(x, bottomy - FixedMul(height, stretch),
+		v.slideDrawStretched(x, bottomy - FixedMul(height, stretch),
 			width, FixedMul(height, stretch), patch,
 			(flags &~V_ALPHAMASK)|V_30TRANS
 		)

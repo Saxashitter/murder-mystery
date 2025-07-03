@@ -314,6 +314,11 @@ addHook("ThinkFrame", function()
 			or MM_N.end_killer
 		*/
 		
+		local releaseTic = 3*TICRATE
+		if MM_N.sniped_end then
+			-- for music timing
+			releaseTic = 3*TICRATE + MM.sniper_theme_offset
+		end
 		for p in players.iterate() do
 			if not (p.mo and not (p.mo.health)) then continue end
 			--if (p.mo == sheriff) then continue end
@@ -324,11 +329,6 @@ addHook("ThinkFrame", function()
 			end
 			
 			--Endcam cutscene
-			local releaseTic = 3*TICRATE
-			if MM_N.sniped_end then
-				-- for music timing
-				releaseTic = 3*TICRATE + MM.sniper_theme_offset
-			end
 			if MM_N.end_ticker < releaseTic
 				p.deadtimer = min($,1)
 				p.mo.momx,p.mo.momy,p.mo.momz = 0,0,0
@@ -336,76 +336,72 @@ addHook("ThinkFrame", function()
 				p.mo.flags = $ | MF_NOGRAVITY
 				p.mo.state = (p.mm.end_deathstate and S_PLAY_DEAD or S_PLAY_PAIN)
 				continue
-				
-			else
-				
-				if MM_N.end_ticker == releaseTic
-					p.mo.flags2 = $ &~MF2_DONTDRAW
-					p.mo.flags = $ &~MF_NOGRAVITY
-					p.mo.state = S_PLAY_DEAD
-					
-					P_InstaThrust(p.mo, p.mo.deathangle, -6*FU)
-					P_SetObjectMomZ(p.mo, 20*FU)
-					S_StartSound(p.mo, sfx_altdi1)
-					
-					local machine = false
-					if (p.charflags & SF_MACHINE)
-					or (skins[p.skin].flags & SF_MACHINE)
-						machine = true
-					end
-					
-					if not machine then continue end
-					
-					p.charflags = $|SF_MACHINE
-					MM.Tripmine_SpawnExplosions(p.mo, false, 10)
-					P_StartQuake(60*FU, TICRATE * 3/4, {p.mo.x, p.mo.y, p.mo.z}, 512*FU)
-					
-					local sfx = P_SpawnGhostMobj(p.mo)
-					sfx.fuse = 3 * TICRATE
-					sfx.tics = sfx.fuse
-					sfx.flags2 = $|MF2_DONTDRAW
-					S_StartSound(sfx, sfx_mmdie0)
-					S_StartSound(sfx, sfx_mmdie0)
-					
-					local a = p.mo.angle + ANGLE_45
-					local spr_scale = FU
-					local tntstate = S_TNTBARREL_EXPL3
-					local rflags = RF_PAPERSPRITE|RF_FULLBRIGHT|RF_NOCOLORMAPS
-					local wavestate = S_FACESTABBERSPEAR
-					local wavetime = TICRATE
-					for i = 0,1
-						local bam = P_SpawnMobjFromMobj(p.mo,0,0,0,MT_THOK)
-						P_SetMobjStateNF(bam, tntstate)
-						bam.spritexscale = FixedMul($, spr_scale)
-						bam.spriteyscale = bam.spritexscale
-						bam.renderflags = $|rflags
-						bam.angle = a + ANGLE_90 * i
-						
-						bam.color = p.skincolor
-						bam.colorized = true
-						bam.blendmode = AST_SUBTRACT
-						
-						local wave = P_SpawnMobjFromMobj(p.mo,0,0,0,MT_THOK)
-						P_SetMobjStateNF(wave, wavestate)
-						wave.spritexscale = FixedMul($, spr_scale)
-						wave.spriteyscale = wave.spritexscale
-						wave.renderflags = $|rflags
-						wave.angle = a + ANGLE_90 * i
-						wave.tics = wavetime
-						wave.fuse = wavetime
-						wave.destscale = wave.scale * 6
-						wave.scalespeed = FixedDiv(wave.destscale - wave.scale, wavetime*FU)
-						
-						wave.color = p.skincolor
-						wave.colorized = true
-						wave.blendmode = AST_ADD
-					end
-					
-				end
-				
-				continue
 			end
+			if not (MM_N.end_ticker == releaseTic) then continue end
+			
+			p.mo.flags2 = $ &~MF2_DONTDRAW
+			p.mo.flags = $ &~MF_NOGRAVITY
+			p.mo.state = S_PLAY_DEAD
+			
+			P_InstaThrust(p.mo, p.mo.deathangle, -6*FU)
+			P_SetObjectMomZ(p.mo, 20*FU)
+			S_StartSound(p.mo, sfx_altdi1)
+			
+			local machine = false
+			if (p.charflags & SF_MACHINE)
+			or (skins[p.skin].flags & SF_MACHINE)
+				machine = true
+			end
+			
+			if not machine then continue end
+			
+			p.charflags = $|SF_MACHINE
+			MM.Tripmine_SpawnExplosions(p.mo, false, 10)
+			P_StartQuake(60*FU, TICRATE * 3/4, {p.mo.x, p.mo.y, p.mo.z}, 512*FU)
+			
+			local sfx = P_SpawnGhostMobj(p.mo)
+			sfx.fuse = 3 * TICRATE
+			sfx.tics = sfx.fuse
+			sfx.flags2 = $|MF2_DONTDRAW
+			S_StartSound(sfx, sfx_mmdie0)
+			S_StartSound(sfx, sfx_mmdie0)
+			
+			local a = p.mo.angle + ANGLE_45
+			local spr_scale = FU
+			local tntstate = S_TNTBARREL_EXPL3
+			local rflags = RF_PAPERSPRITE|RF_FULLBRIGHT|RF_NOCOLORMAPS
+			local wavestate = S_FACESTABBERSPEAR
+			local wavetime = TICRATE
+			for i = 0,1
+				local bam = P_SpawnMobjFromMobj(p.mo,0,0,0,MT_THOK)
+				P_SetMobjStateNF(bam, tntstate)
+				bam.spritexscale = FixedMul($, spr_scale)
+				bam.spriteyscale = bam.spritexscale
+				bam.renderflags = $|rflags
+				bam.angle = a + ANGLE_90 * i
+				
+				bam.color = p.skincolor
+				bam.colorized = true
+				bam.blendmode = AST_SUBTRACT
+				
+				local wave = P_SpawnMobjFromMobj(p.mo,0,0,0,MT_THOK)
+				P_SetMobjStateNF(wave, wavestate)
+				wave.spritexscale = FixedMul($, spr_scale)
+				wave.spriteyscale = wave.spritexscale
+				wave.renderflags = $|rflags
+				wave.angle = a + ANGLE_90 * i
+				wave.tics = wavetime
+				wave.fuse = wavetime
+				wave.destscale = wave.scale * 6
+				wave.scalespeed = FixedDiv(wave.destscale - wave.scale, wavetime*FU)
+				
+				wave.color = p.skincolor
+				wave.colorized = true
+				wave.blendmode = AST_ADD
+			end
+			continue
 		end
+		return
 	end
 	
 	--JUST in case...
@@ -420,12 +416,12 @@ addHook("ThinkFrame", function()
 			continue
 		end
 		
-		if corpse.playerid -- idk why the MF2_DONTDRAW above is only when the game ends :P, maybe y'all should see that?
+		if (corpse.playerid ~= nil)
 		and (players[corpse.playerid] and players[corpse.playerid].valid)
 		and (players[corpse.playerid].mo and players[corpse.playerid].mo.valid)
 			if not players[corpse.playerid].mo.health
 			and not (players[corpse.playerid].mo.flags2 & MF2_DONTDRAW) then
-				players[corpse.playerid].mo.flags2 = $1|MF2_DONTDRAW
+				players[corpse.playerid].mo.flags2 = $|MF2_DONTDRAW
 			end
 		end
         if MM_N.knownDeadPlayers[corpse.playerid]

@@ -147,7 +147,7 @@ end
 local function AntiAdmin(src, msg)
 	local admincolor = "\x82"
 	local normcolor = "\x80 "
-	local color = skinColorToChatColor(src.mo and src.mo.color or src.skincolor)
+	local color = skinColorToChatColor((src.mo and src.mo.valid) and src.mo.color or src.skincolor)
 	if (gamestate == GS_LEVEL)
 	and (src.spectator)
 		color = "\x86"

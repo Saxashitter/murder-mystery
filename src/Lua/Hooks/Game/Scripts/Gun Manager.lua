@@ -3,13 +3,24 @@ local randomPlayer = MM.require "Libs/getRandomPlayer"
 local roles = MM.require "Variables/Data/Roles"
 local lostgun = roles[MMROLE_SHERIFF].weapon or "revolver"
 
+local guns = {
+	[lostgun] = true,
+	["shotgun"] = true,
+	--lol
+	["sword"] = true,
+}
+
 local function _eligibleGunPlayer(p)
 	local hasfreeslot = false
+	local hasgun = false
 	local inv = p.mm.inventory
 	for i = 1, inv.count
 		if inv.items[i] == nil
 			hasfreeslot = true
-			break
+			continue
+		end
+		if guns[inv.items[i].id] == true
+			hasgun = true
 		end
 	end
 	
@@ -20,7 +31,8 @@ local function _eligibleGunPlayer(p)
 	and p.mm
 	and not (p.mm.spectator or p.spectator)
 	and p.mm.role ~= MMROLE_MURDERER
-	and hasfreeslot)
+	and hasfreeslot
+	and not hasgun)
 end
 
 --refill any empty murd/sheriff slots left by players who left
@@ -81,6 +93,7 @@ return function()
 				local p = randomPlayer(_eligibleGunPlayer)
 				if p then
 					MM:GiveItem(p, lostgun)
+					MM_N.gavegun = true
 					
 					for play in players.iterate do
 						if play == p then
@@ -93,7 +106,6 @@ return function()
 					MM:discordMessage("***A random player has received the gun due to inactivity!***\n")
 					P_RemoveMobj(wpn)
 				end
-				MM_N.gavegun = true
 			end
 		end
 		

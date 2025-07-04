@@ -67,22 +67,19 @@ return function(p)
 						mminter.interacted = true
 						
 						local caninteract = true
+						if inter.restrict and inter.restrict[p.mm.role] then
+							chatprintf(p, "\x82*This interaction is prohibited from your role.")
+							caninteract = false
+						end
+						
 						if (inter.price ~= 0)
-							caninteract = (p.mm_save.rings >= inter.price)
-							
-							if inter.restrict then
-								caninteract = not (inter.restrict[p.mm.role])
+							if (p.mm_save.rings < inter.price)
+								caninteract = false
 							end
 							
 							if caninteract
 								p.mm_save.rings = $ - inter.price
 								S_StartSound(nil,sfx_chchng,p)
-							else
-								if inter.restrict and inter.restrict[p.mm.role] then
-									chatprintf(p, "\x82*This interaction is prohibited from your role.")
-								end
-								
-								S_StartSound(nil,sfx_adderr,p)
 							end
 						end
 						
@@ -94,6 +91,8 @@ return function(p)
 							if inter.itemdrop_id then
 								MM:SpawnItemDrop(inter.itemdrop_id, mo.x, mo.y, mo.z, mo.angle, 0)
 							end
+						else
+							S_StartSound(nil,sfx_adderr,p)
 						end
 						
 						--for hud

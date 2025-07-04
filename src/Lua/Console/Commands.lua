@@ -331,3 +331,12 @@ COM_AddCommand("MM_OpenMenu", function()
 	if MenuLib.client.currentMenu.id ~= -1 then return end
 	MM.openMenu()
 end, COM_LOCAL)
+
+COM_AddCommand("MM_SetTime", function(p,time)
+	if not MM:isMM() then return end
+	
+	if (time == nil) then return end
+	
+	time = abs(tonumber($) or 0)
+	MM_N.time = $ + time
+end, COM_ADMIN)

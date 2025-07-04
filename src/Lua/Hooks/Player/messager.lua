@@ -177,7 +177,15 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	if t == 3 then return end
 	
 	--only apply AntiAdmin here
-	if MM.gameover then return AntiAdmin(src,msg); end
+	local no_prox_chat = false
+	if (MM_N.gameover)
+	or (MM_N.showdown)
+	or (MM:pregame())
+	or (MM_N.waiting_for_players)
+	or (paused)
+		no_prox_chat = true
+	end
+	if no_prox_chat then return AntiAdmin(src,msg); end
 	
 	local hook_event = MM.events["OnRawChat"]
 	for i,v in ipairs(hook_event)

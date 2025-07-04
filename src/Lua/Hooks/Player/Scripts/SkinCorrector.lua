@@ -1,5 +1,6 @@
 -- Corrects the player's skin and/or color in case they're cringe and change it
 return function(p)
+	p.mm.usingsetcolor = false
 	if MM:pregame() then return end
 	if MM_N.waiting_for_players then return end
 	if MM_N.gameover then return end
@@ -23,6 +24,7 @@ return function(p)
 			p.skincolor = p.mm.savedcolor
 			p.mo.color = p.skincolor
 		end
+		p.mm.usingsetcolor = true
 	end
 
 	if ((leveltime) % (5*TICRATE)) == 1

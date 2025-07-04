@@ -67,7 +67,10 @@ return function(p)
 						mminter.interacted = true
 						
 						local caninteract = true
-						if inter.restrict and inter.restrict[p.mm.role] then
+						if inter.restrict and(
+							(type(inter.restrict) == "table" and inter.restrict[p.mm.role])
+							or (type(inter.restrict) == "number" and inter.restrict & rolebits[p.mm.role])
+						) then
 							chatprintf(p, "\x82*This interaction is prohibited from your role.")
 							caninteract = false
 						end

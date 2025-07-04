@@ -220,7 +220,8 @@ local function HUD_TabScoresDrawer(v)
 		v.draw(x, y, thisBgPatch, V_50TRANS) --|V_REVERSESUBTRACT, v.getColormap(nil,nil,"Invert"))
 		
 		local p_skin = p.skin
-		local p_skincolor = p.skincolor
+		--fuck
+		local p_skincolor = (p.mm.usingsetcolor) and p.mm.savedcolor or p.skincolor
 		local name = p.name
 
 		if p.mm
@@ -238,7 +239,7 @@ local function HUD_TabScoresDrawer(v)
 		end
 		local p_cmap = v.getColormap(p_skin, p_skincolor)
 		if userdataType(p_cmap) ~= "colormap" --!!!
-			p_cmap = v.getColormap(p.skin, p.skincolor)
+			p_cmap = v.getColormap(p.skin, p.mm.savedcolor)
 		end
 		if roleStyle.overlay then p_cmap = v.getColormap(p_skin,p_skincolor,"Grayscale") end
 		v.drawScaled(x*FU, y*FU, FU/2, iconpatch, 0, p_cmap)

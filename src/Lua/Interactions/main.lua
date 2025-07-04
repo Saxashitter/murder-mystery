@@ -102,11 +102,15 @@ end
 /*@properties: a table that accepts multiple arguments, where the keys are the arguments
 	name:			the name of the interaction (ex. "Button")
 	intertext:		the description of the interaction (ex. "Press")
+	
 	itemdrop:		the item ID this interaction drops (ex. "knife")
+	
 	button:			the BT_* needed to activate (ex. BT_CUSTOM3)
 	time:			the amount of time needed to interact (ex. TICRATE/2)
 	funcid:			the ID of the interaction function
 	price:			the ammount of rings needed to interact with this
+	
+	restrict:		a table or bitfield of which roles cannot interact with this
 */
 MM.interactPoint = function(p,mobj,properties)
 	if not MM.canInteract(p,mobj) then return end
@@ -129,7 +133,7 @@ MM.interactPoint = function(p,mobj,properties)
 		interacting = 0,
 		timesinteracted = 0,
 		
-		restrict = properties.restrict,
+		restrict = properties.restrict or 0,
 		
 		button = properties.button or 0,
 		timespan = 0,

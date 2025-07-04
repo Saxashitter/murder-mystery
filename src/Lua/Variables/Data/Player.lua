@@ -15,7 +15,8 @@ local player_variables =
 	-- Never show this info in tab menu.
 	alias = nil,
 	alias_save = nil,
-
+	
+	usingsetcolor = false,
 	savedcolor = nil,
 	joinedmidgame = false,
 

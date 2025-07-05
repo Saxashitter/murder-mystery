@@ -1,4 +1,5 @@
 local wrapadd = MM.require("Libs/wrappedadd")
+local hooksPassed = MM.hooksPassed
 
 freeslot("SPR2_OOF_")
 states[freeslot "S_PLAY_BODY"] = {
@@ -42,7 +43,7 @@ addHook("ShouldDamage", function(me, inf, sor, d, dmgt)
 	and not (inf and inf.valid and inf.player and inf.player.valid)
 		nodamage(me,sor,inf)
 		return false
-	end	
+	end
 end,MT_PLAYER)
 
 addHook("MobjDeath", function(target, inflictor, source, dmgt)
@@ -116,6 +117,29 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		source.player.mm_save.ringstopay = wrapadd($, 10)
 	end
 
+	do -- Hardcoded beartrap count increase (because luigi bad hook code)
+		local attacker;
+		local attacker_mo;
+		local target_player;
+
+		if source and source.valid and source.player and source.player.valid then
+			attacker = source.player
+			attacker_mo = source
+		elseif inflictor and inflictor.valid and inflictor.player and inflictor.player.valid then
+			attacker = inflictor.player
+			attacker_mo = inflictor
+		end
+		
+		if target and target.valid and target.player and target.player.valid then
+			target_player = target.player
+		end
+		
+		-- hmmm what if we made this an item variable, like item.ammokillincrease = 2
+		if attacker then
+			hooksPassed("KilledPlayer", attacker, target_player)
+		end
+	end
+	
 	if not MM:canGameEnd()
 	and MM_N.special_count >= 2 then
 		if target.player.mm.role ~= MMROLE_INNOCENT

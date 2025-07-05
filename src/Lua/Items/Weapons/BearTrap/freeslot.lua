@@ -168,4 +168,12 @@ addHook("TouchSpecial",function(mine,me)
 	
 end,MT_MM_BEARTRAP)
 
+MM.addHook("KilledPlayer", function(attacker, target)
+	local found, found_slot = MM:GetInventoryItemFromId(attacker, "beartrap") -- this only finds the first item, not multiple items btw lol
+	
+	if found and found_slot then
+		found.ammoleft = $ + 2
+	end
+end)
+
 return S_MM_BEARTRAP_FRIENDLY

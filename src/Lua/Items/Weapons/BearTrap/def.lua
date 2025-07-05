@@ -37,7 +37,7 @@ weapon.shootmobj = MT_THOK
 weapon.equipsfx = sfx_None
 weapon.attacksfx = sfx_None
 weapon.minemobj = MT_MM_BEARTRAP
-weapon.maxshots = 20
+weapon.maxshots = 8
 
 local function DropBearTrap(p)
 	local me = p.mo

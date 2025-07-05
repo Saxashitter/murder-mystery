@@ -109,11 +109,13 @@ addHook("TouchSpecial",function(mine,me)
 	and mine.tracer.player.mm.role == MMROLE_MURDERER)
 	and (me ~= mine.tracer)
 	
+	/*
 	if isTeamMate or (me == mine.tracer) then
 		mine.health = mine.info.spawnhealth
 		mine.flags = $|MF_SPECIAL
 		return true
 	end
+	*/
 	
 	local sfx = P_SpawnGhostMobj(mine)
 	sfx.flags2 = $|MF2_DONTDRAW

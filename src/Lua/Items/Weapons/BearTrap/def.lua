@@ -39,6 +39,8 @@ weapon.attacksfx = sfx_None
 weapon.minemobj = MT_MM_BEARTRAP
 weapon.maxshots = 8
 
+weapon.hiddenforothers = true
+
 local function DropBearTrap(p)
 	local me = p.mo
 	local mine = P_SpawnMobjFromMobj(me,

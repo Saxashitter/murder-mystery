@@ -147,3 +147,16 @@ MM.runHook = function()
 	error("MM.runHook is deprecated, please use MM.tryRunHook instead.")
 	return false
 end
+
+MM.hooksPassed = function(eventname, ...)
+	local args = {...}
+	local hook_event = MM.events[eventname]
+	for i,v in ipairs(hook_event)
+		if MM.tryRunHook(eventname, v,
+			unpack(args) -- i dont know lua syntax enough to know if passing '...' is valid
+		) then
+			return false
+		end
+	end
+	return true
+end

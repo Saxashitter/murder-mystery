@@ -8,18 +8,7 @@ local function shittyfunction(newvalue, maximum)
 	return newvalue
 end
 
-local function hooksPassed(eventname, ...)
-	local args = {...}
-	local hook_event = MM.events[eventname]
-	for i,v in ipairs(hook_event)
-		if MM.tryRunHook(eventname, v,
-			unpack(args) -- i dont know lua syntax enough to know if passing '...' is valid
-		) then
-			return false
-		end
-	end
-	return true
-end
+local hooksPassed = MM.hooksPassed 
 
 --ugh
 local function SphereToCartesian(alpha,beta)

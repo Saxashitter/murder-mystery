@@ -7,6 +7,13 @@ local function SafeFreeslot(...)
 	end
 end
 
+SafeFreeslot("sfx_brtrap")
+
+sfxinfo[sfx_brtrap] = {
+	priority = 64,
+	flags = SF_X4AWAYSOUND,
+}
+
 states[SafeFreeslot("S_MM_BEARTRAP_FRIENDLY")] = {
 	sprite = SafeFreeslot("SPR_BEARTRAP"),
 	frame = A,
@@ -39,7 +46,7 @@ mobjinfo[SafeFreeslot("MT_MM_BEARTRAP")] = {
 	spawnstate = S_MM_BEARTRAP_WAIT,
 	deathstate = S_MM_BEARTRAP_CATCH,
 	deathsound = sfx_thok,
-	activesound = sfx_spkdth,
+	activesound = sfx_brtrap,
 	seesound = sfx_subsmt,
 	spawnhealth = 1,
 	height = 12*FRACUNIT,

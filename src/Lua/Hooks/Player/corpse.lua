@@ -117,7 +117,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		source.player.mm_save.ringstopay = wrapadd($, 10)
 	end
 
-	do -- Hardcoded beartrap count increase (because luigi bad hook code)
+	do
 		local attacker;
 		local attacker_mo;
 		local target_player;

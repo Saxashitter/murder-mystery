@@ -57,6 +57,7 @@ return function()
 				CV_Set(CV_FindVar("restrictskinchange"),1)
 			end
 			
+			chatprint("\x82*Proximity chat has been turned ON!")
 			MM_N.minimum_killed = max(1,innocents/3)
 			MM_N.numbertokill = innocents
 			

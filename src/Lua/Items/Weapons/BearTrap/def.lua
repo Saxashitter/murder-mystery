@@ -54,7 +54,11 @@ end
 
 -- Copied lugger code. This should really be implemented in a cleaner way.
 weapon.hiddenthinker = function(item,p)
-	item.ammoleft = $ or weapon.maxshots
+	if item.ammoleft == nil then
+		item.ammoleft = weapon.maxshots
+	elseif item.ammoleft < 0 then
+		item.ammoleft = 0
+	end
 
 	if (p.mm.inventory.hidden)
 	or (item.cooldown)
@@ -95,14 +99,18 @@ end
 weapon.thinker = weapon.hiddenthinker
 
 weapon.attack = function(item,p)
-	if item.ammoleft == nil or item.ammoleft == 0 then return end
+	if item.ammoleft == nil then return end
+	
+	if item.ammoleft == 0 then
+		S_StartSound(p.mo, sfx_s254, p)
+		chatprintf(p, "\x82*Kill people to get more traps!", false)
+		return
+	end
+	
+	S_StartSound(p.mo, sfx_s3k76, p)
 	
 	DropBearTrap(p)
 	item.ammoleft = $ - 1
-	
-	if item.ammoleft == 0
-		MM:DropItem(p,nil,false,true,true)
-	end
 	
 	if (item.ghost and item.ghost.valid)
 		P_RemoveMobj(item.ghost)
@@ -124,7 +132,7 @@ weapon.drawer = function(v, p,item, x,y,scale,flags, selected, active)
 	if item.ammoleft == nil then return end
 	if not selected
 		v.drawString(x, (y + 32*scale) - 8*FU,
-			item.ammoleft.."/"..weapon.maxshots,
+			item.ammoleft,
 			(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE,
 			"thin-fixed"
 		)
@@ -133,7 +141,7 @@ weapon.drawer = function(v, p,item, x,y,scale,flags, selected, active)
 	end
 	
 	v.drawString(160*FU,y - 20*FU,
-		"Ammo: "..item.ammoleft.." / "..weapon.maxshots,
+		"Traps: "..item.ammoleft,
 		(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE,
 		"thin-fixed-center"
 	)

@@ -347,7 +347,7 @@ end)
 
 COM_AddCommand("MM_OpenMenu", function()
 	if MenuLib.client.currentMenu.id ~= -1 then return end
-	MM.openMenu()
+	MenuLib.initMenu(MenuLib.findMenu("MainMenu"))
 end, COM_LOCAL)
 
 COM_AddCommand("MM_SetTime", function(p,time)

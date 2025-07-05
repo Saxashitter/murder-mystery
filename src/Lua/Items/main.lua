@@ -219,7 +219,7 @@ function MM:FetchEmptySlot(p)
 	return false
 end
 
-function MM:GetInventoryItemFromId(p, item_id)
+function MM:GetInventoryItemFromId(p, id)
 	if not (p and p.valid and p.mm) then return end
 
 	local found
@@ -227,8 +227,8 @@ function MM:GetInventoryItemFromId(p, item_id)
 	
 	for i=1,self:FetchInventoryLimit(p) do
 		if self:FetchInventorySlot(p, i)
-		and self:FetchInventorySlot(p, i).item_id
-		and self:FetchInventorySlot(p, i).item_id == item_id then
+		and self:FetchInventorySlot(p, i).id
+		and self:FetchInventorySlot(p, i).id == id then
 			found = self:FetchInventorySlot(p, i)
 			found_slot = i
 			
